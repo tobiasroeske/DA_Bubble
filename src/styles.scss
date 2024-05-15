@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 /* nunito-200 - latin */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -21,7 +23,7 @@ body {
 
 a {
   text-decoration: none;
-  color: #797EF3;
+  color: #797ef3;
   font-size: 18px;
   font-family: 'Figtree', sans-serif;
   transition: border-color 0.125s ease-in-out;
@@ -52,17 +54,13 @@ button {
   font-weight: 700;
 }
 
-.arrow-down {
-  height: 30px;
-  width: 30px;
-  object-fit: contain;
-}
-
 .add-icon {
   width: 30px;
   height: 30px;
   object-fit: contain;
 }
+
+$specialBlue: rgba(83, 90, 241, 1);
 
 @mixin d-flex($fd: row, $jc: center, $ai: center, $g: 0) {
   display: flex;

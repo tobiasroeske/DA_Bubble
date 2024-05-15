@@ -2,14 +2,17 @@
 
 .sidenav {
     height: 100%;
-    padding: 32px 30px;
+    width: 366px;
+    padding: 32px 30px 0px 30px;
     background: #fff;
     border-radius: 20px;
     font-family: "Nunito";
+    @include d-flex($fd: column, $jc: flex-start, $g: 24px);
 }
 
 .channel-btn {
     @include d-flex($jc: space-between);
+    width: 100%;
 
     >.channel-btn-logo-name {
         @include d-flex($jc: space-between, $g: 16px);
@@ -26,18 +29,20 @@
         }
     }
 
-    >.edit-icon {
+    >.edit_square-icon {
         height: 24px;
         width: 24px;
         object-fit: contain;
         cursor: pointer;
+
+        &:hover path {
+            fill: $specialBlue;
+        }
     }
 }
 
 .channel-container {
-    @include d-flex($fd: column, $jc: flex-start, $ai: center);
-    min-height: 300px;
-    border: 1px solid red;
+    @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 25px);
 
     >.channel-header {
         @include d-flex($jc: space-between);
@@ -45,6 +50,19 @@
 
         >.arrow-symbol-title-container {
             @include d-flex($jc: space-between, $g: 16px);
+            cursor: pointer;
+
+            &:hover .arrow-down-channel path {
+                fill: $specialBlue;
+            }
+
+            &:hover .workspacesIcon path {
+                fill: $specialBlue;
+            }
+
+            &:hover span {
+                color: $specialBlue;
+            }
 
             >span {
                 @include d-flex($jc: space-between, $g: 8px);
@@ -53,6 +71,165 @@
     }
 }
 
+.arrow-down-directmessages {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.arrow-down-channel {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.workspacesIcon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.addIcon-container {
+    height: 32px;
+    width: 32px;
+    @include d-flex();
+
+    &:hover {
+        background: rgba(236, 238, 254, 1);
+        border-radius: 100%;
+        cursor: pointer;
+    }
+
+    &:hover .addIcon path {
+        fill: $specialBlue;
+    }
+}
+
+.addIcon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.channel-links-container {
+    @include d-flex($fd: column, $ai: flex-start, $g: 25px);
+    width: 100%;
+    margin-left: 16px;
+}
+
+.channel {
+    @include d-flex($ai: center, $g: 10px);
+    color: #000;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 4px 20px;
+    border: none;
+
+    &:hover {
+        color: $specialBlue;
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover .hashtagIcon path {
+        fill: $specialBlue
+    }
+
+}
+
+.hashtagIcon {
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
+}
+
+.add-circle {
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
+}
+
 .add-channel-container {
-    @include d-flex($jc: space-between, $g: 16px)
+    @include d-flex($jc: flex-start, $g: 16px);
+    width: 100%;
+    margin-left: 35px;
+
+    &:hover {
+        color: $specialBlue;
+        cursor: pointer;
+    }
+
+    &:hover .add-circle path {
+        fill: $specialBlue;
+    }
+}
+
+// Direct Messages Styles------------------------>
+.direct-messages-container {
+    width: 100%;
+    margin-left: 48px;
+}
+
+.direct-message-header {
+    @include d-flex($jc: flex-start, $g: 16px);
+    cursor: pointer;
+
+
+    &:hover .arrow-down-directmessages path {
+        fill: $specialBlue;
+    }
+
+    &:hover .accountIcon-and-title-container .account-circleIcon path {
+        fill: $specialBlue;
+    }
+
+    &:hover .accountIcon-and-title-container h3 {
+        color: $specialBlue;
+    }
+
+    >.accountIcon-and-title-container {
+        @include d-flex($jc: flex-start, $g: 10px);
+
+        >.account-circleIcon {
+            height: 24px;
+            width: 24px;
+            object-fit: contain;
+        }
+
+        >h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+    }
+}
+
+.colleagues-container {
+    @include d-flex($fd: column, $ai: flex-start, $jc: space-between, $g: 16px);
+    margin-top: 25px;
+
+    >.collegue {
+        @include d-flex($ai: center, $jc: space-between, $g: 16px);
+        padding: 4px 20px;
+        border-radius:35px;
+
+        &:hover{
+            background: rgba(236, 238, 254, 1);
+            cursor: pointer;
+        }
+
+        &:hover h3{
+            color: $specialBlue;
+        }
+
+        >.avatar-sidenav {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        >h3 {
+            font-weight: 400px;
+            font-size: 18px;
+        }
+    }
+
 }

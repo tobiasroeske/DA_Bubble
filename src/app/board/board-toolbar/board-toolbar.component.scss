@@ -2,6 +2,7 @@
 
 div {
     @include d-flex($jc: space-between);
+    padding: 16px 16px 0 16px;
 }
 
 .logo-container {
@@ -47,6 +48,15 @@ div {
 
 .user-container {
     @include d-flex($jc: space-between, $g: 20px);
+    cursor: pointer;
+
+    &:hover span {
+        color: $specialBlue
+    }
+
+    &:hover .arrow-down-user path {
+        fill: $specialBlue
+    }
 
     >span {
         font-size: 32px;
@@ -59,5 +69,11 @@ div {
         width: 70px;
         object-fit: cover;
         cursor: pointer;
+    }
+
+    >.arrow-down-user {
+        width: 13px;
+        height: 8px;
+        object-fit: cover;
     }
 }
