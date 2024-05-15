@@ -5,24 +5,43 @@
     </div>
     <div class="register-box">
         <span>Neu bei DABubble?</span>
-        <a href="#">Konto erstellen</a>
+        <a href="register">Konto erstellen</a>
     </div>
 </header>
 <div class="content">
     <div class="login-container">
         <h2>Anmeldung</h2>
         <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die <br> du bei der Arbeit verwendest.</span>
-        <form>
-            <div class="input-container">
-                <img src="assets/img/mail.png" alt="">
-                <label for="email"></label>
-                <input type="email" id="email" name="email" placeholder="beispielname@email.com">
+        <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+            <div class="input-fields">
+                <div class="input-container">
+                    <div class="input-box">
+                        @if (user.email== '') {
+                            <img src="assets/img/mail.png" alt="">
+                        } @else {
+                            <img src="assets/img/mail_black.png" alt="">
+                        }
+                        <label for="email"></label>
+                        <input [(ngModel)]="user.email" #email type="email" id="email" name="email" placeholder="beispielname@email.com">
+                    </div>
+                    <span class="error-message">Diese E-Mail-Adresse ist leider ungültig</span>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-box">
+                        @if (user.password == '') {
+                            <img src="assets/img/lock.png" alt="">
+                        } @else {
+                            <img src="assets/img/lock_black.png" alt="">
+                        }
+                        <label for="password"></label>
+                        <input [(ngModel)]="user.password" type="password" id="password" name="password" placeholder="Passwort">
+                    </div>
+                    <span class="error-message">Falsches Password. Bitte noch einmal versuchen.</span>
+                </div>
             </div>
-            <div class="input-container">
-                <img src="assets/img/lock.png" alt="">
-                <label for="password"></label>
-                <input type="password" id="password" name="password" placeholder="Passwort">
-            </div>
+
+
             <span class="forgot-password">Password vergessen?</span>
 
             <div class="seperator">
@@ -43,5 +62,5 @@
     <footer>
         <a href="">Impressum</a>
         <a href="">Datenschutz</a>
-    </footer>  
+    </footer>
 </div>

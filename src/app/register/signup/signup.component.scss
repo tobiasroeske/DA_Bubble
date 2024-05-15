@@ -1,0 +1,131 @@
+@import '../../../styles.scss';
+
+* {
+    font-family: 'Nurito', sans-serif;
+}
+
+.content {
+    @include d-flex($fd: column, $g: 32px);
+}
+
+.headline {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.back-arrow {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    padding: 15px;
+    border-radius: 50%;
+    transition: all .125s ease-in-out;
+    &:hover {
+        background-color: #ECEEFE;
+    }
+}
+
+h2 {
+    color: #444DF2;
+    font-size: 46px;
+    font-weight: 700;
+    text-align: center;
+}
+
+span {
+    font-size: 20px;
+    text-align: center;
+}
+
+form {
+    @include d-flex($fd: column, $g: 32px);
+
+}
+
+input {
+    border: 1px solid transparent;
+    border-radius: 100px;
+    outline: unset;
+    background-color: transparent;
+    width: 100%;
+    padding: 18px 32px 18px 88px;
+    height: 100%;
+    font-size: 18px;
+
+    &:hover {
+        border: 1px solid black;
+    }
+
+    &:focus {
+        border-color: #444DF2;
+    }
+}
+
+::placeholder {
+    color: #686868;
+    font-size: 18px;
+    font-family: 'Nurito', sans-serif;
+}
+
+.input-fields {
+    @include d-flex($fd: column, $g: 15.5px)
+}
+
+.input-container {
+    height: 77px;
+}
+
+.input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 500px;
+    border-radius: 100px;
+    background-color: #ECEEFE;
+
+    >img {
+        position: absolute;
+        margin-left: 32px;
+    }
+}
+
+.error-message {
+    font-size: 14px;
+    color: #ED1E79;
+    text-align: center;
+}
+
+.checkbox-container {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    input[type=checkbox] {
+        width: fit-content;
+        margin-right: 32px;
+    }
+
+    a {
+        padding: 5px 4px;
+        transition: all .125s ease-in-out;
+        border-color: transparent;
+        &:hover {
+            background-color: #ECEEFE;
+        }
+    }
+}
+
+.login-btn {
+    width: fit-content;
+    background-color: #444DF2;
+    color: white;
+    transition: background-color 0.125s ease-in-out;
+    align-self: flex-end;
+    &:hover {
+        background-color: #787EF2;
+        border-color: #787EF2;
+    }
+}

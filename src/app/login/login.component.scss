@@ -18,7 +18,7 @@ header {
 }
 
 .content {
-    @include d-flex($fd: column, $g: 64px);
+    @include d-flex($fd: column, $g: 40px);
     height: calc(100vh - 126px);
 }
 
@@ -73,7 +73,15 @@ input {
     font-family: 'Nurito', sans-serif;
 }
 
+.input-fields {
+    @include d-flex($fd: column, $g: 15.5px)
+}
+
 .input-container {
+    height: 77px;
+}
+
+.input-box {
     position: relative;
     display: flex;
     align-items: center;
@@ -85,6 +93,12 @@ input {
         position: absolute;
         margin-left: 32px;
     }
+}
+
+.error-message {
+    font-size: 14px;
+    color: #ED1E79;
+    text-align: center;
 }
 
 .forgot-password {
