@@ -1,0 +1,18 @@
+@import '../../styles.scss';
+
+* {
+    font-family: 'Nurito', sans-serif;
+}
+
+header {
+    @include d-flex($jc: space-between);
+    padding: 75px 75px 0px;
+
+    .logo-box {
+        @include d-flex($g: 16px);
+    }
+
+    .register-box {
+        @include d-flex($fd: column, $g: 16px);
+    }
+}
