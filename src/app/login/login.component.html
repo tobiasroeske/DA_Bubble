@@ -8,24 +8,35 @@
         <a href="#">Konto erstellen</a>
     </div>
 </header>
-<div class="login-container">
-    <h2>Anmeldung</h2>
-    <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</span>
-    <form>
-        <div class="input-container">
-            <label for="email"></label>
-            <input type="email" id="email" name="email" placeholder="beispielname@email.com">
-        </div>
-        <div class="input-container">
-            <label for="password"></label>
-            <input type="password" id="password" name="password" placeholder="Passwort">
-        </div>
-        <a>Password vergessen?</a>
+<div class="content">
+    <div class="login-container">
+        <h2>Anmeldung</h2>
+        <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die <br> du bei der Arbeit verwendest.</span>
+        <form>
+            <div class="input-container">
+                <img src="assets/img/mail.png" alt="">
+                <label for="email"></label>
+                <input type="email" id="email" name="email" placeholder="beispielname@email.com">
+            </div>
+            <div class="input-container">
+                <img src="assets/img/lock.png" alt="">
+                <label for="password"></label>
+                <input type="password" id="password" name="password" placeholder="Passwort">
+            </div>
+            <span class="forgot-password">Password vergessen?</span>
 
-        <button class="btn-no-style"><img src="../../assets/img/google_logo.png" alt=""><a>Anmelden mit Google</a></button>
-        <div>
-            <button class="btn-no-style">Anmelden</button>
-            <button class="btn-no-style">Gäste-Login</button>
-        </div>
-    </form>
+            <div class="seperator">
+                <span>ODER</span>
+            </div>
+
+            <div class="google-container">
+                <button class="btn-no-style google-btn"><img src="../../assets/img/google_logo.png" alt="">Anmelden mit
+                    Google</button>
+            </div>
+            <div class="submit-container">
+                <input type="submit" class="btn-no-style login-btn" value="Anmelden">
+                <div class="btn-no-style guest-login-btn">Gäste-Login</div>
+            </div>
+        </form>
+    </div>
 </div>

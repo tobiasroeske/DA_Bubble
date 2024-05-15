@@ -41,11 +41,14 @@ button {
 }
 
 .btn-no-style {
+  cursor: pointer;
   padding: 12px 25px;
   border: 1px solid #797EF3;
   border-radius: 25px;
   background-color: transparent;
   font-family: 'Nurito', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 @mixin d-flex($fd: row, $jc: center, $ai: center, $g: 0) {
