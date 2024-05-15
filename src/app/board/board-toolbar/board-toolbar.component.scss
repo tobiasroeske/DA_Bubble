@@ -1,0 +1,13 @@
+@import '../../../styles.scss';
+
+div {
+    @include d-flex($jc: space-between);
+
+    >.logo-container {
+        @include d-flex($g: 16px);
+    }
+
+    >.input-search-container {
+        @include d-flex($jc: space-between, $g: 16px);
+    }
+}
