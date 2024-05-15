@@ -2,12 +2,69 @@
 
 div {
     @include d-flex($jc: space-between);
+    padding: 8px;
+}
 
-    >.logo-container {
-        @include d-flex($g: 16px);
+.logo-container {
+    width: 25%;
+    @include d-flex($g: 16px);
+}
+
+.input-search-container {
+    width: 50%;
+    background: #fff;
+    border-radius: 50px;
+    padding: 17.5px 45px;
+    @include d-flex($jc: space-between, $g: 16px);
+
+    >input {
+        font-family: "Nunito";
+        height: 30px;
+        flex: 1;
+        border: unset;
+        outline: none;
+        font-size: 24px;
+        font-weight: 400;
+
+        &::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
     }
 
-    >.input-search-container {
-        @include d-flex($jc: space-between, $g: 16px);
+    >img {
+        height: 35px;
+        width: 35px;
+        cursor: pointer;
+        border-radius: 100%;
+        padding: 4px;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+.user-container {
+    width: 25%;
+    @include d-flex($jc: space-between, $g: 20px);
+
+    >span {
+        font-size: 32px;
+        font-weight: 700;
+        font-family: "Nunito";
+    }
+
+    >.account-photo {
+        height: 70px;
+        width: 70px;
+        object-fit: cover;
+        cursor: pointer;
+    }
+
+    .arrow {
+        height: 30px;
+        width: 30px;
+        object-fit: contain;
+        cursor: pointer;
     }
 }
