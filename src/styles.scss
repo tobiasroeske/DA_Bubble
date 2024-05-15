@@ -14,6 +14,20 @@ body{
     background: rgba(236, 238, 254, 1);
 }
 
+a {
+  text-decoration: none;
+  color: #797EF3;
+  font-size: 18px;
+  font-family: 'Figtree', sans-serif;
+  transition: border 0.125s ease-in-out;
+  padding: 8px 16px;
+  &:hover {
+    
+    border: 1px solid #BDBFE1;
+    border-radius: 32px;
+  }
+}
+
 @mixin d-flex($fd: row, $jc: center, $ai: center, $g: 0) {
     display: flex;
     flex-direction: $fd;
