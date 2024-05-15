@@ -1,12 +1,58 @@
+@import '../../../styles.scss';
+
 .sidenav {
-    width: 366px;
     height: 100%;
+    padding: 32px 30px;
     background: #fff;
     border-radius: 20px;
+    font-family: "Nunito";
+}
 
-    .workspaceLogo {
-        height: 60px;
-        width: 60px;
-        object-fit: cover;
+.channel-btn {
+    @include d-flex($jc: space-between);
+
+    >.channel-btn-logo-name {
+        @include d-flex($jc: space-between, $g: 16px);
+
+        >.workspaceLogo {
+            height: 60px;
+            width: 60px;
+            object-fit: cover;
+        }
+
+        >h3 {
+            font-size: 24px;
+            font-weight: 700;
+        }
     }
+
+    >.edit-icon {
+        height: 24px;
+        width: 24px;
+        object-fit: contain;
+        cursor: pointer;
+    }
+}
+
+.channel-container {
+    @include d-flex($fd: column, $jc: flex-start, $ai: center);
+    min-height: 300px;
+    border: 1px solid red;
+
+    >.channel-header {
+        @include d-flex($jc: space-between);
+        width: 100%;
+
+        >.arrow-symbol-title-container {
+            @include d-flex($jc: space-between, $g: 16px);
+
+            >span {
+                @include d-flex($jc: space-between, $g: 8px);
+            }
+        }
+    }
+}
+
+.add-channel-container {
+    @include d-flex($jc: space-between, $g: 16px)
 }

@@ -2,7 +2,6 @@
 
 div {
     @include d-flex($jc: space-between);
-    padding: 8px;
 }
 
 .logo-container {
@@ -59,13 +58,6 @@ div {
         height: 70px;
         width: 70px;
         object-fit: cover;
-        cursor: pointer;
-    }
-
-    .arrow {
-        height: 30px;
-        width: 30px;
-        object-fit: contain;
         cursor: pointer;
     }
 }
