@@ -1,0 +1,34 @@
+@import '../../../styles.scss';
+
+.thread {
+    width: 495px;
+    height: 100%;
+    background: #fff;
+    border-radius: 30px;
+    font-family: "Nunito";
+
+    >.thread-header {
+        @include d-flex($jc: space-between, $ai: center);
+        padding: 32px 40px;
+
+        >.title-and-channel-container {
+            @include d-flex($jc: space-between, $ai: center, $g: 8px);
+        }
+    }
+}
+
+.cross-icon {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+}

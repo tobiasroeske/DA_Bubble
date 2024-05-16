@@ -3,6 +3,7 @@
 .chat-field-header {
     @include d-flex($jc: space-between, $g: 10px);
     padding: 0px 45px;
+    width: 100%;
     font-family: "Nunito";
 
     >.chat-field-channel {
@@ -66,8 +67,16 @@
     margin-top: 96px;
 }
 
+.chat {
+    width: 100%;
+}
+.chat-box {
+    position: relative;
+}
+
 .time-separator-container {
     position: relative;
+    width: 100%;
     height: 35px;
     @include d-flex($jc: flex-start);
 }
@@ -96,9 +105,30 @@
     width: 100%;
 }
 
-.chat-box {
+.reaction-bar {
+    position: absolute;
+    top: 34px;
+    right: 16px;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid rgba(173, 176, 217, 1);
+    border-radius: 25px 25px 0px 25px;
+    padding: 3px 15px 3px 20px;
+    @include d-flex($jc: space-between, $g: 5px);
+
+    >img {
+        cursor: pointer;
+        border-radius: 100%;
+
+        &:hover {
+            background: rgba(236, 238, 254, 1);
+        }
+    }
+}
+
+.message-box {
+    @include d-flex(row, flex-start, flex-start, 30px);
     padding: 10px 0px 10px 45px;
-    @include d-flex($jc: flex-start, $ai: flex-start, $g: 30px);
     cursor: pointer;
     margin-top: 24px;
 
@@ -115,10 +145,15 @@
         font-weight: bold;
     }
 
-    >.avatar-message {
+    &:hover .answer-container .answers {
+        font-weight: bold;
+    }
+
+    >.avatar-photo {
         height: 70px;
         width: 70px;
         object-fit: cover;
+        border-radius: 100%;
     }
 }
 
@@ -151,9 +186,39 @@
     }
 }
 
+.reaction-indicator-bar {
+    @include d-flex($jc: space-between, $ai: center, $g: 8px);
+
+    >.reaction-indicator {
+        position: relative;
+        padding: 5px 10px;
+        border: 1px solid rgba(173, 176, 217, 1);
+        border-radius: 20px;
+        @include d-flex($jc: space-between, $ai: center, $g: 10px);
+
+        >.pop-up-reaction {
+            position: absolute;
+            top: -131px;
+            left: 26px;
+            width: 150px;
+            border-radius: 30px 30px 30px 0px;
+            background: blue;
+            padding: 15px 10px;
+            color: #fff;
+            @include d-flex($fd: column, $g: 5px);
+            transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+
+            >.pop-up-reacter {
+                @include d-flex($fd: column, $ai: center, $g: 5px);
+            }
+        }
+    }
+
+}
+
 .answer-container {
     width: 260px;
-    @include d-flex($jc: space-between, $g: 16px);
+    @include d-flex($jc: space-between);
 
     >.answers {
         @include d-flex($jc: space-between, $g: 10px);
@@ -169,16 +234,6 @@
         color: rgba(104, 104, 104, 1)
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 // Icons Styles-------------------->
 .add-person-icon-container {
@@ -214,4 +269,18 @@
     width: 14px;
     height: 8px;
     object-fit: contain;
+}
+
+.addReaction-icon,
+.answer-icon {
+    cursor: pointer;
+    border-radius: 100%;
+
+    &:hover {
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover path {
+        fill: $specialBlue;
+    }
 }
