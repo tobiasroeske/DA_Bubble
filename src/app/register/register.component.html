@@ -6,7 +6,13 @@
 </header>
 <div class="content">
     <div class="login-container">
-        <app-signup></app-signup>
-        <app-avatar-picker></app-avatar-picker>
+        @if (!next) {
+            <app-signup (showNextPage)="goToAvatarPicker($event)" (passUserDetail)="getUserDetail($event)"></app-signup>
+        } @else {
+            <app-avatar-picker (signUpSuccessful)="signup($event)" (goBack)="goToAvatarPicker($event)" [userData]="user"></app-avatar-picker>
+        }
     </div>
+    <div [class.slide-in]="signupSuccessful" class="confirmation-message">
+        Konto erfolgreich erstellt!
+    </div> 
 </div>

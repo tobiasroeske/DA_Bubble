@@ -1,0 +1,111 @@
+@import '../../../styles.scss';
+
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+.content {
+    @include d-flex($fd: column, $g: 16px);
+}
+
+.headline {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0 40px;
+}
+
+.back-arrow {
+    cursor: pointer;
+    position: absolute;
+    left: -16px;
+    padding: 15px;
+    border-radius: 50%;
+    transition: all .125s ease-in-out;
+    &:hover {
+        background-color: #ECEEFE;
+    }
+}
+
+h2 {
+    color: #444DF2;
+    font-size: 46px;
+    font-weight: 700;
+    text-align: center;
+}
+
+h3 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 32px;
+    text-align: center;
+}
+
+.profile-img {
+    width: 141px;
+    height: 141px;
+    object-fit: cover;
+    border: 5px solid transparent;
+    transition: border .125s ease-in-out;
+    border-radius: 100%;
+    &:hover {
+        border: 5px solid #E6E6E6;
+        
+    }
+}
+
+.pick-avatar-container {
+    width: 100%;
+    @include d-flex($fd: column, $ai: flex-start, $g: 16px);
+    >span {
+        font-size: 20px;
+    }
+
+    .avatar-list {
+        @include d-flex($g: 8px);
+        >img {
+            cursor: pointer;
+            width: 67px;
+            height: 67px;
+            object-fit: cover;
+            border: 3px solid transparent;
+            transition: all .125s ease-in-out;
+            border-radius: 100%;
+            
+            &:hover {
+                border: 3px solid #E6E6E6;
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    .own-avatar {
+        margin-top: 24px;
+        @include d-flex($g: 24px);
+        .upload-btn {
+            color: #797EF3;
+            transition: all .125s ease-in-out; 
+            &:hover {
+                background-color: #5359F1;
+                color: white;
+            }
+        }
+    }
+}
+
+.login-btn {
+    width: fit-content;
+    background-color: #444DF2;
+    color: white;
+    transition: background-color 0.125s ease-in-out;
+    align-self: flex-end;
+    transition: all .125s ease-in-out; 
+    &:hover {
+        background-color: #787EF2;
+        border-color: #787EF2;
+    }
+}
+
+
+

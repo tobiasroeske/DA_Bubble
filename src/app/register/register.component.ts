@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SignupComponent } from './signup/signup.component';
-import { AvatarPickerComponent } from '../avatar-picker/avatar-picker.component';
+import { AvatarPickerComponent } from './avatar-picker/avatar-picker.component';
+import { User } from '../shared/models/user.class';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,5 +12,25 @@ import { AvatarPickerComponent } from '../avatar-picker/avatar-picker.component'
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  router = inject(Router)
+  next = false;
+  user = new User();
+  signupSuccessful = false;
+  goToAvatarPicker($event: boolean) {
+    this.next = $event;
+  }
 
+  getUserDetail($event: User) {
+    this.user = $event;
+    console.log(this.user);
+  }
+
+
+  signup($event: boolean) {
+    this.signupSuccessful = $event
+    setTimeout(() => {
+      this.router.navigateByUrl('login')
+      
+    }, 1500)
+  }
 }

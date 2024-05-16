@@ -49,9 +49,25 @@ button {
   border: 1px solid #797EF3;
   border-radius: 25px;
   background-color: transparent;
-  font-family: 'Nurito', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 18px;
   font-weight: 700;
+}
+
+.disabled-btn {
+  cursor: unset !important;
+  background-color: #686868 !important;
+  color: white !important;
+  border-color: transparent !important;
+  &:hover {
+      border-color: transparent !important;
+  }
+}
+
+.arrow-down {
+  height: 30px;
+  width: 30px;
+  object-fit: contain;
 }
 
 .add-icon {

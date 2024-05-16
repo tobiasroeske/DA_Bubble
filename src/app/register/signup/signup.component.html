@@ -1,10 +1,10 @@
 <div class="content">
-    
+
     <div class="headline">
         <img routerLink="../login" src="assets/img/arrow_back.png" alt="" class="back-arrow">
         <h2>Konto erstellen</h2>
     </div>
-    
+
     <span>Mit deinem Namen und deiner E-Mail-Adresse hast <br> du dein neues DABubble-Konto.</span>
     <form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
         <div class="input-fields">
@@ -16,10 +16,12 @@
                     <img src="assets/img/person_black.png" alt="">
                     }
                     <label for="name"></label>
-                    <input [(ngModel)]="user.name" #name type="text" id="name" name="name"
-                        placeholder="Name und Nachname">
+                    <input [(ngModel)]="user.name" #name="ngModel" type="text" id="name" name="name"
+                        placeholder="Name und Nachname" required>
                 </div>
+                @if (name.touched && !name.valid) {
                 <span class="error-message">Bitte schreiben sie einen Namen</span>
+                }
             </div>
 
             <div class="input-container">
@@ -30,10 +32,13 @@
                     <img src="assets/img/mail_black.png" alt="">
                     }
                     <label for="email"></label>
-                    <input [(ngModel)]="user.email" #email type="email" id="email" name="email"
-                        placeholder="beispielname@email.com">
+                    <input [(ngModel)]="user.email" #email="ngModel" type="email" id="email" name="email"
+                        placeholder="beispielname@email.com" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                 </div>
+                @if (email.touched && !email.valid) {
                 <span class="error-message">Diese E-Mail-Adresse ist leider ungültig</span>
+                }
+
             </div>
 
             <div class="input-container">
@@ -44,17 +49,19 @@
                     <img src="assets/img/lock_black.png" alt="">
                     }
                     <label for="password"></label>
-                    <input [(ngModel)]="user.password" type="password" id="password" name="password"
-                        placeholder="Passwort">
+                    <input [(ngModel)]="user.password" #password="ngModel" type="password" id="password" name="password"
+                        placeholder="Passwort" required minlength="8">
                 </div>
-                <span class="error-message">Falsches Password. Bitte noch einmal versuchen.</span>
+                @if(password.touched && !password.valid) {
+                    <span class="error-message">Bitte gültiges Passwort eingebene</span>
+                }
             </div>
             <div class="checkbox-container">
-                <input type="checkbox" id="privacyPolicy">
+                <input type="checkbox" id="privacyPolicy" required [(ngModel)]="checkboxChecked" #checkbox="ngModel" name="checkbox">
                 <label for="privacyPolicy">Ich stimme der <a href="">Datenschutzerklärung</a> zu.</label>
             </div>
 
-            <input class="btn-no-style login-btn" type="submit" value="Weiter">
+            <input [disabled]="!signupForm.valid" [class.disabled-btn]="!signupForm.valid" class="btn-no-style login-btn" type="submit" value="Weiter">
         </div>
     </form>
 </div>

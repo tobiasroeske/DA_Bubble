@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../shared/models/user.class';
 import { RouterLink } from '@angular/router';
@@ -13,8 +13,16 @@ import { RouterLink } from '@angular/router';
 })
 export class SignupComponent {
   user = new User();
-  @Input() next = false;
+  checkboxChecked = false;
+  @Output() showNextPage = new EventEmitter<boolean>();
+  @Output() passUserDetail = new EventEmitter<User>();
+
+
   onSubmit(ngForm: NgForm) {
+    if (ngForm.submitted && ngForm.form.valid) {
+      this.showNextPage.emit(true);
+      this.passUserDetail.emit(this.user);
+    }
 
   }
 }

@@ -1,66 +1,40 @@
-<header>
+<header [ngStyle]="{'justify-content': forgotPassword ? 'flex-start' : 'space-between'}">
     <div class="logo-box">
         <img src="assets/img/logo.png" alt="">
-        <img src="../../assets/img/logoName.png" alt="">
+        <h1>DABubble</h1>
+        
     </div>
-    <div class="register-box">
-        <span>Neu bei DABubble?</span>
-        <a href="register">Konto erstellen</a>
-    </div>
+    @if (!forgotPassword) {
+        <div class="register-box">
+            <span>Neu bei DABubble?</span>
+            <a href="register">Konto erstellen</a>
+        </div>
+    }
 </header>
 <div class="content">
-    <div class="login-container">
-        <h2>Anmeldung</h2>
-        <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die <br> du bei der Arbeit verwendest.</span>
-        <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
-            <div class="input-fields">
-                <div class="input-container">
-                    <div class="input-box">
-                        @if (user.email== '') {
-                            <img src="assets/img/mail.png" alt="">
-                        } @else {
-                            <img src="assets/img/mail_black.png" alt="">
-                        }
-                        <label for="email"></label>
-                        <input [(ngModel)]="user.email" #email type="email" id="email" name="email" placeholder="beispielname@email.com">
-                    </div>
-                    <span class="error-message">Diese E-Mail-Adresse ist leider ungültig</span>
-                </div>
-
-                <div class="input-container">
-                    <div class="input-box">
-                        @if (user.password == '') {
-                            <img src="assets/img/lock.png" alt="">
-                        } @else {
-                            <img src="assets/img/lock_black.png" alt="">
-                        }
-                        <label for="password"></label>
-                        <input [(ngModel)]="user.password" type="password" id="password" name="password" placeholder="Passwort">
-                    </div>
-                    <span class="error-message">Falsches Password. Bitte noch einmal versuchen.</span>
-                </div>
-            </div>
-
-
-            <span class="forgot-password">Password vergessen?</span>
-
-            <div class="seperator">
-                <span>ODER</span>
-            </div>
-
-            <div class="google-container">
-                <button class="btn-no-style google-btn"><img src="../../assets/img/google_logo.png" alt="">Anmelden mit
-                    Google</button>
-            </div>
-            <div class="submit-container">
-                <input type="submit" class="btn-no-style login-btn" value="Anmelden">
-                <div class="btn-no-style guest-login-btn">Gäste-Login</div>
-            </div>
-        </form>
+    <div class="top">
+        <div class="login-container">
+            @if (!forgotPassword) {
+                <app-sign-in (passwordForgotten)="openPasswordDialog($event)"></app-sign-in>
+            } @else {
+                <app-forgot-password (goBack)="openPasswordDialog($event)" ></app-forgot-password>
+            }
+        </div>
     </div>
-
     <footer>
         <a href="">Impressum</a>
         <a href="">Datenschutz</a>
     </footer>
+</div>
+
+<div class="intro">
+    <div class="max-width-container">
+        <div class="intro-logo-container">
+            <img src="assets/img/logo_big.png" alt="">
+            <div class="headline">
+                <h1>DABubble</h1>
+            </div>
+        </div>
+    </div>
+    
 </div>

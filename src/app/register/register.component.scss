@@ -1,5 +1,9 @@
 @import '../../styles.scss';
 
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
 header {
     @include d-flex($jc: flex-start);
     padding: 32px 75px 0px;
@@ -10,8 +14,9 @@ header {
 }
 
 .content {
-    @include d-flex($fd: column, $g: 64px);
+    @include d-flex($fd: column, $g: 8px);
     height: calc(100vh - 126px);
+    overflow-x: hidden;
 }
 
 .login-container {
@@ -33,4 +38,22 @@ header {
         font-size: 20px;
         text-align: center;
     }
+}
+
+.confirmation-message {
+    padding: 50px;
+    border-radius: 30px 30px 0 30px;
+    background-color: #444DF2;
+    box-shadow: 0px 6px 10px 0px #00000033;
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+    align-self: flex-end;
+    margin-right: 16px;
+    transform: translateX(600px);
+    transition: transform .125s ease-in-out;
+}
+
+.slide-in {
+    transform: translateX(0);
 }
