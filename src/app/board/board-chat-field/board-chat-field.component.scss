@@ -1,0 +1,217 @@
+@import '../../../styles.scss';
+
+.chat-field-header {
+    @include d-flex($jc: space-between, $g: 10px);
+    padding: 0px 45px;
+    font-family: "Nunito";
+
+    >.chat-field-channel {
+        border-radius: 100px;
+        border: none;
+        padding: 6px 10px;
+        color: #000;
+        font-weight: 700;
+        font-size: 24px;
+        @include d-flex($jc: space-between, $g: 10px);
+        cursor: pointer;
+
+        &:hover {
+            color: $specialBlue;
+            background: rgba(236, 238, 254, 1);
+        }
+
+        &:hover .hashtagIconChat path {
+            fill: $specialBlue;
+        }
+
+        &:hover .arrow-down-chat path {
+            fill: $specialBlue;
+        }
+    }
+}
+
+.members-info-and-add-container {
+    @include d-flex($jc: space-between, $g: 10px);
+}
+
+.members-container {
+    @include d-flex($g: 10px);
+    padding: 3px 10px;
+    border-radius: 100px;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(236, 238, 254, 1);
+        color: $specialBlue;
+    }
+
+    >.avatar-photos-container {
+        >img {
+            height: 40px;
+            width: 40px;
+            border-radius: 100%;
+            object-fit: cover;
+            margin-left: -7px;
+            border: 2px solid #fff;
+        }
+    }
+
+    >.number-of-members {
+        font-size: 20px;
+        font-weight: 600;
+    }
+}
+
+.main-chat-container {
+    margin-top: 96px;
+}
+
+.time-separator-container {
+    position: relative;
+    height: 35px;
+    @include d-flex($jc: flex-start);
+}
+
+.date-container {
+    @include d-flex();
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.date {
+    background: #fff;
+    border-radius: 30px;
+    padding: 5px 15px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    font-family: "Nunito";
+}
+
+.line {
+    display: block;
+    background: rgba(173, 176, 217, 1);
+    height: 1px;
+    width: 100%;
+}
+
+.chat-box {
+    padding: 10px 0px 10px 45px;
+    @include d-flex($jc: flex-start, $ai: flex-start, $g: 30px);
+    cursor: pointer;
+    margin-top: 24px;
+
+    &:hover {
+        background: rgb(236, 238, 254);
+    }
+
+    &:hover .message-container .message {
+        background: #fff;
+    }
+
+    &:hover .last-answer-container {
+        color: #000;
+        font-weight: bold;
+    }
+
+    >.avatar-message {
+        height: 70px;
+        width: 70px;
+        object-fit: cover;
+    }
+}
+
+.message-container {
+    min-width: 352px;
+    @include d-flex(column, flex-start, flex-start, 8px);
+    font-family: "Nunito";
+
+    >.name-and-time-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        >.avatar-name-message {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        >.time {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(104, 104, 104, 1)
+        }
+    }
+
+    >.message {
+        padding: 16px;
+        border-radius: 0px 30px 30px 30px;
+        background: rgba(236, 238, 254, 1)
+    }
+}
+
+.answer-container {
+    width: 260px;
+    @include d-flex($jc: space-between, $g: 16px);
+
+    >.answers {
+        @include d-flex($jc: space-between, $g: 10px);
+        font-size: 18px;
+        font-weight: 400;
+        color: $specialBlue;
+    }
+
+    >.last-answer-container {
+        @include d-flex($jc: space-between, $g: 4px);
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(104, 104, 104, 1)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+// Icons Styles-------------------->
+.add-person-icon-container {
+    @include d-flex();
+    background: rgba(236, 238, 254, 1);
+    border-radius: 100px;
+    height: 48px;
+    width: 48px;
+    cursor: pointer;
+
+    &:hover .add-person-icon {
+        transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+        transform: scale(1.1);
+    }
+
+    &:hover .add-person-icon path {
+        fill: $specialBlue;
+    }
+}
+
+.add-person-icon {
+    height: 22px;
+    object-fit: contain;
+}
+
+.hashtagIconChat {
+    width: 22px;
+    height: 23px;
+    object-fit: contain;
+}
+
+.arrow-down-chat {
+    width: 14px;
+    height: 8px;
+    object-fit: contain;
+}

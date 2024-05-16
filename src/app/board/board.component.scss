@@ -14,11 +14,11 @@
     flex: 1;
     padding: 0 16px;
 
-    >.chat-field {
+    >.chatField {
         height: 100%;
-        display: flex;
         flex: 1;
         background: #fff;
-        border-radius: 20px;
+        border-radius: 30px;
+        padding: 25px;
     }
 }
