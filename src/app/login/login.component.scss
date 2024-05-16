@@ -67,7 +67,7 @@ footer {
     @include d-flex($g: 24px);
     background-image: linear-gradient(#797ef3, #313ae5);
     opacity: 1;
-    animation: background-vanish .225s ease-in-out forwards 2.6s ;
+    animation: background-vanish .225s ease-in-out forwards 2.8s ;
     .max-width-container {
         @include d-flex();
         position: relative;
@@ -80,7 +80,7 @@ footer {
 .intro-logo-container {
     @include d-flex($g: 24px);
     position: absolute;
-    animation: intro-animation .5s ease-in forwards 2s;
+    animation: intro-animation .5s ease-in forwards 2.2s;
 
     >img {
         object-fit: cover;
@@ -88,13 +88,11 @@ footer {
         transform: translateX(154px);
 
         animation-name: logo-animation, intro-logo-animation;
-        animation-duration: .5s, .5s;
-        animation-delay: .5s, 2s;
+        animation-duration: .7s, .5s;
+        animation-delay: .5s, 2.2s;
         animation-timing-function: ease-in-out, ease-in-out;
         animation-fill-mode: forwards, forwards;
 
-        //animation: logo-animation .5s ease-in-out forwards .5s;
-        //animation: intro-logo-animation 0.5s ease-in forwards 2.5s;
     }
 
     .headline {
@@ -108,14 +106,12 @@ footer {
             transform: translateX(-320px);
 
             animation-name: headline-animation, intro-headline-animation;
-            animation-duration: .225s, .5s;
-            animation-delay: 1s, 2s;
+            animation-duration: .5s, .5s;
+            animation-delay: 1s, 2.2s;
             animation-timing-function: ease-in-out, ease-in-out;
             animation-fill-mode: forwards, forwards;
 
             
-            // animation: headline-animation .225s ease-in-out forwards 1s;
-            // animation: intro-logo-animation 0.5s ease-in forwards 2s;
         }
     }
 }
@@ -192,5 +188,6 @@ footer {
 
     to {
         opacity: 0;
+        z-index: -1;
     }
 }

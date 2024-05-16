@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { User } from '../../shared/models/user.class';
 import { RouterLink } from '@angular/router';
+import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
   selector: 'app-avatar-picker',
@@ -10,6 +11,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './avatar-picker.component.scss'
 })
 export class AvatarPickerComponent {
+  signupService = inject(SignupService);
   @Input() userData!:User;
   @Output() goBack = new EventEmitter<boolean>();
   user!: User;
@@ -31,10 +33,14 @@ export class AvatarPickerComponent {
   }
 
   completeSignup() {
+    this.signupService.user$.next(this.user);
+    console.log('signed up user: ', this.signupService.user);
     this.signUpSuccessful.emit(true);
+    
   }
 
   pickAvatar(i:number) {
+    this.user.avatarPath = this.avatars[i];
     this.avatarImgPath = this.avatars[i];
     this.avatarPicked = true;
   }

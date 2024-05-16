@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../shared/models/user.class';
 import { RouterLink } from '@angular/router';
+import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,6 +13,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
+  signupService = inject(SignupService);
   user = new User();
   checkboxChecked = false;
   @Output() showNextPage = new EventEmitter<boolean>();
@@ -23,6 +25,5 @@ export class SignupComponent {
       this.showNextPage.emit(true);
       this.passUserDetail.emit(this.user);
     }
-
   }
 }
