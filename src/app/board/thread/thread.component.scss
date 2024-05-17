@@ -1,11 +1,14 @@
 @import '../../../styles.scss';
 
 .thread {
-    width: 495px;
     height: 100%;
+    width: 100%;
     background: #fff;
     border-radius: 30px;
     font-family: "Nunito";
+    position: relative;
+    @include d-flex(column, flex-start, none, 24px);
+    transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
 
     >.thread-header {
         @include d-flex($jc: space-between, $ai: center);
@@ -34,11 +37,20 @@
     }
 }
 
+.thread-chat {
+    height: 450px;
+    overflow-y: auto;
+}
+
+.thread-message-box {
+    padding: 10px 10px 10px 40px;
+    @include d-flex($fd: column, $jc: flex-start, $g: 8px);
+}
+
 .message {
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    padding: 10px 10px 10px 40px;
 }
 
 .thread-message {
@@ -68,10 +80,6 @@
     }
 }
 
-.answer-container{
-    @include d-flex();
-}
-
 .cross-icon {
     height: 40px;
     width: 40px;
@@ -88,9 +96,67 @@
     }
 }
 
+.answer-advice-container {
+    @include d-flex($jc: space-between, $g: 20px);
+    width: 100%;
+
+    >.answer-advice {
+        @include d-flex($jc: space-between, $g: 8px);
+        color: rgba(173, 176, 217, 1);
+    }
+
+    >.line {
+        height: 1px;
+        flex: 1;
+        display: block;
+        background: rgba(173, 176, 217, 1);
+    }
+}
+
 .avatar-thread-img {
     width: 70px;
     height: 70px;
     object-fit: cover;
     border-radius: 100%;
+}
+
+.reaction-indicator-container {
+    @include d-flex($jc: space-between, $g: 10px);
+}
+
+.reaction-indicator {
+    @include d-flex($jc: space-between, $g: 10px);
+    padding: 5px 10px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    border-radius: 20px;
+    background: #fff;
+}
+
+.addReaction-icon-thread {
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+    background: #fff;
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+
+    &:hover {
+        background: transparent;
+    }
+}
+
+.emoji-thread {
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
+}
+
+.answers-container-thread {
+    padding: 10px 10px 10px 40px;
+}
+
+.textarea-container {
+    padding: 24px
 }

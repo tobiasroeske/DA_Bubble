@@ -1,6 +1,7 @@
 @import '../../styles.scss';
 
 .board {
+    overflow: hidden;
     height: 100vh;
     width: 100%;
     display: flex;
@@ -15,14 +16,63 @@
     gap: 16px;
     flex: 1;
     padding: 0 16px;
+    overflow: hidden;
+    position: relative;
+
+    >.sidenav{
+        transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+    }
 
     >.chatField {
+        position: relative;
         height: 100%;
         width: 100%;
-        @include d-flex($fd: column, $jc: space-between, $ai: flex-start, $g: 24px);
+        @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 24px);
         flex: 1;
         background: #fff;
         border-radius: 30px;
         padding: 25px;
+        transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+    }
+}
+
+.hide-show-sidebar-btn {
+    border-radius: 0px 30px 30px 30px;
+    position: absolute;
+    bottom: 120px;
+    left: -120px;
+    background: #fff;
+    padding: 14px 23px;
+    @include d-flex(row, space-between, center, 10px);
+    transform: rotate(-90deg);
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+
+    >span {
+        font-family: "Nunito";
+        font-weight: 500;
+        font-size: 20px;
+    }
+
+    .hide-show-icon {
+        height: 16px;
+        width: 16px;
+        object-fit: cover;
+        transform: rotate(90deg);
+    }
+}
+
+.hide-show-sidebar-btn {
+    &:hover span {
+        color: $specialBlue;
+    }
+
+    &:hover .hide-show-icon path {
+        fill: $specialBlue;
+        stroke: $specialBlue;
+    }
+
+    &:hover .hide-show-icon rect {
+        stroke: $specialBlue;
     }
 }

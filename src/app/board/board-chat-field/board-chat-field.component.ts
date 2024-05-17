@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
+import { BoardService } from '../board.service';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class BoardChatFieldComponent {
 
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
+  boardServ = inject(BoardService)
 
   onHover(htmlElement: string) {
     if (htmlElement == 'message-box') {

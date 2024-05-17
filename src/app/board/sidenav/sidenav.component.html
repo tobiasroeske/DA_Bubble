@@ -1,5 +1,5 @@
 <div class="sidenav">
-    <div class="channel-btn">
+    <div class="channel-btn" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
         <span class="channel-btn-logo-name">
             <img class="workspaceLogo" src="assets/img/workspaceLogo.png" alt="">
             <h3>Devspace</h3>
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Channels Container -->
-    <div class="channel-container">
+    <div class="channel-container" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
         <div class="channel-header">
             <div class="arrow-symbol-title-container">
                 <svg class="arrow-down-channel" width="10" height="7" viewBox="0 0 10 7" fill="none"
@@ -71,7 +71,7 @@
     </div>
 
     <!-- Direct Messages Container -->
-    <div class="direct-messages-container">
+    <div class="direct-messages-container" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
         <div class="direct-message-header">
             <svg class="arrow-down-directmessages" width="10" height="7" viewBox="0 0 10 7" fill="none"
                 xmlns="http://www.w3.org/2000/svg">

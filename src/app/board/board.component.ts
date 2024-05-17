@@ -6,6 +6,7 @@ import { BoardChatFieldComponent } from './board-chat-field/board-chat-field.com
 import { CreateMessageAreaComponent } from './create-message-area/create-message-area.component';
 import { ThreadComponent } from './thread/thread.component';
 import { SignupService } from '../shared/services/signup/signup.service';
+import { BoardService } from './board.service';
 import { Auth, User } from '@angular/fire/auth';
 
 @Component({
@@ -17,7 +18,8 @@ import { Auth, User } from '@angular/fire/auth';
 })
 export class BoardComponent {
   authService = inject(SignupService);
-  
+  boardServ = inject(BoardService);
+
   constructor() {
     this.authService.getLoggedInUser()
   }

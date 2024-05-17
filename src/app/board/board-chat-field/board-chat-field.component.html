@@ -36,7 +36,7 @@
 </div>
 
 <!-- Main Chat Inside Messages and Time separators -->
-<div class="chat" style="height:350px ;overflow-y: auto;">
+<div class="chat">
     <div class="chat-box">
         <div class="time-separator-container">
             <span class="line"></span>
@@ -107,7 +107,7 @@
                     </span>
                 </div>
                 <div class="answer-container">
-                    <div class="answers">
+                    <div class="answers" (click)="boardServ.open('thread')">
                         <span class="number">2</span>
                         <span>Antworten</span>
                     </div>
@@ -205,7 +205,7 @@
     </div>
 
      <!-- Thats is only demonstrating test -->
-     <div class="chat-box-2-test">
+     <div class="chat-box-2">
         <div class="time-separator-container">
             <span class="line"></span>
             <div class="date-container">
@@ -289,4 +289,4 @@
     </div>
 </div>
 
-<app-create-message-area style="width: 100%;"></app-create-message-area>
+<app-create-message-area></app-create-message-area>

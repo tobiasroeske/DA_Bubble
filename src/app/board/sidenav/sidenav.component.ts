@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -9,5 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './sidenav.component.scss'
 })
 export class SidenavComponent {
+  boardServ = inject(BoardService)
 
 }

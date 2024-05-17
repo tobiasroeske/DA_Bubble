@@ -1,11 +1,11 @@
-@import '../../../styles.scss';
+@import '../../../../styles.scss';
 
 .textarea-container {
-    position:absolute;
-    bottom:20px;
-    left: 20px;
+    position: absolute;
+    bottom: 20px;
     right: 20px;
-    min-height: 145px;
+    left: 20px;
+    height: 145px;
     background: #fff;
     border: 1px solid rgba(173, 176, 217, 1);
     border-radius: 20px;
