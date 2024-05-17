@@ -10,4 +10,5 @@ import { Component } from '@angular/core';
 })
 export class ThreadComponent {
 
+  specialBlue:string = "rgba(83, 90, 241, 1)"
 }

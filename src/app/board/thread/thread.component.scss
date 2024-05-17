@@ -17,6 +17,57 @@
     }
 }
 
+.title-and-channel-container {
+    >h2 {
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    >.hashtag-icon-thread {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+    }
+
+    >.channel-thread {
+        color: $specialBlue;
+    }
+}
+
+.thread-message-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px 10px 10px 40px;
+}
+
+.thread-message {
+    @include d-flex($fd: column, $jc: flex-start, $g: 8px);
+
+    >.time-and-name-container {
+        width: 100%;
+        @include d-flex($jc: flex-start, $g: 20px);
+
+        >.name {
+            font-size: 18px;
+            font-weight: 700;
+
+            &:hover {
+                color: $specialBlue;
+                cursor: pointer;
+            }
+        }
+    }
+
+    >p {
+        background: rgba(236, 238, 254, 1);
+        border-radius: 0px 20px 20px 20px;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: 400;
+    }
+}
+
 .cross-icon {
     height: 40px;
     width: 40px;
@@ -31,4 +82,11 @@
     &:hover path {
         fill: $specialBlue;
     }
+}
+
+.avatar-thread-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 100%;
 }
