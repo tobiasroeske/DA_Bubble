@@ -1,13 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { User } from '../../models/user.class';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
+import { BehaviorSubject, Observable, Subject, from } from 'rxjs';
+import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile} from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignupService {
   auth = inject(Auth)
+  router = inject(Router)
   user$ = new Subject();
   user!: User;
   currentUser = this.auth.currentUser
@@ -21,31 +23,20 @@ export class SignupService {
 
   async register() {
     await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password)
-    .then( userCredential => {
-      let currentUser = userCredential.user;
-      console.log(currentUser);
-    })
-    .catch(error => {
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      console.warn(errorCode)
-      console.warn(errorMessage)
-    })
+      .then(userCredential => {
+        updateProfile(userCredential.user, {
+          photoURL: this.user.avatarPath
+        })
+      })
+      .catch(error => {
+        console.error(error);
+      })
   }
 
   async login(email: string, password: string) {
-    await signInWithEmailAndPassword(this.auth, email, password)
-    .then(userCredential => {
-      let currentUser = userCredential.user;
-      console.log(currentUser);
-      
-    }).catch(error =>  {
-      let errorCode = error.code;
-      let errorMessage = error.code;
-      console.error(errorCode);
-      console.error(errorMessage);
-    })
+    await signInWithEmailAndPassword(this.auth, email, password);
   }
+
 
   getLoggedInUser() {
     onAuthStateChanged(this.auth, user => {
@@ -61,6 +52,7 @@ export class SignupService {
 
   async logout() {
     await signOut(this.auth)
+    this.router.navigateByUrl('login')
   }
 
 }

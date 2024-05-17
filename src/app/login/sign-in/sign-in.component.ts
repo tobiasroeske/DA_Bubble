@@ -15,18 +15,22 @@ import { Router } from '@angular/router';
 export class SignInComponent {
   signupService = inject(SignupService);
   router = inject(Router);
-  mail = '';
-  password = '';
+  mail!: string;
+  password!: string;
+  errorMessage = false;
 
   @Output() passwordForgotten = new EventEmitter<boolean>();
 
-  onSubmit(ngForm: NgForm) {
-    this.login();
-  }
-
-  async login() {
-    await this.signupService.login(this.mail, this.password);
-    this.router.navigateByUrl('board');
+  async onSubmit(ngForm: NgForm) {
+    if (ngForm.submitted) {
+      let rawForm = ngForm.form.getRawValue()
+      await this.signupService.login(rawForm.email, rawForm.password)
+      .then(() => this.router.navigateByUrl('board'))
+      .catch(err => {
+        this.errorMessage = true;
+        console.log(err);
+      })
+    }
   }
 
   forgotPassword() {

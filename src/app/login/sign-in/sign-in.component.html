@@ -13,7 +13,6 @@
                     <label for="email"></label>
                     <input [(ngModel)]="mail" #email type="email" id="email" name="email" placeholder="beispielname@email.com">
                 </div>
-                <span class="error-message">Diese E-Mail-Adresse ist leider ungültig</span>
             </div>
 
             <div class="input-container">
@@ -26,7 +25,9 @@
                     <label for="password"></label>
                     <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="Passwort">
                 </div>
-                <span class="error-message">Falsches Password. Bitte noch einmal versuchen.</span>
+                @if(errorMessage) {
+                    <span class="error-message">E-Mail-Adresse oder Passwort falsch. Bitte noch einmal versuchen.</span>
+                }
             </div>
         </div>
 
