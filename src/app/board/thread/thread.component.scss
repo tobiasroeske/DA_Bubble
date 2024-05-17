@@ -34,7 +34,7 @@
     }
 }
 
-.thread-message-box {
+.message {
     display: flex;
     align-items: flex-start;
     gap: 20px;
@@ -66,6 +66,10 @@
         font-size: 18px;
         font-weight: 400;
     }
+}
+
+.answer-container{
+    @include d-flex();
 }
 
 .cross-icon {
