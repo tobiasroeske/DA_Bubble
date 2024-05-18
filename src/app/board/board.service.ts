@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { User } from '../shared/models/user.class';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +9,10 @@ export class BoardService {
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
-  status:string = ''
+  status: string = 'öffen';
 
 
-  constructor() { }
+  constructor() {}
 
   open(element: string) {
     if (element == 'thread') {
@@ -38,7 +39,7 @@ export class BoardService {
       this.status = 'schließen'
       setTimeout(() => {
         this.textHidden = false;
-      }, 50)
+      }, 100);
     }
   }
 

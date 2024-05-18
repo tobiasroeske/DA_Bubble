@@ -10,6 +10,40 @@ import { BoardService } from '../board.service';
   styleUrl: './sidenav.component.scss'
 })
 export class SidenavComponent {
-  boardServ = inject(BoardService)
+  boardServ = inject(BoardService);
+  channels: string[] = ['Entwickerteam', 'Office Team'];
+
+  channelHeaderIsClicked: boolean = false;
+  directMessHeaderisClicked: boolean = false;
+  canTranslateYChannel: boolean = false;
+  canTranslateYUserList: boolean = false;
+
+  onHeaderClick() {
+    if (!this.channelHeaderIsClicked) {
+      this.channelHeaderIsClicked = true;
+      setTimeout(() => {
+        this.canTranslateYChannel = true;
+      }, 30)
+    } else if (this.channelHeaderIsClicked) {
+      this.canTranslateYChannel = false;
+      setTimeout(() => {
+        this.channelHeaderIsClicked = false;
+      }, 50)
+    }
+  }
+
+  onDirectMessageClick() {
+    if (!this.directMessHeaderisClicked) {
+      this.directMessHeaderisClicked = true;
+      setTimeout(() => {
+        this.canTranslateYUserList = true;
+      }, 30)
+    } else {
+      this.canTranslateYUserList = false;
+      setTimeout(() => {
+        this.directMessHeaderisClicked = false;
+      }, 50)
+    }
+  }
 
 }

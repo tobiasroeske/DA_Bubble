@@ -15,7 +15,7 @@ export class BoardChatFieldComponent {
 
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
-  boardServ = inject(BoardService)
+  boardServ = inject(BoardService);
 
   onHover(htmlElement: string) {
     if (htmlElement == 'message-box') {

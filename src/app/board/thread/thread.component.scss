@@ -53,6 +53,12 @@
     gap: 20px;
 }
 
+.message-3{
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
 .thread-message {
     @include d-flex($fd: column, $jc: flex-start, $g: 8px);
 
