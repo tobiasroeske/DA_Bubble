@@ -3,6 +3,7 @@
 div {
     @include d-flex($jc: space-between);
     padding: 16px 16px 0 16px;
+    position: relative;
 }
 
 .logo-container {
@@ -68,6 +69,7 @@ div {
         height: 70px;
         width: 70px;
         object-fit: cover;
+        border-radius: 100%;
         cursor: pointer;
     }
 
@@ -76,4 +78,35 @@ div {
         height: 8px;
         object-fit: cover;
     }
+}
+
+.profile-options {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 30px;
+    gap: 15px;
+    right: 0;
+    top: 108px;
+    z-index: 10;
+    border-radius: 30px 0 30px 30px;
+    box-shadow: 0px 6px 10px 0px #00000033;
+
+    .profile-btn {
+        width: fit-content;
+        background-color: transparent;
+        color: black;
+        border-color: transparent;
+        transition: background-color 0.125s ease-in-out;
+        padding: 10px 45px;
+        font-size: 24px;
+        font-weight: 600;
+        &:hover {
+            background-color: #ECEEFE;
+            border-color: transparent;
+            color: #5359F1;
+        }
+    }
+
 }

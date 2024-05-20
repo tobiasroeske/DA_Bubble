@@ -22,13 +22,19 @@ import { Auth, User } from '@angular/fire/auth';
 export class BoardComponent {
   authService = inject(SignupService);
   boardServ = inject(BoardService);
+<<<<<<< HEAD
   firestore = inject(FirestoreService);
   
+=======
+  profileOptionContainerOpen = false;
+>>>>>>> 4ce55c2c1c0760fe925a02fca1e1c8ccb60a675a
 
   constructor() {
     this.authService.getLoggedInUser()
-  
-    
+  }
+
+  openProfileOptions($event: boolean) {
+  this.profileOptionContainerOpen = $event;
   }
 
   logout() {

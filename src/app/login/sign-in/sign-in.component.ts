@@ -27,8 +27,11 @@ export class SignInComponent {
       await this.signupService.login(rawForm.email, rawForm.password)
       .then(() => this.router.navigateByUrl('board'))
       .catch(err => {
+        
         this.errorMessage = true;
         console.log(err);
+        console.log(err.code);
+        
       })
     }
   }

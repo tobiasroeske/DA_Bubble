@@ -1,20 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { User } from '../shared/models/user.class';
+import { SignupService } from '../shared/services/signup/signup.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardService {
-
+  authService = inject(SignupService);
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
   dialogIsOpen: boolean = false;
   editDialogIsOpen: boolean = false;
   status: string = 'öffen';
-
+  profileOptionsOpen = false;
+  currentUser!: any;
 
   constructor() { }
+
+  getCurrentUser() {
+    return this.authService.currentUser;
+  }
 
   open(element: string) {
     if (element == 'thread') {
@@ -55,6 +61,14 @@ export class BoardService {
 
   toggleDialogEditChannel() {
     this.editDialogIsOpen = !this.editDialogIsOpen;
+  }
+
+  toggleProfileOptions() {
+    this.profileOptionsOpen = !this.profileOptionsOpen;
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
   }
 
 

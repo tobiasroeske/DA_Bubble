@@ -12,12 +12,12 @@ import { environment } from '../environments/environment.development';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    importProvidersFrom(
-      provideFirebaseApp(() => initializeApp(environment.firebaseConfig))
-    ),
-    importProvidersFrom(provideAuth(() => getAuth())),
-    importProvidersFrom(provideFirestore(() => getFirestore())),
-    importProvidersFrom(provideStorage(() => getStorage())), importProvidersFrom(provideFirebaseApp(() => initializeApp({"projectId":"da-bubble-697bb","appId":"1:177261164734:web:c1a9d6e1ba5fe82dd4c6ef","storageBucket":"da-bubble-697bb.appspot.com","apiKey":"AIzaSyCIw_VDLdKIe_07ziFPONisF9RCaRb72ac","authDomain":"da-bubble-697bb.firebaseapp.com","messagingSenderId":"177261164734"}))), importProvidersFrom(provideAuth(() => getAuth())), importProvidersFrom(provideFirestore(() => getFirestore())), importProvidersFrom(provideStorage(() => getStorage())),
-  ],
+    importProvidersFrom([
+      provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+      provideFirestore(() => getFirestore()),
+      provideAuth(() => getAuth()),
+      provideStorage(() => getStorage())
+    ]
+    )],
 };
 
