@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../board.service';
 import { SignupService } from '../../shared/services/signup/signup.service';
@@ -13,4 +13,5 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 export class BoardToolbarComponent {
   authService = inject(SignupService);
   boardServ = inject(BoardService);
+  
 }

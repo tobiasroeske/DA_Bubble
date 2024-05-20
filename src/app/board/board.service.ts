@@ -13,6 +13,7 @@ export class BoardService {
   dialogIsOpen: boolean = false;
   editDialogIsOpen: boolean = false;
   status: string = 'öffen';
+  profileOptionsOpen = false;
   currentUser!: any;
 
   constructor() { }
@@ -60,6 +61,14 @@ export class BoardService {
 
   toggleDialogEditChannel() {
     this.editDialogIsOpen = !this.editDialogIsOpen;
+  }
+
+  toggleProfileOptions() {
+    this.profileOptionsOpen = !this.profileOptionsOpen;
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
   }
 
 

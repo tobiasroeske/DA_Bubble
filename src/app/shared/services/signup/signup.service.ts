@@ -48,7 +48,7 @@ export class SignupService {
   }
 
   async login(email: string, password: string) {
-    await signInWithEmailAndPassword(this.auth, email, password);
+    await signInWithEmailAndPassword(this.auth, email, password)
   }
 
 
@@ -69,5 +69,7 @@ export class SignupService {
     await signOut(this.auth)
     this.router.navigateByUrl('login')
   }
+
+  
 
 }

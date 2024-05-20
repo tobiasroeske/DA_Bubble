@@ -1,4 +1,7 @@
 <div class="board">
+    @if (boardServ.profileOptionsOpen) {
+        <div class="overlay" (click)="boardServ.toggleProfileOptions()"></div>
+    }
     <app-board-toolbar></app-board-toolbar>
     <!-- <button (click)="logout()" class="btn-no-style">Logout</button> -->
     <div class="view">
