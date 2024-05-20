@@ -53,7 +53,7 @@
     gap: 20px;
 }
 
-.message-3{
+.message-3 {
     display: flex;
     align-items: flex-start;
     gap: 20px;
@@ -83,22 +83,6 @@
         padding: 15px;
         font-size: 18px;
         font-weight: 400;
-    }
-}
-
-.cross-icon {
-    height: 40px;
-    width: 40px;
-    object-fit: contain;
-    border-radius: 100%;
-
-    &:hover {
-        cursor: pointer;
-        background: rgba(236, 238, 254, 1);
-    }
-
-    &:hover path {
-        fill: $specialBlue;
     }
 }
 

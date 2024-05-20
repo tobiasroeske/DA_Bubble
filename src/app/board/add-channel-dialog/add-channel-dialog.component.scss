@@ -1,0 +1,112 @@
+@import '../../../styles.scss';
+
+.dialog-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index:2;
+    background: rgba(0, 0, 0, 0.15);
+    @include d-flex();
+    font-family: "Nunito";
+
+    >.add-channel-dialog {
+        width: 50%;
+        min-height: 50vh;
+        background: #fff;
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+        @include d-flex(column, space-between, flex-start, 20px);
+    }
+}
+
+.add-channel-header {
+    width: 100%;
+    @include d-flex($jc: space-between);
+
+    >h3 {
+        font-size: 24px;
+        font-weight: 700;
+    }
+}
+
+.tipp-text {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.input-and-name-container {
+    @include d-flex(column, space-between, flex-start, 20px);
+    width: 100%;
+
+    >h3 {
+        font-size: 18px;
+        font-weight: 700;
+
+        >span {
+            font-size: 18px;
+            font-weight: 400;
+            color: gray
+        }
+    }
+
+    >.input-container {
+        min-height: 65px;
+        border-radius: 40px;
+        border: 1px solid rgba(173, 176, 217, 1);
+        padding: 18px 20px 18px 20px;
+        width: 100%;
+        @include d-flex($jc: space-between, $g: 15px);
+        overflow-wrap: break-word;
+    }
+}
+
+input {
+    flex: 1;
+    border: unset;
+    outline: none;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.textarea {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    min-width: 0;
+    flex: 1;
+    border: unset;
+    outline: none;
+    resize: none;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.textarea[contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: rgba(104, 104, 104, 1);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.btn-container {
+    width: 100%;
+    @include d-flex($jc: flex-end);
+
+    >button {
+        padding: 12px 25px 12px 25px;
+        background: rgba(68, 77, 242, 1);
+        border-radius: 25px;
+        color: #fff;
+        border: unset;
+        outline: none;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+.d-none {
+    display: none;
+}

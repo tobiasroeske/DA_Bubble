@@ -9,10 +9,12 @@ export class BoardService {
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
+  dialogIsOpen: boolean = false;
+  editDialogIsOpen: boolean = false;
   status: string = 'öffen';
 
 
-  constructor() {}
+  constructor() { }
 
   open(element: string) {
     if (element == 'thread') {
@@ -41,6 +43,18 @@ export class BoardService {
         this.textHidden = false;
       }, 100);
     }
+  }
+
+  openDialogAddChannel() {
+    this.dialogIsOpen = true;
+  }
+
+  closeDialogAddChannel() {
+    this.dialogIsOpen = false;
+  }
+
+  toggleDialogEditChannel() {
+    this.editDialogIsOpen = !this.editDialogIsOpen;
   }
 
 

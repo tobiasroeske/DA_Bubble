@@ -1,0 +1,156 @@
+@import '../../../styles.scss';
+
+.edit-dialog-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    @include d-flex();
+
+    >.edit-dialog {
+        background: #fff;
+        min-height: 50vh;
+        width: 50%;
+        border-radius: 0px 30px 30px 30px;
+        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        font-family: "Nunito";
+        @include d-flex(column, space-between, flex-start, 20px);
+    }
+}
+
+.edit-channel-header {
+    @include d-flex($jc: space-between);
+    width: 100%;
+
+    .channel {
+        @include d-flex($jc: space-between, $g: 15px);
+        padding: 2px 1px;
+        border-radius: 30px;
+        cursor: pointer;
+
+        >h3 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+    }
+}
+
+.edit-channel-name-container {
+    border-radius: 20px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    padding: 20px;
+    @include d-flex(column, space-between, flex-start, 20px);
+    transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+    width: 100%;
+
+    >.edit-channel-name-header {
+        @include d-flex($jc: space-between);
+        width: 100%;
+        transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+
+        >span {
+            color: $specialBlue;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+
+    >.edit-channel-name {
+        @include d-flex($jc: flex-start, $g: 10px);
+        width: 100%;
+
+        >.edit-name {
+            font-size: 18px;
+            font-weight: 400;
+        }
+    }
+}
+
+.edit-channel-description-container {
+    border-radius: 20px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    padding: 20px;
+    @include d-flex(column, space-between, flex-start, 30px);
+    transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+
+    >.edit-channel-description-header {
+        @include d-flex($jc: space-between);
+        width: 100%;
+        transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+
+        >span {
+            color: $specialBlue;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+
+    >.edit-description {
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    >.line {
+        display: block;
+        background: rgba(173, 176, 217, 1);
+        height: 1px;
+        width: 100%;
+    }
+}
+
+.creator-container {
+    @include d-flex(column, space-between, flex-start, 20px);
+
+    >h3 {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    >span {
+        font-size: 24px;
+        font-weight: 400;
+        color: $specialBlue;
+    }
+}
+
+.hashtag-icon {
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
+}
+
+.hashtag-icon-smaller {
+    height: 16px;
+    width: 16px;
+    object-fit: contain;
+}
+
+.name-container-editModus {
+    padding: 0;
+    border: none;
+}
+
+.editChannel-name-editModus {
+    padding: 0;
+    padding: 18px 20px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    border-radius: 40px;
+}
+
+.desc-container-editModus {
+    padding: 0;
+    border: none;
+}
+
+.editChannel-name-editModus {
+    padding: 20px
+}
+
+.d-none{
+    display: none;
+}

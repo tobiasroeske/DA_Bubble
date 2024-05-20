@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 /* nunito-200 - latin */
+$specialBlue: rgba(83, 90, 241, 1);
+
 *,
 *::before,
 *::after {
@@ -19,6 +21,7 @@ body {
   background: rgba(236, 238, 254, 1);
   width: 100%;
   max-width: 1920px;
+  user-select: none;
 }
 
 a {
@@ -77,7 +80,22 @@ button {
   object-fit: contain;
 }
 
-$specialBlue: rgba(83, 90, 241, 1);
+.cross-icon {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  border-radius: 100%;
+
+  &:hover {
+    cursor: pointer;
+    background: rgba(236, 238, 254, 1);
+  }
+
+  &:hover path {
+    fill: $specialBlue;
+  }
+}
+
 
 @mixin d-flex($fd: row, $jc: center, $ai: center, $g: 0) {
   display: flex;

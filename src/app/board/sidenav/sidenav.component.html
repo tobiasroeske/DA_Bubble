@@ -33,7 +33,7 @@
                     <h2>Channels</h2>
                 </span>
             </div>
-            <div class="addIcon-container">
+            <div (click)="boardServ.openDialogAddChannel()" class="addIcon-container">
                 <svg class="addIcon" width="14" height="14" viewBox="0 0 14 14" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -55,7 +55,7 @@
             </a>
             }
         </div>
-        <span [ngClass]="{'d-none': !channelHeaderIsClicked}" class="add-channel-container">
+        <span (click)="boardServ.openDialogAddChannel()" [ngClass]="{'d-none': !channelHeaderIsClicked}" class="add-channel-container">
             <svg class="add-circle" width="20" height="21" viewBox="0 0 20 21" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
