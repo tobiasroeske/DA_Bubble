@@ -21,9 +21,12 @@ import { Auth, User } from '@angular/fire/auth';
 export class BoardComponent {
   authService = inject(SignupService);
   boardServ = inject(BoardService);
+  
 
   constructor() {
     this.authService.getLoggedInUser()
+  
+    
   }
 
   logout() {
