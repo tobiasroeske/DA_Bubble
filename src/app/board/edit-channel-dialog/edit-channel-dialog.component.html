@@ -35,7 +35,7 @@
                 <h3>Beschreibung</h3>
                 <span (click)="onDescriptionButtonClick()">{{editDesc}}</span>
             </div>
-            <p [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}" class="edit-description">Dieser
+            <p [attr.contenteditable]="editDescriptionBtnClicked" [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}" class="edit-description">Dieser
                 Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen
                 mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.
             </p>

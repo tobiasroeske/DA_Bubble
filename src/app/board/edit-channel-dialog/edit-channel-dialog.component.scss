@@ -7,11 +7,12 @@
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.15);
+    z-index: 2;
     @include d-flex();
 
     >.edit-dialog {
         background: #fff;
-        min-height: 50vh;
+        min-height: 616px;
         width: 50%;
         border-radius: 0px 30px 30px 30px;
         box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
@@ -103,6 +104,10 @@
     }
 }
 
+.edit-description {
+    outline: none;
+}
+
 .creator-container {
     @include d-flex(column, space-between, flex-start, 20px);
 
@@ -151,6 +156,6 @@
     padding: 20px
 }
 
-.d-none{
+.d-none {
     display: none;
 }

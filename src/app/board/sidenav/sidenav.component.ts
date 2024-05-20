@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../board.service';
+import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -11,7 +12,7 @@ import { BoardService } from '../board.service';
 })
 export class SidenavComponent {
   boardServ = inject(BoardService);
-  channels: string[] = ['Entwickerteam', 'Office Team'];
+  firestore = inject(FirestoreService);
 
   channelHeaderIsClicked: boolean = false;
   directMessHeaderisClicked: boolean = false;

@@ -8,6 +8,7 @@ import { ThreadComponent } from './thread/thread.component';
 import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dialog.component';
 import { EditChannelDialogComponent } from './edit-channel-dialog/edit-channel-dialog.component';
 import { SignupService } from '../shared/services/signup/signup.service';
+import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { BoardService } from './board.service';
 import { Auth, User } from '@angular/fire/auth';
 
@@ -21,6 +22,7 @@ import { Auth, User } from '@angular/fire/auth';
 export class BoardComponent {
   authService = inject(SignupService);
   boardServ = inject(BoardService);
+  firestore = inject(FirestoreService);
   
 
   constructor() {

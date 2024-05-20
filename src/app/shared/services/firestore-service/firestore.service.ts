@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore/firebase';
+import { Injectable, inject, } from '@angular/core';
+import { Firestore, addDoc, collection, doc, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { Channel } from '../../models/channel.class';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,27 @@ import { Firestore } from '@angular/fire/firestore/firebase';
 export class FirestoreService {
   firestore = inject(Firestore);
 
-  
-  constructor() { }
+  unsubChannel;
+  allChannels:any[] = [];
+
+  constructor() {
+    this.unsubChannel = this.subChannelList();
+  }
+
+  subChannelList() {
+    return onSnapshot(this.getChannelsRef(), (list) => {
+      this.allChannels = [];
+      list.forEach((el) => {
+        this.allChannels.push(el.data());
+      });
+    });
+  }
+
+  getChannelsRef() {
+    return collection(this.firestore, 'channels');
+  }
+
+  getSingleChannelRef(colId: string, docId: string) {
+    return doc(collection(this.firestore, colId), docId);
+  }
 }
