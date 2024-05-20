@@ -3,6 +3,7 @@ import { User } from '../../models/user.class';
 import { BehaviorSubject, Observable, Subject, from } from 'rxjs';
 import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile} from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { FirestoreService } from '../firestore-service/firestore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,11 @@ import { Router } from '@angular/router';
 export class SignupService {
   auth = inject(Auth)
   router = inject(Router)
+  firestoreService = inject(FirestoreService);
   user$ = new Subject();
   user!: User;
-  currentUser = this.auth.currentUser
+  currentUser!: any;
+  
 
   constructor() {
     this.user$.subscribe(val => {
@@ -25,12 +28,23 @@ export class SignupService {
     await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password)
       .then(userCredential => {
         updateProfile(userCredential.user, {
-          photoURL: this.user.avatarPath
+          photoURL: this.user.avatarPath,
+          displayName: this.user.name
+        })
+        this.firestoreService.addUser({
+          id: userCredential.user.uid, 
+          name: this.user.name, 
+          email: this.user.email, 
+          avatarPath: this.user.avatarPath
         })
       })
       .catch(error => {
         console.error(error);
       })
+  }
+
+  getCurrentUser() {
+    return this.currentUser
   }
 
   async login(email: string, password: string) {
@@ -43,7 +57,8 @@ export class SignupService {
       if (user) {
         console.log('signed in ', user);
         const uid = user.uid;
-        console.log('User id is', uid);
+        this.currentUser = user;
+        console.log('Current user is: ', this.currentUser);
       } else {
         console.log(user + 'is signed out');
       }

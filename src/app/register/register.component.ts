@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AvatarPickerComponent } from './avatar-picker/avatar-picker.component';
 import { SignupService } from '../shared/services/signup/signup.service';
 
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -15,6 +16,7 @@ import { SignupService } from '../shared/services/signup/signup.service';
 export class RegisterComponent {
   router = inject(Router)
   signupService = inject(SignupService)
+ 
   next = false;
   user = new User();
   signupSuccessful = false;

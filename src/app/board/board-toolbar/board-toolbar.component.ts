@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BoardService } from '../board.service';
+import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
   selector: 'app-board-toolbar',
@@ -9,5 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './board-toolbar.component.scss'
 })
 export class BoardToolbarComponent {
-
+  authService = inject(SignupService);
+  boardServ = inject(BoardService);
 }
