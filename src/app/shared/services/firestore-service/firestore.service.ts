@@ -32,7 +32,7 @@ export class FirestoreService {
     return doc(this.getUsersRef(), userId)
   }
 
-  async addUser(userId: string, user:CurrentUser) {
+  async addUser(userId: string, user: CurrentUser) {
     await setDoc(this.getUserDocRef(userId), user);
   }
 
@@ -82,7 +82,6 @@ export class FirestoreService {
         let channel = new Channel(el.data());
         channel.id = el.id;
         this.allChannels.push(channel.toJSON());
-        console.log(this.allChannels);
       });
     });
   }

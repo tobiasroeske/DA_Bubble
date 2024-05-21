@@ -79,6 +79,7 @@
     padding: 20px;
     @include d-flex(column, space-between, flex-start, 30px);
     transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+    width: 100%;
 
     >.edit-channel-description-header {
         @include d-flex($jc: space-between);
@@ -93,9 +94,14 @@
         }
     }
 
-    >.edit-description {
+    >textarea {
         font-size: 18px;
         font-weight: 400;
+        width: 100%;
+        border: unset;
+        resize: none;
+        outline: none;
+        font-family: "Nunito";
     }
 
     >.line {

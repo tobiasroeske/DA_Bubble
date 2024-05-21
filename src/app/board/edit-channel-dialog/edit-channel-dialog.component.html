@@ -1,12 +1,13 @@
-<div (click)="boardServ.toggleDialogEditChannel()" [ngClass]="{'d-none': !boardServ.editDialogIsOpen}" class="edit-dialog-container">
+<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" [ngClass]="{'d-none': !boardServ.editDialogIsOpen}"
+    class="edit-dialog-container">
     <div (click)="boardServ.stopPropagation($event)" class="edit-dialog">
         <div class="edit-channel-header">
             <span class="channel">
                 <img class="hashtag-icon" src="assets/icons/hashtag.svg" alt="">
-                <h3>Entwicklerteam</h3>
+                <h3>{{firestore.allChannels[boardServ.idx].title}}</h3>
             </span>
-            <svg (click)="boardServ.toggleDialogEditChannel()" class="cross-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="cross-icon" width="40" height="40"
+                viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
                     <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -35,17 +36,13 @@
                 <h3>Beschreibung</h3>
                 <span (click)="onDescriptionButtonClick()">{{editDesc}}</span>
             </div>
-            <p [attr.contenteditable]="editDescriptionBtnClicked" [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}" class="edit-description">Dieser
-                Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen
-                mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.
-            </p>
+            <textarea [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}"
+                class="edit-description" [ngModel]="firestore.allChannels[boardServ.idx]?.description"></textarea>
             <span class="line"></span>
             <div class="creator-container">
                 <h3>Erstellt von</h3>
                 <span>Noah Braun</span>
             </div>
-
         </div>
     </div>
-
 </div>

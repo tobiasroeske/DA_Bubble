@@ -1,23 +1,30 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../board.service';
+import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-edit-channel-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './edit-channel-dialog.component.html',
   styleUrl: './edit-channel-dialog.component.scss'
 })
-export class EditChannelDialogComponent {
+export class EditChannelDialogComponent{
 
   boardServ = inject(BoardService);
-  
+  firestore = inject(FirestoreService);
+
   editName: string = "Bearbeiten";
   editDesc: string = "Bearbeiten"
   editNameBtnClicked: boolean = false;
   editDescriptionBtnClicked: boolean = false;
+
+  constructor(){
+  }
+
 
   onEditButtonClick() {
     if (!this.editNameBtnClicked) {

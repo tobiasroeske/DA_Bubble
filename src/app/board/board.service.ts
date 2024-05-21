@@ -19,12 +19,12 @@ export class BoardService {
   profileOpen = false;
   editMode = false;
   currentUser!: any;
+  idx:number = 0
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
     console.log('user from local storage is: ', this.currentUser);
-    
-   }
+  }
 
   getCurrentUser() {
     return this.authService.currentUser;
@@ -68,7 +68,8 @@ export class BoardService {
     event?.stopPropagation();
   }
 
-  toggleDialogEditChannel() {
+  toggleDialogEditChannel(i:number) {
+    this.idx = i;
     this.editDialogIsOpen = !this.editDialogIsOpen;
   }
 
@@ -86,6 +87,11 @@ export class BoardService {
 
   stopPropagation(event: Event) {
     event.stopPropagation();
+  }
+
+  async showChannelInChatField(i: number, event: Event) {
+    this.idx = i;
+    event.preventDefault();
   }
 
 }
