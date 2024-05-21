@@ -1,0 +1,29 @@
+<div class="container">
+    <ng-container>
+        <div class="headline">
+            <h3>Profil</h3>
+            <img src="assets/icons/close.svg" alt="" (click)="closeDialog($event)">
+        </div>
+        <img src="assets/img/{{ boardServ.currentUser.avatarPath }}" alt="" class="avatar-img">
+        <div class="name-box">
+            <div>
+                <h2>{{ boardServ.currentUser.name }}</h2>
+                <span (click)="boardServ.toggleProfileEditor(); boardServ.stopPropagation($event)">Bearbeiten</span>
+            </div>
+            <span class="status">
+                <img src="assets/img/status_online.png" alt=""> Online
+            </span>
+        </div>
+    
+        <div class="email-container">
+            <img src="assets/img/mail_black.png" alt="">
+            <div>
+                <span>Email Adresse</span>
+                <span class="email-address">{{ boardServ.currentUser.email }}</span>
+            </div>
+        </div>
+    </ng-container>
+    
+    
+    
+</div>

@@ -1,12 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { User } from '../shared/models/user.class';
 import { SignupService } from '../shared/services/signup/signup.service';
+import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardService {
   authService = inject(SignupService);
+  storageService = inject(LocalStorageService);
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
@@ -14,9 +16,15 @@ export class BoardService {
   editDialogIsOpen: boolean = false;
   status: string = 'öffen';
   profileOptionsOpen = false;
+  profileOpen = false;
+  editMode = false;
   currentUser!: any;
 
-  constructor() { }
+  constructor() {
+    this.currentUser = this.storageService.loadCurrentUser();
+    console.log('user from local storage is: ', this.currentUser);
+    
+   }
 
   getCurrentUser() {
     return this.authService.currentUser;
@@ -68,9 +76,16 @@ export class BoardService {
     this.profileOptionsOpen = !this.profileOptionsOpen;
   }
 
+  toggleProfileView() {
+    this.profileOpen = !this.profileOpen;
+  }
+
+  toggleProfileEditor() {
+    this.editMode = !this.editMode;
+  }
+
   stopPropagation(event: Event) {
     event.stopPropagation();
   }
-
 
 }
