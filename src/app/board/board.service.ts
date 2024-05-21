@@ -57,6 +57,7 @@ export class BoardService {
 
   closeDialogAddChannel() {
     this.dialogIsOpen = false;
+    event?.stopPropagation();
   }
 
   toggleDialogEditChannel() {

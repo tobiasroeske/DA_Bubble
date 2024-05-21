@@ -1,5 +1,5 @@
-<div [ngClass]="{'d-none': !boardServ.editDialogIsOpen}" class="edit-dialog-container">
-    <div class="edit-dialog">
+<div (click)="boardServ.toggleDialogEditChannel()" [ngClass]="{'d-none': !boardServ.editDialogIsOpen}" class="edit-dialog-container">
+    <div (click)="boardServ.stopPropagation($event)" class="edit-dialog">
         <div class="edit-channel-header">
             <span class="channel">
                 <img class="hashtag-icon" src="assets/icons/hashtag.svg" alt="">
@@ -26,7 +26,7 @@
             </div>
             <div [ngClass]="{'editChannel-name-editModus': editNameBtnClicked}" class="edit-channel-name">
                 <img class="hashtag-icon-smaller" src="assets/icons/hashtag.svg" alt="">
-                <p class="edit-name">Entwicklerteam</p>
+                <input minlength="3" type="text">
             </div>
         </div>
         <div [ngClass]="{'desc-container-editModus': editDescriptionBtnClicked}"

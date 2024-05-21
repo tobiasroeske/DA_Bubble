@@ -64,9 +64,11 @@
         @include d-flex($jc: flex-start, $g: 10px);
         width: 100%;
 
-        >.edit-name {
+        >input {
             font-size: 18px;
             font-weight: 400;
+            border: unset;
+            outline: none;
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, collection, doc, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { Channel } from '../../models/channel.class';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class FirestoreService {
   userList: CurrentUser[] = [];
   unsubscribeUsers;
   unsubChannel;
-  allChannels:any[] = [];
+  allChannels: any[] = [];
+
 
   constructor() {
     this.unsubscribeUsers = this.unsubUsersList();
@@ -19,6 +21,7 @@ export class FirestoreService {
 
   ngOnDestroy(): void {
     this.unsubscribeUsers();
+    this.unsubChannel();
   }
 
   getUsersRef() {
@@ -31,13 +34,13 @@ export class FirestoreService {
 
   async addUser(user: CurrentUser) {
     await addDoc(this.getUsersRef(), this.getCleanUserJson(user))
-    .catch(err => console.error(err))
-    .then(docRef => {
-      if (docRef?.id) {
-        let uid = docRef?.id;
-        updateDoc(this.getUserDocRef(uid), { id: uid });
-      }
-    })
+      .catch(err => console.error(err))
+      .then(docRef => {
+        if (docRef?.id) {
+          let uid = docRef?.id;
+          updateDoc(this.getUserDocRef(uid), { id: uid });
+        }
+      })
   }
 
   unsubUsersList() {
@@ -46,7 +49,7 @@ export class FirestoreService {
       list.forEach(user => {
         let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
         this.userList.push(singleUser);
-      })
+      });
     })
   }
 
@@ -67,19 +70,29 @@ export class FirestoreService {
       avatarPath: obj.path || ''
     }
   }
+
   subChannelList() {
     return onSnapshot(this.getChannelsRef(), (list) => {
       this.allChannels = [];
       list.forEach((el) => {
-        this.allChannels.push(el.data());
+        let channel = new Channel(el.data());
+        channel.id = el.id;
+        this.allChannels.push(channel.toJSON());
+        console.log(this.allChannels);
       });
     });
   }
-  
+
+  async addChannel(obj: {}) {
+    await addDoc(this.getChannelsRef(), obj).catch((err) => {
+      console.log(err);
+    })
+  }
+
   getChannelsRef() {
     return collection(this.firestore, 'channels');
   }
-  
+
   getSingleChannelRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
   }

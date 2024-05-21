@@ -20,14 +20,10 @@ import { Auth, User } from '@angular/fire/auth';
   styleUrl: './board.component.scss'
 })
 export class BoardComponent {
+  firestore = inject(FirestoreService);
   authService = inject(SignupService);
   boardServ = inject(BoardService);
-<<<<<<< HEAD
-  firestore = inject(FirestoreService);
-  
-=======
   profileOptionContainerOpen = false;
->>>>>>> 4ce55c2c1c0760fe925a02fca1e1c8ccb60a675a
 
   constructor() {
     this.authService.getLoggedInUser()

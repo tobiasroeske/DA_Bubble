@@ -38,9 +38,5 @@ export class EditChannelDialogComponent {
       this.editDesc = "Bearbeiten";
     }
   }
-
-  closeEditDialog() {
-
-  }
 }
 
