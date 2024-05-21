@@ -36,6 +36,10 @@ export class SignInComponent {
     }
   }
 
+  googleLogin() {
+    this.signupService.googleLogin()
+  }
+
   forgotPassword() {
     this.passwordForgotten.emit(true);
   }

@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { User } from '../shared/models/user.class';
+
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
+import { User, onAuthStateChanged } from '@angular/fire/auth/firebase';
+import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 
 @Injectable({
   providedIn: 'root'

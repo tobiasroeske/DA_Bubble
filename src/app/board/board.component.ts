@@ -25,6 +25,10 @@ export class BoardComponent {
   boardServ = inject(BoardService);
   profileOptionContainerOpen = false;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cd09f9ab3928c5147236a1c9d70f679c8100e76b
 
   constructor() {
     this.authService.getLoggedInUser()

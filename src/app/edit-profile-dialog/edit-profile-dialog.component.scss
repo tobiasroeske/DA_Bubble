@@ -62,3 +62,32 @@ form {
         color: #686868;
     }
 }
+
+.form-actions {
+    @include d-flex($g:32px);
+    width: 100%;
+
+    .cancel-btn {
+        border-radius: 50px;
+        border: 1px solid #797EF3;
+        padding: 12px 25px;
+        color: #444DF2;
+        transition: all .125s ease-in-out;
+        &:hover {
+            background-color: #5359F1;
+            color: white;
+        }
+    }
+
+    .submit-btn {
+        border-radius: 50px;
+        padding: 12px 25px;
+        border: 1px solid transparent;
+        background-color: #444DF2;
+        color: white;
+        transition: all .125s ease-in-out;
+        &:hover {
+            background-color: #787EF2;
+        }
+    }
+}
