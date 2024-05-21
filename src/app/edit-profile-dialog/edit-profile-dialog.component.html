@@ -1,9 +1,9 @@
 <div class="content">
     <div class="headline">
         <h3>Dein Profil bearbeiten</h3>
-        <img src="assets/icons/close.svg" alt="" class="">
+        <img src="assets/icons/close.svg" alt="" class="" (click)="closeDialog(); boardServ.stopPropagation($event)">
     </div>
-    <img src="assets/img/{{ boardServ.getCurrentUser()?.photoURL }}" alt="" class="avatar-img">
+    <img src="assets/img/{{ boardServ.currentUser.avatarPath }}" alt="" class="avatar-img">
 
     <form (ngSubmit)="onsubmit(editForm)" #editForm="ngForm">
         <div class="input-container">
@@ -17,8 +17,8 @@
         </div>
 
         <div class="form-actions">
-            <div class="cancel-btn">Abbrechen</div>
-            <input type="submit" value="Speicher" class="submit-btn">
+            <div class="btn-no-style cancel-btn" (click)="closeDialog(); boardServ.stopPropagation($event)">Abbrechen</div>
+            <input type="submit" value="Speichern" class="btn-no-style submit-btn">
         </div>
         
         

@@ -23,13 +23,9 @@ export class BoardComponent {
   firestore = inject(FirestoreService);
   authService = inject(SignupService);
   boardServ = inject(BoardService);
-<<<<<<< HEAD
-  profileOptionContainerOpen = false;
-=======
-  firestore = inject(FirestoreService);
   profileOptionContainerOpen = false;
 
->>>>>>> 2fead1713dc567e2592298dbd8270465305537ea
+
 
   constructor() {
     this.authService.getLoggedInUser()

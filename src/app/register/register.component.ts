@@ -32,12 +32,12 @@ export class RegisterComponent {
 
   async signup($event: boolean) {
     this.signupSuccessful = $event
-    await this.signupService.register();
-    setTimeout(() => {
-      this.router.navigateByUrl('board')
-      
-    }, 1500)
+    await this.signupService.register()
+    .then(() => {
+      setTimeout(() => {
+        this.router.navigateByUrl('board')
+        
+      }, 1500)
+    }) 
   }
-
-  
 }
