@@ -1,0 +1,64 @@
+@import '../../styles.scss';
+
+.content {
+    @include d-flex($fd: column, $g: 45px);
+    width: 450px;
+    font-family: 'Nunito', sans-serif;
+    padding: 15px 10px;
+
+    .avatar-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 500px;
+    }
+}
+
+.headline {
+    width: 100%;
+    @include d-flex($jc: space-between);
+    font-size: 24px;
+    font-weight: 700;
+
+    >img {
+        cursor: pointer;
+        border-radius: 20px;
+        padding: 8px;
+        transition: all .125s ease-in-out;
+
+        &:hover {
+            background-color: #ECEEFD;
+        }
+    }
+}
+
+form {
+    width: 100%;
+    @include d-flex($fd: column, $ai: flex-start, $g: 20px);
+}
+
+.input-container {
+    @include d-flex($fd: column, $g: 7px, $ai: flex-start);
+    width: 100%;
+
+    label {
+        @include d-flex($g: 16px);
+        font-size: 20px;
+        font-weight: 700;
+
+        >img {
+            width: 30px;
+            height: 30px;
+
+        }
+    }
+
+    input {
+        width: 100%;
+        border-radius: 30px;
+        border: 1px solid #ADB0D9;
+        padding: 15px 20px;
+        font-size: 18px;
+        font-weight: 500;
+        color: #686868;
+    }
+}

@@ -1,0 +1,102 @@
+@import '../../styles.scss';
+
+
+
+.container {
+    @include d-flex($fd: column, $g: 38px);
+    font-family: 'Nunito', sans-serif;
+    padding: 15px 10px;
+    width: 450px;
+
+    .avatar-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 500px;
+    }
+}
+
+.name-box {
+    width: 100%;
+    @include d-flex($fd: column, $g: 20px);
+
+    >div {
+        @include d-flex($jc: space-between);
+        width: 100%;
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        >span {
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            color: #535AF1;
+            transition: all .125s ease-in-out;
+
+            &:hover {
+                color: #444DF2;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.status {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 16px;
+    color: #92C83E;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.headline {
+    @include d-flex($jc: space-between);
+    width: 100%;
+    font-size: 24px;
+    font-weight: 700;
+
+    >img {
+        cursor: pointer;
+        border-radius: 20px;
+        padding: 8px;
+        transition: all .125s ease-in-out;
+
+        &:hover {
+            background-color: #ECEEFD;
+        }
+    }
+}
+
+.email-container {
+    width: 100%;
+    @include d-flex($ai: flex-start, $jc: flex-start);
+
+    >img {
+        align-self: flex-start;
+        padding-top: 5px;
+    }
+
+    >div {
+        @include d-flex($fd: column, $ai: flex-start);
+
+        >span:first-child {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .email-address {
+            color: #1381FF;
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+}

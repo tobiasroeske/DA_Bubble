@@ -1,0 +1,26 @@
+<div class="content">
+    <div class="headline">
+        <h3>Dein Profil bearbeiten</h3>
+        <img src="assets/icons/close.svg" alt="" class="">
+    </div>
+    <img src="assets/img/{{ boardServ.getCurrentUser()?.photoURL }}" alt="" class="avatar-img">
+
+    <form (ngSubmit)="onsubmit(editForm)" #editForm="ngForm">
+        <div class="input-container">
+            <label for="name"><img src="assets/icons/name_edit_user.png">Vollständiger Name</label>
+            <input type="text" id="name" name="name" [(ngModel)]="fullname" #name="ngModel">
+        </div>
+
+        <div class="input-container">
+            <label for="name"><img src="assets/icons/mail_edit_user.png" alt="">E-Mail-Adresse</label>
+            <input type="email" id="email" name="email" #email="ngModel" [(ngModel)]="mail">
+        </div>
+
+        <div class="form-actions">
+            <div class="cancel-btn">Abbrechen</div>
+            <input type="submit" value="Speicher" class="submit-btn">
+        </div>
+        
+        
+    </form>
+</div>

@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { User } from '../../models/user.class';
-import { BehaviorSubject, Observable, Subject, from } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firestore-service/firestore.service';
+import { LocalStorageService } from '../local-storage-service/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class SignupService {
   auth = inject(Auth)
   router = inject(Router)
   firestoreService = inject(FirestoreService);
+  storageService = inject(LocalStorageService);
   user$ = new Subject();
   user!: User;
   currentUser!: any;
@@ -30,8 +32,9 @@ export class SignupService {
         updateProfile(userCredential.user, {
           photoURL: this.user.avatarPath,
           displayName: this.user.name
-        })
-        this.firestoreService.addUser({
+        });
+        this.storageService.saveCurrentUser(userCredential.user);
+        this.firestoreService.addUser(userCredential.user.uid ,{
           id: userCredential.user.uid, 
           name: this.user.name, 
           email: this.user.email, 
@@ -49,25 +52,32 @@ export class SignupService {
 
   async login(email: string, password: string) {
     await signInWithEmailAndPassword(this.auth, email, password)
+    .then((userCredential) => {
+      this.storageService.saveCurrentUser(userCredential.user);
+    })
   }
 
 
   getLoggedInUser() {
     onAuthStateChanged(this.auth, user => {
       if (user) {
-        console.log('signed in ', user);
         const uid = user.uid;
         this.currentUser = user;
         console.log('Current user is: ', this.currentUser);
+        this.storageService.saveCurrentUser(user);
       } else {
         console.log(user + 'is signed out');
+        this.storageService.saveCurrentUser(user);
       }
     })
   }
 
   async logout() {
     await signOut(this.auth)
-    this.router.navigateByUrl('login')
+    .then(() => {
+      this.storageService.saveCurrentUser('');
+      window.open('login', '_self');
+    })
   }
 
   
