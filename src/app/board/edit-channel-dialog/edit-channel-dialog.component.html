@@ -4,7 +4,7 @@
         <div class="edit-channel-header">
             <span class="channel">
                 <img class="hashtag-icon" src="assets/icons/hashtag.svg" alt="">
-                <h3>{{firestore.allChannels[boardServ.idx].title}}</h3>
+                <h3>{{firestore.allChannels[boardServ.idx]?.title}}</h3>
             </span>
             <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="cross-icon" width="40" height="40"
                 viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
