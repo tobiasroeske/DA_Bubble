@@ -2,12 +2,15 @@ import { Injectable, inject } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, collection, doc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
+// import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
   firestore = inject(Firestore)
+  // userListSubject = new BehaviorSubject<CurrentUser[]>([])
+  // userList$ = this.userListSubject.asObservable();
   userList: CurrentUser[] = [];
   unsubscribeUsers;
   unsubChannel;
@@ -36,19 +39,10 @@ export class FirestoreService {
     await setDoc(this.getUserDocRef(userId), user);
   }
 
-  // async addUser(user: CurrentUser) {
-  //   await addDoc(this.getUsersRef(), this.getCleanUserJson(user))
-  //   .catch(err => console.error(err))
-  //   .then(docRef => {
-  //     if (docRef?.id) {
-  //       let uid = docRef?.id;
-  //       updateDoc(this.getUserDocRef(uid), { id: uid });
-  //     }
-  //   })
-  // }
-
   subUsersList() {
     return onSnapshot(this.getUsersRef(), list => {
+      // const userList = list.docs.map(doc => this.setUserObject(doc.data(), doc.id))
+      // this.userListSubject.next(userList);
       this.userList = [];
       list.forEach(user => {
         let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
