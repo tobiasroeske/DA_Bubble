@@ -20,7 +20,7 @@ export class BoardService {
   profileOptionsOpen = false;
   profileOpen = false;
   editMode = false;
-  currentUser!: any;
+  currentUser: any;
   idx:number = 0
 
   constructor() {
@@ -76,6 +76,10 @@ export class BoardService {
 
   toggleProfileOptions() {
     this.profileOptionsOpen = !this.profileOptionsOpen;
+    this.editMode =false;
+    this.authService.errorCode = '';
+    this.profileOpen = false;
+
   }
 
   toggleProfileView() {

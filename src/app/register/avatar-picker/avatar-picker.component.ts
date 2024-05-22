@@ -25,18 +25,17 @@ export class AvatarPickerComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.user = this.userData;
-    console.log(this.user);
   }
 
   goBackToRegister() {
     this.goBack.emit(false)
+    this.signupService.signUpSuccessful = false;
+    this.signupService.errorCode = '';
   }
 
   completeSignup() {
     this.signupService.user$.next(this.user);
-    console.log('signed up user: ', this.signupService.user);
     this.signUpSuccessful.emit(true);
-    
   }
 
   pickAvatar(i:number) {

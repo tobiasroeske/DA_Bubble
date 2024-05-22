@@ -3,7 +3,24 @@
         <h3>Dein Profil bearbeiten</h3>
         <img src="assets/icons/close.svg" alt="" class="" (click)="closeDialog(); boardServ.stopPropagation($event)">
     </div>
-    <img src="assets/img/{{ boardServ.currentUser.avatarPath }}" alt="" class="avatar-img">
+    <img src="assets/img/{{ avatarPath }}" alt="" class="avatar-img" (click)="changeAvatar = !changeAvatar">
+    @if (changeAvatar) {
+        <div class="pick-avatar-container" (click)="changeAvatar = !changeAvatar">
+            <div class="pick-avatar-popup">
+                <span>Aus der Liste wählen</span>
+                <div class="avatar-list">
+                    @for (avatar of avatars; track avatar; let i = $index) {
+                        <img src="assets/img/{{ avatar }}" alt="" (click)="pickAvatar(i); boardServ.stopPropagation($event)">
+                    }
+                </div>
+                <div class="own-avatar">
+                    <span>eigenes Bild verwenden</span>
+                    <button class="btn-no-style upload-btn">Datei hochladen</button>
+                </div>
+            </div>
+            
+        </div>
+    }
 
     <form (ngSubmit)="onsubmit(editForm)" #editForm="ngForm">
         <div class="input-container">
@@ -13,13 +30,24 @@
 
         <div class="input-container">
             <label for="name"><img src="assets/icons/mail_edit_user.png" alt="">E-Mail-Adresse</label>
-            <input type="email" id="email" name="email" #email="ngModel" [(ngModel)]="mail">
+            <input type="email" id="email" name="email" #email="ngModel" [(ngModel)]="mail" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
         </div>
+        @if (email.touched && !email.valid) {
+            <span class="error-message">Bitte geben sie eine gültige E-Mail-Adresse ein</span>
+        }
+        @else if (authService.errorCode == 'auth/requires-recent-login') {
+            <span class="error-message">Ihr letzter Login ist zu lange her<br> Bitte loggen sie nich erneut ein.</span>
+        } @else if (authService.errorCode == 'no error') {
+            <span class="error-message">Eine Email zum Bestätigen der Änderung <br> wurde an ihre E-Mail-Adresse gesendet</span>
+        } @else if (changesSuccessful) {
+            <span class="error-message" style="color: #444DF2;">Ihre Änderungen wurden erfolgreich gespeichert</span>
+        }
 
         <div class="form-actions">
             <div class="btn-no-style cancel-btn" (click)="closeDialog(); boardServ.stopPropagation($event)">Abbrechen</div>
             <input type="submit" value="Speichern" class="btn-no-style submit-btn">
         </div>
+       
         
         
     </form>

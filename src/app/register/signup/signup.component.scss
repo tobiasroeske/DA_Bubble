@@ -78,6 +78,10 @@ input {
     height: 77px;
 }
 
+.password-input {
+    height: 88px;
+}
+
 .input-box {
     position: relative;
     display: flex;
@@ -91,6 +95,8 @@ input {
         margin-left: 32px;
     }
 }
+
+
 
 .error-message {
     font-size: 14px;

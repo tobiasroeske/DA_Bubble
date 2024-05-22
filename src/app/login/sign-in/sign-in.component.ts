@@ -25,14 +25,14 @@ export class SignInComponent {
     if (ngForm.submitted) {
       let rawForm = ngForm.form.getRawValue()
       await this.signupService.login(rawForm.email, rawForm.password)
-      .then(() => this.router.navigateByUrl('board'))
-      .catch(err => {
+      // .then(() => this.router.navigateByUrl('board'))
+      // .catch(err => {
         
-        this.errorMessage = true;
-        console.log(err);
-        console.log(err.code);
+      //   this.errorMessage = true;
+      //   console.log(err);
+      //   console.log(err.code);
         
-      })
+      // })
     }
   }
 

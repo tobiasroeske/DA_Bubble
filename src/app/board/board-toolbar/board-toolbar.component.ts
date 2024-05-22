@@ -5,9 +5,7 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 import { ShowProfileDialogComponent } from "../../show-profile-dialog/show-profile-dialog.component";
 import { EditProfileDialogComponent } from "../../edit-profile-dialog/edit-profile-dialog.component";
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { user } from '@angular/fire/auth';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-board-toolbar',

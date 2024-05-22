@@ -19,12 +19,13 @@ export class SignupService {
   user$ = new Subject();
   user!: User;
   currentUser!: any;
+  errorCode!: string;
+  signUpSuccessful = false;
 
 
   constructor() {
     this.user$.subscribe(val => {
       this.user = new User(val);
-      console.log('user for signup: ', this.user);
     })
   }
 
@@ -47,8 +48,12 @@ export class SignupService {
         .then(() => {
           console.log('email updated')
           this.storageService.saveCurrentUser(this.auth.currentUser)
+          this.errorCode = 'no error'
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          this.errorCode = err.code
+          
+        })
     } else {
       console.log('Current user does not exist on auth');
 
@@ -86,8 +91,15 @@ export class SignupService {
             }
           })
       })
+      .then(() => {
+        this.signUpSuccessful = true;
+        setTimeout(() => {
+          this.router.navigateByUrl('board')
+          
+        }, 1500)
+      })
       .catch(err => {
-        console.log(err);
+        this.errorCode = err.code;
       })
   }
 
@@ -109,6 +121,10 @@ export class SignupService {
     await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         this.storageService.saveCurrentUser(userCredential.user);
+        this.router.navigateByUrl('board');
+      })
+      .catch(err => {
+        this.errorCode = err.code;
       })
   }
 
