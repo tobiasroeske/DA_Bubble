@@ -7,6 +7,7 @@ import { CreateMessageAreaComponent } from './create-message-area/create-message
 import { ThreadComponent } from './thread/thread.component';
 import { AddChannelDialogComponent } from './add-channel-dialog/add-channel-dialog.component';
 import { EditChannelDialogComponent } from './edit-channel-dialog/edit-channel-dialog.component';
+import { MembersDialogComponent } from './members-dialog/members-dialog.component';
 import { SignupService } from '../shared/services/signup/signup.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { BoardService } from './board.service';
@@ -15,7 +16,7 @@ import { Auth, User } from '@angular/fire/auth';
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent],
+  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
@@ -25,17 +26,12 @@ export class BoardComponent {
   boardServ = inject(BoardService);
   profileOptionContainerOpen = false;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> cd09f9ab3928c5147236a1c9d70f679c8100e76b
-
   constructor() {
     this.authService.getLoggedInUser()
   }
 
   openProfileOptions($event: boolean) {
-  this.profileOptionContainerOpen = $event;
+    this.profileOptionContainerOpen = $event;
   }
 
   logout() {

@@ -1,10 +1,10 @@
-<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" [ngClass]="{'d-none': !boardServ.editDialogIsOpen}"
+<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)"
     class="edit-dialog-container">
     <div (click)="boardServ.stopPropagation($event)" class="edit-dialog">
         <div class="edit-channel-header">
             <span class="channel">
                 <img class="hashtag-icon" src="assets/icons/hashtag.svg" alt="">
-                <h3>{{firestore.allChannels[boardServ.idx].title}}</h3>
+                <h3>{{title}}</h3>
             </span>
             <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="cross-icon" width="40" height="40"
                 viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@
             </div>
             <div [ngClass]="{'editChannel-name-editModus': editNameBtnClicked}" class="edit-channel-name">
                 <img class="hashtag-icon-smaller" src="assets/icons/hashtag.svg" alt="">
-                <input minlength="3" type="text">
+                <input [disabled]="inputDisabled" [(ngModel)]="title" minlength="3" type="text">
             </div>
         </div>
         <div [ngClass]="{'desc-container-editModus': editDescriptionBtnClicked}"
@@ -36,12 +36,12 @@
                 <h3>Beschreibung</h3>
                 <span (click)="onDescriptionButtonClick()">{{editDesc}}</span>
             </div>
-            <textarea [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}"
-                class="edit-description" [ngModel]="firestore.allChannels[boardServ.idx]?.description"></textarea>
+            <textarea [disabled]="textareaDisabled" [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}"
+                class="edit-description" [(ngModel)]="description"></textarea>
             <span class="line"></span>
             <div class="creator-container">
                 <h3>Erstellt von</h3>
-                <span>Noah Braun</span>
+                <span>{{creatorName}}</span>
             </div>
         </div>
     </div>

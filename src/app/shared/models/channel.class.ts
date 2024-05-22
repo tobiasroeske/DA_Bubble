@@ -3,7 +3,8 @@ export class Channel {
     title: string;
     members: string[] = [];
     description?: string;
-    creator: string;
+    creatorId: string;
+    creatorName:string;
     chat?: any[] = [];
 
     constructor(obj?: any) {
@@ -11,7 +12,8 @@ export class Channel {
         this.title = obj ? obj.title : "";
         this.members = obj ? [...obj.members] : [];
         this.description = obj ? obj.description : "";
-        this.creator = obj ? obj.creator : "";
+        this.creatorId = obj ? obj.creatorId : "";
+        this.creatorName = obj? obj.creatorName : "";
         this.chat = obj ? obj.chat : "";
     }
 
@@ -21,7 +23,8 @@ export class Channel {
             title: this.title,
             members: this.members,
             description: this.description,
-            creator: this.creator,
+            creatorId: this.creatorId,
+            creatorName: this.creatorName,
             chat: this.chat
         }
     }

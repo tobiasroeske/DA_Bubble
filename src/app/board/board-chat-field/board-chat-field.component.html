@@ -20,7 +20,7 @@
             <span class="avatar-photos-container">
                 @for(member of firestore.allChannels[boardServ.idx]?.members; track member; let i = $index){
                 <img id="{{i}}" src="assets/img/avatar-chat-header.png" alt="">
-                };
+                }
             </span>
             <span class="number-of-members">{{firestore.allChannels[boardServ.idx]?.members.length}}</span>
         </div>

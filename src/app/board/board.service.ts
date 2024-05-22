@@ -67,7 +67,6 @@ export class BoardService {
 
   closeDialogAddChannel() {
     this.dialogIsOpen = false;
-    event?.stopPropagation();
   }
 
   toggleDialogEditChannel(i:number) {
@@ -91,7 +90,7 @@ export class BoardService {
     event.stopPropagation();
   }
 
-  async showChannelInChatField(i: number, event: Event) {
+  showChannelInChatField(i: number, event: Event) {
     this.idx = i;
     event.preventDefault();
   }

@@ -92,6 +92,13 @@ export class FirestoreService {
     })
   }
 
+  async updateChannel(item: {}, docId: string) {
+    let docRef = this.getSingleChannelRef('channels', docId)
+    await updateDoc(docRef, item).catch((err) => {
+      console.log(err);
+    }).then(() => { });
+  }
+
   getChannelsRef() {
     return collection(this.firestore, 'channels');
   }
