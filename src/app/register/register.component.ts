@@ -16,10 +16,10 @@ import { SignupService } from '../shared/services/signup/signup.service';
 export class RegisterComponent {
   router = inject(Router)
   signupService = inject(SignupService)
- 
   next = false;
   user = new User();
   signupSuccessful = false;
+
   goToAvatarPicker($event: boolean) {
     this.next = $event;
   }
@@ -27,7 +27,6 @@ export class RegisterComponent {
   getUserDetail($event: User) {
     this.user = $event;
   }
-
 
   async signup($event: boolean) {
     

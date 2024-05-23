@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { User } from '../../models/user.class';
 import { Subject } from 'rxjs';
-import { Auth, GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateEmail, updateProfile, verifyBeforeUpdateEmail } from '@angular/fire/auth';
+import { ActionCodeSettings, Auth, GoogleAuthProvider, confirmPasswordReset, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateEmail, updateProfile, verifyBeforeUpdateEmail } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
-import { BoardService } from '../../../board/board.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class SignupService {
   currentUser!: any;
   errorCode!: string;
   signUpSuccessful = false;
-  actionCodeSettings: {};
+  actionCodeSettings: ActionCodeSettings;
 
 
   constructor() {
@@ -29,7 +29,7 @@ export class SignupService {
       this.user = new User(val);
     })
     this.actionCodeSettings = {
-      url: ''
+      url: 'http://localhost:4200/resetpassword'
     }
   }
 
@@ -46,8 +46,14 @@ export class SignupService {
   }
 
   async sendPasswordResetMail(mail: string) {
-    await sendPasswordResetEmail(this.auth, mail)
+    await sendPasswordResetEmail(this.auth, mail, this.actionCodeSettings)
     .then(() => console.log('Email sent'))
+    .catch(err => console.log(err))
+  }
+
+  async resetPassword(code: string, password: string) {
+    await confirmPasswordReset(this.auth, code, password)
+    .then(() => console.log('password changed'))
     .catch(err => console.log(err))
   }
 
