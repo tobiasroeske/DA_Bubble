@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { User } from '../../shared/models/user.class';
 import { RouterLink } from '@angular/router';
 import { SignupService } from '../../shared/services/signup/signup.service';
+import { FirebaseStorageService } from '../../shared/services/firebase-storage-service/firebase-storage.service';
+
 
 @Component({
   selector: 'app-avatar-picker',
@@ -10,21 +12,40 @@ import { SignupService } from '../../shared/services/signup/signup.service';
   templateUrl: './avatar-picker.component.html',
   styleUrl: './avatar-picker.component.scss'
 })
-export class AvatarPickerComponent {
+export class AvatarPickerComponent implements OnInit{
   signupService = inject(SignupService);
+  firebaseStorageService = inject(FirebaseStorageService);
   @Input() userData!:User;
   @Output() goBack = new EventEmitter<boolean>();
   user!: User;
   avatarPicked = false;
   @Output() signUpSuccessful = new EventEmitter<boolean>();
-  avatars: string[] = ['avatar0.png', 'avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png', 'avatar5.png']
-  avatarImgPath = 'profile_big.png';
+  avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png']
+  avatarImgPath = 'assets/img/profile_big.png';
 
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.user = this.userData;
+  }
+
+  async onFileChange(event:any) {
+    let file = event.target.files[0];
+    if (file) {
+      let path = `avatarImages/${file.name}`;
+      this.firebaseStorageService.uploadFile(path, file)
+      .then(() => {
+        this.firebaseStorageService.getDownLoadUrl(path)
+        .then(url => {
+          this.user.avatarPath = url;
+          this.avatarImgPath = url;
+          this.avatarPicked = true;
+        })
+        .catch(err => console.log(err))
+      })
+      
+    }
   }
 
   goBackToRegister() {

@@ -3,19 +3,20 @@
         <h3>Dein Profil bearbeiten</h3>
         <img src="assets/icons/close.svg" alt="" class="" (click)="closeDialog(); boardServ.stopPropagation($event)">
     </div>
-    <img src="assets/img/{{ avatarPath }}" alt="" class="avatar-img" (click)="changeAvatar = !changeAvatar">
+    <img src="{{ avatarPath }}" alt="" class="avatar-img" (click)="changeAvatar = !changeAvatar">
     @if (changeAvatar) {
         <div class="pick-avatar-container" (click)="changeAvatar = !changeAvatar">
             <div class="pick-avatar-popup">
                 <span>Aus der Liste wählen</span>
                 <div class="avatar-list">
                     @for (avatar of avatars; track avatar; let i = $index) {
-                        <img src="assets/img/{{ avatar }}" alt="" (click)="pickAvatar(i); boardServ.stopPropagation($event)">
+                        <img src="{{ avatar }}" alt="" (click)="pickAvatar(i); boardServ.stopPropagation($event)">
                     }
                 </div>
-                <div class="own-avatar">
+                <div class="own-avatar" (click)=" boardServ.stopPropagation($event)">
                     <span>eigenes Bild verwenden</span>
-                    <button class="btn-no-style upload-btn">Datei hochladen</button>
+                    <label for="fileUpload" class="btn-no-style upload-btn">Datei hochladen</label>
+                    <input type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)">
                 </div>
             </div>
             

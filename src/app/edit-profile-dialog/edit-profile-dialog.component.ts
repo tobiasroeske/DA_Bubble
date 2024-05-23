@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
+import { FirebaseStorageService } from '../shared/services/firebase-storage-service/firebase-storage.service';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -18,10 +19,11 @@ export class EditProfileDialogComponent {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
   firestoreService = inject(FirestoreService);
+  firebaseStorageService = inject(FirebaseStorageService);
   fullname: string;
   mail: string;
   avatarPath: string;
-  avatars: string[] = ['avatar0.png', 'avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png', 'avatar5.png'];
+  avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png'];
   changeAvatar = false;
   changesSuccessful = false;
 
@@ -45,6 +47,22 @@ export class EditProfileDialogComponent {
           this.updateUsers();
           this.changesSuccessful = true;
         })
+    }
+  }
+
+  onFileChange(event: any) {
+    let file = event.target.files[0];
+    if (file) {
+      let path = `avatarImages/${file.name}`;
+      this.firebaseStorageService.uploadFile(path, file)
+      .then(() => {
+        this.firebaseStorageService.getDownLoadUrl(path)
+        .then(url => {
+          this.avatarPath = url;
+          this.changeAvatar = false;
+        })
+        .catch(err => console.log(err))
+      })
     }
   }
 

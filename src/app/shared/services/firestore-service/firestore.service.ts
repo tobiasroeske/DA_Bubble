@@ -56,6 +56,8 @@ export class FirestoreService {
         let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
         this.userList.push(singleUser);
       });
+      console.log(this.userList);
+      
     })
   }
 

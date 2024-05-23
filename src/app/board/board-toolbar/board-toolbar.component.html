@@ -9,7 +9,7 @@
     </div>
     <div class="user-container" (click)="boardServ.toggleProfileOptions()">
         <span>{{ boardServ.currentUser.name }}</span>
-        <img class="account-photo" src="./assets/img/{{ boardServ.currentUser.avatarPath }}" alt="account-photo">
+        <img class="account-photo" src="{{ boardServ.currentUser.avatarPath }}" alt="account-photo">
         
         <svg class="arrow-down-user" width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

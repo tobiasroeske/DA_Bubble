@@ -8,6 +8,8 @@
 
     .avatar-img {
         cursor: pointer;
+        object-fit: cover;
+        object-position: center;
         width: 200px;
         height: 200px;
         border-radius: 500px;
@@ -156,4 +158,21 @@ form {
         }
     }
 
+}
+
+.login-btn {
+    width: fit-content;
+    background-color: #444DF2;
+    color: white;
+    transition: background-color 0.125s ease-in-out;
+    align-self: flex-end;
+    transition: all .125s ease-in-out; 
+    &:hover {
+        background-color: #787EF2;
+        border-color: #787EF2;
+    }
+}
+
+input[type="file"] {
+    display: none;
 }
