@@ -1,122 +1,144 @@
 import { Injectable, inject } from '@angular/core';
-import { User } from '../../models/user.class';
 import { Subject } from 'rxjs';
-import { ActionCodeSettings, Auth, GoogleAuthProvider, confirmPasswordReset, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateEmail, updateProfile, verifyBeforeUpdateEmail } from '@angular/fire/auth';
+import {
+  ActionCodeSettings,
+  Auth,
+  GoogleAuthProvider,
+  UserCredential,
+  confirmPasswordReset,
+  createUserWithEmailAndPassword,
+  getRedirectResult,
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+  updateEmail,
+  updateProfile,
+  user,
+  verifyBeforeUpdateEmail,
+} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
+import { User } from '../../models/user.class';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SignupService {
-  auth = inject(Auth)
-  router = inject(Router)
+  auth = inject(Auth);
+  router = inject(Router);
   firestoreService = inject(FirestoreService);
   storageService = inject(LocalStorageService);
-  provider = new GoogleAuthProvider()
+  provider = new GoogleAuthProvider();
   user$ = new Subject();
-  user!: User;
+  user = new User();
   currentUser!: any;
   errorCode!: string;
   signUpSuccessful = false;
   actionCodeSettings: ActionCodeSettings;
 
-
   constructor() {
-    this.user$.subscribe(val => {
+    this.user$.subscribe((val) => {
       this.user = new User(val);
-    })
+    });
     this.actionCodeSettings = {
-      url: 'http://localhost:4200/resetpassword'
-    }
+      url: 'http://localhost:4200/resetpassword',
+    };
+    console.log(this.user);
   }
 
   async googleLogin() {
-    await signInWithPopup(this.auth, this.provider)
-    .then(result => {
-      this.updateUserProfile({ photoURL: 'avatar0.png' })
-      .then(() => {
-        this.storageService.saveCurrentUser(result.user);
-        this.router.navigateByUrl('board');
-      })
-    })
-    .catch(err => console.error(err))
+    await signInWithRedirect(this.auth, this.provider).catch((err) =>
+      console.log(err)
+    );
+  }
+
+  async getRedirectIntel() {
+    await getRedirectResult(this.auth).then((result) => {
+      if (result != null) {
+        this.updateUserProfile({ photoURL: 'assets/img/avatar0.png' }).then(
+          () => {
+            this.getUserData(result);
+            this.firestoreService
+              .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
+              .then(() => {
+                this.router.navigateByUrl('board');
+              });
+          }
+        );
+      }
+    });
+  }
+
+  getUserData(uc: UserCredential) {
+    this.user.name = uc.user.displayName!;
+    this.user.email = uc.user.email!;
+    this.user.avatarPath = uc.user.photoURL!;
   }
 
   async sendPasswordResetMail(mail: string) {
     await sendPasswordResetEmail(this.auth, mail, this.actionCodeSettings)
-    .then(() => console.log('Email sent'))
-    .catch(err => console.log(err))
+      .then(() => console.log('Email sent'))
+      .catch((err) => console.log(err));
   }
 
   async resetPassword(code: string, password: string) {
     await confirmPasswordReset(this.auth, code, password)
-    .then(() => console.log('password changed'))
-    .catch(err => console.log(err))
+      .then(() => console.log('password changed'))
+      .catch((err) => console.log(err));
   }
 
   async updateEmail(email: string) {
-    if (this.auth.currentUser) {
+    if (this.auth.currentUser != null) {
       await verifyBeforeUpdateEmail(this.auth.currentUser, email)
-      //await updateEmail(this.auth.currentUser, email)
         .then(() => {
-          console.log('email updated')
-          this.storageService.saveCurrentUser(this.auth.currentUser)
-          this.errorCode = 'no error'
+          this.storageService.saveCurrentUser(this.auth.currentUser);
+          this.errorCode = 'no error';
         })
-        .catch(err => {
-          this.errorCode = err.code
-          
-        })
-    } else {
-      console.log('Current user does not exist on auth');
-
+        .catch((err) => {
+          this.errorCode = err.code;
+        });
     }
   }
 
   async updateUserProfile(changes: {}) {
-    if (this.auth.currentUser) {
+    if (this.auth.currentUser != null) {
       await updateProfile(this.auth.currentUser, changes)
         .then(() => {
-          console.log('profile updated')
-          this.storageService.saveCurrentUser(this.auth.currentUser)
+          this.storageService.saveCurrentUser(this.auth.currentUser);
         })
-        .catch(err => console.error(err))
-    } else {
-      console.log('update was not successful');
-
+        .catch((err) => console.error(err));
     }
+  }
+
+  async updateStorages(uc: UserCredential) {
+    this.storageService.saveCurrentUser(uc.user);
+    await this.firestoreService.addUser(uc.user.uid, this.setNewUserObject(uc.user.uid))
   }
 
   async register() {
     await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password)
       .then(userCredential => {
-        updateProfile(userCredential.user, {
-          photoURL: this.user.avatarPath,
-          displayName: this.user.name
-        })
-          .then(() => {
-            let currentUser = this.auth.currentUser;
-            this.storageService.saveCurrentUser(currentUser);
-            if (currentUser != null) {
-              this.firestoreService.addUser(currentUser.uid, this.setNewUserObject(currentUser.uid));
-              sendEmailVerification(currentUser)
-                .then(() => console.log('Verification mail send'))
-            }
-          })
+        if (userCredential.user != null) {
+          this.updateUserProfile({ photoURL: this.user.avatarPath, displayName: this.user.name, })
+            .then(() => {
+              this.updateStorages(userCredential)
+              sendEmailVerification(userCredential.user);
+              this.signUpSuccessful = true;
+              setTimeout(() => {
+                this.router.navigateByUrl('board');
+              }, 1500);
+            })
+        }
       })
-      .then(() => {
-        this.signUpSuccessful = true;
-        setTimeout(() => {
-          this.router.navigateByUrl('board')
-          
-        }, 1500)
-      })
-      .catch(err => {
+      .catch((err) => {
         this.errorCode = err.code;
-      })
+      });
   }
 
   setNewUserObject(userId: string) {
@@ -124,13 +146,12 @@ export class SignupService {
       id: userId,
       name: this.user.name,
       email: this.user.email,
-      avatarPath: this.user.avatarPath
-    }
-
+      avatarPath: this.user.avatarPath,
+    };
   }
 
   getCurrentUser() {
-    return this.currentUser
+    return this.currentUser;
   }
 
   async login(email: string, password: string) {
@@ -139,14 +160,13 @@ export class SignupService {
         this.storageService.saveCurrentUser(userCredential.user);
         this.router.navigateByUrl('board');
       })
-      .catch(err => {
+      .catch((err) => {
         this.errorCode = err.code;
-      })
+      });
   }
 
-
   getLoggedInUser() {
-    onAuthStateChanged(this.auth, user => {
+    onAuthStateChanged(this.auth, (user) => {
       if (user) {
         const uid = user.uid;
         this.currentUser = user;
@@ -157,17 +177,13 @@ export class SignupService {
         console.log(user + 'is signed out');
         this.storageService.saveCurrentUser(user);
       }
-    })
+    });
   }
 
   async logout() {
-    await signOut(this.auth)
-      .then(() => {
-        this.storageService.saveCurrentUser('');
-        window.open('login', '_self');
-      })
+    await signOut(this.auth).then(() => {
+      this.storageService.saveCurrentUser('');
+      window.open('login', '_self');
+    });
   }
-
-
-
 }

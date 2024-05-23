@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { User } from '../../shared/models/user.class';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit{
   signupService = inject(SignupService);
   router = inject(Router);
   mail!: string;
@@ -20,6 +20,10 @@ export class SignInComponent {
   errorMessage = false;
 
   @Output() passwordForgotten = new EventEmitter<boolean>();
+
+  ngOnInit(): void {
+    this.signupService.getRedirectIntel()
+  }
 
   async onSubmit(ngForm: NgForm) {
     if (ngForm.submitted) {
