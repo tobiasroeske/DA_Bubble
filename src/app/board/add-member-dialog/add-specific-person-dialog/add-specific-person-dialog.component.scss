@@ -3,6 +3,7 @@
 .add-specific-person-container {
     font-family: "Nunito";
     width: 100%;
+    position: relative;
     @include d-flex(column, space-between, none, 20px);
 
     >span {
@@ -21,10 +22,48 @@
 }
 
 .search-member-container {
-    width: 100%;
-    border: 1px solid red;
-    position: relative;
+    @include d-flex($jc: flex-start, $g: 10px);
+    border: 1px solid rgb(173, 176, 217);
+    border-radius: 30px;
+    padding: 15px 20px;
 }
+
+.selected-members-container {
+    @include d-flex($jc: space-between, $g: 10px);
+}
+
+.selected-member-and-cross-icon-container {
+    @include d-flex($jc: space-between);
+    padding: 4px 12px;
+    border-radius: 30px;
+
+    &:hover {
+        background: rgba(236, 238, 254, 1);
+    }
+
+    >.selected-member {
+        @include d-flex($jc: space-between, $g: 10px);
+
+        >.avatar-selected-member {
+            height: 30px;
+            width: 30px;
+            object-fit: cover;
+            border-radius: 100%;
+        }
+    }
+
+}
+
+
+.search {
+    height: 100%;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    outline: none;
+    border: unset;
+}
+
 
 .suggested-member-list {
     background: #fff;
@@ -32,9 +71,10 @@
     padding: 40px;
     @include d-flex(column, space-between, flex-start, 20px);
     position: absolute;
-    top: 55px;
+    top: 105px;
     left: 0;
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid red;
 }
 
 .suggested-member {
@@ -56,21 +96,6 @@
     >span {
         font-size: 18px;
         font-weight: 400;
-    }
-}
-
-.search-member-container {
-    border: 1px solid rgb(173, 176, 217);
-    border-radius: 30px;
-    padding: 15px 20px;
-
-    >.search {
-        width: 100%;
-        height: 100%;
-        font-size: 18px;
-        font-weight: 400;
-        color: #000;
-        outline: none;
     }
 }
 
