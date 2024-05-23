@@ -16,12 +16,15 @@ export class BoardService {
   textHidden: boolean = true;
   dialogIsOpen: boolean = false;
   editDialogIsOpen: boolean = false;
+  membersDialogIsOpen: boolean = false;
+  addMemberDialogIsOpen:boolean = false;
+  addSpecificPerson:boolean = false;
   status: string = 'öffen';
   profileOptionsOpen = false;
   profileOpen = false;
   editMode = false;
   currentUser!: any;
-  idx:number = 0
+  idx: number = 0
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
@@ -69,7 +72,7 @@ export class BoardService {
     this.dialogIsOpen = false;
   }
 
-  toggleDialogEditChannel(i:number) {
+  toggleDialogEditChannel(i: number) {
     this.idx = i;
     this.editDialogIsOpen = !this.editDialogIsOpen;
   }
@@ -84,6 +87,20 @@ export class BoardService {
 
   toggleProfileEditor() {
     this.editMode = !this.editMode;
+  }
+
+  toggleMembersDialog(event: Event) {
+    this.membersDialogIsOpen = !this.membersDialogIsOpen;
+    event?.stopPropagation();
+  }
+
+  openAddMembersDialog(){
+    this.addMemberDialogIsOpen = true
+  }
+
+  goToAddSpecificPerson(event:Event){
+    this.addSpecificPerson = true;
+    event.stopPropagation();
   }
 
   stopPropagation(event: Event) {

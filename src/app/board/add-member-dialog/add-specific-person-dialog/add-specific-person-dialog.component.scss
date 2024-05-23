@@ -1,0 +1,88 @@
+@import '../../../../styles.scss';
+
+.add-specific-person-container {
+    font-family: "Nunito";
+    width: 100%;
+    @include d-flex(column, space-between, none, 20px);
+
+    >span {
+        @include d-flex($jc: flex-start, $g: 15px);
+
+        >.hashtag-icon path {
+            fill: $specialBlue;
+        }
+
+        >h3 {
+            font-size: 18px;
+            font-weight: 400;
+            color: $specialBlue;
+        }
+    }
+}
+
+.search-member-container {
+    width: 100%;
+    border: 1px solid red;
+    position: relative;
+}
+
+.suggested-member-list {
+    background: #fff;
+    border-radius: 0px 30px 30px 30px;
+    padding: 40px;
+    @include d-flex(column, space-between, flex-start, 20px);
+    position: absolute;
+    top: 55px;
+    left: 0;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.suggested-member {
+    @include d-flex($jc: flex-start, $g: 20px);
+    border-radius: 100px;
+    padding: 4px 20px;
+
+    &:hover {
+        background: rgb(236, 238, 254);
+    }
+
+    >.avatar-member {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+
+    >span {
+        font-size: 18px;
+        font-weight: 400;
+    }
+}
+
+.search-member-container {
+    border: 1px solid rgb(173, 176, 217);
+    border-radius: 30px;
+    padding: 15px 20px;
+
+    >.search {
+        width: 100%;
+        height: 100%;
+        font-size: 18px;
+        font-weight: 400;
+        color: #000;
+        outline: none;
+    }
+}
+
+.btn-container {
+    @include d-flex($jc: flex-end);
+
+    >button {
+        border-radius: 25px;
+        padding: 12px 25px;
+        background: rgba(104, 104, 104, 1);
+        font-size: 18px;
+        font-weight: 700px;
+        color: #fff;
+    }
+}

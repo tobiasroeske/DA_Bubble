@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
+import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-members-dialog',
@@ -9,5 +11,8 @@ import { Component } from '@angular/core';
   styleUrl: './members-dialog.component.scss'
 })
 export class MembersDialogComponent {
+  @Input() dialog!: boolean;
+  firestore = inject(FirestoreService);
+  boardServ = inject(BoardService);
 
 }

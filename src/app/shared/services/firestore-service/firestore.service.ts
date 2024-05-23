@@ -65,7 +65,7 @@ export class FirestoreService {
       id: id || '',
       name: obj.name || '',
       email: obj.email || '',
-      avatarPath: obj.path || ''
+      avatarPath: obj.avatarPath || ''
     }
   }
 

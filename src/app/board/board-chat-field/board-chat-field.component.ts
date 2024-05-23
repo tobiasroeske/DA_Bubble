@@ -3,12 +3,14 @@ import { Component, inject } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
+import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
+import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog.component';
 
 
 @Component({
   selector: 'app-board-chat-field',
   standalone: true,
-  imports: [CommonModule, CreateMessageAreaComponent],
+  imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent],
   templateUrl: './board-chat-field.component.html',
   styleUrl: './board-chat-field.component.scss'
 })
@@ -16,6 +18,7 @@ export class BoardChatFieldComponent {
 
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
+  memberDialogIsOpen: boolean = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
 
@@ -33,6 +36,10 @@ export class BoardChatFieldComponent {
     } else {
       this.popUpReaction = false;
     }
+  }
+
+  showMembersDialogToggle() {
+    this.memberDialogIsOpen = true;
   }
 }
 

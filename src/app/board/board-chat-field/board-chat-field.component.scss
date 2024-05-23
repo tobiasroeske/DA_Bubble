@@ -40,6 +40,7 @@
     padding: 3px 10px;
     border-radius: 100px;
     cursor: pointer;
+    position:relative;
 
     &:hover {
         background: rgba(236, 238, 254, 1);
@@ -250,6 +251,7 @@
     height: 48px;
     width: 48px;
     cursor: pointer;
+    position:relative;
 
     &:hover .add-person-icon {
         transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
