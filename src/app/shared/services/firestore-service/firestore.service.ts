@@ -39,6 +39,14 @@ export class FirestoreService {
     await setDoc(this.getUserDocRef(userId), user);
   }
 
+  async updateUser(userId: string, newUser: CurrentUser) {
+    let userRef = this.getUserDocRef(userId);
+    let userUpdate = this.setUserObject(newUser, userId);
+    await updateDoc(userRef, userUpdate)
+    .then(() => {})
+    .catch(err => console.log(err))
+  }
+
   subUsersList() {
     return onSnapshot(this.getUsersRef(), list => {
       // const userList = list.docs.map(doc => this.setUserObject(doc.data(), doc.id))
@@ -48,6 +56,8 @@ export class FirestoreService {
         let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
         this.userList.push(singleUser);
       });
+      console.log(this.userList);
+      
     })
   }
 

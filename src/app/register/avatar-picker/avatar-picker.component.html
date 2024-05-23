@@ -4,18 +4,20 @@
         <img (click)="goBackToRegister()" src="assets/img/arrow_back.png" alt="" class="back-arrow">
         <h2>Wähle deinen Avatar</h2>
     </div>
-    <img src="assets/img/{{ avatarImgPath }}" alt="" class="profile-img">
+    <img src="{{ avatarImgPath }}" alt="" class="profile-img">
     <h3>{{ user.name }}</h3>
     <div class="pick-avatar-container">
         <span>Aus der Liste wählen</span>
         <div class="avatar-list">
             @for (avatar of avatars; track avatar; let i = $index) {
-                <img (click)="pickAvatar(i)" src="assets/img/{{ avatar }}" alt="">
+                <img (click)="pickAvatar(i)" src="{{ avatar }}" alt="">
             }
         </div>
         <div class="own-avatar">
             <span>eigenes Bild verwenden</span>
-            <button class="btn-no-style upload-btn">Datei hochladen</button>
+            <label for="fileUpload" class="btn-no-style upload-btn">Datei hochladen</label>
+            <input type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)">
+            <!-- <button class="btn-no-style upload-btn">Datei hochladen</button> -->
         </div>
     </div>
     <button (click)="completeSignup()" [disabled]="!avatarPicked" [class.disabled-btn]="!avatarPicked" class="btn-no-style login-btn">Weiter</button>

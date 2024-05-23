@@ -4,6 +4,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
+import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
+import { FirebaseStorageService } from '../shared/services/firebase-storage-service/firebase-storage.service';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -14,29 +16,72 @@ import { LocalStorageService } from '../shared/services/local-storage-service/lo
 })
 export class EditProfileDialogComponent {
   boardServ = inject(BoardService);
-  authService = inject(SignupService)
-  storageService = inject(LocalStorageService)
+  authService = inject(SignupService);
+  storageService = inject(LocalStorageService);
+  firestoreService = inject(FirestoreService);
+  firebaseStorageService = inject(FirebaseStorageService);
   fullname: string;
   mail: string;
+  avatarPath: string;
+  avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png'];
+  changeAvatar = false;
+  changesSuccessful = false;
 
   constructor() {
     this.fullname = this.boardServ.currentUser.name;
     this.mail = this.boardServ.currentUser.email;
+    this.avatarPath = this.boardServ.currentUser.avatarPath;
   }
 
 
   async onsubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid) {
-      await this.authService.updateUserProfile({ displayName: this.fullname })
-      .then(() => this.authService.updateEmail(this.mail))
-      .then(() => this.boardServ.currentUser = this.storageService.loadCurrentUser())
+      await this.authService.updateUserProfile({ displayName: this.fullname, photoURL: this.avatarPath })
+        .then(() => {
+          let emailChanged = this.mail != this.authService.auth.currentUser?.email
+          if (emailChanged) {
+            this.authService.updateEmail(this.mail)
+          }
+        })
+        .then(() => {
+          this.updateUsers();
+          this.changesSuccessful = true;
+        })
     }
+  }
+
+  onFileChange(event: any) {
+    let file = event.target.files[0];
+    if (file) {
+      let path = `avatarImages/${file.name}`;
+      this.firebaseStorageService.uploadFile(path, file)
+      .then(() => {
+        this.firebaseStorageService.getDownLoadUrl(path)
+        .then(url => {
+          this.avatarPath = url;
+          this.changeAvatar = false;
+        })
+        .catch(err => console.log(err))
+      })
+    }
+  }
+
+  updateUsers() {
+    this.boardServ.currentUser = this.storageService.loadCurrentUser();
+    this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+  }
+
+  pickAvatar(i: number) {
+    this.avatarPath = this.avatars[i];
+    this.changeAvatar = false;
   }
 
   closeDialog() {
     this.boardServ.profileOptionsOpen = false;
     this.boardServ.profileOpen = false;
     this.boardServ.editMode = false;
+    this.authService.errorCode = '';
+    this.changesSuccessful = false;
   }
 
 }

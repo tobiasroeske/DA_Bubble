@@ -26,18 +26,12 @@ export class RegisterComponent {
 
   getUserDetail($event: User) {
     this.user = $event;
-    console.log(this.user);
   }
 
 
   async signup($event: boolean) {
-    this.signupSuccessful = $event
+    
     await this.signupService.register()
-    .then(() => {
-      setTimeout(() => {
-        this.router.navigateByUrl('board')
-        
-      }, 1500)
-    }) 
+    .then(() => this.signupSuccessful = $event)
   }
 }

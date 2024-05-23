@@ -7,6 +7,9 @@
     padding: 15px 10px;
 
     .avatar-img {
+        cursor: pointer;
+        object-fit: cover;
+        object-position: center;
         width: 200px;
         height: 200px;
         border-radius: 500px;
@@ -64,7 +67,7 @@ form {
 }
 
 .form-actions {
-    @include d-flex($g:32px);
+    @include d-flex($g: 32px);
     width: 100%;
 
     .cancel-btn {
@@ -73,6 +76,7 @@ form {
         padding: 12px 25px;
         color: #444DF2;
         transition: all .125s ease-in-out;
+
         &:hover {
             background-color: #5359F1;
             color: white;
@@ -86,8 +90,89 @@ form {
         background-color: #444DF2;
         color: white;
         transition: all .125s ease-in-out;
+
         &:hover {
             background-color: #787EF2;
         }
     }
+}
+
+.error-message {
+    font-size: 14px;
+    color: #ED1E79;
+    text-align: center;
+}
+
+.pick-avatar-container {
+    @include d-flex();
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+
+    .pick-avatar-popup {
+        @include d-flex($fd: column, $ai: flex-start, $g: 16px);
+        background-color: white;
+        border-radius: 30px;
+        padding: 15px 25px;
+        >span {
+            font-size: 20px;
+        }
+
+        .avatar-list {
+            @include d-flex($g: 8px);
+
+            >img {
+                cursor: pointer;
+                width: 67px;
+                height: 67px;
+                object-fit: cover;
+                border: 3px solid transparent;
+                transition: all .125s ease-in-out;
+                border-radius: 100%;
+
+                &:hover {
+                    border: 3px solid #E6E6E6;
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        .own-avatar {
+            margin-top: 24px;
+            @include d-flex($g: 24px);
+
+            .upload-btn {
+                color: #797EF3;
+                transition: all .125s ease-in-out;
+
+                &:hover {
+                    background-color: #5359F1;
+                    color: white;
+                }
+            }
+        }
+    }
+
+}
+
+.login-btn {
+    width: fit-content;
+    background-color: #444DF2;
+    color: white;
+    transition: background-color 0.125s ease-in-out;
+    align-self: flex-end;
+    transition: all .125s ease-in-out; 
+    &:hover {
+        background-color: #787EF2;
+        border-color: #787EF2;
+    }
+}
+
+input[type="file"] {
+    display: none;
 }
