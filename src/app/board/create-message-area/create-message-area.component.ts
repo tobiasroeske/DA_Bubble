@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+
 
 @Component({
   selector: 'app-create-message-area',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PickerComponent],
   templateUrl: './create-message-area.component.html',
   styleUrl: './create-message-area.component.scss'
 })
@@ -24,9 +24,15 @@ export class CreateMessageAreaComponent {
   enterPressed = false;
   @Input() index!: number;
   @Input() channelId!: string;
+  preview = 'false';
 
   constructor() {
     this.currentUser = this.boardService.currentUser;
+  }
+
+  addEmoji(event:any) {
+    console.log(event);
+    
   }
 
   sendMessage(index:number) {
