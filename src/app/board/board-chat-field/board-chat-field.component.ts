@@ -6,12 +6,13 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog.component';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 
 @Component({
   selector: 'app-board-chat-field',
   standalone: true,
-  imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent],
+  imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent, ChatMessageComponent],
   templateUrl: './board-chat-field.component.html',
   styleUrl: './board-chat-field.component.scss'
 })

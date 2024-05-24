@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { Component, HostListener, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { BoardService } from '../board.service';
@@ -20,6 +20,8 @@ export class CreateMessageAreaComponent {
   textMessage: string = '';
   message!: ChatMessage;
   currentUser: any;
+  shiftPressed = false;
+  enterPressed = false;
   @Input() index!: number;
   @Input() channelId!: string;
 
@@ -31,6 +33,36 @@ export class CreateMessageAreaComponent {
     let date = new Date().getTime();
     this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
     .then(() => this.textMessage = '')
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Shift') {
+      this.shiftPressed = true;
+    }
+    if (event.key === 'Enter') {
+      this.enterPressed = true;
+    }
+    this.checkShiftEnter();
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  handleKeyUp(event: KeyboardEvent): void {
+    if (event.key === 'Shift') {
+      this.shiftPressed = false;
+    }
+    if (event.key === 'Enter') {
+      this.enterPressed = false;
+    }
+  }
+
+  checkShiftEnter() {
+    if (this.shiftPressed && this.enterPressed) {
+      console.log('beide Tasten gedrückt');
+      return;
+    } else if (this.enterPressed) {
+      this.sendMessage(this.index);
+    }
   }
 
   setMessageObject(date: number): ChatMessage {
