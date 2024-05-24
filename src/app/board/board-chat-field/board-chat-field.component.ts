@@ -21,6 +21,10 @@ export class BoardChatFieldComponent {
   memberDialogIsOpen: boolean = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
+  membersList: any[] = []
+
+  constructor() {
+  }
 
   onHover(htmlElement: string) {
     if (htmlElement == 'message-box') {

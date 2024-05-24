@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { BoardService } from '../../board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
+import { Channel } from '../../../shared/models/channel.class';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 
 @Component({
@@ -19,15 +20,27 @@ export class AddSpecificPersonDialogComponent {
   userList;
   filteredUsersList;
   selectedList: any = [];
+  currentChannel!: Channel;
+  channelId!: string;
   selectedMember: any;
   showSuggestedList: boolean = false;
   searchValue!: string;
+  showAllSelectedMembers: boolean = false;
+  placeholder: string = "Name eingeben"
 
   constructor() {
     this.title = this.firestore.allChannels[this.boardServ.idx].title;
     this.userList = this.firestore.userList;
     this.filteredUsersList = this.userList;
-    console.log(this.userList);
+    this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
+    this.channelId = this.currentChannel['id']!
+  }
+
+  addNewMembersToChannel() {
+    this.selectedList.forEach((member: string) => {
+      this.currentChannel.members.push(member);
+    })
+    this.firestore.updateChannel(this.currentChannel.toJSON(), this.channelId);
   }
 
   filterMembers(text: string) {
@@ -36,7 +49,11 @@ export class AddSpecificPersonDialogComponent {
       this.showSuggestedList = false;
     } else {
       this.filteredUsersList = this.userList.filter(ul => ul.name.toLowerCase().includes(text.toLowerCase()));
-      this.showSuggestedList = true;
+      if (this.filteredUsersList.length > 0) {
+        this.showSuggestedList = true;
+      } else {
+        this.showSuggestedList = false;
+      }
     }
   }
 
@@ -46,6 +63,27 @@ export class AddSpecificPersonDialogComponent {
     if (idx == -1) {
       this.selectedList.push(this.selectedMember);
       this.searchValue = "";
+      console.log(this.filteredUsersList);
     }
+  }
+
+  removeMemberFromSelectedList(index: number) {
+    this.selectedList.splice(index, 1)
+  }
+
+  showSelectedMembersFullList() {
+    this.showAllSelectedMembers = true
+  }
+
+  hideSelectedMembersFullList() {
+    this.showAllSelectedMembers = false
+  }
+
+  hidePlaceholder() {
+    this.placeholder = "";
+  }
+
+  showPlaceholder() {
+    this.placeholder = "Name eingeben"
   }
 }

@@ -19,7 +19,7 @@
         <div (click)="boardServ.toggleMembersDialog($event)" class="members-container">
             <span class="avatar-photos-container">
                 @for(member of firestore.allChannels[boardServ.idx]?.members; track member; let i = $index){
-                <img id="{{i}}" src="assets/img/avatar-chat-header.png" alt="">
+                <img id="{{i}}" src="{{member.avatarPath}}" alt="">
                 }
             </span>
             <span class="number-of-members">{{firestore.allChannels[boardServ.idx]?.members.length}}</span>
@@ -27,7 +27,7 @@
             <app-members-dialog></app-members-dialog>
             }
         </div>
-        <div (click)="boardServ.openAddMembersDialog()" class="add-person-icon-container">
+        <div (click)="boardServ.openAddMembersDialog($event)" class="add-person-icon-container">
             <svg class="add-person-icon" width="22" height="16" viewBox="0 0 22 16" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
