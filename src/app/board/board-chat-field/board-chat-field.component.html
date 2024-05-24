@@ -42,12 +42,15 @@
 </div>
 
 <!-- Main Chat Inside Messages and Time separators -->
+
+
 <div class="chat">
+    @for (chat of firestore.allChannels[boardServ.idx]?.chat; track chat.user.id; let i = $index) {
     <div class="chat-box">
         <div class="time-separator-container">
             <span class="line"></span>
             <div class="date-container">
-                <span class="date"> Donnerstag, 16 Mai</span>
+                <span class="date">{{ chat.date | date: 'EEEE, MMMM d' }}</span>
             </div>
         </div>
         <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
@@ -80,13 +83,13 @@
             </svg>
         </span>
         <div (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
-            [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}" class="message-box">
-            <img class="avatar-photo" src="assets/img/avatar5.png" alt="">
+            [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}" class="message-box" [class.message-box-reverse]="chat.user.id != boardServ.currentUser.id">
+            <img class="avatar-photo" src="{{ chat.user.avatarPath }}" alt="">
             <div class="message-container">
                 <div class="name-and-time-container">
-                    <span class="avatar-name-message">User Name</span> <span class="time">14:25</span>
+                    <span class="avatar-name-message">{{ chat.user.name }}</span> <span class="time">{{ chat.date | date: 'shortTime' }}</span>
                 </div>
-                <p class="message">Welche Version ist Aktuell von Angular?</p>
+                <p class="message">{{ chat.message }}</p>
                 <div class="reaction-indicator-bar">
                     <svg class="addReaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -125,9 +128,11 @@
             </div>
         </div>
     </div>
+    }
+
 
     <!-- Thats is only demonstrating test -->
-    <div class="chat-box-2-test">
+    <!-- <div class="chat-box-2-test">
         <div class="time-separator-container">
             <span class="line"></span>
             <div class="date-container">
@@ -208,10 +213,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Thats is only demonstrating test -->
-    <div class="chat-box-2">
+    <!-- <div class="chat-box-2">
         <div class="time-separator-container">
             <span class="line"></span>
             <div class="date-container">
@@ -292,7 +297,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
-<app-create-message-area></app-create-message-area>
+<app-create-message-area [index]="boardServ.idx"
+    [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-create-message-area>

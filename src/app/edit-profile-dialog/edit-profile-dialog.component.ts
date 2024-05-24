@@ -44,8 +44,7 @@ export class EditProfileDialogComponent {
           }
         })
         .then(() => {
-          this.updateUsers();
-          this.changesSuccessful = true;
+          this.updateUsers().then(() => this.changesSuccessful = true)
         })
     }
   }
@@ -66,9 +65,9 @@ export class EditProfileDialogComponent {
     }
   }
 
-  updateUsers() {
+  async updateUsers() {
     this.boardServ.currentUser = this.storageService.loadCurrentUser();
-    this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+    await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
   }
 
   pickAvatar(i: number) {

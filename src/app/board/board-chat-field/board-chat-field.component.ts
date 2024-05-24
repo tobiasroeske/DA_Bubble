@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, Input, computed, inject, signal } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog.component';
+import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 
 
 @Component({
@@ -15,7 +16,6 @@ import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog
   styleUrl: './board-chat-field.component.scss'
 })
 export class BoardChatFieldComponent {
-
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
   memberDialogIsOpen: boolean = false;
