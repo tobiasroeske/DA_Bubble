@@ -1,5 +1,6 @@
 <div class="textarea-container">
-    <textarea name="" id="" placeholder="Nachricht an #Entwicklerteam"></textarea>
+    <label for="message"></label>
+    <textarea name="message" id="message" [(ngModel)]="textMessage" #message="ngModel" placeholder="Nachricht an #Entwicklerteam"></textarea>
     <div class="tool-panel-textarea">
         <div class="icons-container">
             <!-- Add Files Icon -->
@@ -51,7 +52,7 @@
             </svg>
         </div>
         <!-- Send message Icon -->
-        <svg class="sendMsg-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
+        <svg (click)="sendMessage(index)" class="sendMsg-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_51470_679" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="5" y="5" width="30"
                 height="30">

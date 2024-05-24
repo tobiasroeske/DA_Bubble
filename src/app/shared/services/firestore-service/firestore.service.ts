@@ -1,7 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { Firestore, addDoc, collection, doc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
+import { BehaviorSubject } from 'rxjs';
+import { ChatMessage } from '../../interfaces/chatMessage.interface';
+import { user } from '@angular/fire/auth';
 // import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -17,10 +20,13 @@ export class FirestoreService {
   allChannels: any[] = [];
 
 
+
   constructor() {
     this.unsubscribeUsers = this.subUsersList();
     this.unsubChannel = this.subChannelList();
   }
+
+  
 
   ngOnDestroy(): void {
     this.unsubscribeUsers();
@@ -90,6 +96,8 @@ export class FirestoreService {
     });
   }
 
+ 
+
   async addChannel(obj: {}) {
     await addDoc(this.getChannelsRef(), obj).catch((err) => {
       console.log(err);
@@ -101,6 +109,12 @@ export class FirestoreService {
     await updateDoc(docRef, item).catch((err) => {
       console.log(err);
     }).then(() => { });
+  }
+
+  async updateChats(docId:string, messageObject: ChatMessage){
+    let chatRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(chatRef, { chat: arrayUnion(messageObject)})
+    .catch(err => console.log(err));
   }
 
   getChannelsRef() {

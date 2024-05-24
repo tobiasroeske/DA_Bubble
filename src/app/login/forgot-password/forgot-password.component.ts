@@ -15,12 +15,14 @@ import { RouterLink } from '@angular/router';
 export class ForgotPasswordComponent {
   authService = inject(SignupService);
   mail = '';
+  emailSent = false;
   @Output() goBack = new EventEmitter<boolean>();
   
   
   onSubmit(ngForm: NgForm) {
     if (ngForm.form.valid && ngForm.submitted) {
-      this.authService.sendPasswordResetMail(this.mail);
+      this.authService.sendPasswordResetMail(this.mail)
+      .then(() => this.emailSent = true)
     }
   }
 

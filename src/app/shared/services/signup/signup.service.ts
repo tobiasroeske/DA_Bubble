@@ -5,6 +5,8 @@ import {
   Auth,
   GoogleAuthProvider,
   UserCredential,
+  applyActionCode,
+  checkActionCode,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   getRedirectResult,
@@ -24,6 +26,7 @@ import { Router } from '@angular/router';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
 import { User } from '../../models/user.class';
+import { appConfig } from '../../../app.config';
 
 
 @Injectable({
@@ -104,6 +107,27 @@ export class SignupService {
           this.errorCode = err.code;
         });
     }
+  }
+
+  async handleEmailUpdate(actionCode: string) {
+    let restoredMail = null;
+    checkActionCode(this.auth, actionCode)
+    .then(info => {
+      restoredMail = info['data']['email'];
+      return applyActionCode(this.auth, actionCode)
+      .then(() => {
+        console.log('email changed');
+        
+      })
+      .catch(err => console.log(err))
+    })
+  }
+
+  async verifyEmail(actionCode:string) {
+    await applyActionCode(this.auth, actionCode)
+    .then(response => {
+      console.log('Email verified');
+    }).catch(err => console.log(err));
   }
 
   async updateUserProfile(changes: {}) {

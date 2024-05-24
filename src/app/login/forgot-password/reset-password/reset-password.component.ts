@@ -23,14 +23,24 @@ export class ResetPasswordComponent implements OnInit {
   actionMode!: string;
 
   ngOnInit(): void {
-    console.log(this.activatedRoute);
-    
     this.activatedRoute.queryParams.subscribe((val) => {
       this.resetCode = val['oobCode']
       this.actionMode = val['mode']
     })
-    
-    
+    if (this.actionMode == 'verifyAndChangeEmail') {
+      this.changeEmail();
+    }
+    if (this.actionMode =='verifyEmail') {
+      this.verifyEmail();
+    }
+  }
+
+  verifyEmail() {
+    this.authService.verifyEmail(this.resetCode);
+  }
+
+  changeEmail() {
+    this.authService.handleEmailUpdate(this.resetCode);
   }
 
   comparePasswords() {
@@ -41,7 +51,7 @@ export class ResetPasswordComponent implements OnInit {
     }
   }
 
-  backtoLogin() {
+  backToLogin() {
     this.router.navigateByUrl('login');
   }
 
@@ -52,7 +62,7 @@ export class ResetPasswordComponent implements OnInit {
       .then(() => {
         this.passwordChanged = true;
         setTimeout(() => {
-          this.backtoLogin();
+          this.backToLogin();
         },1500)
       })
     } else if (ngForm.submitted && ngForm.form.valid && !this.comparePasswords()) {
