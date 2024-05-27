@@ -1,0 +1,8 @@
+<div class="suggested-member-list">
+    @for(user of filteredUsersListFromParent; track user; let index = $index ){
+    <div (click)="addThisMember(index)" id="{{index}}" class="suggested-member">
+        <img class="avatar-member" src="{{user.avatarPath}}" alt="">
+        <span>{{user.name}}</span>
+    </div>
+    }
+</div>

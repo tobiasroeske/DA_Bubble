@@ -29,7 +29,8 @@ export class LocalStorageService {
       id: obj.uid || '',
       name: obj.displayName || '',
       email: obj.email || '',
-      avatarPath: obj.photoURL || ''
+      avatarPath: obj.photoURL || '',
+      seleted: obj.selected || false
     }
   }
 

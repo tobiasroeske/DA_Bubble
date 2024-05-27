@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BoardService } from '../board.service';
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';
-
+import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 @Component({
   selector: 'app-add-member-dialog',
   standalone: true,
@@ -14,8 +14,7 @@ import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/a
 export class AddMemberDialogComponent {
   specificMember: boolean = false;
   allMembers: boolean = false;
-
-  boardServ = inject(BoardService);
+  memberServ = inject(MemberDialogsService);
 
   onCheck(condition: string) {
     if (condition == "allMembers") {
@@ -28,8 +27,8 @@ export class AddMemberDialogComponent {
   }
 
   closeAddMemberDialog(event: Event) {
-    this.boardServ.addMemberDialogIsOpen = false;
-    this.boardServ.addSpecificPerson = false;
+    this.memberServ.addMemberDialogIsOpen = false;
+    this.memberServ.addSpecificPerson = false;
     event.stopPropagation();
   }
 }

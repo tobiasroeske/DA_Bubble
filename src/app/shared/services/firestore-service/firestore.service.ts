@@ -26,7 +26,7 @@ export class FirestoreService {
     this.unsubChannel = this.subChannelList();
   }
 
-  
+
 
   ngOnDestroy(): void {
     this.unsubscribeUsers();
@@ -49,8 +49,8 @@ export class FirestoreService {
     let userRef = this.getUserDocRef(userId);
     let userUpdate = this.setUserObject(newUser, userId);
     await updateDoc(userRef, userUpdate)
-    .then(() => {})
-    .catch(err => console.log(err))
+      .then(() => { })
+      .catch(err => console.log(err))
   }
 
   subUsersList() {
@@ -63,7 +63,7 @@ export class FirestoreService {
         this.userList.push(singleUser);
       });
       console.log(this.userList);
-      
+
     })
   }
 
@@ -72,7 +72,8 @@ export class FirestoreService {
       id: obj.id ? obj.id : '',
       name: obj.name,
       email: obj.email,
-      avatarPath: obj.avatarPath
+      avatarPath: obj.avatarPath,
+      selected: obj.selected ? obj.selected : false
     }
   }
 
@@ -81,7 +82,8 @@ export class FirestoreService {
       id: id || '',
       name: obj.name || '',
       email: obj.email || '',
-      avatarPath: obj.avatarPath || ''
+      avatarPath: obj.avatarPath || '',
+      selected: obj.selected || false
     }
   }
 
@@ -96,8 +98,6 @@ export class FirestoreService {
     });
   }
 
- 
-
   async addChannel(obj: {}) {
     await addDoc(this.getChannelsRef(), obj).catch((err) => {
       console.log(err);
@@ -111,10 +111,20 @@ export class FirestoreService {
     }).then(() => { });
   }
 
-  async updateChats(docId:string, messageObject: ChatMessage){
+  async updateMembers(newMember: string, docId: string) {
+    let channelRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(channelRef, { members: arrayUnion(newMember) });
+  }
+
+  async updateChannelUsers(updatedUser: any, docId: string) {
+    let channelRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(channelRef, { allUsers: updatedUser })
+  }
+
+  async updateChats(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(chatRef, { chat: arrayUnion(messageObject)})
-    .catch(err => console.log(err));
+    await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
+      .catch(err => console.log(err));
   }
 
   getChannelsRef() {

@@ -25,6 +25,10 @@ export class AddChannelDialogComponent {
   onSubmit(ngForm: NgForm) {
     this.channel.creatorId = this.signUpServ.currentUser.uid; // take the id of the logged-in user that a new channel creates
     this.channel.creatorName = this.signUpServ.currentUser.displayName;
+    this.channel.allUsers = [];
+    this.firestore.userList.forEach((user) => {
+      this.channel.allUsers.push(user)
+    })
     if (ngForm.valid && ngForm.submitted) {
       this.firestore.addChannel(this.channel.toJSON());
       ngForm.resetForm();

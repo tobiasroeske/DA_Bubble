@@ -1,7 +1,8 @@
-@if(boardServ.addMemberDialogIsOpen){
-    <div class="opacity"></div>
+@if(memberServ.addMemberDialogIsOpen){
+<div (click)="closeAddMemberDialog($event)" class="opacity"></div>
 }
-<div [ngStyle]="{'gap': boardServ.addSpecificPerson ? '0' : '20px'}" (click)="boardServ.stopPropagation($event)" class="add-member-dialog">
+<div [ngStyle]="{'gap': memberServ.addSpecificPerson ? '0' : '20px'}" (click)="memberServ.stopPropagation($event)"
+    class="add-member-dialog">
     <div class="add-member-dialog-header">
         <span>Leute hinzufügen</span>
         <svg (click)="closeAddMemberDialog($event)" class="cross-icon" width="40" height="40" viewBox="0 0 40 40"
@@ -18,7 +19,7 @@
         </svg>
     </div>
 
-    <div [ngClass]="{'d-none': boardServ.addSpecificPerson}" class="add-members-options">
+    <div [ngClass]="{'d-none': memberServ.addSpecificPerson}" class="add-members-options">
         <div class="checkbox-and-text-container">
             <div (click)="onCheck('allMembers')" class="ellipse-container">
                 @if(allMembers){
@@ -41,14 +42,14 @@
             @if(allMembers){
             <button>Erstellen</button>
             } @else if(specificMember) {
-            <button (click)="boardServ.goToAddSpecificPerson($event)">Erstellen</button>
+            <button (click)="memberServ.goToAddSpecificPerson($event)">Erstellen</button>
             } @else {
             <button style="background-color: gray;" [disabled]="true">Erstellen</button>
             }
         </div>
 
     </div>
-    @if(boardServ.addSpecificPerson){
+    @if(memberServ.addSpecificPerson){
     <app-add-specific-person-dialog style="width: 100%;"></app-add-specific-person-dialog>
     }
 </div>

@@ -1,0 +1,54 @@
+@import '../../../../../styles.scss';
+
+.selected-members-full-list {
+    @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 20px);
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 16px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(173, 176, 217, 1);
+        ;
+        border-radius: 100px;
+    }
+}
+
+.selected-member-in-full-list {
+    @include d-flex($jc: flex-start, $ai: center, $g: 10px);
+    padding: 4px 12px;
+    border-radius: 25px;
+    font-size: 18px;
+
+    &:hover {
+        background: rgb(236, 238, 254);
+    }
+}
+
+.avatar-and-name-selected-member-container {
+    @include d-flex($jc: space-between, $g: 13px);
+}
+
+.avatar-selected-member {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.cross-icon-member {
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+    cursor: pointer;
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+}

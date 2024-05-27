@@ -3,4 +3,5 @@ export interface CurrentUser {
     name: string;
     email: string;
     avatarPath: string;
+    selected?:boolean;
 }

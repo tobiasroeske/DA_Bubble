@@ -5,6 +5,7 @@ import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog.component';
+import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 
 
@@ -21,6 +22,7 @@ export class BoardChatFieldComponent {
   memberDialogIsOpen: boolean = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
+  memberServ = inject(MemberDialogsService);
   membersList: any[] = []
 
   constructor() {

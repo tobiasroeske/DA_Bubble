@@ -16,9 +16,6 @@ export class BoardService {
   textHidden: boolean = true;
   dialogIsOpen: boolean = false;
   editDialogIsOpen: boolean = false;
-  membersDialogIsOpen: boolean = false;
-  addMemberDialogIsOpen: boolean = false;
-  addSpecificPerson: boolean = false;
   status: string = 'öffen';
   profileOptionsOpen = false;
   profileOpen = false;
@@ -91,23 +88,6 @@ export class BoardService {
 
   toggleProfileEditor() {
     this.editMode = !this.editMode;
-  }
-
-  toggleMembersDialog(event: Event) {
-    this.membersDialogIsOpen = !this.membersDialogIsOpen;
-    event?.stopPropagation();
-  }
-
-  openAddMembersDialog(event:Event) {
-    this.addMemberDialogIsOpen = true;
-    if(this.membersDialogIsOpen){
-      this.toggleMembersDialog(event)
-    }
-  }
-
-  goToAddSpecificPerson(event: Event) {
-    this.addSpecificPerson = true;
-    event.stopPropagation();
   }
 
   stopPropagation(event: Event) {

@@ -1,0 +1,22 @@
+@import '../../../../../styles.scss';
+
+.selected-member-and-cross-icon-container {
+    @include d-flex($jc: space-between);
+    padding: 4px 12px;
+    border-radius: 30px;
+
+    &:hover {
+        background: rgba(236, 238, 254, 1);
+    }
+}
+
+.selected-member {
+    @include d-flex($jc: space-between, $g: 10px);
+
+    >.avatar-selected-member {
+        height: 30px;
+        width: 30px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+}
