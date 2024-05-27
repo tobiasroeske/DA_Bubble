@@ -1,5 +1,6 @@
 @import '../../../styles.scss';
 
+
 .textarea-container {
     position:absolute;
     bottom:20px;
@@ -58,4 +59,11 @@
 
 .d-none {
     display: none;
+}
+
+.emoji-container {
+    position: absolute;
+    background-color: white;
+    top: 0;
+    z-index: 5;
 }

@@ -124,7 +124,7 @@ export class FirestoreService {
   async updateChats(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
-      .catch(err => console.log(err));
+    .catch(err => console.log(err));
   }
 
   getChannelsRef() {
