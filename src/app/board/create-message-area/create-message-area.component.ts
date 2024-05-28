@@ -35,10 +35,12 @@ export class CreateMessageAreaComponent {
     
   }
 
-  sendMessage(index:number) {
-    let date = new Date().getTime();
-    this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
-    .then(() => this.textMessage = '')
+  sendMessage() {
+    if (this.textMessage.length > 0) {
+      let date = new Date().getTime();
+      this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
+      .then(() => this.textMessage = '')
+    }
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -67,7 +69,7 @@ export class CreateMessageAreaComponent {
       console.log('beide Tasten gedrückt');
       return;
     } else if (this.enterPressed) {
-      this.sendMessage(this.index);
+      this.sendMessage();
     }
   }
 

@@ -12,7 +12,6 @@ import { Firestore, collection } from '@angular/fire/firestore';
 export class BoardService {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
-  firestore = inject(Firestore);
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
@@ -24,6 +23,8 @@ export class BoardService {
   editMode = false;
   currentUser: any;
   idx: number = 0
+  currentChatMessage!:any;
+  chatMessageIndex!:number;
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();

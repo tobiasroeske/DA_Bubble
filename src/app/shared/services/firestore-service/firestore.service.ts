@@ -2,10 +2,15 @@ import { Injectable, inject, signal } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
+<<<<<<< HEAD
 import { PrivateChat } from '../../models/privateChat.class';
 import { BehaviorSubject } from 'rxjs';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
 import { Auth, user } from '@angular/fire/auth';
+=======
+import { ChatMessage } from '../../interfaces/chatMessage.interface';
+import { BehaviorSubject } from 'rxjs';
+>>>>>>> 82d05f69056a8f0d5c7c6b1753e89c141d17b240
 // import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -13,11 +18,13 @@ import { Auth, user } from '@angular/fire/auth';
 })
 export class FirestoreService {
   firestore = inject(Firestore)
-  // userListSubject = new BehaviorSubject<CurrentUser[]>([])
-  // userList$ = this.userListSubject.asObservable();
+
+  // usersListSubject = new BehaviorSubject<CurrentUser[]>([])
+  // usersList$ = this.usersListSubject.asObservable();
   userList: CurrentUser[] = [];
   unsubscribeUsers;
   unsubChannel;
+<<<<<<< HEAD
   unsubDirectMess;
   auth = inject(Auth);
   allChannels: any[] = [];
@@ -27,12 +34,32 @@ export class FirestoreService {
     this.unsubscribeUsers = this.subUsersList();
     this.unsubChannel = this.subChannelList();
     this.unsubDirectMess = this.subDirectMessages();
+=======
+  // unsubChannelAlternative;
+  // unsubUserListAlternative;
+  unsubPrivateMessage!: any;
+  allChannels: any[] = [];
+  allChannelsSubject = new BehaviorSubject<any[]>([]);
+  allChannels$ = this.allChannelsSubject.asObservable();
+  privateMessages = [];
+  
+  constructor() {
+    this.unsubscribeUsers = this.subUsersList();
+    this.unsubChannel = this.subChannelList();
+    // this.unsubChannelAlternative = this.subChannelListAlternative();
+    // this.unsubUserListAlternative = this.subUsersListAlternative();
+>>>>>>> 82d05f69056a8f0d5c7c6b1753e89c141d17b240
   }
 
   ngOnDestroy(): void {
     this.unsubscribeUsers();
     this.unsubChannel();
+<<<<<<< HEAD
     this.unsubDirectMess();
+=======
+    // this.unsubChannelAlternative;
+    // this.unsubUserListAlternative();
+>>>>>>> 82d05f69056a8f0d5c7c6b1753e89c141d17b240
   }
 
   getUsersRef() {
@@ -68,6 +95,17 @@ export class FirestoreService {
     });
   }
 
+  // subUsersListAlternative() {
+  //   return onSnapshot(this.getUsersRef(), list => {
+  //     let usersList: CurrentUser[] = [];
+  //     list.forEach(user => {
+  //       let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
+  //       usersList.push(singleUser);
+  //     })
+  //     this.usersListSubject.next(usersList);
+  //   })
+  // }
+
   getCleanUserJson(obj: any) {
     return {
       id: obj.id ? obj.id : '',
@@ -87,6 +125,20 @@ export class FirestoreService {
       selected: obj.selected || false
     }
   }
+
+  // subChannelListAlternative() {
+  //   return onSnapshot(this.getChannelsRef(), (list) => {
+  //     let allChannels: any[] = [];
+  //     list.forEach((el) => {
+  //       let channel = new Channel(el.data());
+  //       channel.id = el.id;
+  //       allChannels.push(channel.toJSON());
+  //     });
+  //     console.log(allChannels);
+      
+  //     this.allChannelsSubject.next(allChannels);
+  //   });
+  // }
 
   subChannelList() {
     return onSnapshot(this.getChannelsRef(), (list) => {
@@ -111,7 +163,15 @@ export class FirestoreService {
   }
 
   async addChannel(obj: {}) {
-    await addDoc(this.getChannelsRef(), obj).catch((err) => {
+    await addDoc(this.getChannelsRef(), obj)
+    .then(docRef => {
+      if (docRef?.id) {
+        let channelId = docRef?.id;
+        updateDoc(this.getSingleChannelRef('channels', channelId), { id: channelId}).catch(err => console.log(err))
+      }
+      
+    })
+    .catch((err) => {
       console.log(err);
     })
   }
@@ -143,6 +203,24 @@ export class FirestoreService {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
       .catch(err => console.log(err));
+  }
+
+  async updateReactions(docId: string, newChats: ChatMessage[]) {
+    let chatRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(chatRef, { chat: newChats }).then((data) => console.log(data)
+    )
+    .catch(err => console.log(err));
+  }
+
+  subChatMessages(channelId: string) {
+    return onSnapshot(this.getChatsRef(channelId), list => {
+      console.log(list.docs);
+      
+    })
+  }
+
+  getChatsRef(channelId:string) {
+    return collection(this.firestore, 'channels', channelId, 'chatMessages');
   }
 
   getChannelsRef() {
