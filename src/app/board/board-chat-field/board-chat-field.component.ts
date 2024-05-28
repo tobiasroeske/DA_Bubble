@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, computed, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, computed, inject, signal } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -8,6 +8,7 @@ import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -25,9 +26,16 @@ export class BoardChatFieldComponent {
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
   membersList: any[] = []
+  //channelId: string;
+ 
 
   constructor() {
+    
   }
+
+  
+
+  
 
   onHover(htmlElement: string) {
     if (htmlElement == 'message-box') {

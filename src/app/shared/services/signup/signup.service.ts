@@ -182,6 +182,7 @@ export class SignupService {
     await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         this.storageService.saveCurrentUser(userCredential.user);
+        
         this.router.navigateByUrl('board');
       })
       .catch((err) => {
@@ -197,6 +198,7 @@ export class SignupService {
         console.log('Current user is: ', this.currentUser);
 
         this.storageService.saveCurrentUser(user);
+        
       } else {
         console.log(user + 'is signed out');
         this.storageService.saveCurrentUser(user);

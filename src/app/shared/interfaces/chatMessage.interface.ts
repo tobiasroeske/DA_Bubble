@@ -1,9 +1,10 @@
 import { User } from "../models/user.class";
+import { Reaction } from "./reaction.interface";
 
 export interface ChatMessage {
     date: number;
     user: User;
     message: string;
-    answers: [];
-    reactions: [];
+    answers: ChatMessage[];
+    reactions: Reaction[];
 }

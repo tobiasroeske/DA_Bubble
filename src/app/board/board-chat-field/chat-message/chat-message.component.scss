@@ -53,11 +53,45 @@
     >img {
         cursor: pointer;
         border-radius: 100%;
+        margin: 4px;
 
         &:hover {
             background: rgba(236, 238, 254, 1);
         }
     }
+}
+
+.reaction-dialog {
+    position: absolute;
+    top: 48px;
+    right: 80px;
+    @include d-flex($jc: center, $g: 12px);
+    flex-wrap: wrap;
+    padding: 15px 12px;
+    background-color: white;
+    width: 180px;
+    border-radius: 30px 0 30px 30px;
+    box-shadow: 0px 2px 10px 0px #00000014;
+}
+
+.emoji-icon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+
+    object-fit: cover;
+    border-radius: 100%;
+    transition: all 0.125s ease-in-out;
+
+    &:hover {
+        background-color: transparent !important;
+        transform: scale(1.2);
+    }
+}
+
+.reaction-dialog-reverse {
+    right: -100px;
+    border-radius: 0 30px 30px 30px;
 }
 
 .message-box {
@@ -94,9 +128,11 @@
 .message-box-reverse {
     flex-direction: row-reverse !important;
     padding: 10px 45px 10px 0px !important;
+
     &:hover {
         background-color: #ECEEFD !important;
     }
+
     &:hover .message-container .message {
         background-color: #787EF2;
         color: #fff;
@@ -155,6 +191,21 @@
         border-radius: 20px;
         @include d-flex($jc: space-between, $ai: center, $g: 10px);
 
+        img {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+
+            object-fit: cover;
+            border-radius: 100%;
+            transition: all 0.125s ease-in-out;
+
+            &:hover {
+
+                transform: scale(1.1);
+            }
+        }
+
         >.pop-up-reaction {
             position: absolute;
             top: -131px;
@@ -164,11 +215,18 @@
             background: blue;
             padding: 15px 10px;
             color: #fff;
-            @include d-flex($fd: column, $g: 5px);
+            display: none;
             transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+            z-index: 10;
 
             >.pop-up-reacter {
                 @include d-flex($fd: column, $ai: center, $g: 5px);
+            }
+        }
+
+        &:hover {
+            >.pop-up-reaction {
+                @include d-flex($fd: column, $g: 5px);
             }
         }
     }

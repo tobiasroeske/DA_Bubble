@@ -4,6 +4,8 @@ import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { User, onAuthStateChanged } from '@angular/fire/auth/firebase';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
+import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,8 @@ import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 export class BoardService {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
-  threadTranslate: boolean = false;
+  firestoreService = inject(FirestoreService);
+  threadTranslate: boolean = true;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
   dialogIsOpen: boolean = false;
@@ -22,6 +25,8 @@ export class BoardService {
   editMode = false;
   currentUser: any;
   idx: number = 0
+  currentChatMessage!:any;
+  chatMessageIndex!:number;
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();

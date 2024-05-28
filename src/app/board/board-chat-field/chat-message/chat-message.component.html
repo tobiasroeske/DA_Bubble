@@ -5,12 +5,15 @@
             <span class="date">{{ checkIfDateIsToday(chat.date) ? 'Heute' : chat.date | date: 'EEEE, MMMM d' }}</span>
         </div>
     </div>
-    <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')" #reactionbar{{i}}
-        [ngStyle]="{'display': mouseIsOverMessage ? '' : 'none'}" class="reaction-bar" [class.reaction-bar-reverse]="chat.user.id != boardServ.currentUser.id">
-        <img src="assets/emoji/checkMark.png" alt="">
-        <img src="assets/emoji/handsUp.png" alt="">
+    <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
+        [ngStyle]="{'display': mouseIsOverMessage ? '' : 'none'}" class="reaction-bar"
+        [class.reaction-bar-reverse]="chat.user.id == boardServ.currentUser.id">
+        <img src="assets/emoji/emoji_{{ lastReactions[0] }}.png" alt="" class="emoji-icon"
+            (click)="updateCompleteChannel(0, lastReactions)">
+        <img src="assets/emoji/emoji_{{ lastReactions[1] }}.png" alt="" class="emoji-icon"
+            (click)="updateCompleteChannel(1, lastReactions)">
         <svg class="addReaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
+            xmlns="http://www.w3.org/2000/svg" (click)="toggleReactionDialog()">
             <mask id="mask0_1817_19446" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                 height="24">
                 <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -33,13 +36,24 @@
                     fill="black" />
             </g>
         </svg>
+        @if (reactionDialogOpen) {
+        <div class="reaction-dialog" [class.reaction-dialog-reverse]="chat.user.id == boardServ.currentUser.id">
+            @for (emoji of reactionEmojis; track emoji; let i = $index) {
+            <img src="assets/emoji/emoji_{{ emoji }}.png" alt="{{ emoji }}" class="emoji-icon"
+                (click)="updateCompleteChannel(i, reactionEmojis)">
+            }
+        </div>
+        }
+
     </span>
     <div (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
-        [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}" class="message-box" [class.message-box-reverse]="chat.user.id != boardServ.currentUser.id">
+        [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}" class="message-box"
+        [class.message-box-reverse]="chat.user.id == boardServ.currentUser.id">
         <img class="avatar-photo" src="{{ chat.user.avatarPath }}" alt="">
         <div class="message-container">
             <div class="name-and-time-container">
-                <span class="avatar-name-message">{{ chat.user.name }}</span> <span class="time">{{ chat.date | date: 'shortTime' }}</span>
+                <span class="avatar-name-message">{{ chat.user.name }}</span> <span class="time">{{ chat.date | date:
+                    'shortTime' }}</span>
             </div>
             <p class="message">{{ chat.message }}</p>
             <div class="reaction-indicator-bar">
@@ -55,27 +69,39 @@
                             fill="black" />
                     </g>
                 </svg>
-                <span (mouseover)="onHover('react-indic')" (mouseleave)="onLeave('react-indic')"
+                @for (reaction of chat.reactions; track reaction; let i = $index) {
+                <span 
                     class="reaction-indicator">
-                    <img src="assets/emoji-single/check-mark.png" alt="">
-                    <p>1</p>
-                    <div [ngStyle]="{'display': popUpReaction ? '' : 'none'}" class="pop-up-reaction">
-                        <img src="assets/emoji-single/check-mark.png" alt="">
-                        <div class="pop-up-reacter"><b>Sofia Müller</b> <br>
+                    <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
+                    <p>{{ reaction.count }}</p>
+                   
+                    <div class="pop-up-reaction">
+                        <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
+                        <div class="pop-up-reacter"><b>{{ reaction.creator[reaction.creator.length - 1] }}</b> <br>
                             <p>hat reagiert</p>
                         </div>
                     </div>
+        
+
                 </span>
+                }
+
             </div>
-            <div class="answer-container">
-                <div class="answers" (click)="boardServ.open('thread')">
-                    <span class="number">2</span>
+            <div class="answer-container" [ngStyle]="{'justify-content': chat.answers.length > 1 ? 'space-between' : 'flex-end'}">
+                <div class="answers" (click)="boardServ.open('thread'); boardServ.currentChatMessage = currentChatMessage; boardServ.chatMessageIndex = chatMessageIndex">
+                    @if (chat.answers.length > 0) {
+                        <span class="number">{{ chat.answers.length }}</span>
+                    }
+                    
                     <span>Antworten</span>
                 </div>
-                <div class="last-answer-container">
-                    Letzte Antwort
-                    <span class="last-answer-time"> 14:56</span>
-                </div>
+                @if (chat.answers.length > 0) {
+                    <div class="last-answer-container">
+                        Letzte Antwort
+                        <span class="last-answer-time"> {{ chat.answers[chat.answers.length - 1].date | date: 'shortTime' }}</span>
+                    </div>
+                }
+                
             </div>
         </div>
     </div>
