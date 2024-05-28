@@ -33,7 +33,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   userList: CurrentUser[] = [];
   filteredUsersList: any[] = [];
   selectedList: any = [];
-  channel = new Channel();
+  channel:Channel = new Channel();
 
   constructor() {
     this.title = this.firestore.allChannels[this.boardServ.idx].title;
@@ -59,7 +59,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
 
   addNewMembersToChannel() {
     this.selectedList.forEach((member: any) => {
-      this.firestore.updateMembers(member, this.channelId);
+      // this.firestore.updateMembers(member, this.channelId);
       this.currentChannel.allUsers.forEach((user) => {
         if (user.name == member.name) {
           user.selected = true;
@@ -67,7 +67,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
       })
     })
     let updatedUsers = this.currentChannel.allUsers;
-    this.firestore.updateChannelUsers(updatedUsers, this.channelId)
+    this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
   };
 

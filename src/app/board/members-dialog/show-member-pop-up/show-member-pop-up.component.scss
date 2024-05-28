@@ -1,0 +1,48 @@
+@import '../../../../styles.scss';
+
+.opacity {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    @include d-flex();
+    z-index: 4;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.show-member-pop-up {
+    background: #fff;
+    border-radius: 30px;
+    padding: 40px;
+    font-family: "Nunito";
+    @include d-flex(column, space-between, flex-start, 45px);
+    width: 500px;
+}
+
+.title-and-cross-icon {
+    @include d-flex($jc: space-between);
+    width: 100%;
+
+    >span {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+    }
+}
+
+.profil-photo-container {
+    width: 100%;
+    @include d-flex();
+
+    .profil-photo {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+}
+
+.name-and-state-container {
+    @include d-flex(column, space-between, flex-start, 15px)
+}

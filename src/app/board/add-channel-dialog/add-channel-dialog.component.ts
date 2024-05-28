@@ -5,6 +5,7 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { Channel } from '../../shared/models/channel.class';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignupService } from '../../shared/services/signup/signup.service';
+import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
   selector: 'app-add-channel-dialog',
@@ -16,24 +17,32 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 export class AddChannelDialogComponent {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  signUpServ = inject(SignupService)
+  signUpServ = inject(SignupService);
+  memberServ = inject(MemberDialogsService);
 
   channel: Channel = new Channel();
 
-  constructor() { }
+  constructor() {
+    console.log(this.firestore.allChannels);
+   }
 
-  onSubmit(ngForm: NgForm) {
+  onSubmit(ngForm: NgForm, event: Event) {
+    this.shapeChannel();
+    if (ngForm.valid && ngForm.submitted) {
+      this.firestore.addChannel(this.channel.toJSON());
+      ngForm.resetForm();
+      this.memberServ.openAddMembersDialog(event);
+      this.boardServ.closeDialogAddChannel();
+    }
+  }
+  
+  shapeChannel() {
     this.channel.creatorId = this.signUpServ.currentUser.uid; // take the id of the logged-in user that a new channel creates
     this.channel.creatorName = this.signUpServ.currentUser.displayName;
     this.channel.allUsers = [];
     this.firestore.userList.forEach((user) => {
       this.channel.allUsers.push(user)
     })
-    if (ngForm.valid && ngForm.submitted) {
-      this.firestore.addChannel(this.channel.toJSON());
-      ngForm.resetForm();
-      this.boardServ.closeDialogAddChannel();
-    }
   }
-
 }
+

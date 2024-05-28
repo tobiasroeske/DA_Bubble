@@ -18,7 +18,7 @@
         <p class="tipp-text">Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein
             #marketing zum Beispiel
         </p>
-        <form (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm">
+        <form (ngSubmit)="onSubmit(contactForm, $event)" #contactForm="ngForm">
             <div class="input-and-name-container">
                 <h3>Channel-Name</h3>
                 <div class="input-container">

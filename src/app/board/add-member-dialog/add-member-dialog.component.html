@@ -26,7 +26,7 @@
                 <img class="ellipse" src="assets/icons/ellipse.png" alt="">
                 }
             </div>
-            <span>Alle Mitglieder von OfficeTeam hinzufügen</span>
+            <span>Alle Mitglieder von <b style="color: #5988FF">OfficeTeam</b> hinzufügen</span>
         </div>
 
         <div class="checkbox-and-text-container">
@@ -40,7 +40,7 @@
 
         <div class="btn-container">
             @if(allMembers){
-            <button>Erstellen</button>
+            <button (click)="setAllUsersOnSelectedTrue()">Erstellen</button>
             } @else if(specificMember) {
             <button (click)="memberServ.goToAddSpecificPerson($event)">Erstellen</button>
             } @else {

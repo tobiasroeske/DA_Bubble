@@ -4,6 +4,7 @@ import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { User, onAuthStateChanged } from '@angular/fire/auth/firebase';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
+import { Firestore, collection } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 export class BoardService {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
+  firestore = inject(Firestore);
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
@@ -98,5 +100,4 @@ export class BoardService {
     this.idx = i;
     event.preventDefault();
   }
-
 }

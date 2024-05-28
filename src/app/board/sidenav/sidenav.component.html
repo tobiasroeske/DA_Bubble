@@ -42,7 +42,8 @@
                 </svg>
             </div>
         </div>
-        <div class="channel-links-container" [ngStyle]="{'display': channelHeaderIsClicked ? '' : 'none', 'transform': canTranslateYChannel ? 'translateY(0%)' : 'translateY(-200%)' }">
+        <div class="channel-links-container"
+            [ngStyle]="{'display': channelHeaderIsClicked ? '' : 'none', 'transform': canTranslateYChannel ? 'translateY(0%)' : 'translateY(-200%)' }">
             @for(channel of firestore.allChannels; track channel; let index = $index){
             <a id="{{index}}" class="channel" href="" (click)="boardServ.showChannelInChatField(index, $event)">
                 <svg class="hashtagIcon" width="17" height="17" viewBox="0 0 17 17" fill="none"
@@ -55,7 +56,8 @@
             </a>
             }
         </div>
-        <span (click)="boardServ.openDialogAddChannel()" [ngClass]="{'d-none': !channelHeaderIsClicked}" class="add-channel-container">
+        <span (click)="boardServ.openDialogAddChannel()" [ngClass]="{'d-none': !channelHeaderIsClicked}"
+            class="add-channel-container">
             <svg class="add-circle" width="20" height="21" viewBox="0 0 20 21" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -67,9 +69,11 @@
     </div>
 
     <!-- Direct Messages Container -->
-    <div (click)="onDirectMessageClick()" class="direct-messages-container" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
+    <div (click)="onDirectMessageClick()" class="direct-messages-container"
+        [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
         <div class="direct-message-header">
-            <svg [ngStyle]="{'transform': directMessHeaderisClicked ? 'rotate(0deg)' : 'rotate(-90deg)'}" class="arrow-down-directmessages" width="10" height="7" viewBox="0 0 10 7" fill="none"
+            <svg [ngStyle]="{'transform': directMessHeaderisClicked ? 'rotate(0deg)' : 'rotate(-90deg)'}"
+                class="arrow-down-directmessages" width="10" height="7" viewBox="0 0 10 7" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M4.12483 5.875L0.874832 2.625C0.478999 2.22917 0.390665 1.77625 0.609832 1.26625C0.828165 0.755417 1.21858 0.5 1.78108 0.5H8.21858C8.78108 0.5 9.1715 0.755417 9.38983 1.26625C9.609 1.77625 9.52067 2.22917 9.12483 2.625L5.87483 5.875C5.74983 6 5.61442 6.09375 5.46858 6.15625C5.32275 6.21875 5.1665 6.25 4.99983 6.25C4.83317 6.25 4.67692 6.21875 4.53108 6.15625C4.38525 6.09375 4.24983 6 4.12483 5.875Z"
@@ -86,23 +90,13 @@
             </span>
         </div>
 
-        <div [ngStyle]="{'display' : directMessHeaderisClicked ? '' : 'none', 'transform': canTranslateYUserList ? 'translateY(0%)' : 'translateY(-200%)'}" class="colleagues-container">
+        <div [ngStyle]="{'display' : directMessHeaderisClicked ? '' : 'none', 'transform': canTranslateYUserList ? 'translateY(0%)' : 'translateY(-200%)'}"
+            class="colleagues-container">
+            @for(privateChat of this.firestore.directMessages; track privateChat ){
             <div class="collegue">
-                <img class="avatar-sidenav" src="assets/img/avatar.png" alt="">
-                <h3>Collegue Name</h3>
+                <img class="avatar-sidenav" src="{{privateChat.guest.avatarPath}}" alt="">
+                <h3>{{privateChat.guest.name}}</h3>
             </div>
-            <div class="collegue">
-                <img class="avatar-sidenav" src="assets/img/avatar.png" alt="">
-                <h3>Collegue Name</h3>
-            </div>
-            <div class="collegue">
-                <img class="avatar-sidenav" src="assets/img/avatar.png" alt="">
-                <h3>Collegue Name</h3>
-            </div>
-            <div class="collegue">
-                <img class="avatar-sidenav" src="assets/img/avatar.png" alt="">
-                <h3>Collegue Name</h3>
-            </div>
-
+            }
         </div>
     </div>

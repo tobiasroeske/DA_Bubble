@@ -3,7 +3,7 @@ import { CurrentUser } from "../interfaces/currentUser.interface";
 export class Channel {
     id?: string;
     title: string;
-    members: string[];
+    members: CurrentUser[];
     description?: string;
     creatorId: string;
     creatorName: string;

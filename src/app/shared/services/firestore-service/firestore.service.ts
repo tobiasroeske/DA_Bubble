@@ -2,9 +2,10 @@ import { Injectable, inject, signal } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
+import { PrivateChat } from '../../models/privateChat.class';
 import { BehaviorSubject } from 'rxjs';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
-import { user } from '@angular/fire/auth';
+import { Auth, user } from '@angular/fire/auth';
 // import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -17,20 +18,21 @@ export class FirestoreService {
   userList: CurrentUser[] = [];
   unsubscribeUsers;
   unsubChannel;
+  unsubDirectMess;
+  auth = inject(Auth);
   allChannels: any[] = [];
-
-
+  directMessages: PrivateChat[] = [];
 
   constructor() {
     this.unsubscribeUsers = this.subUsersList();
     this.unsubChannel = this.subChannelList();
+    this.unsubDirectMess = this.subDirectMessages();
   }
-
-
 
   ngOnDestroy(): void {
     this.unsubscribeUsers();
     this.unsubChannel();
+    this.unsubDirectMess();
   }
 
   getUsersRef() {
@@ -38,7 +40,7 @@ export class FirestoreService {
   }
 
   getUserDocRef(userId: string) {
-    return doc(this.getUsersRef(), userId)
+    return doc(this.getUsersRef(), userId);
   }
 
   async addUser(userId: string, user: CurrentUser) {
@@ -63,8 +65,7 @@ export class FirestoreService {
         this.userList.push(singleUser);
       });
       console.log(this.userList);
-
-    })
+    });
   }
 
   getCleanUserJson(obj: any) {
@@ -98,9 +99,26 @@ export class FirestoreService {
     });
   }
 
+  subDirectMessages() {
+    return onSnapshot(this.getDirectMessRef(), (list) => {
+      list.forEach(el => {
+        let privateChat = new PrivateChat(el.data());
+        privateChat.id = el.id;
+        this.directMessages.push(privateChat);
+        console.log(this.directMessages);
+      });
+    });
+  }
+
   async addChannel(obj: {}) {
     await addDoc(this.getChannelsRef(), obj).catch((err) => {
       console.log(err);
+    })
+  }
+
+  async addChatRoom(obj: {}) {
+    await addDoc(this.getDirectMessRef(), obj).catch((err) => {
+      console.error(err);
     })
   }
 
@@ -111,20 +129,20 @@ export class FirestoreService {
     }).then(() => { });
   }
 
-  async updateMembers(newMember: string, docId: string) {
+  async updateMembers(newMember: string | CurrentUser, docId: string) {
     let channelRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(channelRef, { members: arrayUnion(newMember) });
   }
 
   async updateChannelUsers(updatedUser: any, docId: string) {
     let channelRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(channelRef, { allUsers: updatedUser })
+    await updateDoc(channelRef, { allUsers: updatedUser });
   }
 
   async updateChats(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
-    .catch(err => console.log(err));
+      .catch(err => console.log(err));
   }
 
   getChannelsRef() {
@@ -134,5 +152,14 @@ export class FirestoreService {
   getSingleChannelRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
   }
+
+  getDirectMessRef() {
+    return collection(this.firestore, 'direct-messages');
+  }
+
+  getDirectMessSingleDoc(userId: string) {
+    return doc(this.getDirectMessRef(), userId)
+  }
+
 }
 
