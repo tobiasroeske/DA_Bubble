@@ -16,6 +16,7 @@
     border-radius: 30px;
     padding: 40px;
     font-family: "Nunito";
+    color: #000;
     @include d-flex(column, space-between, flex-start, 45px);
     width: 500px;
 }
@@ -44,5 +45,84 @@
 }
 
 .name-and-state-container {
-    @include d-flex(column, space-between, flex-start, 15px)
+    @include d-flex(column, space-between, flex-start, 15px);
+
+    >h3 {
+        font-size: 32px;
+        color: #000;
+        font-weight: 700;
+    }
+
+    >.state-container {
+        @include d-flex($jc: space-between, $g: 15px);
+
+        >.point-container {
+            @include d-flex();
+            width: 16px;
+            height: 16px;
+
+            >.online-point {
+                width: 100%;
+                height: 100%;
+                border-radius: 100%;
+                background: rgba(146, 200, 62, 1)
+            }
+
+            >.online-point {
+                width: 100%;
+                border-radius: 100%;
+                background: rgba(104, 104, 104, 1)
+            }
+
+            >span {
+                font-size: 20px;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+.email-container {
+    @include d-flex($jc: space-between, $ai: flex-start, $g: 15px);
+
+    >img {
+        height: 20px;
+        width: 25px;
+        object-fit: contain;
+    }
+
+    >.email {
+        @include d-flex(column, space-between, flex-start, 20px);
+    }
+}
+
+
+.cross-icon-show-member {
+    &:hover {
+        background: rgb(236, 238, 254);
+        border-radius: 100%;
+    }
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+}
+
+.btn-container {
+    @include d-flex();
+    width: 100%;
+
+    >a {
+        background: rgba(68, 77, 242, 1);
+        border-radius: 50px;
+        padding: 12px 25px;
+        @include d-flex($g: 10px);
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+
+        &:hover {
+            background: rgb(121, 126, 243);
+        }
+    }
 }

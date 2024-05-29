@@ -39,13 +39,12 @@ export class MembersDialogComponent {
   setChatRoom(event: Event) {
     this.privateChat.guest = this.currentMember;
     this.privateChat.creator = this.boardServ.currentUser;
-    this.firestore.addChatRoom(this.privateChat.toJSON());
-    // console.log(this.privateChat);
-    console.log(this.firestore.directMessages);
+    // this.firestore.addChatRoom(this.privateChat.toJSON());
+    this.memberServ.toggleMembersDialog(event);
+    console.log(this.privateChat);
+    this.closeShowMemberPopUp(event);
     event.preventDefault();
   }
-
-
 
   closeShowMemberPopUp(event: Event) {
     this.showMemberPopUpisOpen = false;

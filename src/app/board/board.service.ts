@@ -22,9 +22,11 @@ export class BoardService {
   profileOpen = false;
   editMode = false;
   currentUser: any;
-  idx: number = 0
-  currentChatMessage!:any;
-  chatMessageIndex!:number;
+  idx: number = 0;
+  chatPartnerIdx!: number;
+  currentChatMessage!: any;
+  chatMessageIndex!: number;
+  privateChatIsStarted: boolean = false;
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
@@ -100,5 +102,11 @@ export class BoardService {
   showChannelInChatField(i: number, event: Event) {
     this.idx = i;
     event.preventDefault();
+  }
+
+  startPrivateChat(index: number, event: Event) {
+    this.chatPartnerIdx = index;
+    this.privateChatIsStarted = true;
+    event.stopPropagation();
   }
 }

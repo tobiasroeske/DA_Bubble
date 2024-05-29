@@ -129,12 +129,13 @@ export class FirestoreService {
 
   subDirectMessages() {
     return onSnapshot(this.getDirectMessRef(), (list) => {
+      this.directMessages = [];
       list.forEach(el => {
         let privateChat = new PrivateChat(el.data());
         privateChat.id = el.id;
         this.directMessages.push(privateChat);
-        console.log(this.directMessages);
       });
+      console.log(this.directMessages);
     });
   }
 
@@ -186,13 +187,6 @@ export class FirestoreService {
     await updateDoc(chatRef, { chat: newChats }).then((data) => console.log(data)
     )
       .catch(err => console.log(err));
-  }
-
-  subChatMessages(channelId: string) {
-    return onSnapshot(this.getChatsRef(channelId), list => {
-      console.log(list.docs);
-
-    })
   }
 
   getChatsRef(channelId: string) {

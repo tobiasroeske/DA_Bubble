@@ -2,7 +2,7 @@
     <div (click)="boardServ.stopPropagation($event)" class="show-member-pop-up">
         <div class="title-and-cross-icon">
             <span>Profil</span>
-            <svg (click)="closeShowMemberPopUp($event)" width="40" height="40" viewBox="0 0 40 40" fill="none"
+            <svg class="cross-icon-show-member" (click)="closeShowMemberPopUp($event)" width="40" height="40" viewBox="0 0 40 40" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
@@ -21,17 +21,22 @@
         <div class="name-and-state-container">
             <h3>{{selectedMember}}</h3>
             <div class="state-container">
-                <img src="" alt="">
+                <div class="point-container">
+                    <div class="online-point"></div>
+                    <div class="offline-point"></div>
+                </div>
                 <span>Aktiv</span>
             </div>
         </div>
         <div class="email-container">
-            <img src="" alt="">
-            <span>E-Mail Addresse</span>
-            <span>sofia.muelbeispiel.com</span>
+            <img src="assets/icons/mail.png" alt="">
+            <div class="email">
+                <h3>E-Mail Addresse</h3>
+                <span>sofia.muelbeispiel.com</span>
+            </div>
         </div>
         <div (click)="setChatRoom($event)" class="btn-container">
-            <a href="">Nachricht</a>
+            <a href=""> <img src="assets/icons/mode_comment.png" alt=""> Nachricht</a>
         </div>
     </div>
 </div>

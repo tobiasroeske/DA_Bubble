@@ -40,7 +40,7 @@
     padding: 3px 10px;
     border-radius: 100px;
     cursor: pointer;
-    position:relative;
+    position: relative;
 
     &:hover {
         background: rgba(236, 238, 254, 1);
@@ -71,6 +71,7 @@
 .chat {
     width: 100%;
     overflow-y: auto;
+    flex: 1;
 }
 
 
@@ -168,9 +169,11 @@
 .message-box-reverse {
     flex-direction: row-reverse !important;
     padding: 10px 45px 10px 0px !important;
+
     &:hover {
         background-color: #ECEEFD !important;
     }
+
     &:hover .message-container .message {
         background-color: #787EF2;
         color: #fff;
@@ -278,7 +281,7 @@
     height: 48px;
     width: 48px;
     cursor: pointer;
-    position:relative;
+    position: relative;
 
     &:hover .add-person-icon {
         transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
@@ -318,5 +321,71 @@
 
     &:hover path {
         fill: $specialBlue;
+    }
+}
+
+.user-private-message-header {
+    @include d-flex($g: 15px);
+    padding: 4px 8px;
+    border-radius: 30px;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(236, 238, 254, 1);
+    }
+
+    >.avatar-private {
+        border-radius: 100%;
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+    }
+
+    >h3 {
+        font-size: 24px;
+        font-weight: 700;
+    }
+}
+
+.chat-partner-pop-up {
+    @include d-flex(column, space-between, flex-start, 25px);
+    font-family: "Nunito";
+    margin-bottom: 150px;
+
+    >.partner-container {
+        @include d-flex($jc: space-between, $ai: flex-end, $g: 25px);
+
+        >img {
+            height: 100px;
+            object-fit: cover;
+            border-radius: 100px;
+            cursor: pointer;
+        }
+
+        >h3 {
+            font-size: 24px;
+            font-weight: 700;
+
+            &:hover {
+                color: $specialBlue;
+                cursor: pointer;
+            }
+        }
+    }
+
+    >p {
+        font-size: 20px;
+        font-weight: 400;
+        @include d-flex($jc: space-between, $g: 8px);
+
+        >span {
+            color: $specialBlue;
+
+
+            &:hover {
+                font-weight: bold;
+                cursor: pointer;
+            }
+        }
     }
 }

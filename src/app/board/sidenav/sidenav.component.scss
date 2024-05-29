@@ -171,7 +171,7 @@
 // Direct Messages Styles------------------------>
 .direct-messages-container {
     width: 100%;
-    overflow: hidden;
+    // overflow: hidden;
 }
 
 .direct-message-header {
@@ -230,6 +230,8 @@
             width: 50px;
             height: 50px;
             object-fit: cover;
+            border-radius: 100%;
+            z-index:4;
         }
 
         >h3 {

@@ -18,24 +18,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './board-chat-field.component.html',
   styleUrl: './board-chat-field.component.scss'
 })
-export class BoardChatFieldComponent {
+export class BoardChatFieldComponent implements OnInit {
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
   memberDialogIsOpen: boolean = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
-  membersList: any[] = []
+  membersList: any[] = [];
+  chatPartnerName!: string;
+  chatPartnerAvatar!: string;
   //channelId: string;
- 
 
   constructor() {
-    
   }
 
-  
-
-  
+  ngOnInit(): void {
+  }
 
   onHover(htmlElement: string) {
     if (htmlElement == 'message-box') {

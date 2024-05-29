@@ -1,5 +1,6 @@
 <!-- Main Chat Header -->
 <div class="chat-field-header">
+    @if(!boardServ.privateChatIsStarted){
     <a (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="chat-field-channel">
         <svg class="hashtagIconChat" width="17" height="17" viewBox="0 0 17 17" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -39,16 +40,42 @@
             }
         </div>
     </div>
-</div>
-
-<!-- Main Chat Inside Messages and Time separators -->
-
-
-<div class="chat">
-    @for (chat of firestore.allChannels[boardServ.idx]?.chat; track chat.user.id; let i = $index; let lastIndex = $last) {
-        <app-chat-message [lastIndex]="lastIndex" [chatMessageIndex]="i" [chat]="chat" [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-chat-message>
+    } @else {
+    <div class="user-private-message-header">
+        <img class="avatar-private" src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}"
+            alt="">
+        <h3>{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
+    </div>
     }
 </div>
+
+<div class="chat">
+    @if(!boardServ.privateChatIsStarted){
+    @for (chat of firestore.allChannels[boardServ.idx]?.chat; track chat.user.id; let i = $index; let lastIndex = $last)
+    {
+    <app-chat-message [lastIndex]="lastIndex" [chatMessageIndex]="i" [chat]="chat"
+        [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-chat-message>
+    }
+    } @else {
+    <div>
+        <app-chat-message></app-chat-message>
+    </div>
+    }
+</div>
+@if(boardServ.privateChatIsStarted){
+<div class="chat-partner-pop-up">
+    <div class="partner-container">
+        <img src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}" alt="">
+        <h3>{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
+    </div>
+    <p>Diese Unterhaltung findet nur zwischen
+        <span>
+            &#64;{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}
+        </span>
+        un dir statt
+    </p>
+</div>
+}
 
 <app-create-message-area [index]="boardServ.idx"
     [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-create-message-area>
