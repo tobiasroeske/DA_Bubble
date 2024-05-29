@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BoardService } from '../board.service';
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';
@@ -15,19 +15,23 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
   styleUrl: './add-member-dialog.component.scss'
 })
 export class AddMemberDialogComponent {
+  @Input() currentChannel!: Channel;
+  @Input() currentChannelId!: string;
   specificMember: boolean = false;
   allMembers: boolean = false;
   memberServ = inject(MemberDialogsService);
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  currentChannel!: Channel;
-  currentChannelId!: string;
-  allUsers!: CurrentUser[];
+  //currentChannel!: Channel;
+  //currentChannelId!: string;
+  allUsers: CurrentUser[] = []
 
   constructor() {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    this.currentChannelId = this.firestore.allChannels[this.boardServ.idx].id;
-    console.log(this.currentChannelId);
+    //this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    //this.currentChannelId = this.firestore.allChannels[this.boardServ.idx]?.id;
+    console.log('Current channel Id',this.currentChannelId);
+    console.log('current channel ', this.currentChannel);
+    console.log('boardserv id', this.boardServ.idx);
   }
 
   onCheck(condition: string) {
@@ -44,7 +48,7 @@ export class AddMemberDialogComponent {
     this.currentChannel.allUsers.forEach((user) => {
       user.selected = true;
     });
-    this.allUsers = this.currentChannel.allUsers;
+    this.allUsers = this.currentChannel?.allUsers;
     await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId);
     this.addUserToMemberArray();
   }

@@ -23,6 +23,7 @@ export class FirestoreService {
   auth = inject(Auth);
   allChannels: any[] = [];
   directMessages: PrivateChat[] = [];
+  newChannelId?:string; 
 
   constructor() {
     this.unsubscribeUsers = this.subUsersList();
@@ -143,10 +144,9 @@ export class FirestoreService {
     await addDoc(this.getChannelsRef(), obj)
       .then(docRef => {
         if (docRef?.id) {
-          let channelId = docRef?.id;
-          updateDoc(this.getSingleChannelRef('channels', channelId), { id: channelId }).catch(err => console.log(err))
+          this.newChannelId = docRef?.id;
+          updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId }).catch(err => console.log(err))
         }
-
       })
       .catch((err) => {
         console.log(err);

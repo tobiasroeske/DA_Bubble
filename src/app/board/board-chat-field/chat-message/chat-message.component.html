@@ -5,8 +5,8 @@
             <span class="date">{{ checkIfDateIsToday(chat.date) ? 'Heute' : chat.date | date: 'EEEE, MMMM d' }}</span>
         </div>
     </div>
-    <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
-        [ngStyle]="{'display': mouseIsOverMessage ? '' : 'none'}" class="reaction-bar"
+    <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')" [class.slide-in]="mouseIsOverMessage"
+         class="reaction-bar"
         [class.reaction-bar-reverse]="chat.user.id == boardServ.currentUser.id">
         <img src="assets/emoji/emoji_{{ lastReactions[0] }}.png" alt="" class="emoji-icon"
             (click)="updateCompleteChannel(0, lastReactions)">

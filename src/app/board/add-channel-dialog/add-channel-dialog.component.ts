@@ -26,14 +26,24 @@ export class AddChannelDialogComponent {
     console.log(this.firestore.allChannels);
    }
 
-  onSubmit(ngForm: NgForm, event: Event) {
+  async onSubmit(ngForm: NgForm, event: Event) {
     this.shapeChannel();
     if (ngForm.valid && ngForm.submitted) {
-      this.firestore.addChannel(this.channel.toJSON());
+      await this.firestore.addChannel(this.channel.toJSON())
+      .then((res) => {
+        this.boardServ.idx = this.getNewChannelIndex()
+      });
       ngForm.resetForm();
       this.memberServ.openAddMembersDialog(event);
       this.boardServ.closeDialogAddChannel();
     }
+  }
+
+  getNewChannelIndex() {
+    let allChannels = this.firestore.allChannels;
+    let isChannel = (channel:Channel) => channel.id == this.firestore.newChannelId
+    let index = allChannels.findIndex(isChannel);
+    return index
   }
   
   shapeChannel() {
