@@ -32,7 +32,7 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
       if (this.currentChannel) {
         this.currentChannel.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage)
         console.log(this.currentChannel);
-        this.firestoreService.updateReactions(this.currentChannel.id!, this.currentChannel.chat!)
+        this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
         .then(() => this.textMessage = '')
       }
     }

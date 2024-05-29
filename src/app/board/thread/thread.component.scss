@@ -38,20 +38,37 @@
 }
 
 .thread-chat {
-    height: 450px;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(173, 176, 217, 1);
+        border-radius: 100px;
+    }
 }
 
 .thread-message-box {
-    padding: 10px 10px 10px 40px;
+    
    
-    @include d-flex($fd: column, $jc: flex-start, $g: 8px);
+    @include d-flex($fd: column, $jc: flex-start, $g: 8px, $ai: flex-start);
 }
 
 .message {
+    padding: 10px 10px 10px 40px;
     display: flex;
     align-items: flex-start;
     gap: 20px;
+    width: 100%;
+    &:hover {
+        background-color: #ECEEFD;
+    }
+
+    &:hover .thread-answer-message{
+        background-color: white;
+    }
 }
 
 .message-3 {
@@ -61,7 +78,7 @@
 }
 
 .thread-message {
-    @include d-flex($fd: column, $jc: flex-start, $g: 8px);
+    @include d-flex($fd: column, $jc: flex-start, $g: 8px, $ai: flex-start);
 
     >.time-and-name-container {
         width: 100%;
@@ -90,6 +107,7 @@
 .answer-advice-container {
     @include d-flex($jc: space-between, $g: 20px);
     width: 100%;
+    padding: 10px 40px 10px 40px;
 
     >.answer-advice {
         @include d-flex($jc: space-between, $g: 8px);
@@ -145,8 +163,11 @@
 }
 
 .answers-container-thread {
-  
-    padding: 10px 10px 10px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 32px;
+    padding: 10px 0px;
 }
 
 .textarea-container {

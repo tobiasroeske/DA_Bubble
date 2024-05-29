@@ -1,4 +1,4 @@
-<div class="message" [class.reverse]="answer.user.id == boardServ.currentUser.id">
+<div class="message" [class.reverse]="answer.user.id == boardServ.currentUser.id" [ngStyle]="{'margin-bottom.px': lastIndex ? '135' : '0'}">
     <img class="avatar-thread-img" src="{{ answer.user.avatarPath }}" alt="">
     <div class="thread-message">
         <div class="time-and-name-container">

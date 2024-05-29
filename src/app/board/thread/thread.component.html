@@ -34,7 +34,7 @@
                         <span class="time">{{ currentChatMessage?.date | date:
                             'shortTime' }}</span>
                     </div>
-                    <p>{{ currentChatMessage?.message }}
+                    <p class="thread-answer-message">{{ currentChatMessage?.message }}
                     </p>
                     <span class="reaction-indicator-container">
                         <div class="reaction-indicator">
@@ -70,8 +70,8 @@
         </div>
 
         <div class="answers-container-thread">
-            @for (answer of currentChatMessage?.answers; track answer; let i = $index) {
-                <app-answer-message [currentChannel]="currentChannel" [currentChatMessage]="currentChatMessage" [answer]="answer"></app-answer-message>
+            @for (answer of currentChatMessage?.answers; track answer; let i = $index; let lastIdx = $last) {
+                <app-answer-message [currentChannel]="currentChannel" [currentChatMessage]="currentChatMessage" [answer]="answer" [lastIndex]="lastIdx"></app-answer-message>
             }
            
         </div>
