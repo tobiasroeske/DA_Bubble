@@ -19,7 +19,7 @@
     </div>
     <div class="members-list">
         @for(member of firestore.allChannels[boardServ.idx].members; track member; let index = $index){
-        <div id="{{index}}" class="member" (click)="openShowMemberPopUp(index)">
+        <div id="{{index}}" class="member" (click)="memberServ.openShowMemberPopUp(index)">
             <img class="avatar-members" src="{{member.avatarPath}}" alt="">
             <span>{{member.name}}</span>
         </div>
@@ -38,6 +38,6 @@
     </div>
 </div>
 
-@if(showMemberPopUpisOpen){
-<app-show-member-pop-up (sendTheStartChatOk)="setChatRoom($event)" (sendEventToParent)="closeShowMemberPopUp($event)" [selectedMember]="name" [memberImage]="avatarPath"></app-show-member-pop-up>
+@if(memberServ.showMemberPopUpisOpen){
+<app-show-member-pop-up></app-show-member-pop-up>
 }

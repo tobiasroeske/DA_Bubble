@@ -22,7 +22,7 @@ export class BoardService {
   profileOpen = false;
   editMode = false;
   currentUser: any;
-  idx: number = 0;
+  idx!: number;
   chatPartnerIdx!: number;
   currentChatMessage!: any;
   chatMessageIndex!: number;

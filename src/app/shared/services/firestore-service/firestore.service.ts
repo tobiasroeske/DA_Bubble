@@ -139,7 +139,7 @@ export class FirestoreService {
     });
   }
 
-  async addChannel(obj: {}) {
+  async addChannel(obj: {}) { // --------------------------------> hier arbeiten
     await addDoc(this.getChannelsRef(), obj)
       .then(docRef => {
         if (docRef?.id) {
