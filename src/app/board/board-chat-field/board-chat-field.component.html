@@ -36,7 +36,7 @@
                     fill="black" />
             </svg>
             @if(memberServ.addMemberDialogIsOpen){
-            <app-add-member-dialog></app-add-member-dialog>
+            <app-add-member-dialog [currentChannel]="firestore.allChannels[boardServ.idx]" [currentChannelId]="firestore.allChannels[boardServ.idx]?.id"></app-add-member-dialog>
             }
         </div>
     </div>

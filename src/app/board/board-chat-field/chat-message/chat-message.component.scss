@@ -48,8 +48,9 @@
     border: 1px solid rgba(173, 176, 217, 1);
     border-radius: 25px 25px 0px 25px;
     padding: 3px 15px 3px 20px;
+    opacity: 0;
     @include d-flex($jc: space-between, $g: 5px);
-
+    transition: all 0.125s ease-in-out;
     >img {
         cursor: pointer;
         border-radius: 100%;
@@ -59,6 +60,11 @@
             background: rgba(236, 238, 254, 1);
         }
     }
+}
+
+.slide-in {
+    opacity: 1;
+    //right: 16px;
 }
 
 .reaction-dialog {
