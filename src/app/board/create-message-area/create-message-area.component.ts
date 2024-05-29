@@ -24,6 +24,7 @@ export class CreateMessageAreaComponent {
   enterPressed = false;
   @Input() index!: number;
   @Input() channelId!: string;
+  @Input() channelTitle!: string;
   preview = 'false';
 
   constructor() {

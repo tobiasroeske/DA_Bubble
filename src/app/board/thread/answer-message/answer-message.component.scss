@@ -4,7 +4,7 @@
     display: flex;
     align-items: flex-start;
     gap: 20px;
-
+    padding: 10px 10px 10px 40px;
     &:hover {
         background: #ECEEFD;
     }
@@ -12,8 +12,6 @@
     &:hover .answer-message {
         background-color: white;
     }
-
-
 }
 
 .avatar-thread-img {
@@ -66,7 +64,7 @@
     height: 32px;
     width: 32px;
     object-fit: contain;
-    background: #fff;
+    background: transparent;
 
     &:hover path {
         fill: $specialBlue;
@@ -89,7 +87,7 @@
 
 .reverse {
     flex-direction: row-reverse;
-
+    padding: 10px 40px 10px 10px;
     .time-and-name-container {
         flex-direction: row-reverse;
     }

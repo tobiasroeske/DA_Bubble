@@ -70,38 +70,44 @@
                     </g>
                 </svg>
                 @for (reaction of chat.reactions; track reaction; let i = $index) {
-                <span 
-                    class="reaction-indicator">
+                <span class="reaction-indicator">
                     <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
                     <p>{{ reaction.count }}</p>
-                   
+
                     <div class="pop-up-reaction">
                         <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
-                        <div class="pop-up-reacter"><b>{{ reaction.creator[reaction.creator.length - 1] }}</b> <br>
+                        <div class="pop-up-reacter">
+
+                            <b>{{ reaction.creator[reaction.creator.length - 1] }}</b> <br>
+
+
                             <p>hat reagiert</p>
                         </div>
                     </div>
-        
+
 
                 </span>
                 }
 
             </div>
-            <div class="answer-container" [ngStyle]="{'justify-content': chat.answers.length > 1 ? 'space-between' : 'flex-end'}">
-                <div class="answers" (click)="boardServ.open('thread'); boardServ.currentChatMessage = currentChatMessage; boardServ.chatMessageIndex = chatMessageIndex">
+            <div class="answer-container"
+                [ngStyle]="{'justify-content': chat.answers.length > 1 ? 'space-between' : chat.user.id == boardServ.currentUser.id ? 'flex-end' : 'flex-start'}">
+                <div class="answers"
+                    (click)="boardServ.open('thread'); boardServ.currentChatMessage = currentChatMessage; boardServ.chatMessageIndex = chatMessageIndex">
                     @if (chat.answers.length > 0) {
-                        <span class="number">{{ chat.answers.length }}</span>
+                    <span class="number">{{ chat.answers.length }}</span>
                     }
-                    
+
                     <span>Antworten</span>
                 </div>
                 @if (chat.answers.length > 0) {
-                    <div class="last-answer-container">
-                        Letzte Antwort
-                        <span class="last-answer-time"> {{ chat.answers[chat.answers.length - 1].date | date: 'shortTime' }}</span>
-                    </div>
+                <div class="last-answer-container">
+                    Letzte Antwort
+                    <span class="last-answer-time"> {{ chat.answers[chat.answers.length - 1].date | date: 'shortTime'
+                        }}</span>
+                </div>
                 }
-                
+
             </div>
         </div>
     </div>

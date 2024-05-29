@@ -61,7 +61,7 @@ export class ChatMessageComponent implements OnInit {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
     this.currentChannel.chat.splice(this.chatMessageIndex, 1, newChatMessage);
     console.log('current chanel after update', this.currentChannel.chat);
-    this.firestore.updateReactions(this.channelId, this.currentChannel.chat);
+    this.firestore.updateAllChats(this.channelId, this.currentChannel.chat);
     this.getLastTwoReactions(emojiIdx);
   }
 

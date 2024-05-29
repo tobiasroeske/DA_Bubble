@@ -181,7 +181,7 @@ export class FirestoreService {
       .catch(err => console.log(err));
   }
 
-  async updateReactions(docId: string, newChats: ChatMessage[]) {
+  async updateAllChats(docId: string, newChats: ChatMessage[]) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: newChats }).then((data) => console.log(data)
     )

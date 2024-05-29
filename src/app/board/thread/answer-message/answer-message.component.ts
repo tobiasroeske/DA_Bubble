@@ -15,6 +15,7 @@ export class AnswerMessageComponent {
   @Input() currentChannel?: Channel
   @Input() currentChatMessage?: ChatMessage;
   @Input() answer!: ChatMessage;
+  @Input() lastIndex!:boolean;
   boardServ = inject(BoardService)
 
   
