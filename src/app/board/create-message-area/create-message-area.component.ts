@@ -30,11 +30,12 @@ export class CreateMessageAreaComponent {
 
   constructor() {
     this.currentUser = this.boardService.currentUser;
+    console.log(this.textMessage);
   }
 
-  addEmoji(event:any) {
+  addEmoji(event: any) {
     console.log(event);
-    
+
   }
 
   sendMessage() {
@@ -81,11 +82,11 @@ export class CreateMessageAreaComponent {
 
   setMessageObject(date: number): ChatMessage {
     return {
-    date: date,
-    user: this.currentUser,
-    message: this.textMessage,
-    answers: [],
-    reactions: [],
+      date: date,
+      user: this.currentUser,
+      message: this.textMessage,
+      answers: [],
+      reactions: [],
     }
   }
 }

@@ -4,7 +4,8 @@ import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { User, onAuthStateChanged } from '@angular/fire/auth/firebase';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
-import { Firestore, collection } from '@angular/fire/firestore';
+import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
+import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { Firestore, collection } from '@angular/fire/firestore';
 export class BoardService {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
+  firestore = inject(FirestoreService);
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = false;
   textHidden: boolean = true;
@@ -22,13 +24,17 @@ export class BoardService {
   profileOpen = false;
   editMode = false;
   currentUser: any;
-  idx: number = 0;
+  idx!: number;
   chatPartnerIdx!: number;
   currentChatMessage!: any;
   chatMessageIndex!: number;
   privateChatIsStarted: boolean = false;
   chatFieldRef!: ElementRef;
   threadRef!: ElementRef;
+
+  currentChatPartner!: CurrentUser;
+  privateChat!: ChatMessage[];
+  privateChatId?: string
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
@@ -113,12 +119,17 @@ export class BoardService {
 
   showChannelInChatField(i: number, event: Event) {
     this.idx = i;
+    this.privateChatIsStarted = false;
     event.preventDefault();
   }
 
   startPrivateChat(index: number, event: Event) {
     this.chatPartnerIdx = index;
+    this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+    this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
+    this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
     this.privateChatIsStarted = true;
     event.stopPropagation();
   }
+
 }

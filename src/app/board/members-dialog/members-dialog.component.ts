@@ -21,33 +21,4 @@ export class MembersDialogComponent {
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
   memberServ = inject(MemberDialogsService);
-  currentChannel!: Channel;
-  name!: string;
-  avatarPath!: string;
-  showMemberPopUpisOpen: boolean = false;
-  privateChat = new PrivateChat();
-  currentMember!: CurrentUser;
-
-  openShowMemberPopUp(index: number) {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    this.currentMember = this.currentChannel.members[index];
-    this.name = this.currentChannel.members[index].name;
-    this.avatarPath = this.currentChannel.members[index].avatarPath;
-    this.showMemberPopUpisOpen = true;
-  }
-
-  setChatRoom(event: Event) {
-    this.privateChat.guest = this.currentMember;
-    this.privateChat.creator = this.boardServ.currentUser;
-    // this.firestore.addChatRoom(this.privateChat.toJSON());
-    this.memberServ.toggleMembersDialog(event);
-    console.log(this.privateChat);
-    this.closeShowMemberPopUp(event);
-    event.preventDefault();
-  }
-
-  closeShowMemberPopUp(event: Event) {
-    this.showMemberPopUpisOpen = false;
-    event.stopPropagation();
-  }
 }

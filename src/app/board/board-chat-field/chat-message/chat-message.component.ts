@@ -29,7 +29,7 @@ export class ChatMessageComponent implements OnInit {
   reactionDialogIndicatorbarOpen = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  membersList: any[] = []
+  membersList: any[] = [];
   currentChannel!: any;
   currentUserName!: any
   lastReactions: string[] = ['thumbs_up', 'laughing'];
@@ -126,7 +126,6 @@ export class ChatMessageComponent implements OnInit {
       emojiPath: this.reactionEmojis[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
-
     }
   }
 

@@ -36,12 +36,13 @@
                     fill="black" />
             </svg>
             @if(memberServ.addMemberDialogIsOpen){
-            <app-add-member-dialog [currentChannel]="firestore.allChannels[boardServ.idx]" [currentChannelId]="firestore.allChannels[boardServ.idx]?.id"></app-add-member-dialog>
+            <app-add-member-dialog [currentChannel]="firestore.allChannels[boardServ.idx]"
+                [currentChannelId]="firestore.allChannels[boardServ.idx]?.id"></app-add-member-dialog>
             }
         </div>
     </div>
     } @else {
-    <div class="user-private-message-header">
+    <div class="user-private-message-header" (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
         <img class="avatar-private" src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}"
             alt="">
         <h3>{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
@@ -57,19 +58,22 @@
         [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-chat-message>
     }
     } @else {
+    @for(privateChat of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateChat; let index = $index){
     <div>
-        <app-chat-message></app-chat-message>
+        <app-private-chat-message [privateChat]="privateChat" [privateChatIndex]="index"></app-private-chat-message>
     </div>
+    }
     }
 </div>
 @if(boardServ.privateChatIsStarted){
 <div class="chat-partner-pop-up">
     <div class="partner-container">
         <img src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}" alt="">
-        <h3>{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
+        <h3 (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
+            {{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
     </div>
     <p>Diese Unterhaltung findet nur zwischen
-        <span>
+        <span (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
             &#64;{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}
         </span>
         un dir statt
@@ -77,5 +81,13 @@
 </div>
 }
 
-<app-create-message-area [index]="boardServ.idx"
-    [channelId]="firestore.allChannels[boardServ.idx]?.id" [channelTitle]="firestore.allChannels[boardServ.idx]?.title"></app-create-message-area>
+@if(!boardServ.privateChatIsStarted){
+<app-create-message-area [index]="boardServ.idx" [channelId]="firestore.allChannels[boardServ.idx]?.id"
+    [channelTitle]="firestore.allChannels[boardServ.idx]?.title"></app-create-message-area>
+} @else {
+<app-create-private-message-area></app-create-private-message-area>
+}
+
+@if(memberServ.showMemberPopUpisOpen){
+<app-show-member-pop-up style="position: absolute;"></app-show-member-pop-up>
+}

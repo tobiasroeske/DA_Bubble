@@ -1,0 +1,281 @@
+@import '../../../../styles.scss';
+
+.chat-box {
+    position: relative;
+}
+
+.chat-box-2 {
+    margin-bottom: 150px;
+}
+
+.time-separator-container {
+    position: relative;
+    width: 100%;
+    height: 35px;
+    @include d-flex($jc: flex-start);
+}
+
+.date-container {
+    @include d-flex();
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.date {
+    background: #fff;
+    border-radius: 30px;
+    padding: 5px 15px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    font-family: "Nunito";
+}
+
+.line {
+    display: block;
+    background: rgba(173, 176, 217, 1);
+    height: 1px;
+    width: 100%;
+}
+
+.reaction-bar {
+    position: absolute;
+    top: 34px;
+    right: 16px;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid rgba(173, 176, 217, 1);
+    border-radius: 25px 25px 0px 25px;
+    padding: 3px 15px 3px 20px;
+    opacity: 0;
+    @include d-flex($jc: space-between, $g: 5px);
+    transition: all 0.125s ease-in-out;
+
+    >img {
+        cursor: pointer;
+        border-radius: 100%;
+        margin: 4px;
+
+        &:hover {
+            background: rgba(236, 238, 254, 1);
+        }
+    }
+}
+
+.slide-in {
+    opacity: 1;
+    //right: 16px;
+}
+
+.reaction-dialog {
+    position: absolute;
+    top: 48px;
+    right: 80px;
+    @include d-flex($jc: center, $g: 12px);
+    flex-wrap: wrap;
+    padding: 15px 12px;
+    background-color: white;
+    width: 180px;
+    border-radius: 30px 0 30px 30px;
+    box-shadow: 0px 2px 10px 0px #00000014;
+}
+
+.emoji-icon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+
+    object-fit: cover;
+    border-radius: 100%;
+    transition: all 0.125s ease-in-out;
+
+    &:hover {
+        background-color: transparent !important;
+        transform: scale(1.2);
+    }
+}
+
+.reaction-dialog-reverse {
+    right: -100px;
+    border-radius: 0 30px 30px 30px;
+}
+
+.message-box {
+    @include d-flex(row, flex-start, flex-start, 30px);
+    padding: 10px 25px 10px 70px;
+    cursor: pointer;
+    margin-top: 24px;
+
+    &:hover {
+        background: rgb(236, 238, 254);
+    }
+
+    &:hover .message-container .message {
+        background: #fff;
+    }
+
+    &:hover .last-answer-container {
+        color: #000;
+        font-weight: bold;
+    }
+
+    &:hover .answer-container .answers {
+        font-weight: bold;
+    }
+
+    >.avatar-photo {
+        height: 70px;
+        width: 70px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+}
+
+.message-box-reverse {
+    flex-direction: row-reverse !important;
+    padding: 10px 70px 10px 0px !important;
+
+    &:hover {
+        background-color: #ECEEFD !important;
+    }
+
+    &:hover .message-container .message {
+        background-color: #787EF2;
+        color: #fff;
+    }
+
+    .message-container {
+        align-items: flex-end !important;
+
+        p {
+            border-radius: 30px 0 30px 30px !important;
+        }
+    }
+
+    .reaction-indicator-bar {
+        flex-direction: row-reverse;
+    }
+}
+
+.reaction-bar-reverse {
+    right: auto !important;
+    left: 16px !important;
+}
+
+.message-container {
+    min-width: 352px;
+    @include d-flex(column, flex-start, flex-start, 8px);
+    font-family: "Nunito";
+
+    >.name-and-time-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        >.avatar-name-message {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        >.time {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(104, 104, 104, 1)
+        }
+    }
+
+    >.message {
+        padding: 16px;
+        font-size: 18px;
+        border-radius: 0px 30px 30px 30px;
+        background: rgba(236, 238, 254, 1)
+    }
+}
+
+.reaction-indicator-bar {
+    @include d-flex($jc: space-between, $ai: center, $g: 8px);
+
+    >.reaction-indicator {
+        position: relative;
+        padding: 5px 10px;
+        border: 1px solid rgba(173, 176, 217, 1);
+        border-radius: 20px;
+        @include d-flex($jc: space-between, $ai: center, $g: 10px);
+
+        img {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+
+            object-fit: cover;
+            border-radius: 100%;
+            transition: all 0.125s ease-in-out;
+
+            &:hover {
+
+                transform: scale(1.1);
+            }
+        }
+
+        >.pop-up-reaction {
+            position: absolute;
+            top: -131px;
+            left: 26px;
+            width: 150px;
+            border-radius: 30px 30px 30px 0px;
+            background: blue;
+            padding: 15px 10px;
+            color: #fff;
+            display: none;
+            transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+            z-index: 10;
+
+            >.pop-up-reacter {
+                @include d-flex($fd: column, $ai: center, $g: 5px);
+            }
+        }
+
+        &:hover {
+            >.pop-up-reaction {
+                @include d-flex($fd: column, $g: 5px);
+            }
+        }
+    }
+
+}
+
+
+
+.answer-container {
+    width: 260px;
+    @include d-flex($jc: space-between);
+
+    >.answers {
+        @include d-flex($jc: space-between, $g: 10px);
+        font-size: 18px;
+        font-weight: 400;
+        color: $specialBlue;
+    }
+
+    >.last-answer-container {
+        @include d-flex($jc: space-between, $g: 4px);
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(104, 104, 104, 1)
+    }
+}
+
+.addReaction-icon,
+.answer-icon {
+    cursor: pointer;
+    border-radius: 100%;
+
+    &:hover {
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+}

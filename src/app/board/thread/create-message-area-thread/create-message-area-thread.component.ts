@@ -22,9 +22,9 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
 
   override sendMessage(): void {
     console.log(this.currentChatMessage);
-      console.log(this.currentChannel);
-      console.log(this.boardService.chatMessageIndex);
-      
+    console.log(this.currentChannel);
+    console.log(this.boardService.chatMessageIndex);
+
     if (this.textMessage.length > 0) {
       let date = new Date().getTime();
       let newAnswer = this.setMessageObject(date);

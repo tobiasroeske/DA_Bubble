@@ -1,9 +1,9 @@
-<div class="opacity" (click)="closeShowMemberPopUp($event)">
+<div class="opacity" (click)="memberServ.closeShowMemberPopUp($event)">
     <div (click)="boardServ.stopPropagation($event)" class="show-member-pop-up">
         <div class="title-and-cross-icon">
             <span>Profil</span>
-            <svg class="cross-icon-show-member" (click)="closeShowMemberPopUp($event)" width="40" height="40" viewBox="0 0 40 40" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg class="cross-icon-show-member" (click)="memberServ.closeShowMemberPopUp($event)" width="40" height="40"
+                viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
                     <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -16,10 +16,10 @@
             </svg>
         </div>
         <div class="profil-photo-container">
-            <img class="profil-photo" src="{{memberImage}}" alt="">
+            <img class="profil-photo" src="{{memberServ.avatarPath}}" alt="">
         </div>
         <div class="name-and-state-container">
-            <h3>{{selectedMember}}</h3>
+            <h3>{{memberServ.name}}</h3>
             <div class="state-container">
                 <div class="point-container">
                     <div class="online-point"></div>
@@ -32,10 +32,10 @@
             <img src="assets/icons/mail.png" alt="">
             <div class="email">
                 <h3>E-Mail Addresse</h3>
-                <span>sofia.muelbeispiel.com</span>
+                <span>{{memberServ.email}}</span>
             </div>
         </div>
-        <div (click)="setChatRoom($event)" class="btn-container">
+        <div (click)="memberServ.setChatRoom($event)" class="btn-container">
             <a href=""> <img src="assets/icons/mode_comment.png" alt=""> Nachricht</a>
         </div>
     </div>
