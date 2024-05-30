@@ -23,7 +23,8 @@ export class FirestoreService {
   auth = inject(Auth);
   allChannels: any[] = [];
   directMessages: PrivateChat[] = [];
-  newChannelId?:string; 
+  newChannelId?: string;
+  chatRoomId?: string;
 
   constructor() {
     this.unsubscribeUsers = this.subUsersList();
@@ -140,7 +141,7 @@ export class FirestoreService {
     });
   }
 
-  async addChannel(obj: {}) { // --------------------------------> hier arbeiten
+  async addChannel(obj: {}) {
     await addDoc(this.getChannelsRef(), obj)
       .then(docRef => {
         if (docRef?.id) {
@@ -150,14 +151,21 @@ export class FirestoreService {
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   async addChatRoom(obj: {}) {
-    await addDoc(this.getDirectMessRef(), obj).catch((err) => {
-      console.error(err);
-    })
+    await addDoc(this.getDirectMessRef(), obj)
+      .then((docRef) => {
+        if (docRef?.id) {
+          this.chatRoomId = docRef?.id;
+          updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId })
+        }
+      }).catch((err) => {
+        console.error(err);
+      })
   }
+
 
   async updateChannel(item: {}, docId: string) {
     let docRef = this.getSingleChannelRef('channels', docId)
@@ -176,10 +184,16 @@ export class FirestoreService {
     await updateDoc(channelRef, { allUsers: updatedUser });
   }
 
+
   async updateChats(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
       .catch(err => console.log(err));
+  }
+
+  async updatePrivateChat(docId: string, messageObject: ChatMessage) {
+    let chatRef = this.getDirectMessSingleDoc(docId);
+    await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
   }
 
   async updateAllChats(docId: string, newChats: ChatMessage[]) {
@@ -205,8 +219,8 @@ export class FirestoreService {
     return collection(this.firestore, 'direct-messages');
   }
 
-  getDirectMessSingleDoc(userId: string) {
-    return doc(this.getDirectMessRef(), userId)
+  getDirectMessSingleDoc(colId: string) {
+    return doc(this.getDirectMessRef(), colId)
   }
 
 }

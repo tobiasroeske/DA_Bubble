@@ -1,10 +1,11 @@
 import { CurrentUser } from "../interfaces/currentUser.interface";
+import { ChatMessage } from "../interfaces/chatMessage.interface";
 
 export class PrivateChat {
     id?: string;
     creator: CurrentUser;
     guest: CurrentUser;
-    chat: any[];
+    chat: ChatMessage[];
 
     constructor(obj?: any) {
         this.id = obj ? obj.id : "";

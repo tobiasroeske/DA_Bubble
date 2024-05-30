@@ -25,7 +25,7 @@ export class ChatMessageComponent implements OnInit {
   reactionDialogOpen = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  membersList: any[] = []
+  membersList: any[] = [];
   currentChannel!: any;
   currentUserName!: any
   lastReactions: string[] = ['thumbs_up', 'laughing'];
@@ -54,8 +54,6 @@ export class ChatMessageComponent implements OnInit {
   toggleReactionDialog() {
     this.reactionDialogOpen = !this.reactionDialogOpen;
   }
-
-
 
   updateCompleteChannel(emojiIdx: number, emojiArray: string[]) {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
@@ -95,7 +93,6 @@ export class ChatMessageComponent implements OnInit {
       emojiPath: this.reactionEmojis[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
-
     }
   }
 

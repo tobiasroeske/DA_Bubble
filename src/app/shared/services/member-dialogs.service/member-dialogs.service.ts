@@ -49,23 +49,22 @@ export class MemberDialogsService {
       this.name = this.currentChannel.members[index].name;
       this.avatarPath = this.currentChannel.members[index].avatarPath;
       this.email = this.currentChannel.members[index].email;
-      this.showMemberPopUpisOpen = true;
     } else {
       this.name = this.firestore.directMessages[index].guest.name;
       this.avatarPath = this.firestore.directMessages[index].guest.avatarPath;
       this.email = this.firestore.directMessages[index].guest.email;
-      this.showMemberPopUpisOpen = true;
     }
+    this.showMemberPopUpisOpen = true;
   }
 
-  setChatRoom(event: Event) {
+  async setChatRoom(event: Event) {
+    event.preventDefault();
     this.privateChat.guest = this.currentMember;
     this.privateChat.creator = this.boardServ.currentUser;
-    // this.firestore.addChatRoom(this.privateChat.toJSON());
+    await this.firestore.addChatRoom(this.privateChat.toJSON());
     this.toggleMembersDialog(event);
     console.log(this.privateChat);
     this.closeShowMemberPopUp(event);
-    event.preventDefault();
   }
 
   closeShowMemberPopUp(event: Event) {

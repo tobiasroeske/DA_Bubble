@@ -22,9 +22,9 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
 
   override sendMessage(): void {
     console.log(this.currentChatMessage);
-      console.log(this.currentChannel);
-      console.log(this.boardService.chatMessageIndex);
-      
+    console.log(this.currentChannel);
+    console.log(this.boardService.chatMessageIndex);
+
     if (this.textMessage.length > 0) {
       let date = new Date().getTime();
       let newAnswer = this.setMessageObject(date);
@@ -33,7 +33,7 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
         this.currentChannel.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage)
         console.log(this.currentChannel);
         this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
-        .then(() => this.textMessage = '')
+          .then(() => this.textMessage = '')
       }
     }
   }
