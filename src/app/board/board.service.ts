@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { ElementRef, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
@@ -27,11 +27,23 @@ export class BoardService {
   currentChatMessage!: any;
   chatMessageIndex!: number;
   privateChatIsStarted: boolean = false;
+  chatFieldRef!: ElementRef;
+  threadRef!: ElementRef;
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
     console.log('user from local storage is: ', this.currentUser);
   }
+
+  scrollToBottom(elementRef: ElementRef) {
+    if (elementRef == this.chatFieldRef) {
+      elementRef.nativeElement.scrollTo(0, elementRef.nativeElement.scrollHeight)
+    }
+    if (elementRef == this.threadRef) {
+      elementRef.nativeElement.scrollTo(0, elementRef.nativeElement.scrollHeight);
+    }
+  }
+
 
   getCurrentUser() {
     return this.authService.currentUser;

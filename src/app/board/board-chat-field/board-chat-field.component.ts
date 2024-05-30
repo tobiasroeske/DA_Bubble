@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, computed, inject, signal } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './board-chat-field.component.html',
   styleUrl: './board-chat-field.component.scss'
 })
-export class BoardChatFieldComponent implements OnInit {
+export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
   memberDialogIsOpen: boolean = false;
@@ -30,10 +30,31 @@ export class BoardChatFieldComponent implements OnInit {
   chatPartnerAvatar!: string;
   //channelId: string;
 
+  @ViewChild('chatMessageArea') chatField!: ElementRef;
+
   constructor() {
   }
 
   ngOnInit(): void {
+    this.boardServ.chatFieldRef = this.chatField;
+    
+  }
+
+  ngAfterViewInit(): void {
+    this.boardServ.chatFieldRef = this.chatField;
+  }
+
+  
+
+  scrollToBotom() {
+    try {
+      this.chatField.nativeElement.scrollTo(0,this.chatField.nativeElement.scrollHeight);
+      
+      
+    } catch(err) {
+      console.log(err);
+      
+    }
   }
 
   onHover(htmlElement: string) {

@@ -4,12 +4,14 @@ import { FirestoreService } from '../../../shared/services/firestore-service/fir
 import { CommonModule } from '@angular/common';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
+import { FormsModule } from '@angular/forms';
+import { MessageEditorComponent } from '../message-editor/message-editor.component';
 
 
 @Component({
   selector: 'app-chat-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, MessageEditorComponent],
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.scss'
 })
@@ -18,11 +20,13 @@ export class ChatMessageComponent implements OnInit {
   @Input() lastIndex!: boolean;
   @Input() channelId!: string;
   @Input() chatMessageIndex!: number;
+  editedMessage?: string;
 
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
   memberDialogIsOpen: boolean = false;
   reactionDialogOpen = false;
+  reactionDialogIndicatorbarOpen = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   membersList: any[] = []
@@ -30,6 +34,7 @@ export class ChatMessageComponent implements OnInit {
   currentUserName!: any
   lastReactions: string[] = ['thumbs_up', 'laughing'];
   currentChatMessage!: ChatMessage
+  editorOpen = false;
 
 
   reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
@@ -38,6 +43,8 @@ export class ChatMessageComponent implements OnInit {
     this.currentChannel = (this.firestore.allChannels[this.boardServ.idx]);
     this.currentUserName = this.boardServ.currentUser.name;
     this.currentChatMessage = this.currentChannel.chat[this.chatMessageIndex];
+    this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
+    this.editedMessage = this.chat.message;
   }
 
   checkIfDateIsToday(date: number) {
@@ -51,11 +58,35 @@ export class ChatMessageComponent implements OnInit {
     }
   }
 
-  toggleReactionDialog() {
-    this.reactionDialogOpen = !this.reactionDialogOpen;
+  toggleReactionDialog(htmlElement:string) {
+    if (htmlElement == 'reactionIdicator') {
+      this.reactionDialogIndicatorbarOpen = !this.reactionDialogIndicatorbarOpen;
+    } else {
+      this.reactionDialogOpen = !this.reactionDialogOpen;
+    }
   }
 
+  toggleMessageEditor() {
+    this.editorOpen =!this.editorOpen
+  }
 
+  editMessage(index:number) {
+    console.log(this.currentChannel);
+    this.chat.message = this.editedMessage!;
+    console.log(this.chat);
+    
+    this.currentChannel.chat.splice(index, 1, this.chat);
+    console.log(this.currentChannel);
+    this.firestore.updateChannel(this.currentChannel, this.currentChannel.id)
+
+    //this.firestore.updateAllChats(this.channelId, this.currentChannel.chat)
+    .then(() => this.editorOpen = false);
+  }
+
+  setCurrentMessage() {
+    this.boardServ.currentChatMessage = this.currentChatMessage; 
+    this.boardServ.chatMessageIndex = this.chatMessageIndex
+  }
 
   updateCompleteChannel(emojiIdx: number, emojiArray: string[]) {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);

@@ -5,6 +5,7 @@ import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { doc } from '@angular/fire/firestore';
 
 
 @Component({
@@ -40,7 +41,11 @@ export class CreateMessageAreaComponent {
     if (this.textMessage.length > 0) {
       let date = new Date().getTime();
       this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
-      .then(() => this.textMessage = '')
+      .then(() => {
+        this.textMessage = ''
+        this.boardService.scrollToBottom(this.boardService.chatFieldRef)
+        
+      })
     }
   }
 

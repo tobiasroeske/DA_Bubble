@@ -33,7 +33,10 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
         this.currentChannel.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage)
         console.log(this.currentChannel);
         this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
-        .then(() => this.textMessage = '')
+        .then(() => {
+          this.textMessage = '';
+          this.boardService.scrollToBottom(this.boardService.threadRef);
+        })
       }
     }
   }

@@ -154,7 +154,8 @@ export class FirestoreService {
   }
 
   async addChatRoom(obj: {}) {
-    await addDoc(this.getDirectMessRef(), obj).catch((err) => {
+    await addDoc(this.getDirectMessRef(), obj)
+    .catch((err) => {
       console.error(err);
     })
   }

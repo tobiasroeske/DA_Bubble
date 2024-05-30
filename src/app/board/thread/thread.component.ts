@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { CreateMessageAreaThreadComponent } from './create-message-area-thread/create-message-area-thread.component';
 import { BoardService } from '../board.service';
 import { Channel } from '../../shared/models/channel.class';
@@ -12,9 +12,40 @@ import { AnswerMessageComponent } from './answer-message/answer-message.componen
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss'
 })
-export class ThreadComponent {
+export class ThreadComponent implements AfterViewInit{
   @Input() currentChannel?: Channel
   @Input() currentChatMessage?: ChatMessage;
+  @Input() chatMessageIndex?:number;
+
+  @ViewChild('threadChat') threadChatField!: ElementRef;
   boardServ = inject(BoardService)
   specialBlue: string = "rgba(83, 90, 241, 1)"
+  showReactionPopup = false;
+  showEmojiBar = false
+  reactionDialogIndicatorbarOpen = false;
+
+  toggleReactionPopup(event: Event) {
+    if (event.type == 'mouseover') {
+      this.showReactionPopup = true;
+    } 
+    if (event.type == 'mouseleave') {
+      this.showReactionPopup = false;
+      this.showEmojiBar = false;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.boardServ.threadRef = this.threadChatField;
+  }
+
+  reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
+
+  showEmmojibar(boolean: boolean) {
+    if (boolean == true) {
+      this.reactionDialogIndicatorbarOpen = !this.reactionDialogIndicatorbarOpen;
+    }
+    if (boolean == false) {
+      this.showEmojiBar = !this.showEmojiBar
+    }
+  }
 }
