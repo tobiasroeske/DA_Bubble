@@ -3,15 +3,16 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Channel } from '../../../shared/models/channel.class';
 import { BoardService } from '../../board.service';
 import { CommonModule } from '@angular/common';
-import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 import { User } from '../../../shared/models/user.class';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
+import { AnswerEditorComponent } from '../answer-editor/answer-editor.component';
+
 
 @Component({
   selector: 'app-answer-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AnswerEditorComponent],
   templateUrl: './answer-message.component.html',
   styleUrl: './answer-message.component.scss'
 })
@@ -29,6 +30,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
   showReactionPopup = false;
   showEmojiBar = false;
   reactionDialogIndicatorbarOpen = false;
+  editorOpen = false;
 
   boardServ = inject(BoardService)
 
@@ -51,7 +53,9 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
     console.log(this.currentChatMessage);
   }
 
-
+  toggleMessageEditor() {
+    this.editorOpen =!this.editorOpen
+  }
 
   checkIfReactionExists(emojiIdx: number){
     let emojiPath = this.reactionEmojis[emojiIdx];

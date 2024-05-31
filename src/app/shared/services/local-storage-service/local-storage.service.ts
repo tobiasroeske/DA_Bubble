@@ -30,7 +30,8 @@ export class LocalStorageService {
       name: obj.displayName || '',
       email: obj.email || '',
       avatarPath: obj.photoURL || '',
-      seleted: obj.selected || false
+      seleted: obj.selected || false,
+      loggedIn: obj.loggedIn || false
     }
   }
 

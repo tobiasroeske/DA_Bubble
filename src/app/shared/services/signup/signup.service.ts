@@ -171,6 +171,7 @@ export class SignupService {
       name: this.user.name,
       email: this.user.email,
       avatarPath: this.user.avatarPath,
+      loggedIn: false
     };
   }
 
@@ -196,12 +197,12 @@ export class SignupService {
         const uid = user.uid;
         this.currentUser = user;
         console.log('Current user is: ', this.currentUser);
-
         this.storageService.saveCurrentUser(user);
         
       } else {
         console.log(user + 'is signed out');
         this.storageService.saveCurrentUser(user);
+        
       }
     });
   }

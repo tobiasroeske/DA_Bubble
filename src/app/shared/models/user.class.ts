@@ -5,6 +5,7 @@ export class User {
     password!: string;
     avatarPath!: string;
     selected:boolean;
+    loggedIn: boolean;
 
     constructor(obj?:any) {
         this.id = obj ? obj.id : '';
@@ -13,5 +14,6 @@ export class User {
         this.password = obj ? obj.password : '';
         this.avatarPath = obj ? obj.avatarPath : '';
         this.selected = false;
+        this.loggedIn = false;
     }
 }

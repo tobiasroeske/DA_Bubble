@@ -100,7 +100,8 @@ export class FirestoreService {
       name: obj.name || '',
       email: obj.email || '',
       avatarPath: obj.avatarPath || '',
-      selected: obj.selected || false
+      selected: obj.selected || false,
+      loggedIn: obj.loggedIn || false
     }
   }
 

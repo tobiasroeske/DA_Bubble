@@ -27,15 +27,9 @@ export class MessageEditorComponent implements OnInit{
 
  editMessage(index:number) {
   this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-  console.log(this.currentChannel);
   this.chat.message = this.editedMessage!;
-  console.log(this.chat);
-  
   this.currentChannel.chat.splice(index, 1, this.chat);
-  console.log(this.currentChannel);
   this.firestore.updateChannel(this.currentChannel, this.currentChannel.id)
-
-  //this.firestore.updateAllChats(this.channelId, this.currentChannel.chat)
   .then(() => this.closeEditor());
 }
 
