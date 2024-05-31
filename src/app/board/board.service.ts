@@ -1,11 +1,12 @@
-import { AfterViewInit, ElementRef, Injectable, inject } from '@angular/core';
+import { ElementRef, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
-import { User, onAuthStateChanged } from '@angular/fire/auth/firebase';
+import { User} from '@angular/fire/auth/firebase';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +40,13 @@ export class BoardService {
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
-    console.log('user from local storage is: ', this.currentUser);
+    console.log(this.currentUser);
+    
+    this.currentUser.loggedIn = true;
+    this.firestore.updateUser(this.currentUser.id, this.currentUser);
   }
+
+  
 
   scrollToBottom(elementRef: ElementRef) {
     if (elementRef == this.chatFieldRef) {

@@ -112,22 +112,22 @@ export class SignupService {
   async handleEmailUpdate(actionCode: string) {
     let restoredMail = null;
     checkActionCode(this.auth, actionCode)
-    .then(info => {
-      restoredMail = info['data']['email'];
-      return applyActionCode(this.auth, actionCode)
-      .then(() => {
-        console.log('email changed');
-        
+      .then(info => {
+        restoredMail = info['data']['email'];
+        return applyActionCode(this.auth, actionCode)
+          .then(() => {
+            console.log('email changed');
+
+          })
+          .catch(err => console.log(err))
       })
-      .catch(err => console.log(err))
-    })
   }
 
-  async verifyEmail(actionCode:string) {
+  async verifyEmail(actionCode: string) {
     await applyActionCode(this.auth, actionCode)
-    .then(response => {
-      console.log('Email verified');
-    }).catch(err => console.log(err));
+      .then(response => {
+        console.log('Email verified');
+      }).catch(err => console.log(err));
   }
 
   async updateUserProfile(changes: {}) {
@@ -183,7 +183,7 @@ export class SignupService {
     await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         this.storageService.saveCurrentUser(userCredential.user);
-        
+
         this.router.navigateByUrl('board');
       })
       .catch((err) => {
@@ -198,19 +198,29 @@ export class SignupService {
         this.currentUser = user;
         console.log('Current user is: ', this.currentUser);
         this.storageService.saveCurrentUser(user);
-        
+
       } else {
         console.log(user + 'is signed out');
         this.storageService.saveCurrentUser(user);
-        
+
       }
     });
   }
 
+  listAllUsers() {
+    
+  }
+
   async logout() {
-    await signOut(this.auth).then(() => {
-      this.storageService.saveCurrentUser('');
-      window.open('login', '_self');
-    });
+    
+    let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
+    userWithLoginState.loggedIn = false;
+    await this.firestoreService.updateUser(userWithLoginState.id, userWithLoginState)
+      .then(() => {
+        signOut(this.auth).then(() => {
+          this.storageService.saveCurrentUser('');
+          window.open('login', '_self');
+        })
+      })
   }
 }
