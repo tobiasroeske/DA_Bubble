@@ -33,6 +33,7 @@
         border-radius: 30px;
         // padding: 25px;
         transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+        overflow: hidden;
     }
 }
 
@@ -85,6 +86,6 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0,0,0, 0.15);
+    background-color: rgba(0, 0, 0, 0.15);
     z-index: 5;
 }

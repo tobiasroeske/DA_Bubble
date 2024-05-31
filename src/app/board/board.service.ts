@@ -27,6 +27,7 @@ export class BoardService {
   idx!: number;
   chatPartnerIdx!: number;
   firstPrivateMessageWasSent: boolean = false;
+  public hidePopUpChatPartner: boolean = false;
   currentChatMessage!: any;
   chatMessageIndex!: number;
   privateChatIsStarted: boolean = false;
@@ -128,13 +129,20 @@ export class BoardService {
     this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
     this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
     this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-    if (this.firestore.directMessages[this.chatPartnerIdx].chat && this.firestore.directMessages[this.chatPartnerIdx].chat.length > 0) {
-      this.firstPrivateMessageWasSent = true
-    } else {
-      this.firstPrivateMessageWasSent = false
-    }
+    this.checkIfPrivatChatIsEmpty();
     this.privateChatIsStarted = true;
     event.stopPropagation();
   }
 
+  checkIfPrivatChatIsEmpty() {
+    if (this.privateChat.length == 0) {
+      this.hidePopUpChatPartner = false;
+      setTimeout(() => {
+        this.firstPrivateMessageWasSent = false;
+      }, 100);
+    } else {
+      this.hidePopUpChatPartner = true;
+      this.firstPrivateMessageWasSent = true;
+    }
+  }
 }

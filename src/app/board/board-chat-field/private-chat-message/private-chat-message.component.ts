@@ -16,6 +16,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent {
   @Input() privateChatId?: string;
   @Input() privateMessage!: ChatMessage;
   @Input() privateChatIndex!: number;
+  @Input() lasIndex!: boolean;
   currentPrivatChat!: ChatMessage[];
 
 

@@ -70,9 +70,10 @@
             </div>
             @if (!editorOpen) {
             <p class="message">{{ chat.message }}</p>
-            } 
+            }
             @else {
-            <app-message-editor (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat" style="width:100%"></app-message-editor>
+            <app-message-editor (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat"
+                style="width:100%"></app-message-editor>
             <!-- <div class="textarea-container">
                 <label for="messageEditor{{ chatMessageIndex }}"></label>
                 <textarea name="messageEditor" id="messageEditor{{ chatMessageIndex }}"

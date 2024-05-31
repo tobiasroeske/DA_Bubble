@@ -31,7 +31,6 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
-  hidePartnerDialogsSystem: boolean[] = [];
   //channelId: string;
 
   @ViewChild('chatMessageArea') chatField!: ElementRef;
@@ -80,5 +79,7 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   showMembersDialogToggle() {
     this.memberDialogIsOpen = true;
   }
+
+  
 }
 

@@ -360,6 +360,8 @@
     @include d-flex(column, space-between, flex-start, 25px);
     font-family: "Nunito";
     margin-bottom: 150px;
+    transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+    padding: 25px 70px;
 
     >.partner-container {
         @include d-flex($jc: space-between, $ai: flex-end, $g: 25px);
@@ -397,4 +399,12 @@
             }
         }
     }
+}
+
+.translateX {
+    transform: translateX(-200%);
+}
+
+.d-none {
+    display: none;
 }

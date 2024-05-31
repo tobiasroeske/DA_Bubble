@@ -33,15 +33,26 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   }
 
   ngOnInit(): void {
+    this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
   override sendMessage(): void {
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
-      this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message).then(() => { this.boardServ.firstPrivateMessageWasSent = true })
+      this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
+      if (this.privateChat.length == 0) {
+        this.boardServ.firstPrivateMessageWasSent = true;
+        setTimeout(() => {
+          this.boardServ.hidePopUpChatPartner = true;
+        }, 100);
+      } else {
+        this.boardServ.hidePopUpChatPartner = false
+        setTimeout(() => {
+          this.boardServ.firstPrivateMessageWasSent = false;
+        }, 100);
+      }
       this.textMessage = "";
-      console.log(this.privateChat);
     }
   }
 
