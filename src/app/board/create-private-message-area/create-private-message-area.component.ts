@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -26,6 +26,8 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   chatId?: string;
   override message!: ChatMessage;
 
+  @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>()
+
   constructor() {
     super();
   }
@@ -37,7 +39,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
-      this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
+      this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message).then(() => { this.boardServ.firstPrivateMessageWasSent = true })
       this.textMessage = "";
       console.log(this.privateChat);
     }

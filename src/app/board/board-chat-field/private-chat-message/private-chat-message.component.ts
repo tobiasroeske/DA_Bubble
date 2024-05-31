@@ -14,8 +14,9 @@ import { Reaction } from '../../../shared/interfaces/reaction.interface';
 export class PrivateChatMessageComponent extends ChatMessageComponent {
 
   @Input() privateChatId?: string;
-  @Input() privateChat!: ChatMessage;
+  @Input() privateMessage!: ChatMessage;
   @Input() privateChatIndex!: number;
+  currentPrivatChat!: ChatMessage[];
 
 
   constructor() {
@@ -23,16 +24,30 @@ export class PrivateChatMessageComponent extends ChatMessageComponent {
   }
 
   override ngOnInit(): void {
-    // console.log(this.privateChatId);
-    // console.log(this.privateChat.reactions);
-    // console.log(this.privateChatIndex);
+    this.currentPrivatChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
   override updateCompleteChannel(emojiIdx: number, emojiArray: string[]): void {
-    let selectedEmoji = this.setReactionObject(emojiIdx);
-    console.log(selectedEmoji);
-    this.privateChat.reactions.push(selectedEmoji);
+    if (this.privateChatId) {
+      let newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
+      this.currentPrivatChat.splice(this.privateChatIndex, 1, newPrivateMessage);
+      this.firestore.updateCompletlyPrivateChat(this.privateChatId, this.currentPrivatChat);
+    }
   }
+
+  override checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
+    let privateChatMessage = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex]
+    let emojiPath = emojiArray[emojiIdx];
+    let existingReaction = privateChatMessage.reactions.find(reaction => reaction.emojiPath == emojiPath);
+    if (existingReaction) {
+      existingReaction.count++;
+    } else {
+      privateChatMessage.reactions.push(this.setReactionObject(emojiIdx))
+    }
+
+    return privateChatMessage
+  }
+
 
 
   override setReactionObject(i: number): Reaction {

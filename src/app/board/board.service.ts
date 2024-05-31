@@ -26,12 +26,12 @@ export class BoardService {
   currentUser: any;
   idx!: number;
   chatPartnerIdx!: number;
+  firstPrivateMessageWasSent: boolean = false;
   currentChatMessage!: any;
   chatMessageIndex!: number;
   privateChatIsStarted: boolean = false;
   chatFieldRef!: ElementRef;
   threadRef!: ElementRef;
-
   currentChatPartner!: CurrentUser;
   privateChat!: ChatMessage[];
   privateChatId?: string
@@ -128,6 +128,11 @@ export class BoardService {
     this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
     this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
     this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
+    if (this.firestore.directMessages[this.chatPartnerIdx].chat && this.firestore.directMessages[this.chatPartnerIdx].chat.length > 0) {
+      this.firstPrivateMessageWasSent = true
+    } else {
+      this.firstPrivateMessageWasSent = false
+    }
     this.privateChatIsStarted = true;
     event.stopPropagation();
   }

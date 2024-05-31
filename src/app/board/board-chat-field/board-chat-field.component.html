@@ -58,15 +58,17 @@
         [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-chat-message>
     }
     } @else {
-    @for(privateChat of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateChat; let index = $index){
+    @for(privateMessage of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateMessage; let index =
+    $index){
     <div>
-        <app-private-chat-message [privateChat]="privateChat" [privateChatIndex]="index"></app-private-chat-message>
+        <app-private-chat-message [privateChatId]="firestore.directMessages[boardServ.chatPartnerIdx].id"
+            [privateMessage]="privateMessage" [privateChatIndex]="index"></app-private-chat-message>
     </div>
     }
     }
 </div>
-@if(boardServ.privateChatIsStarted){
-<div class="chat-partner-pop-up">
+@if(!boardServ.privateChatIsStarted && !boardServ.firstPrivateMessageWasSent){
+<div id="{{boardServ.chatPartnerIdx}}" class="chat-partner-pop-up">
     <div class="partner-container">
         <img src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}" alt="">
         <h3 (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">

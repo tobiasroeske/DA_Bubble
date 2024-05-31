@@ -31,6 +31,7 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
+  hidePartnerDialogsSystem: boolean[] = [];
   //channelId: string;
 
   @ViewChild('chatMessageArea') chatField!: ElementRef;
@@ -40,23 +41,23 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.boardServ.chatFieldRef = this.chatField;
-    
+
   }
 
   ngAfterViewInit(): void {
     this.boardServ.chatFieldRef = this.chatField;
   }
 
-  
+
 
   scrollToBotom() {
     try {
-      this.chatField.nativeElement.scrollTo(0,this.chatField.nativeElement.scrollHeight);
-      
-      
-    } catch(err) {
+      this.chatField.nativeElement.scrollTo(0, this.chatField.nativeElement.scrollHeight);
+
+
+    } catch (err) {
       console.log(err);
-      
+
     }
   }
 

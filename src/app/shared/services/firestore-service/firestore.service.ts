@@ -193,7 +193,12 @@ export class FirestoreService {
 
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
+    await updateDoc(chatRef, { chat: arrayUnion(messageObject) });
+  }
+
+  async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
+    let chatRef = this.getDirectMessSingleDoc(docId);
+    await updateDoc(chatRef, { chat: messageObject })
   }
 
   async updateAllChats(docId: string, newChats: ChatMessage[]) {
