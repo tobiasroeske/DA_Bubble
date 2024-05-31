@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -12,6 +12,7 @@ import { SignupService } from '../shared/services/signup/signup.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { BoardService } from './board.service';
 import { Auth, User } from '@angular/fire/auth';
+import { IdleService } from '../shared/services/idle-service/idle.service';
 
 @Component({
   selector: 'app-board',
@@ -20,14 +21,25 @@ import { Auth, User } from '@angular/fire/auth';
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
-export class BoardComponent {
+export class BoardComponent implements OnInit{
   firestore = inject(FirestoreService);
   authService = inject(SignupService);
   boardServ = inject(BoardService);
+  idleUserService = inject(IdleService);
+  isUserIdle = false;
   profileOptionContainerOpen = false;
 
   constructor() {
     this.authService.getLoggedInUser()
+  }
+
+  ngOnInit() {
+    // this.idleUserService.userInactive.subscribe(isIdle => {
+    //   if (isIdle) {
+    //     console.log('you will be logged out');
+    //     this.authService.logout()
+    //   }
+    // })
   }
 
   openProfileOptions($event: boolean) {

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { PrivateChat } from '../../models/privateChat.class';
 import { Channel } from '../../models/channel.class';
@@ -25,6 +25,8 @@ export class MemberDialogsService {
 
   constructor() { }
 
+ 
+
   toggleMembersDialog(event: Event) {
     this.membersDialogIsOpen = !this.membersDialogIsOpen;
     event?.stopPropagation();
@@ -45,7 +47,8 @@ export class MemberDialogsService {
   openShowMemberPopUp(index: number) {
     if (!this.boardServ.privateChatIsStarted) {
       this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-      this.currentMember = this.currentChannel.members[index];
+      console.log(this.currentChannel);
+      this.currentMember = this.currentChannel.allUsers[index];
       this.name = this.currentChannel.members[index].name;
       this.avatarPath = this.currentChannel.members[index].avatarPath;
       this.email = this.currentChannel.members[index].email;

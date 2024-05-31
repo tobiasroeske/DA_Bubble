@@ -21,11 +21,17 @@
         <div class="name-and-state-container">
             <h3>{{memberServ.name}}</h3>
             <div class="state-container">
-                <div class="point-container">
-                    <div class="online-point"></div>
-                    <div class="offline-point"></div>
-                </div>
-                <span>Aktiv</span>
+                    @if (memberServ.currentMember.loggedIn) {
+                        <div class="point-container">
+                            <img src="assets/icons/user_online.png" alt="">
+                            <span>Aktiv</span>
+                        </div>
+                    } @else {
+                        <div class="point-container">
+                            <img src="assets/icons/user_offline.png" alt="">
+                            <span>Abwesend</span>
+                        </div>
+                    }
             </div>
         </div>
         <div class="email-container">

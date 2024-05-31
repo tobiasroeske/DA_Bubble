@@ -180,6 +180,7 @@ export class FirestoreService {
     await updateDoc(channelRef, { members: arrayUnion(newMember) });
   }
 
+
   async updateChannelUsers(updatedUser: any, docId: string) {
     let channelRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(channelRef, { allUsers: updatedUser });

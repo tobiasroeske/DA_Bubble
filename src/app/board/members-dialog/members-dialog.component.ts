@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
@@ -16,9 +16,27 @@ import { SignupService } from '../../shared/services/signup/signup.service';
   templateUrl: './members-dialog.component.html',
   styleUrl: './members-dialog.component.scss'
 })
-export class MembersDialogComponent {
+export class MembersDialogComponent implements OnInit {
   @Input() dialog!: boolean;
+  @Input() currentChannel!:Channel
+  @Input() userList!:any [];
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
   memberServ = inject(MemberDialogsService);
+
+  ngOnInit(): void {
+    let updatedUsers = this.updateLoginState();
+    this.firestore.updateChannelUsers(updatedUsers, this.currentChannel.id!);
+  }
+
+  updateLoginState(): CurrentUser[] {
+    let allUsers = this.currentChannel.allUsers;
+    this.userList.forEach(user => {
+      let index = allUsers.findIndex(u => u.id == user.id);
+      if (index != -1 && allUsers[index].loggedIn != user.loggedIn) {
+        allUsers[index].loggedIn = user.loggedIn;
+      }
+    })
+    return allUsers
+  }
 }
