@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -40,6 +40,17 @@ export class BoardComponent implements OnInit{
     //     this.authService.logout()
     //   }
     // })
+  }
+
+  
+  @HostListener('window:unload', [ '$event' ])
+  async unloadHandler(event: Event) {
+    event.preventDefault();
+    console.log(event);
+    
+    let currentUser = this.boardServ.currentUser;
+    currentUser.loggedIn = false;
+    await this.firestore.updateUser(currentUser.id, currentUser);
   }
 
   openProfileOptions($event: boolean) {
