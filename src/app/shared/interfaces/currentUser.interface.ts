@@ -4,5 +4,5 @@ export interface CurrentUser {
     email: string;
     avatarPath: string;
     selected?:boolean;
-    loggedIn: boolean;
+    loginState: 'loggedIn' | 'loggedOut' | 'idle';
 }

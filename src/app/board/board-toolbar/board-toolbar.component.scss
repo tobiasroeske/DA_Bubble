@@ -48,6 +48,7 @@ div {
 }
 
 .user-container {
+    position: relative;
     @include d-flex($jc: space-between, $g: 20px);
     cursor: pointer;
 
@@ -111,4 +112,12 @@ div {
         }
     }
 
+}
+
+.state-icon {
+    right: 46px;
+    bottom: 8px;
+    position: absolute;
+    width: 16px;
+    height: 16px;
 }

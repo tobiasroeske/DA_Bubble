@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Subject } from 'rxjs';
+import { BoardService } from '../../../board/board.service';
+import { FirestoreService } from '../firestore-service/firestore.service';
 
 export enum IdleUserTimes {
-  IdleTime = 60000,
+  IdleTime = 10000,
   CountdownTime = 5000
 }
 
@@ -10,6 +12,8 @@ export enum IdleUserTimes {
   providedIn: 'root'
 })
 export class IdleService {
+  boardServ = inject(BoardService);
+  firestore = inject(FirestoreService)
   private timeoutId: any;
   private countdownId: any;
   private countdownValue!: number;
@@ -31,7 +35,7 @@ export class IdleService {
     window.addEventListener('MSPointerMove', () => this.reset());
   }
 
-  reset() {
+  async reset() {
     clearTimeout(this.timeoutId);
     clearTimeout(this.countdownId);
     this.startIdleTimer();
@@ -48,10 +52,8 @@ export class IdleService {
     this.countdownValue = IdleUserTimes.CountdownTime / 1000;
     this.countdownId = setInterval(() => {
       this.countdownValue--;
-      console.log('You will logout in:', this.countdownValue, 'seconds');
       if (this.countdownValue <= 0) {
         clearInterval(this.countdownId);
-        console.log('User idle');
         this.userInactive.next(true);
       }
     }, 1000);

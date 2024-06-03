@@ -5,7 +5,7 @@ export class User {
     password!: string;
     avatarPath!: string;
     selected:boolean;
-    loggedIn: boolean;
+    loginState: 'loggedIn' | 'loggedOut' | 'idle';
 
     constructor(obj?:any) {
         this.id = obj ? obj.id : '';
@@ -14,6 +14,6 @@ export class User {
         this.password = obj ? obj.password : '';
         this.avatarPath = obj ? obj.avatarPath : '';
         this.selected = false;
-        this.loggedIn = false;
+        this.loginState = 'loggedOut';
     }
 }

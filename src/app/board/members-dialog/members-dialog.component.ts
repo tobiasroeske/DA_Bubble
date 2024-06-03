@@ -33,8 +33,8 @@ export class MembersDialogComponent implements OnInit {
     let allUsers = this.currentChannel.allUsers;
     this.userList.forEach(user => {
       let index = allUsers.findIndex(u => u.id == user.id);
-      if (index != -1 && allUsers[index].loggedIn != user.loggedIn) {
-        allUsers[index].loggedIn = user.loggedIn;
+      if (index != -1 && allUsers[index].loginState != user.loginState) {
+        allUsers[index].loginState = user.loginState;
       }
     })
     return allUsers

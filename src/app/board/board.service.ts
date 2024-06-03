@@ -39,11 +39,11 @@ export class BoardService {
   privateChatId?: string
 
   constructor() {
-    this.currentUser = this.storageService.loadCurrentUser();
+    this.currentUser = this.storageService.loadCurrentUser()!;
     console.log(this.currentUser);
     
-    this.currentUser.loggedIn = true;
-    this.firestore.updateUser(this.currentUser.id, this.currentUser);
+    this.currentUser.loginState = 'loggedIn';
+    this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
 
   

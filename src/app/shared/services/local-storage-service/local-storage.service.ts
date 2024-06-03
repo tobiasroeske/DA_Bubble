@@ -6,6 +6,7 @@ import { CurrentUser } from '../../interfaces/currentUser.interface';
 })
 export class LocalStorageService {
   currentUser!: CurrentUser;
+  introPlayed = false;
   constructor() { }
 
   saveCurrentUser(user:any) {
@@ -23,6 +24,20 @@ export class LocalStorageService {
     }
   }
 
+  saveIntroPlayed(state: boolean) {
+    localStorage.setItem('introPlayed', JSON.stringify(state));
+  }
+
+  loadIntroPlayed() {
+    let introPlayed = localStorage.getItem('introPlayed');
+    if (introPlayed != null) {
+      let introPlayedAsJson = JSON.parse(localStorage.getItem('introPlayed')!);
+      this.introPlayed = introPlayedAsJson;
+      console.log(this.introPlayed);
+      
+    }
+  }
+
 
   setCurrentUserObject(obj: any) {
     return {
@@ -31,7 +46,7 @@ export class LocalStorageService {
       email: obj.email || '',
       avatarPath: obj.photoURL || '',
       seleted: obj.selected || false,
-      loggedIn: obj.loggedIn || false
+      loginState: obj.loginState || 'loggedOut'
     }
   }
 
