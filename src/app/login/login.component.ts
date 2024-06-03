@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../shared/models/user.class';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -12,10 +13,20 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   forgotPassword = false;
+  localStorageService = inject(LocalStorageService)
 
- 
+ ngOnInit(): void {
+  this.localStorageService.loadIntroPlayed();
+  setTimeout(() => this.localStorageService.saveIntroPlayed(true), 3000);
+ }
+
+ @HostListener('window:unload', [ '$event' ])
+  async unloadHandler(event: Event) {
+    event.preventDefault();
+    this.localStorageService.saveIntroPlayed(false);
+  }
   
   openPasswordDialog($event: boolean) {
     this.forgotPassword = $event;

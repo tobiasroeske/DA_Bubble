@@ -108,8 +108,8 @@ export class FirestoreService {
       email: obj.email || '',
       avatarPath: obj.avatarPath || '',
       selected: obj.selected || false,
-      loggedIn: obj.loggedIn || false,
-      directMessages: obj.directMessages || []
+      directMessages: obj.directMessages || [],
+      loginState: obj.loginState || 'loggedOut'
     }
   }
 

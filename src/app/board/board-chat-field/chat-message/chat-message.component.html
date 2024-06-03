@@ -72,8 +72,8 @@
             <p class="message">{{ chat.message }}</p>
             }
             @else {
-            <app-message-editor (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat"
-                style="width:100%"></app-message-editor>
+            <app-message-editor (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat" style="width:100%"></app-message-editor>
+           
             }
             <div class="reaction-indicator-bar">
                 <svg class="addReaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"

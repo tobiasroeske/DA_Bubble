@@ -21,15 +21,20 @@
         <div class="name-and-state-container">
             <h3>{{memberServ.name}}</h3>
             <div class="state-container">
-                    @if (memberServ.currentMember.loggedIn) {
+                    @if (memberServ.currentMember.loginState == 'loggedIn') {
                         <div class="point-container">
-                            <img src="assets/icons/user_online.png" alt="">
-                            <span>Aktiv</span>
+                            <img src="assets/icons/user_online.png" alt="" class="state-icon">
+                            <span>Online</span>
                         </div>
-                    } @else {
+                    } @else if (memberServ.currentMember.loginState == 'loggedOut') {
                         <div class="point-container">
-                            <img src="assets/icons/user_offline.png" alt="">
-                            <span>Abwesend</span>
+                            <img src="assets/icons/user_offline.png" alt="" class="state-icon">
+                            <span>Offline</span>
+                        </div>
+                    } @else if (memberServ.currentMember.loginState == 'idle') {
+                        <div class="point-container">
+                            <img src="assets/icons/user_idle.png" alt="" class="state-icon">
+                            <span style="color: #F19E39">Abwesend</span>
                         </div>
                     }
             </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -13,6 +13,8 @@ import { FirestoreService } from '../shared/services/firestore-service/firestore
 import { BoardService } from './board.service';
 import { Auth, User } from '@angular/fire/auth';
 import { IdleService } from '../shared/services/idle-service/idle.service';
+import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
+import { interval, throttle } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -21,11 +23,12 @@ import { IdleService } from '../shared/services/idle-service/idle.service';
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
-export class BoardComponent implements OnInit{
+export class BoardComponent implements OnInit {
   firestore = inject(FirestoreService);
   authService = inject(SignupService);
   boardServ = inject(BoardService);
   idleUserService = inject(IdleService);
+  localStorageService = inject(LocalStorageService)
   isUserIdle = false;
   profileOptionContainerOpen = false;
 
@@ -34,12 +37,29 @@ export class BoardComponent implements OnInit{
   }
 
   ngOnInit() {
-    // this.idleUserService.userInactive.subscribe(isIdle => {
-    //   if (isIdle) {
-    //     console.log('you will be logged out');
-    //     this.authService.logout()
-    //   }
-    // })
+    this.idleUserService.userInactive.subscribe(isIdle => {
+      if (isIdle) {
+        this.boardServ.currentUser.loginState = 'idle';
+        this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+      } 
+    })
+  }
+
+
+  @HostListener('window:click', ['$event'])
+  async handleClick() {
+    this.boardServ.currentUser.loginState = 'loggedIn'
+    await this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+  }
+
+  @HostListener('window:unload', ['$event'])
+  async unloadHandler(event: Event) {
+    event.preventDefault();
+    console.log(event);
+    this.localStorageService.saveIntroPlayed(false);
+    let currentUser = this.boardServ.currentUser;
+    currentUser.loginState = 'loggedOut';
+    await this.firestore.updateUser(currentUser.id, currentUser);
   }
 
   openProfileOptions($event: boolean) {

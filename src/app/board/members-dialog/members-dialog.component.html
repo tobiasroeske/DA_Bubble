@@ -23,10 +23,12 @@
                 <div id="{{i}}" class="member" (click)="memberServ.openShowMemberPopUp(i)">
                     <img class="avatar-members" src="{{user.avatarPath}}" alt="">
                     <span>{{user.name}}</span>
-                    @if (user.loggedIn) {
-                        <img src="../../../assets/icons/user_online.png" alt="" class="status-bullet">
-                    } @else {
-                        <img src="../../../assets/icons/user_offline.png" alt="" class="status-bullet">
+                    @if (user.loginState == 'loggedIn') {
+                        <img src="assets/icons/user_online.png" alt="" class="status-bullet">
+                    } @else if (user.loginState == 'loggedOut') {
+                        <img src="assets/icons/user_offline.png" alt="" class="status-bullet">
+                    } @else if (user.loginState == 'idle') {
+                        <img src="assets/icons/user_idle.png" alt="" class="status-bullet">
                     }
                 </div>
             }

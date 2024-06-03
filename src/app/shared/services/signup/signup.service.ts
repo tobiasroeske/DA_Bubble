@@ -27,6 +27,7 @@ import { FirestoreService } from '../firestore-service/firestore.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
 import { User } from '../../models/user.class';
 import { appConfig } from '../../../app.config';
+import { CurrentUser } from '../../interfaces/currentUser.interface';
 
 
 @Injectable({
@@ -165,14 +166,14 @@ export class SignupService {
       });
   }
 
-  setNewUserObject(userId: string) {
+  setNewUserObject(userId: string): CurrentUser {
     return {
       id: userId,
       name: this.user.name,
       email: this.user.email,
       avatarPath: this.user.avatarPath,
-      loggedIn: false,
-    }
+      loginState: "loggedOut"
+    };
   }
 
   getCurrentUser() {
@@ -207,14 +208,11 @@ export class SignupService {
     });
   }
 
-  listAllUsers() {
-    
-  }
-
   async logout() {
     
     let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
-    userWithLoginState.loggedIn = false;
+    userWithLoginState.loginState = 'loggedOut';
+    this.storageService.saveIntroPlayed(false)
     await this.firestoreService.updateUser(userWithLoginState.id, userWithLoginState)
       .then(() => {
         signOut(this.auth).then(() => {
