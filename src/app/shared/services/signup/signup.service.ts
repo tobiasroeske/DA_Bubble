@@ -171,8 +171,8 @@ export class SignupService {
       name: this.user.name,
       email: this.user.email,
       avatarPath: this.user.avatarPath,
-      loggedIn: false
-    };
+      loggedIn: false,
+    }
   }
 
   getCurrentUser() {

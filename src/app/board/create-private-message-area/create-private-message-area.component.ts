@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, OnInit, Output } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -32,6 +32,15 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     super();
   }
 
+  onEnterPress(event: KeyboardEvent) {
+    if (event.key == 'Enter' && !event.shiftKey) {
+      this.sendMessage();
+      event.preventDefault();
+    } else if (event.key == 'Enter' && event.shiftKey) {
+      console.log('works!');
+    }
+  }
+
   ngOnInit(): void {
     this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
@@ -40,19 +49,25 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
-      this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
-      if (this.privateChat.length == 0) {
-        this.boardServ.firstPrivateMessageWasSent = true;
-        setTimeout(() => {
-          this.boardServ.hidePopUpChatPartner = true;
-        }, 100);
-      } else {
-        this.boardServ.hidePopUpChatPartner = false
-        setTimeout(() => {
-          this.boardServ.firstPrivateMessageWasSent = false;
-        }, 100);
+      if (this.message.message.trim() !== '') {
+        this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
       }
+      this.checkIfPrivatChatIsEmpty();
       this.textMessage = "";
+    }
+  }
+
+  checkIfPrivatChatIsEmpty() {
+    if (this.privateChat.length > 0) {
+      this.boardServ.firstPrivateMessageWasSent = true;
+      setTimeout(() => {
+        this.boardServ.hidePopUpChatPartner = true;
+      }, 100);
+    } else {
+      this.boardServ.hidePopUpChatPartner = false
+      setTimeout(() => {
+        this.boardServ.firstPrivateMessageWasSent = false;
+      }, 100);
     }
   }
 
@@ -60,7 +75,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     return {
       date: date,
       user: this.currentUser,
-      message: this.textMessage,
+      message: this.textMessage.replace('/\n/g', '<br>'),
       answers: [],
       reactions: []
     }

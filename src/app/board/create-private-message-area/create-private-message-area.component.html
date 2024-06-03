@@ -1,7 +1,7 @@
 <div class="textarea-container">
     <label for="message"></label>
-    <textarea name="message" id="message" [(ngModel)]="textMessage" #message="ngModel"
-        placeholder="Nachricht an"></textarea>
+    <textarea wrap="hard" rows="3" col="20" name="message" #message="ngModel"
+        (keydown)="onEnterPress($event)" placeholder="Dein Nachricht an {{boardServ.currentChatPartner.name}}" id="message" [(ngModel)]="textMessage"></textarea>
     <div class="tool-panel-textarea">
         <div class="icons-container">
             <!-- Add Files Icon -->

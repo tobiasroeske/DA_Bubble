@@ -4,6 +4,7 @@ import { PrivateChat } from '../../models/privateChat.class';
 import { Channel } from '../../models/channel.class';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { BoardService } from '../../../board/board.service';
+import { User } from '../../models/user.class';
 
 @Injectable({
   providedIn: 'root'
@@ -22,10 +23,12 @@ export class MemberDialogsService {
   showMemberPopUpisOpen: boolean = false;
   privateChat = new PrivateChat();
   currentMember!: CurrentUser;
+  guestId?: string;
+  creatorId?: string;
 
   constructor() { }
 
- 
+
 
   toggleMembersDialog(event: Event) {
     this.membersDialogIsOpen = !this.membersDialogIsOpen;
@@ -62,16 +65,28 @@ export class MemberDialogsService {
 
   async setChatRoom(event: Event) {
     event.preventDefault();
-    this.privateChat.guest = this.currentMember;
-    this.privateChat.creator = this.boardServ.currentUser;
+    this.setThePrivateChatObject();
     await this.firestore.addChatRoom(this.privateChat.toJSON());
     this.toggleMembersDialog(event);
     console.log(this.privateChat);
+    console.log(this.firestore.directMessages);
     this.closeShowMemberPopUp(event);
+  }
+
+  setThePrivateChatObject() {
+    this.privateChat.guest = this.currentMember;
+    this.privateChat.creator = this.boardServ.currentUser;
+    this.guestId = this.privateChat.guest.id;
+    this.creatorId = this.privateChat.creator.id;
+    if (this.guestId && this.creatorId) {
+      this.privateChat.partecipantsIds = [];
+      this.privateChat.partecipantsIds.push(this.guestId, this.creatorId)
+    }
   }
 
   closeShowMemberPopUp(event: Event) {
     this.showMemberPopUpisOpen = false;
+    event.preventDefault();
     event.stopPropagation();
   }
 

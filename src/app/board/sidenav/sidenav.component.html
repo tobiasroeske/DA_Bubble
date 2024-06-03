@@ -93,10 +93,17 @@
         <div [ngStyle]="{'display' : directMessHeaderisClicked ? '' : 'none', 'transform': canTranslateYUserList ? 'translateY(0%)' : 'translateY(-200%)'}"
             class="colleagues-container">
             @for(privateChat of this.firestore.directMessages; track privateChat; let index = $index){
-            <div id="{{index}}" class="collegue" (click)="boardServ.startPrivateChat(index, $event)">
+            @if(firestore.currentUserId == privateChat.creator.id){
+            <div id="{{index}}" class="collegue" (click)="boardServ.startPrivateChat(index, $event, 'creator')">
                 <img class="avatar-sidenav" src="{{privateChat.guest.avatarPath}}" alt="">
                 <h3>{{privateChat.guest.name}}</h3>
             </div>
+            } @else {
+            <div id="{{index}}" class="collegue" (click)="boardServ.startPrivateChat(index, $event, 'guest')">
+                <img class="avatar-sidenav" src="{{privateChat.creator.avatarPath}}" alt="">
+                <h3>{{privateChat.creator.name}}</h3>
+            </div>
+            }
             }
         </div>
     </div>

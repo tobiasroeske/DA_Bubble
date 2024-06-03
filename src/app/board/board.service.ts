@@ -2,7 +2,7 @@ import { ElementRef, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
-import { User} from '@angular/fire/auth/firebase';
+import { User } from '@angular/fire/auth/firebase';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
@@ -28,7 +28,7 @@ export class BoardService {
   idx!: number;
   chatPartnerIdx!: number;
   firstPrivateMessageWasSent: boolean = false;
-  public hidePopUpChatPartner: boolean = false;
+  hidePopUpChatPartner: boolean = false;
   currentChatMessage!: any;
   chatMessageIndex!: number;
   privateChatIsStarted: boolean = false;
@@ -40,13 +40,11 @@ export class BoardService {
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser();
-    console.log(this.currentUser);
-    
     this.currentUser.loggedIn = true;
     this.firestore.updateUser(this.currentUser.id, this.currentUser);
   }
 
-  
+
 
   scrollToBottom(elementRef: ElementRef) {
     if (elementRef == this.chatFieldRef) {
@@ -130,14 +128,24 @@ export class BoardService {
     event.preventDefault();
   }
 
-  startPrivateChat(index: number, event: Event) {
-    this.chatPartnerIdx = index;
-    this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
-    this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
-    this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-    this.checkIfPrivatChatIsEmpty();
-    this.privateChatIsStarted = true;
-    event.stopPropagation();
+  startPrivateChat(index: number, event: Event, partecipant: string) {
+    if (partecipant == "creator") {
+      this.chatPartnerIdx = index;
+      this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+      this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
+      this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
+      this.checkIfPrivatChatIsEmpty();
+      this.privateChatIsStarted = true;
+      event.stopPropagation();
+    } else {
+      this.chatPartnerIdx = index;
+      this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+      this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].creator;
+      this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
+      this.checkIfPrivatChatIsEmpty();
+      this.privateChatIsStarted = true;
+      event.stopPropagation();
+    }
   }
 
   checkIfPrivatChatIsEmpty() {

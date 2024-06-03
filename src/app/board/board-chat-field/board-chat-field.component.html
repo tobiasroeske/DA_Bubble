@@ -25,7 +25,8 @@
             </span>
             <span class="number-of-members">{{firestore.allChannels[boardServ.idx]?.members.length}}</span>
             @if(memberServ.membersDialogIsOpen){
-            <app-members-dialog [userList]="firestore.userList" [currentChannel]="firestore.allChannels[boardServ.idx]"></app-members-dialog>
+            <app-members-dialog [userList]="firestore.userList"
+                [currentChannel]="firestore.allChannels[boardServ.idx]"></app-members-dialog>
             }
         </div>
         <div (click)="memberServ.openAddMembersDialog($event)" class="add-person-icon-container">
@@ -43,9 +44,9 @@
     </div>
     } @else {
     <div class="user-private-message-header" (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
-        <img class="avatar-private" src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}"
+        <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}"
             alt="">
-        <h3>{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
+        <h3>{{boardServ.currentChatPartner.name}}</h3>
     </div>
     }
 </div>
@@ -58,10 +59,10 @@
         [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-chat-message>
     }
     } @else {
-    @for(privateMessage of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateMessage; let index =
-    $index; let lastIndex = $last){
+    @for(privateMessage of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateMessage ; let index =
+    $index; let lastIndex = $last;){
     <div>
-        <app-private-chat-message [lastIndex]="lastIndex"
+        <app-private-chat-message [lastIndex]="lastIndex" [message]="privateMessage.message"
             [privateChatId]="firestore.directMessages[boardServ.chatPartnerIdx].id" [privateMessage]="privateMessage"
             [privateChatIndex]="index"></app-private-chat-message>
     </div>
@@ -69,13 +70,13 @@
     }
 </div>
 
-@if(boardServ.privateChatIsStarted){
+@if(boardServ.privateChatIsStarted && this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat.length == 0){
 <div [ngClass]="{translateX: boardServ.firstPrivateMessageWasSent, 'd-none': boardServ.hidePopUpChatPartner}"
     id="{{boardServ.chatPartnerIdx}}" class="chat-partner-pop-up">
     <div class="partner-container">
-        <img src="{{firestore.directMessages[boardServ.chatPartnerIdx].guest.avatarPath}}" alt="">
+        <img src="{{boardServ.currentChatPartner.avatarPath}}" alt="">
         <h3 (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
-            {{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}</h3>
+            {{boardServ.currentChatPartner.name}}</h3>
     </div>
     <p>Diese Unterhaltung findet nur zwischen
         <span (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">

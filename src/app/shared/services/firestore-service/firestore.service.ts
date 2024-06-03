@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc, query, where, orderBy } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
 import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
@@ -12,24 +12,30 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class FirestoreService {
-  firestore = inject(Firestore)
-
+  firestore = inject(Firestore);
   // usersListSubject = new BehaviorSubject<CurrentUser[]>([])
   // usersList$ = this.usersListSubject.asObservable();
   userList: CurrentUser[] = [];
   unsubscribeUsers;
   unsubChannel;
-  unsubDirectMess;
+  unsubDirectMess: any;
   auth = inject(Auth);
   allChannels: any[] = [];
   directMessages: PrivateChat[] = [];
   newChannelId?: string;
   chatRoomId?: string;
+  currentUserId?: string;
 
   constructor() {
     this.unsubscribeUsers = this.subUsersList();
     this.unsubChannel = this.subChannelList();
-    this.unsubDirectMess = this.subDirectMessages();
+    this.auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.currentUserId = user.uid; // take the current user id from authentication;
+        this.unsubDirectMess = this.subDirectMessages();
+      }
+    });
+    console.log(this.userList);
   }
 
   ngOnDestroy(): void {
@@ -90,7 +96,8 @@ export class FirestoreService {
       name: obj.name,
       email: obj.email,
       avatarPath: obj.avatarPath,
-      selected: obj.selected ? obj.selected : false
+      selected: obj.selected ? obj.selected : false,
+      directMessages: obj.directMessages ? obj.directMessages : []
     }
   }
 
@@ -101,7 +108,8 @@ export class FirestoreService {
       email: obj.email || '',
       avatarPath: obj.avatarPath || '',
       selected: obj.selected || false,
-      loggedIn: obj.loggedIn || false
+      loggedIn: obj.loggedIn || false,
+      directMessages: obj.directMessages || []
     }
   }
 
@@ -131,11 +139,11 @@ export class FirestoreService {
   }
 
   subDirectMessages() {
-    return onSnapshot(this.getDirectMessRef(), (list) => {
+    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
+    return onSnapshot(q, (list) => {
       this.directMessages = [];
       list.forEach(el => {
         let privateChat = new PrivateChat(el.data());
-        privateChat.id = el.id;
         this.directMessages.push(privateChat);
       });
       console.log(this.directMessages);
@@ -166,7 +174,6 @@ export class FirestoreService {
         console.error(err);
       })
   }
-
 
   async updateChannel(item: {}, docId: string) {
     let docRef = this.getSingleChannelRef('channels', docId)

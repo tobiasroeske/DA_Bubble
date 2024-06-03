@@ -8,7 +8,7 @@ export class LocalStorageService {
   currentUser!: CurrentUser;
   constructor() { }
 
-  saveCurrentUser(user:any) {
+  saveCurrentUser(user: any) {
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
@@ -31,7 +31,7 @@ export class LocalStorageService {
       email: obj.email || '',
       avatarPath: obj.photoURL || '',
       seleted: obj.selected || false,
-      loggedIn: obj.loggedIn || false
+      loggedIn: obj.loggedIn || false,
     }
   }
 
