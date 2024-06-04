@@ -216,7 +216,7 @@
         @include d-flex($ai: center, $jc: space-between, $g: 16px);
         padding: 4px 20px;
         border-radius: 35px;
-
+        position: relative;
         &:hover {
             background: rgba(236, 238, 254, 1);
             cursor: pointer;
@@ -240,6 +240,15 @@
         }
     }
 
+}
+
+.state-icon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 55px;
+    bottom: 5px;
+    z-index: 10;
 }
 
 .d-none {

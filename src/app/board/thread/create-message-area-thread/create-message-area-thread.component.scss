@@ -56,6 +56,16 @@
     fill: $specialBlue;
 }
 
+.emoji-mart {
+    width: 75% !important;
+}
+
+.emoji-container {
+    position: absolute;
+    bottom: 160px;
+    left: 40px;
+}
+
 .d-none {
     display: none;
 }

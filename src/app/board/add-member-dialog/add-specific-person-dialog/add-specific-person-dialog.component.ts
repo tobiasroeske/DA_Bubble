@@ -59,7 +59,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
 
   addNewMembersToChannel() {
     this.selectedList.forEach((member: any) => {
-      // this.firestore.updateMembers(member, this.channelId);
+      this.firestore.updateMembers(member, this.channelId);
       this.currentChannel.allUsers.forEach((user) => {
         if (user.name == member.name) {
           user.selected = true;

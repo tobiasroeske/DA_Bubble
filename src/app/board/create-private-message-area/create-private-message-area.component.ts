@@ -8,12 +8,13 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { User } from '../../shared/models/user.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
-import { PrivateChat } from '../../shared/models/privateChat.class';
+
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @Component({
   selector: 'app-create-private-message-area',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PickerComponent],
   templateUrl: './create-private-message-area.component.html',
   styleUrl: './create-private-message-area.component.scss'
 })
@@ -35,6 +36,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   onEnterPress(event: KeyboardEvent) {
     if (event.key == 'Enter' && !event.shiftKey) {
       this.sendMessage();
+      this.showEmojiPicker = false;
       event.preventDefault();
     } else if (event.key == 'Enter' && event.shiftKey) {
       console.log('works!');
@@ -50,7 +52,8 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
       if (this.message.message.trim() !== '') {
-        this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
+        this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
+        .then(() => this.boardServ.scrollToBottom(this.boardServ.chatFieldRef));
       }
       this.checkIfPrivatChatIsEmpty();
       this.textMessage = "";

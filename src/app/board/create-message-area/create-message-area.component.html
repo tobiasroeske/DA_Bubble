@@ -1,6 +1,7 @@
 <div class="textarea-container">
     <label for="message"></label>
-    <textarea name="message" id="message" [(ngModel)]="textMessage" #message="ngModel" placeholder="Nachricht an #{{ channelTitle }}"></textarea>
+    <textarea name="message" id="message" [(ngModel)]="textMessage" #message="ngModel"
+        placeholder="Nachricht an #{{ channelTitle }}"></textarea>
     <div class="tool-panel-textarea">
         <div class="icons-container">
             <!-- Add Files Icon -->
@@ -26,7 +27,7 @@
             <span class="vertical-line"></span>
             <!-- Add Emoji Icon -->
             <svg class="textarea-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+                xmlns="http://www.w3.org/2000/svg" (click)="boardService.toggleEmojiPicker($event)">
                 <mask id="mask0_51470_671" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
                     <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -39,7 +40,7 @@
             </svg>
             <!-- @ et Icon-->
             <svg class="textarea-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+                xmlns="http://www.w3.org/2000/svg" (click)="toggleTagMemberDialog()">
                 <mask id="mask0_51470_675" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
                     <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -66,10 +67,29 @@
         </svg>
     </div>
 </div>
-<div class="emoji-container">
+@if (boardService.showEmojiPicker) {
+    <div class="emoji-container">
+        <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>
+    </div>
+}
+
+@if (tagMembers) {
+    <div class="tag-member-dialog">
+        
+            @for (member of filteredMembers; track member.id; let i = $index) {
+                <div class="member" (click)="tagMember(i)">
+                    <img src="{{ member.avatarPath }}" alt="">
+                    <span>{{ member.name }}</span>
+                </div>
+            }
+        
+        <!-- @for (member of firestoreService.allChannels[boardService.idx].members; track member.id; let i = $index) {
+            <div class="member" (click)="tagMember(i)">
+                <img src="{{ member.avatarPath }}" alt="">
+                <span>{{ member.name }}</span>
+            </div>
+        } -->
+       
+    </div>
     
-
-
-<!-- <emoji-mart title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart> -->
-
-</div>
+}

@@ -2,10 +2,10 @@ import { ElementRef, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
-import { User } from '@angular/fire/auth/firebase';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
+import { PrivateChat } from '../shared/models/privateChat.class';
 
 
 @Injectable({
@@ -37,6 +37,8 @@ export class BoardService {
   currentChatPartner!: CurrentUser;
   privateChat!: ChatMessage[];
   privateChatId?: string
+  showEmojiPicker = false;
+  showEmojiPickerInThreads = false;
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser()!;
@@ -46,7 +48,13 @@ export class BoardService {
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
 
-
+  getUserLoginState(privateChat: PrivateChat) {
+    let allUsers: CurrentUser []= this.firestore.userList;
+    let user: CurrentUser = allUsers.find(user => user.id == privateChat.guest.id || user.id == privateChat.creator.id)!;
+    //console.log(user.loginState);
+    
+    return user.loginState
+  }
 
   scrollToBottom(elementRef: ElementRef) {
     if (elementRef == this.chatFieldRef) {
@@ -109,7 +117,16 @@ export class BoardService {
     this.editMode = false;
     this.authService.errorCode = '';
     this.profileOpen = false;
+  }
 
+  toggleEmojiPicker(event: Event) {
+    this.showEmojiPicker = !this.showEmojiPicker;
+    event.stopPropagation()
+  }
+
+  toggleEmojiPickerThreads(event: Event) {
+    this.showEmojiPickerInThreads = !this.showEmojiPickerInThreads;
+    event.stopPropagation()
   }
 
   toggleProfileView() {

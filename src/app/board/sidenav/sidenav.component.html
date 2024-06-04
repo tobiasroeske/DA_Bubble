@@ -96,11 +96,25 @@
             @if(firestore.currentUserId == privateChat.creator.id){
             <div id="{{index}}" class="collegue" (click)="boardServ.startPrivateChat(index, $event, 'creator')">
                 <img class="avatar-sidenav" src="{{privateChat.guest.avatarPath}}" alt="">
+                @if (boardServ.getUserLoginState(privateChat) == 'idle') {
+                    <img src="assets/icons/user_idle.png" alt="" class="state-icon">
+                } @else if (boardServ.getUserLoginState(privateChat) == 'loggedOut') {
+                    <img src="assets/icons/user_offline.png" alt="" class="state-icon">
+                } @else {
+                    <img src="assets/icons/user_online.png" alt="" class="state-icon">
+                }
                 <h3>{{privateChat.guest.name}}</h3>
             </div>
             } @else {
             <div id="{{index}}" class="collegue" (click)="boardServ.startPrivateChat(index, $event, 'guest')">
                 <img class="avatar-sidenav" src="{{privateChat.creator.avatarPath}}" alt="">
+                @if (boardServ.getUserLoginState(privateChat) == 'idle') {
+                    <img src="assets/icons/user_idle.png" alt="" class="state-icon">
+                } @else if (boardServ.getUserLoginState(privateChat) == 'loggedOut') {
+                    <img src="assets/icons/user_offline.png" alt="" class="state-icon">
+                } @else {
+                    <img src="assets/icons/user_online.png" alt="" class="state-icon">
+                }
                 <h3>{{privateChat.creator.name}}</h3>
             </div>
             }
