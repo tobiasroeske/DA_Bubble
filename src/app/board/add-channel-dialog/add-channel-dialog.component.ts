@@ -24,15 +24,15 @@ export class AddChannelDialogComponent {
 
   constructor() {
     console.log(this.firestore.allChannels);
-   }
+  }
 
   async onSubmit(ngForm: NgForm, event: Event) {
     this.shapeChannel();
     if (ngForm.valid && ngForm.submitted) {
       await this.firestore.addChannel(this.channel.toJSON())
-      .then((res) => {
-        this.boardServ.idx = this.getNewChannelIndex()
-      });
+        .then((res) => {
+          this.boardServ.idx = this.getNewChannelIndex()
+        });
       ngForm.resetForm();
       this.memberServ.openAddMembersDialog(event);
       this.boardServ.closeDialogAddChannel();
@@ -41,15 +41,17 @@ export class AddChannelDialogComponent {
 
   getNewChannelIndex() {
     let allChannels = this.firestore.allChannels;
-    let isChannel = (channel:Channel) => channel.id == this.firestore.newChannelId
+    let isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId
     let index = allChannels.findIndex(isChannel);
     return index
   }
-  
+
   shapeChannel() {
     this.channel.creatorId = this.signUpServ.currentUser.uid; // take the id of the logged-in user that a new channel creates
     this.channel.creatorName = this.signUpServ.currentUser.displayName;
     this.channel.allUsers = [];
+    this.channel.partecipantsIds = [];
+    this.channel.partecipantsIds.push(this.signUpServ.currentUser.uid);
     this.firestore.userList.forEach((user) => {
       this.channel.allUsers.push(user)
     })

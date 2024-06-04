@@ -33,12 +33,12 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   userList: CurrentUser[] = [];
   filteredUsersList: any[] = [];
   selectedList: any = [];
-  channel:Channel = new Channel();
+  channel: Channel = new Channel();
 
   constructor() {
-    this.title = this.firestore.allChannels[this.boardServ.idx].title;
-    this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
-    this.channelId = this.currentChannel.id!
+      this.title = this.firestore.allChannels[this.boardServ.idx].title;
+      this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
+      this.channelId = this.currentChannel.id!
   }
 
   ngOnInit(): void {
@@ -58,8 +58,12 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   addNewMembersToChannel() {
-    this.selectedList.forEach((member: any) => {
-      // this.firestore.updateMembers(member, this.channelId);
+    this.currentChannel.partecipantsIds = [];
+    this.selectedList.forEach((member: CurrentUser) => {
+      this.firestore.updateMembers(member, this.channelId);
+      if (member.id) {
+        this.currentChannel.partecipantsIds.push(member.id);
+      }
       this.currentChannel.allUsers.forEach((user) => {
         if (user.name == member.name) {
           user.selected = true;
@@ -69,7 +73,14 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     let updatedUsers = this.currentChannel.allUsers;
     this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
+    this.addPartecipantsIds();
   };
+
+  addPartecipantsIds() {
+    this.currentChannel.partecipantsIds.forEach(id => {
+      this.firestore.updatePartecipantsIds(id, this.channelId)
+    })
+  }
 
   filterMembers(text: string) {
     if (!text) {

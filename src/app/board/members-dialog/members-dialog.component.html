@@ -18,7 +18,7 @@
         </svg>
     </div>
     <div class="members-list">
-        @for (user of firestore.allChannels[boardServ.idx].allUsers; track user.id; let i = $index) {
+        @for (user of firestore.allChannels[boardServ.idx].members; track user.id; let i = $index) {
             @if (user.selected) {
                 <div id="{{i}}" class="member" (click)="memberServ.openShowMemberPopUp(i)">
                     <img class="avatar-members" src="{{user.avatarPath}}" alt="">

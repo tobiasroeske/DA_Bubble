@@ -40,7 +40,6 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.boardServ.chatFieldRef = this.chatField;
-
   }
 
   ngAfterViewInit(): void {
@@ -80,6 +79,6 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
     this.memberDialogIsOpen = true;
   }
 
-  
+
 }
 

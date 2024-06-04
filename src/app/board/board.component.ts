@@ -15,11 +15,12 @@ import { Auth, User } from '@angular/fire/auth';
 import { IdleService } from '../shared/services/idle-service/idle.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { interval, throttle } from 'rxjs';
+import { ShowChatParterPopUpComponent } from './show-chat-parter-pop-up/show-chat-parter-pop-up.component';
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent],
+  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent, ShowChatParterPopUpComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
@@ -41,7 +42,7 @@ export class BoardComponent implements OnInit {
       if (isIdle) {
         this.boardServ.currentUser.loginState = 'idle';
         this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
-      } 
+      }
     })
   }
 

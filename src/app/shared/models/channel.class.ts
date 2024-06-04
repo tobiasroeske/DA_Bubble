@@ -9,6 +9,7 @@ export class Channel {
     creatorName: string;
     chat?: any[];
     allUsers: CurrentUser[];
+    partecipantsIds: string[];
 
     constructor(obj?: any) {
         this.id = obj ? obj.id : "";
@@ -19,6 +20,7 @@ export class Channel {
         this.creatorName = obj ? obj.creatorName : "";
         this.chat = obj ? obj.chat : [];
         this.allUsers = obj ? obj.allUsers : [];
+        this.partecipantsIds = obj ? obj.partecipants : [];
     }
 
     public toJSON(): {} {
@@ -30,7 +32,8 @@ export class Channel {
             creatorId: this.creatorId,
             creatorName: this.creatorName,
             chat: this.chat,
-            allUsers: this.allUsers
+            allUsers: this.allUsers,
+            partecipantsIds: this.partecipantsIds,
         }
     }
 }

@@ -22,14 +22,10 @@ export class AddMemberDialogComponent {
   memberServ = inject(MemberDialogsService);
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  //currentChannel!: Channel;
-  //currentChannelId!: string;
   allUsers: CurrentUser[] = []
 
   constructor() {
-    //this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    //this.currentChannelId = this.firestore.allChannels[this.boardServ.idx]?.id;
-    console.log('Current channel Id',this.currentChannelId);
+    console.log('Current channel Id', this.currentChannelId);
     console.log('current channel ', this.currentChannel);
     console.log('boardserv id', this.boardServ.idx);
   }
@@ -54,11 +50,25 @@ export class AddMemberDialogComponent {
   }
 
   addUserToMemberArray() {
+    this.currentChannel.members = [];
+    this.currentChannel.partecipantsIds = [];
     this.allUsers.forEach(user => {
       this.currentChannel.members.push(user);
     });
     this.currentChannel.members.forEach(members => {
       this.firestore.updateMembers(members, this.currentChannelId);
+      if (members.id) {
+        this.currentChannel.partecipantsIds.push(members.id)
+      }
+    });
+    this.addIdsToPartecipantsIds();
+  }
+
+  addIdsToPartecipantsIds() {
+    this.currentChannel.partecipantsIds.forEach(id => {
+      if (this.currentChannel.id) {
+        this.firestore.updatePartecipantsIds(id, this.currentChannelId)
+      }
     })
   }
 

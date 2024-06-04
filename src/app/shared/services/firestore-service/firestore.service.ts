@@ -6,6 +6,7 @@ import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
 import { Auth, user } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
+import { User } from '../../models/user.class';
 // import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class FirestoreService {
   // usersList$ = this.usersListSubject.asObservable();
   userList: CurrentUser[] = [];
   unsubscribeUsers;
-  unsubChannel;
+  unsubChannel: any;
   unsubDirectMess: any;
   auth = inject(Auth);
   allChannels: any[] = [];
@@ -28,14 +29,13 @@ export class FirestoreService {
 
   constructor() {
     this.unsubscribeUsers = this.subUsersList();
-    this.unsubChannel = this.subChannelList();
     this.auth.onAuthStateChanged((user) => {
       if (user) {
         this.currentUserId = user.uid; // take the current user id from authentication;
+        this.unsubChannel = this.subChannelList();
         this.unsubDirectMess = this.subDirectMessages();
       }
     });
-    console.log(this.userList);
   }
 
   ngOnDestroy(): void {
@@ -128,15 +128,18 @@ export class FirestoreService {
   // }
 
   subChannelList() {
-    return onSnapshot(this.getChannelsRef(), (list) => {
+    const q = query(this.getChannelsRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
+    return onSnapshot(q, (list) => {
       this.allChannels = [];
       list.forEach((el) => {
         let channel = new Channel(el.data());
         channel.id = el.id;
         this.allChannels.push(channel.toJSON());
-      });
-    });
+      })
+      console.log(this.allChannels);
+    })
   }
+
 
   subDirectMessages() {
     const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
@@ -179,20 +182,23 @@ export class FirestoreService {
     let docRef = this.getSingleChannelRef('channels', docId)
     await updateDoc(docRef, item).catch((err) => {
       console.log(err);
-    }).then(() => { });
+    })
   }
-
-  async updateMembers(newMember: string | CurrentUser, docId: string) {
-    let channelRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(channelRef, { members: arrayUnion(newMember) });
-  }
-
 
   async updateChannelUsers(updatedUser: any, docId: string) {
     let channelRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(channelRef, { allUsers: updatedUser });
   }
 
+  async updateMembers(updateMembers: string | CurrentUser, docId: string) {
+    let channelRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(channelRef, { members: arrayUnion(updateMembers) })
+  }
+
+  async updatePartecipantsIds(id: string, docId: string) {
+    let channelRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(channelRef, { partecipantsIds: arrayUnion(id) })
+  }
 
   async updateChats(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getSingleChannelRef('channels', docId);
