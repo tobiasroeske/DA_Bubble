@@ -1,4 +1,4 @@
-<div class="board">
+<div class="board" (click)="boardServ.showEmojiPicker=false; boardServ.showEmojiPickerInThreads=false">
     <!-- <app-members-dialog></app-members-dialog> -->
     @if (boardServ.profileOptionsOpen) {
     <div class="overlay" (click)="boardServ.toggleProfileOptions()"></div>

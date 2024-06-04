@@ -4,11 +4,12 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/models/channel.class';
 import { CreateMessageAreaComponent } from '../../create-message-area/create-message-area.component';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @Component({
   selector: 'app-create-message-area-thread',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PickerComponent],
   templateUrl: './create-message-area-thread.component.html',
   styleUrl: './create-message-area-thread.component.scss'
 })
@@ -21,10 +22,6 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
   }
 
   override sendMessage(): void {
-    console.log(this.currentChatMessage);
-    console.log(this.currentChannel);
-    console.log(this.boardService.chatMessageIndex);
-
     if (this.textMessage.length > 0) {
       let date = new Date().getTime();
       let newAnswer = this.setMessageObject(date);
@@ -35,6 +32,7 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
         this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
         .then(() => {
           this.textMessage = '';
+          this.showEmojiPicker = false;
           this.boardService.scrollToBottom(this.boardService.threadRef);
         })
       }
