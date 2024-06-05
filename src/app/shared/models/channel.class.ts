@@ -20,7 +20,7 @@ export class Channel {
         this.creatorName = obj ? obj.creatorName : "";
         this.chat = obj ? obj.chat : [];
         this.allUsers = obj ? obj.allUsers : [];
-        this.partecipantsIds = obj ? obj.partecipants : [];
+        this.partecipantsIds = obj ? obj.partecipantsIds : [];
     }
 
     public toJSON(): {} {

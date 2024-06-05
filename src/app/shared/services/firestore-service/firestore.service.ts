@@ -36,6 +36,7 @@ export class FirestoreService {
         this.unsubDirectMess = this.subDirectMessages();
       }
     });
+    console.log(this.allChannels);
   }
 
   ngOnDestroy(): void {
@@ -142,7 +143,7 @@ export class FirestoreService {
 
 
   subDirectMessages() {
-    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
+    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId));
     return onSnapshot(q, (list) => {
       this.directMessages = [];
       list.forEach(el => {

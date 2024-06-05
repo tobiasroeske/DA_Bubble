@@ -32,6 +32,8 @@
                 </div>
                 @if(!title.valid && title.touched){
                 <span style="color: red;">Der Name des Titels muss aus mindestens drei Buchstaben bestehen</span>
+                } @else if(channelAlreadyExist){
+                <span style="color: red;">Dieser Kanal existiert bereits</span>
                 }
             </div>
 

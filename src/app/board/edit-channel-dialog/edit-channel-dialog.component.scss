@@ -7,7 +7,7 @@
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.15);
-    z-index: 2;
+    z-index: 99;
     @include d-flex();
 
     >.edit-dialog {
@@ -162,6 +162,25 @@
 
 .editChannel-name-editModus {
     padding: 20px
+}
+
+.btn-container {
+    @include d-flex($jc: flex-end);
+    width: 100%;
+
+    >button {
+        border-radius: 25px;
+        padding: 12px 25px;
+        background: rgba(68, 77, 242, 1);
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        transition: all 0.15s cubic-bezier(.215, .61, .355, 1);
+
+        &:hover {
+            background: rgba(173, 176, 217, 1);
+        }
+    }
 }
 
 .d-none {

@@ -1,5 +1,4 @@
-<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)"
-    class="edit-dialog-container">
+<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="edit-dialog-container">
     <div (click)="boardServ.stopPropagation($event)" class="edit-dialog">
         <div class="edit-channel-header">
             <span class="channel">
@@ -23,26 +22,33 @@
         <div [ngClass]="{'name-container-editModus': editNameBtnClicked}" class="edit-channel-name-container">
             <div class="edit-channel-name-header">
                 <h3>Channel-Name</h3>
-                <span (click)="onEditButtonClick()">{{editName}}</span>
+                <span (click)="onEditButtonClick($event)">{{editName}}</span>
             </div>
             <div [ngClass]="{'editChannel-name-editModus': editNameBtnClicked}" class="edit-channel-name">
                 <img class="hashtag-icon-smaller" src="assets/icons/hashtag.svg" alt="">
                 <input [disabled]="inputDisabled" [(ngModel)]="title" minlength="3" type="text">
             </div>
         </div>
+        @if(channelAlreadyExist){
+        <span style="color:red">Dieser Kanal existiert bereit</span>
+        }
         <div [ngClass]="{'desc-container-editModus': editDescriptionBtnClicked}"
             class="edit-channel-description-container">
             <div class="edit-channel-description-header">
                 <h3>Beschreibung</h3>
-                <span (click)="onDescriptionButtonClick()">{{editDesc}}</span>
+                <span (click)="onDescriptionButtonClick($event)">{{editDesc}}</span>
             </div>
-            <textarea [disabled]="textareaDisabled" [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}"
-                class="edit-description" [(ngModel)]="description"></textarea>
+            <textarea [disabled]="textareaDisabled"
+                [ngClass]="{'editChannel-name-editModus': editDescriptionBtnClicked}" class="edit-description"
+                [(ngModel)]="description"></textarea>
             <span class="line"></span>
             <div class="creator-container">
                 <h3>Erstellt von</h3>
                 <span>{{creatorName}}</span>
             </div>
+        </div>
+        <div class="btn-container">
+            <button (click)="leaveThisChannel($event)">Channel verlassen</button>
         </div>
     </div>
 </div>
