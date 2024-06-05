@@ -6,6 +6,7 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
 import { FormsModule } from '@angular/forms';
 import { MessageEditorComponent } from '../message-editor/message-editor.component';
+import { FirebaseStorageService } from '../../../shared/services/firebase-storage-service/firebase-storage.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class ChatMessageComponent implements OnInit {
   @Input() channelId!: string;
   @Input() chatMessageIndex!: number;
   editedMessage?: string;
+  showFile = false;
 
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
@@ -29,6 +31,7 @@ export class ChatMessageComponent implements OnInit {
   reactionDialogIndicatorbarOpen = false;
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
+  fbStorageService = inject(FirebaseStorageService);
   membersList: any[] = [];
   currentChannel!: any;
   currentUserName!: any
@@ -68,6 +71,10 @@ export class ChatMessageComponent implements OnInit {
 
   toggleMessageEditor() {
     this.editorOpen =!this.editorOpen
+  }
+
+  toggleFilePreview() {
+    this.showFile = !this.showFile;
   }
 
   editMessage(index:number) {

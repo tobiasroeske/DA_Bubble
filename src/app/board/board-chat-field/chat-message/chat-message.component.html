@@ -68,10 +68,15 @@
                 <span class="avatar-name-message">{{ chat.user.name }}</span> <span class="time">{{ chat.date | date:
                     'shortTime' }}</span>
             </div>
-            @if (!editorOpen) {
+            @if (chat.fileUpload.length > 0) {
+                <div class="uploaded-file-container">
+                    <img src="{{ chat.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
+                </div>
+            }
+            @if (!editorOpen && chat.message.length > 0) {
             <p class="message">{{ chat.message }}</p>
             }
-            @else {
+            @else if (editorOpen) {
             <app-message-editor (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat" style="width:100%"></app-message-editor>
            
             }
@@ -142,3 +147,14 @@
         </div>
     </div>
 </div>
+
+<!-- Image popup -->
+@if (showFile) {
+    <div class="file-popup">
+        <div class="img-container">
+            <img src="{{ chat.fileUpload }}" alt="" class="img-in-popup">
+            <a href="{{ chat.fileUpload }}" download="download.image.png" target="_blank" (click)="boardServ.stopPropagation($event)" class="link"><img src="assets/icons/download_icon.png" alt="" class="download-icon"></a>
+            <img src="assets/icons/close.svg" alt="" class="close-icon" (click)="toggleFilePreview()">
+        </div>
+    </div>
+}

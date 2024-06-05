@@ -34,7 +34,7 @@ export class AvatarPickerComponent implements OnInit{
     let file = event.target.files[0];
     if (file) {
       let path = `avatarImages/${file.name}`;
-      this.firebaseStorageService.uploadFile(path, file)
+      await this.firebaseStorageService.uploadFile(path, file)
       .then(() => {
         this.firebaseStorageService.getDownLoadUrl(path)
         .then(url => {

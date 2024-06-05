@@ -16,8 +16,8 @@ export class BoardService {
   storageService = inject(LocalStorageService);
   firestore = inject(FirestoreService);
   threadTranslate: boolean = false;
-  sidenavTranslate: boolean = false;
-  textHidden: boolean = true;
+  sidenavTranslate: boolean = true;
+  textHidden: boolean = false;
   dialogIsOpen: boolean = false;
   editDialogIsOpen: boolean = false;
   status: string = 'öffen';
@@ -141,8 +141,14 @@ export class BoardService {
     event.stopPropagation();
   }
 
+  stopAllOtherActions(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   showChannelInChatField(i: number, event: Event) {
     this.idx = i;
+    this.storageService.saveCurrentChannelIndex(this.idx);
     this.privateChatIsStarted = false;
     event.preventDefault();
   }

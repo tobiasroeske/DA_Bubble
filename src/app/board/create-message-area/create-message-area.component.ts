@@ -7,6 +7,7 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { Channel } from '../../shared/models/channel.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { FirebaseStorageService } from '../../shared/services/firebase-storage-service/firebase-storage.service';
 
 
 
@@ -20,30 +21,63 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 export class CreateMessageAreaComponent {
   boardService = inject(BoardService);
   firestoreService = inject(FirestoreService);
+  fbStorageService = inject(FirebaseStorageService)
   textMessage: string = '';
   memberToTag: string = '';
+  channelToTag: string = '';
   message!: ChatMessage;
   currentUser: any;
   shiftPressed = false;
   enterPressed = false;
   tagMembers = false;
+  tagChannels = false;
+  fileSizeToGreat = false;
   filteredMembers: CurrentUser[] = []
+  filteredChannels: Channel[] = [];
+  uploadedFile: string = '';
   @Input() index!: number;
   @Input() channelId!: string;
   @Input() channelTitle!: string;
-  
+  @Input() channels!: Channel[];
+
 
   preview = 'false';
   @Input() showEmojiPicker = false;
 
   constructor() {
     this.currentUser = this.boardService.currentUser;
-    
+    this.filteredChannels = this.channels;
+  }
+
+  async onFileChange(event: any) {
+    this.fileSizeToGreat = false;
+    let file = event.target.files[0];
+    if (file && file.size <= 500000) {
+      let path = `fileUploads/${file.name}`;
+      await this.uploadFile(path, file);
+    } else {
+      this.fileSizeToGreat = true;
+    }
+  }
+
+  async uploadFile(path:string ,file: File) {
+    await this.fbStorageService.uploadFile(path, file)
+    .then(() => {
+      this.fbStorageService.getDownLoadUrl(path)
+      .then(url => {
+        this.uploadedFile = url;
+      })
+    })
+  }
+
+  async deleteFile() {
+    await this.fbStorageService.deleteFile(this.uploadedFile)
+    .then(() => this.uploadedFile = '');
+
   }
 
   addEmoji(event: any) {
     this.textMessage = this.textMessage + event.emoji.native;
-    console.log(event);
   }
 
   toggleTagMemberDialog() {
@@ -51,64 +85,85 @@ export class CreateMessageAreaComponent {
     this.tagMembers = !this.tagMembers
   }
 
-  tagMember(i:number) {
+  tagMember(i: number) {
     if (this.memberToTag.length > 0) {
-      this.removeMemberToTagFromTextMessage();
+      this.removeStringToTagFromTextMessage(this.memberToTag);
     }
     let member = this.filteredMembers[i];
-    this.textMessage += `@${member.name} `;
+    this.textMessage += ` @${member.name} `;
     this.tagMembers = false;
-  }
-
-  removeMemberToTagFromTextMessage() {
-    let regex = new RegExp(`${this.memberToTag}`, 'gi');
-    console.log(regex);
-    
-    this.textMessage = this.textMessage.replace(regex, '').trim();
     this.memberToTag = '';
   }
 
+  tagChannel(i: number) {
+    if (this.channelToTag.length > 0) {
+      this.removeStringToTagFromTextMessage(this.channelToTag);
+    }
+    let channel = this.filteredChannels[i];
+    this.textMessage += ` #${channel.title}`;
+    this.tagChannels = false;
+    this.channelToTag = '';
+  }
+
+  removeStringToTagFromTextMessage(string: string) {
+    let regex = new RegExp(`${string}`, 'gi');
+    this.textMessage = this.textMessage.replace(regex, '').trim();
+    string = '';
+  }
+
   sendMessage() {
-    if (this.textMessage.length > 0) {
+    if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       let date = new Date().getTime();
       this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
-      .then(() => {
-        this.textMessage = ''
-        this.boardService.showEmojiPicker = false;
-        this.boardService.scrollToBottom(this.boardService.chatFieldRef)
-        
-      })
+        .then(() => {
+          this.textMessage = '';
+          this.uploadedFile = '';
+          this.boardService.showEmojiPicker = false;
+          this.boardService.scrollToBottom(this.boardService.chatFieldRef);
+        })
     }
   }
 
-  @HostListener('window:keydown', ['$event'])
+  @HostListener('keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Shift') {
+    let { key } = event;
+    if (key === 'Shift') {
       this.shiftPressed = true;
-    }
-    if (event.key === 'Enter') {
+    } else if (key === 'Enter') {
       this.enterPressed = true;
-    }
-    if (this.tagMembers && event.key === 'Backspace') {
-      this.memberToTag = this.memberToTag.slice(0, -1);
-      this.filterMember();
-      if (this.memberToTag.length == 0) {
-        this.tagMembers = false;
-        console.log('es ist vorbei');
-        
+    } else if (key === 'Backspace') {
+      if (this.tagMembers) {
+        this.memberToTag = this.memberToTag.slice(0, -1);
+        this.filterMember();
+        this.tagMembers = this.memberToTag.length !== 0;
+      }
+      if (this.tagChannels) {
+        this.channelToTag = this.channelToTag.slice(0, -1);
+        this.filterChannels();
+        this.tagChannels = this.channelToTag.length !== 0;
       }
     }
     this.checkShiftEnter();
   }
 
-  @HostListener('window:keypress', ['$event']) 
-  handleKeyPress(event: KeyboardEvent) {
-    if (event.key === '@') {
-      this.tagMembers = true;
+  @HostListener('keypress', ['$event'])
+  handleKeyPress(event: KeyboardEvent): void {
+    let { key } = event;
+    if (key === '@') {
+      this.tagMembers = !this.tagMembers;
+      if (this.tagMembers) {
+        this.memberToTag = '';
+      }
+    } else if (key === '#') {
+      this.tagChannels = true;
     }
     if (this.tagMembers) {
-      this.memberToTag += event.key;
-      this.filterMember()
+      this.memberToTag += key;
+      this.filterMember();
+    }
+    if (this.tagChannels) {
+      this.channelToTag += key;
+      this.filterChannels();
     }
   }
 
@@ -118,7 +173,13 @@ export class CreateMessageAreaComponent {
     this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
   }
 
-  @HostListener('window:keyup', ['$event'])
+  filterChannels() {
+    let channels: Channel[] = this.firestoreService.allChannels;
+    let lowerCaseTag = this.channelToTag.slice(1).toLowerCase();
+    this.filteredChannels = channels.filter(channel => channel.title.toLowerCase().includes(lowerCaseTag));
+  }
+
+  @HostListener('keyup', ['$event'])
   handleKeyUp(event: KeyboardEvent): void {
     if (event.key === 'Shift') {
       this.shiftPressed = false;
@@ -130,7 +191,6 @@ export class CreateMessageAreaComponent {
 
   checkShiftEnter() {
     if (this.shiftPressed && this.enterPressed) {
-      console.log('beide Tasten gedrückt');
       return;
     } else if (this.enterPressed) {
       this.sendMessage();
@@ -144,6 +204,7 @@ export class CreateMessageAreaComponent {
       message: this.textMessage,
       answers: [],
       reactions: [],
+      fileUpload: this.uploadedFile
     }
   }
 }
