@@ -89,9 +89,9 @@
 
 @if(!boardServ.privateChatIsStarted){
 <app-create-message-area [index]="boardServ.idx" [channelId]="firestore.allChannels[boardServ.idx]?.id"
-    [channelTitle]="firestore.allChannels[boardServ.idx]?.title"></app-create-message-area>
+    [channelTitle]="firestore.allChannels[boardServ.idx]?.title" [channels]="firestore.allChannels"></app-create-message-area>
 } @else {
-<app-create-private-message-area></app-create-private-message-area>
+<app-create-private-message-area [allUsers]="firestore.userList"></app-create-private-message-area>
 }
 
 @if(memberServ.showMemberPopUpisOpen){

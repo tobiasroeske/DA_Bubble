@@ -12,6 +12,7 @@ import { PrivateChatMessageComponent } from './private-chat-message/private-chat
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { Subscription } from 'rxjs';
+import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
+  storageService = inject(LocalStorageService)
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
@@ -36,6 +38,8 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   @ViewChild('chatMessageArea') chatField!: ElementRef;
 
   constructor() {
+    this.boardServ.idx = this.storageService.loadCurrentChannelIndex()
+    
   }
 
   ngOnInit(): void {

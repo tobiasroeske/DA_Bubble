@@ -51,8 +51,13 @@
         <img class="avatar-photo" src="{{privateMessage.user.avatarPath}}" alt="">
         <div class="message-container">
             <div class="name-and-time-container">
-                <span class="avatar-name-message">{{privateMessage.user.name}}</span> <span class="time"></span>
+                <span class="avatar-name-message">{{privateMessage.user.name}}</span> <span class="time">{{ privateMessage.date | date: 'shortTime' }}</span>
             </div>
+            @if (privateMessage.fileUpload.length > 0) {
+                <div class="uploaded-file-container">
+                    <img src="{{ privateMessage.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
+                </div>
+            }
             <p class="message" [innerText]="message"></p>
             <div class="reaction-indicator-bar">
                 <svg (click)="toggleReactionDialog('reactionIdicator')" class="add-reaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -91,3 +96,14 @@
         </div>
     </div>
 </div>
+
+<!-- Image popup -->
+@if (showFile) {
+    <div class="file-popup">
+        <div class="img-container">
+            <img src="{{ privateMessage.fileUpload }}" alt="" class="img-in-popup">
+            <a href="{{ privateMessage.fileUpload }}" download="download.image.png" target="_blank" (click)="boardServ.stopPropagation($event)" class="link"><img src="assets/icons/download_icon.png" alt="" class="download-icon"></a>
+            <img src="assets/icons/close.svg" alt="" class="close-icon" (click)="toggleFilePreview()">
+        </div>
+    </div>
+}

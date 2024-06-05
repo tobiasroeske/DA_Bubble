@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -27,36 +27,53 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   chatId?: string;
   override message!: ChatMessage;
 
+
+  @Input() allUsers!: CurrentUser[]
+
   @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   constructor() {
     super();
   }
 
-  onEnterPress(event: KeyboardEvent) {
-    if (event.key == 'Enter' && !event.shiftKey) {
-      this.sendMessage();
-      this.showEmojiPicker = false;
-      event.preventDefault();
-    } else if (event.key == 'Enter' && event.shiftKey) {
-      console.log('works!');
-    }
+  override toggleTagMemberDialog() {
+    this.filteredMembers = this.allUsers;
+    this.tagMembers = !this.tagMembers
   }
+
+  override filterMember() {
+    let members: CurrentUser[] = this.allUsers;
+    let lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
+    this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
+  }
+
+  // onEnterPress(event: KeyboardEvent) {
+  //   if (event.key == 'Enter' && !event.shiftKey) {
+  //     this.sendMessage();
+  //     this.showEmojiPicker = false;
+  //     event.preventDefault();
+  //   } else if (event.key == 'Enter' && event.shiftKey) {
+  //     console.log('works!');
+  //   }
+  // }
 
   ngOnInit(): void {
     this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
-  override sendMessage(): void {
+  override async sendMessage() {
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
       if (this.message.message.trim() !== '') {
-        this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
-        .then(() => this.boardServ.scrollToBottom(this.boardServ.chatFieldRef));
+        await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
+          .then(() => {
+            this.boardServ.scrollToBottom(this.boardServ.chatFieldRef)
+            this.uploadedFile = '';
+            this.checkIfPrivatChatIsEmpty();
+            this.textMessage = "";
+          });
       }
-      this.checkIfPrivatChatIsEmpty();
-      this.textMessage = "";
     }
   }
 
@@ -80,7 +97,8 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
       user: this.currentUser,
       message: this.textMessage.replace('/\n/g', '<br>'),
       answers: [],
-      reactions: []
+      reactions: [],
+      fileUpload: this.uploadedFile
     }
   }
 }

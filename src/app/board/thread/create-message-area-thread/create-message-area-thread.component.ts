@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/models/channel.class';
 import { CreateMessageAreaComponent } from '../../create-message-area/create-message-area.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 
 @Component({
   selector: 'app-create-message-area-thread',
@@ -16,6 +17,12 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent {
   @Input() currentChatMessage?: ChatMessage;
   @Input() currentChannel?: Channel
+  override memberToTag: string = '';
+  override channelToTag: string = '';
+  override filteredChannels: Channel[] = [];
+  override filteredMembers: CurrentUser[] = [];
+  tagMembersThread = false;
+  tagChannelsThread = false;
 
   constructor() {
     super();
@@ -28,7 +35,6 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
       this.currentChatMessage?.answers.push(newAnswer)
       if (this.currentChannel) {
         this.currentChannel.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage)
-        console.log(this.currentChannel);
         this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
         .then(() => {
           this.textMessage = '';

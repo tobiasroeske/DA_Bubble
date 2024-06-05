@@ -28,6 +28,18 @@ export class LocalStorageService {
     localStorage.setItem('introPlayed', JSON.stringify(state));
   }
 
+  saveCurrentChannelIndex(i: number) {
+    localStorage.setItem('currentChannelIndex', JSON.stringify(i));
+  }
+
+  loadCurrentChannelIndex() {
+    let currentIndex = localStorage.getItem('currentChannelIndex');
+    if (currentIndex != null) {
+      let currentIndexAsJson = JSON.parse(localStorage.getItem('currentChannelIndex')!);
+      return currentIndexAsJson;
+    } 
+  }
+
   loadIntroPlayed() {
     let introPlayed = localStorage.getItem('introPlayed');
     if (introPlayed != null) {

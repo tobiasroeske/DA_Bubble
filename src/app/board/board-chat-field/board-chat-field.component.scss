@@ -5,6 +5,8 @@
     padding: 25px 70px;
     width: 100%;
     font-family: "Nunito";
+    box-shadow: 0px 2px 10px 0px #00000014;
+
 
     >.chat-field-channel {
         border-radius: 100px;
@@ -48,6 +50,7 @@
     }
 
     >.avatar-photos-container {
+        @include d-flex();
         >img {
             height: 40px;
             width: 40px;

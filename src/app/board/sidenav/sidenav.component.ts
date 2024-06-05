@@ -14,10 +14,10 @@ export class SidenavComponent {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
 
-  channelHeaderIsClicked: boolean = false;
-  directMessHeaderisClicked: boolean = false;
-  canTranslateYChannel: boolean = false;
-  canTranslateYUserList: boolean = false;
+  channelHeaderIsClicked: boolean = true;
+  directMessHeaderisClicked: boolean = true;
+  canTranslateYChannel: boolean = true;
+  canTranslateYUserList: boolean = true;
 
   onHeaderClick() {
     if (!this.channelHeaderIsClicked) {

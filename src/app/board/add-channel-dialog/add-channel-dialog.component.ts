@@ -6,6 +6,7 @@ import { Channel } from '../../shared/models/channel.class';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
+import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
   selector: 'app-add-channel-dialog',
@@ -19,6 +20,7 @@ export class AddChannelDialogComponent {
   firestore = inject(FirestoreService);
   signUpServ = inject(SignupService);
   memberServ = inject(MemberDialogsService);
+  localStorageService = inject(LocalStorageService)
   channelAlreadyExist: boolean = false;
   existingChannelIndex?: number;
 
@@ -45,6 +47,7 @@ export class AddChannelDialogComponent {
     await this.firestore.addChannel(this.channel.toJSON())
       .then((res) => {
         this.boardServ.idx = this.getNewChannelIndex()
+        this.localStorageService.saveCurrentChannelIndex(this.getNewChannelIndex());
       });
     ngForm.resetForm();
   }

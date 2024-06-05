@@ -7,4 +7,5 @@ export interface ChatMessage {
     message: string;
     answers: ChatMessage[];
     reactions: Reaction[];
+    fileUpload: string;
 }
