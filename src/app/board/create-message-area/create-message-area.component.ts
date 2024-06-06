@@ -60,19 +60,19 @@ export class CreateMessageAreaComponent {
     }
   }
 
-  async uploadFile(path:string ,file: File) {
+  async uploadFile(path: string, file: File) {
     await this.fbStorageService.uploadFile(path, file)
-    .then(() => {
-      this.fbStorageService.getDownLoadUrl(path)
-      .then(url => {
-        this.uploadedFile = url;
+      .then(() => {
+        this.fbStorageService.getDownLoadUrl(path)
+          .then(url => {
+            this.uploadedFile = url;
+          })
       })
-    })
   }
 
   async deleteFile() {
     await this.fbStorageService.deleteFile(this.uploadedFile)
-    .then(() => this.uploadedFile = '');
+      .then(() => this.uploadedFile = '');
 
   }
 

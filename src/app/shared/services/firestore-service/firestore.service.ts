@@ -23,6 +23,8 @@ export class FirestoreService {
   auth = inject(Auth);
   allChannels: any[] = [];
   directMessages: PrivateChat[] = [];
+//  directMessagesSubject = new BehaviorSubject<PrivateChat[]>([]);
+//   directMessages$ = this.directMessagesSubject.asObservable();
   newChannelId?: string;
   chatRoomId?: string;
   currentUserId?: string;
@@ -143,7 +145,7 @@ export class FirestoreService {
 
 
   subDirectMessages() {
-    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId));
+    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
     return onSnapshot(q, (list) => {
       this.directMessages = [];
       list.forEach(el => {
@@ -153,6 +155,19 @@ export class FirestoreService {
       console.log(this.directMessages);
     });
   }
+
+  // subDirectMessages2(){
+  //   const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
+  //   return onSnapshot(q, (list) => {
+  //     let directMessages:PrivateChat[] = [];
+  //     list.forEach(el => {
+  //       let privateChat = new PrivateChat(el.data());
+  //       directMessages.push(privateChat);
+  //     });
+  //     console.log(this.directMessages);
+  //     this.directMessagesSubject.next(directMessages);
+  //   });
+  // }
 
   async addChannel(obj: {}) {
     await addDoc(this.getChannelsRef(), obj)
@@ -209,7 +224,10 @@ export class FirestoreService {
 
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(chatRef, { chat: arrayUnion(messageObject) });
+    await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
+      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() })
+      console.log(this.directMessages);
+    });
   }
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {

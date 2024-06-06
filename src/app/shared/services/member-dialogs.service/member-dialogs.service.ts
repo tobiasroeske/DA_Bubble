@@ -5,6 +5,8 @@ import { Channel } from '../../models/channel.class';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { BoardService } from '../../../board/board.service';
 import { User } from '../../models/user.class';
+import { ChatMessage } from '../../interfaces/chatMessage.interface';
+import { PrivateChatMessageComponent } from '../../../board/board-chat-field/private-chat-message/private-chat-message.component';
 
 @Injectable({
   providedIn: 'root'
@@ -64,13 +66,22 @@ export class MemberDialogsService {
   }
 
   async setChatRoom(event: Event) {
+    let idxToStartPrivatChat:number;
     event.preventDefault();
     this.setThePrivateChatObject();
-    await this.firestore.addChatRoom(this.privateChat.toJSON());
-    this.toggleMembersDialog(event);
-    console.log(this.privateChat);
-    console.log(this.firestore.directMessages);
-    this.closeShowMemberPopUp(event);
+    let idxToCheckIfGuestExist = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
+    if (idxToCheckIfGuestExist == -1) {
+      await this.firestore.addChatRoom(this.privateChat.toJSON());
+      this.toggleMembersDialog(event);
+      this.closeShowMemberPopUp(event);
+      idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
+      this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
+    } else {
+      console.log('chat partner existiert bereits');
+      idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId)
+      this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
+      this.closeShowMemberPopUp(event);
+    }
   }
 
   setThePrivateChatObject() {

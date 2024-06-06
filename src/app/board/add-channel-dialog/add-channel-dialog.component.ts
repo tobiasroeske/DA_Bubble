@@ -20,7 +20,7 @@ export class AddChannelDialogComponent {
   firestore = inject(FirestoreService);
   signUpServ = inject(SignupService);
   memberServ = inject(MemberDialogsService);
-  localStorageService = inject(LocalStorageService)
+  localStorageService = inject(LocalStorageService);
   channelAlreadyExist: boolean = false;
   existingChannelIndex?: number;
 
@@ -78,6 +78,7 @@ export class AddChannelDialogComponent {
     this.channel.allUsers = [];
     this.channel.partecipantsIds = [];
     this.channel.partecipantsIds.push(this.signUpServ.currentUser.uid);
+    this.channel.members = [];
     this.firestore.userList.forEach((user) => {
       if (user.id == this.channel.creatorId) {
         user.selected = true;

@@ -5,7 +5,7 @@ export class PrivateChat {
     id?: string;
     partecipantsIds: string[];
     initiatedAt: string;
-    lastUpdateAt: string;
+    lastUpdateAt: number;
     creator: CurrentUser;
     guest: CurrentUser;
     chat: ChatMessage[];
@@ -14,7 +14,7 @@ export class PrivateChat {
         this.id = obj ? obj.id : "";
         this.partecipantsIds = obj ? obj.partecipantsIds : [];
         this.initiatedAt = obj ? obj.initiatedAt : "";
-        this.lastUpdateAt = obj ? obj.lastUpdateAt : "";
+        this.lastUpdateAt = obj ? obj.lastUpdateAt : 0;
         this.creator = obj ? obj.creator : "";
         this.guest = obj ? obj.guest : "";
         this.chat = obj ? obj.chat : [];

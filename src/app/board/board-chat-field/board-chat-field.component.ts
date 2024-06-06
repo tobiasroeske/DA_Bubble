@@ -13,6 +13,7 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { Subscription } from 'rxjs';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
+import { PrivateChat } from '../../shared/models/privateChat.class';
 
 
 @Component({
@@ -33,13 +34,16 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
+  directMessages:PrivateChat[] = [];
   //channelId: string;
 
   @ViewChild('chatMessageArea') chatField!: ElementRef;
 
   constructor() {
     this.boardServ.idx = this.storageService.loadCurrentChannelIndex()
-    
+    // this.firestore.directMessages$.subscribe(pm => {
+    //   this.directMessages = pm;
+    // })
   }
 
   ngOnInit(): void {

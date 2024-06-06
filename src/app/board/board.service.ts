@@ -39,20 +39,22 @@ export class BoardService {
   privateChatId?: string
   showEmojiPicker = false;
   showEmojiPickerInThreads = false;
+  blueColorsForTheChatPartersFocus: boolean[] = [];
+  blueText!: boolean;
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser()!;
     console.log(this.currentUser);
-    
+
     this.currentUser.loginState = 'loggedIn';
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
 
   getUserLoginState(privateChat: PrivateChat) {
-    let allUsers: CurrentUser []= this.firestore.userList;
+    let allUsers: CurrentUser[] = this.firestore.userList;
     let user: CurrentUser = allUsers.find(user => user.id == privateChat.guest.id || user.id == privateChat.creator.id)!;
     //console.log(user.loginState);
-    
+
     return user.loginState
   }
 
@@ -153,7 +155,7 @@ export class BoardService {
     event.preventDefault();
   }
 
-  startPrivateChat(index: number, event: Event, partecipant: string) {
+  startPrivateChat(index: number, partecipant: string, event?: Event) {
     if (partecipant == "creator") {
       this.chatPartnerIdx = index;
       this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
@@ -161,7 +163,9 @@ export class BoardService {
       this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
       this.checkIfPrivatChatIsEmpty();
       this.privateChatIsStarted = true;
-      event.stopPropagation();
+      if (event) {
+        event.stopPropagation();
+      }
     } else {
       this.chatPartnerIdx = index;
       this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
@@ -169,8 +173,20 @@ export class BoardService {
       this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
       this.checkIfPrivatChatIsEmpty();
       this.privateChatIsStarted = true;
-      event.stopPropagation();
+      if (event) {
+        event.stopPropagation();
+      }
     }
+    this.blueColorsForTheChatPartersFocus = [];
+    this.firestore.directMessages.forEach(privateChat => {
+      this.blueColorsForTheChatPartersFocus.push(false);
+    })
+    console.log(this.blueColorsForTheChatPartersFocus);
+    this.setBlueColorToChatPartner(index)
+  }
+
+  setBlueColorToChatPartner(index: number) {
+    this.blueColorsForTheChatPartersFocus[index] = true
   }
 
   checkIfPrivatChatIsEmpty() {

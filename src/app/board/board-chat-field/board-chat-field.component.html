@@ -70,7 +70,7 @@
     }
 </div>
 
-@if(boardServ.privateChatIsStarted && this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat.length == 0){
+@if(boardServ.privateChatIsStarted && this.firestore.directMessages[boardServ.chatPartnerIdx].chat.length == 0){
 <div [ngClass]="{translateX: boardServ.firstPrivateMessageWasSent, 'd-none': boardServ.hidePopUpChatPartner}"
     id="{{boardServ.chatPartnerIdx}}" class="chat-partner-pop-up">
     <div class="partner-container">

@@ -10,6 +10,7 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { PrivateChat } from '../../shared/models/privateChat.class';
 
 @Component({
   selector: 'app-create-private-message-area',
@@ -34,6 +35,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
 
   constructor() {
     super();
+    console.log(this.boardServ.currentChatPartner);
   }
 
   override toggleTagMemberDialog() {
@@ -61,21 +63,50 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
-  override async sendMessage() {
+  override async sendMessage(event?: Event) {
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
       if (this.message.message.trim() !== '') {
         await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
           .then(() => {
-            this.boardServ.scrollToBottom(this.boardServ.chatFieldRef)
             this.uploadedFile = '';
             this.checkIfPrivatChatIsEmpty();
             this.textMessage = "";
+            this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
           });
+        setTimeout(() => {
+          let idx = this.firestore.directMessages.findIndex((privChat: PrivateChat) => privChat.guest.id == this.boardServ.currentChatPartner.id)
+          this.boardServ.startPrivateChat(idx, 'creator', event);
+          console.log(idx);
+        }, 1)
       }
     }
   }
+
+  // override async sendMessage(event?: Event) {
+  //   if (this.boardServ.privateChatId) {
+  //     let date = new Date().getTime();
+  //     this.message = this.setMessageObject(date);
+  //     if (this.message.message.trim() !== '') {
+  //       let idx = 0;
+  //       let directMessages: PrivateChat[] = [];
+  //       await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
+  //         .then(() => {
+  //           this.uploadedFile = '';
+  //           this.checkIfPrivatChatIsEmpty();
+  //           this.textMessage = "";
+  //           this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
+  //           this.firestore.directMessages$.subscribe(dm => {
+  //             directMessages = dm
+  //             idx = directMessages.findIndex((privChat: PrivateChat) => privChat.guest.id == this.boardServ.currentChatPartner.id)
+  //             this.boardServ.startPrivateChat(idx, 'creator', event);
+  //             console.log(idx);
+  //           });
+  //         });
+  //     }
+  //   }
+  // }
 
   checkIfPrivatChatIsEmpty() {
     if (this.privateChat.length > 0) {

@@ -7,7 +7,7 @@
     right: 0;
     bottom: 0;
     @include d-flex();
-    z-index: 4;
+    z-index: 9;
     background: rgba(0, 0, 0, 0.2);
 }
 
@@ -19,6 +19,7 @@
     color: #000;
     @include d-flex(column, space-between, flex-start, 45px);
     width: 500px;
+    z-index: 10;
 }
 
 .title-and-cross-icon {
@@ -58,7 +59,7 @@
 
         >.point-container {
             @include d-flex($jc: flex-start, $g: 24px);
-            
+
             >span {
                 font-size: 20px;
                 font-weight: 400;

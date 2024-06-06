@@ -217,6 +217,7 @@
         padding: 4px 20px;
         border-radius: 35px;
         position: relative;
+
         &:hover {
             background: rgba(236, 238, 254, 1);
             cursor: pointer;
@@ -231,7 +232,7 @@
             height: 50px;
             object-fit: cover;
             border-radius: 100%;
-            z-index:4;
+            z-index: 4;
         }
 
         >h3 {
@@ -239,7 +240,11 @@
             font-size: 18px;
         }
     }
+}
 
+.collegue-on-focus {
+    color: $specialBlue;
+    background: rgba(236, 238, 254, 1);
 }
 
 .state-icon {
