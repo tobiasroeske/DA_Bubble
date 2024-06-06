@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/models/channel.class';
@@ -17,10 +17,14 @@ import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent {
   @Input() currentChatMessage?: ChatMessage;
   @Input() currentChannel?: Channel
+  @ViewChild('fileInput') override fileInput!: ElementRef<any>;
   override memberToTag: string = '';
   override channelToTag: string = '';
   override filteredChannels: Channel[] = [];
   override filteredMembers: CurrentUser[] = [];
+  override uploadedFile: string = '';
+  override filePath: string = '';
+  override fileSizeToGreat: boolean = false;
   tagMembersThread = false;
   tagChannelsThread = false;
 
@@ -28,21 +32,29 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
     super();
   }
 
+
+
   override sendMessage(): void {
-    if (this.textMessage.length > 0) {
+    if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       let date = new Date().getTime();
       let newAnswer = this.setMessageObject(date);
       this.currentChatMessage?.answers.push(newAnswer)
       if (this.currentChannel) {
         this.currentChannel.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage)
         this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
-        .then(() => {
-          this.textMessage = '';
-          this.showEmojiPicker = false;
-          this.boardService.scrollToBottom(this.boardService.threadRef);
-        })
+          .then(() => {
+            this.resetTextArea();
+            this.boardService.scrollToBottom(this.boardService.threadRef);
+          })
       }
     }
   }
+
+  // override resetTextArea() {
+  //   this.textMessage = '';
+  //   this.uploadedFile = '';
+  //   this.filePath = '';
+  //   this.showEmojiPicker = false;
+  // }
 
 }

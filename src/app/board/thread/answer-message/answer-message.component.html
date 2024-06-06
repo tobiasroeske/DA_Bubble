@@ -2,10 +2,9 @@
     [ngStyle]="{'margin-bottom.px': lastIndex ? '135' : '0'}" (mouseover)="toggleReactionPopup($event)"
     (mouseleave)="toggleReactionPopup($event)">
     <div class="add-reaction-popup"
-        [ngClass]="{'slide-in': showReactionPopup, 'reaction-popoup-reverse': boardServ.currentUser.id != answer.user.id}"
-        >
-        <svg (click)="showEmmojibar(false)" class="addReaction-icon-thread" width="40" height="40" viewBox="0 0 40 40" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
+        [ngClass]="{'slide-in': showReactionPopup, 'reaction-popoup-reverse': boardServ.currentUser.id != answer.user.id}">
+        <svg (click)="showEmmojibar(false)" class="addReaction-icon-thread" width="40" height="40" viewBox="0 0 40 40"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_1817_19446" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                 height="24">
                 <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
@@ -40,18 +39,24 @@
     </div>
     }
 
-    
+
     @if (!editorOpen) {
-        <img class="avatar-thread-img" src="{{ answer.user.avatarPath }}" alt="">
-        <div class="thread-message"
+    <img class="avatar-thread-img" src="{{ answer.user.avatarPath }}" alt="">
+    <div class="thread-message"
         [ngStyle]="{'align-items': answer.user.id == boardServ.currentUser.id ? 'flex-end' : 'flex-start'}">
         <div class="time-and-name-container">
             <span class="name">{{ answer.user.name }}</span>
             <span class="time">{{ answer.date | date: 'shortTime' }}</span>
         </div>
-        
-        <p class="answer-message">{{ answer.message }}
-        </p>
+        @if (answer.fileUpload.length > 0) {
+        <div class="uploaded-file-container">
+            <img src="{{ answer.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
+        </div>
+        }  
+        @if (answer.message.length > 0) {
+        <p class="answer-message">{{ answer.message }}</p>
+        }
+
         <span class="reaction-indicator-container"
             [ngStyle]="{'justify-content': answer.user.id == boardServ.currentUser.id ? 'flex-end' : 'flex-start'}">
             @for (reaction of answer.reactions; track reaction; let i = $index) {
@@ -90,7 +95,21 @@
         </span>
     </div>
     } @else {
-        <app-answer-editor (editorOpen)="toggleMessageEditor()" [answer]="answer" [answerIndex]="answerIndex!"></app-answer-editor>
-        }
-   
+    <app-answer-editor (editorOpen)="toggleMessageEditor()" [answer]="answer"
+        [answerIndex]="answerIndex!"></app-answer-editor>
+    }
+
 </div>
+
+<!-- Image popup -->
+@if (showFile) {
+<div class="file-popup">
+    <div class="img-container">
+        <img src="{{ answer.fileUpload }}" alt="" class="img-in-popup">
+        <a href="{{ answer.fileUpload }}" download="download.image.png" target="_blank"
+            (click)="boardServ.stopPropagation($event)" class="link"><img src="assets/icons/download_icon.png" alt=""
+                class="download-icon"></a>
+        <img src="assets/icons/close.svg" alt="" class="close-icon" (click)="toggleFilePreview()">
+    </div>
+</div>
+}

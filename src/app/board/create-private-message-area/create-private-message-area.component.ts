@@ -65,16 +65,21 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
-      if (this.message.message.trim() !== '') {
+      if (this.message.message.trim() !== '' || this.uploadedFile.length > 0) {
         await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
           .then(() => {
-            this.boardServ.scrollToBottom(this.boardServ.chatFieldRef)
-            this.uploadedFile = '';
-            this.checkIfPrivatChatIsEmpty();
-            this.textMessage = "";
+            this.resetTextArea();
           });
       }
     }
+  }
+
+  override resetTextArea() {
+    this.uploadedFile = '';
+    this.textMessage = '';
+    this.filePath = '';
+    this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
+    this.checkIfPrivatChatIsEmpty();
   }
 
   checkIfPrivatChatIsEmpty() {
