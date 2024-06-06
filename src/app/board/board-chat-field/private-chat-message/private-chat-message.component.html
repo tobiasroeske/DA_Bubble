@@ -57,8 +57,10 @@
                 <div class="uploaded-file-container">
                     <img src="{{ privateMessage.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
                 </div>
+            } @else if (privateMessage.message.length > 0) {
+                <p class="message" [innerText]="message"></p>
             }
-            <p class="message" [innerText]="message"></p>
+            
             <div class="reaction-indicator-bar">
                 <svg (click)="toggleReactionDialog('reactionIdicator')" class="add-reaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <mask id="mask0_1817_19446" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24" height="24">

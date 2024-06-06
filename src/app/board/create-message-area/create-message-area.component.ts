@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Host, HostListener, Input, Output, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Host, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { BoardService } from '../board.service';
@@ -35,6 +35,9 @@ export class CreateMessageAreaComponent {
   filteredMembers: CurrentUser[] = []
   filteredChannels: Channel[] = [];
   uploadedFile: string = '';
+  filePath: string = '';
+
+  @ViewChild('fileInput') fileInput!: ElementRef;
   @Input() index!: number;
   @Input() channelId!: string;
   @Input() channelTitle!: string;
@@ -53,8 +56,11 @@ export class CreateMessageAreaComponent {
     this.fileSizeToGreat = false;
     let file = event.target.files[0];
     if (file && file.size <= 500000) {
-      let path = `fileUploads/${file.name}`;
-      await this.uploadFile(path, file);
+      this.filePath = `fileUploads/${file.name}`;
+      await this.uploadFile(this.filePath, file)
+        .then(() => {
+          this.fileInput.nativeElement.value = ''; // so the next event change can get detected
+        })
     } else {
       this.fileSizeToGreat = true;
     }
@@ -66,13 +72,26 @@ export class CreateMessageAreaComponent {
         this.fbStorageService.getDownLoadUrl(path)
           .then(url => {
             this.uploadedFile = url;
+<<<<<<< HEAD
+=======
+            console.log(this.uploadedFile);
+>>>>>>> bebcfcc5d2708e12eb8bbba91ffd95e94bc6b63f
           })
       })
   }
 
   async deleteFile() {
+<<<<<<< HEAD
     await this.fbStorageService.deleteFile(this.uploadedFile)
       .then(() => this.uploadedFile = '');
+=======
+    await this.fbStorageService.deleteFile(this.filePath)
+      .then(() => {
+        this.uploadedFile = '';
+        this.filePath = '';
+        console.log(this.uploadedFile);
+      });
+>>>>>>> bebcfcc5d2708e12eb8bbba91ffd95e94bc6b63f
 
   }
 
@@ -116,12 +135,17 @@ export class CreateMessageAreaComponent {
       let date = new Date().getTime();
       this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
         .then(() => {
-          this.textMessage = '';
-          this.uploadedFile = '';
-          this.boardService.showEmojiPicker = false;
+          this.resetTextArea();
           this.boardService.scrollToBottom(this.boardService.chatFieldRef);
         })
     }
+  }
+
+  resetTextArea() {
+    this.textMessage = '';
+    this.uploadedFile = '';
+    this.filePath = '';
+    this.boardService.showEmojiPicker = false;
   }
 
   @HostListener('keydown', ['$event'])

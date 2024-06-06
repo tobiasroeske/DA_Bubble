@@ -31,6 +31,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
   showEmojiBar = false;
   reactionDialogIndicatorbarOpen = false;
   editorOpen = false;
+  showFile = false;
 
   boardServ = inject(BoardService)
 
@@ -39,6 +40,10 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
   ngOnInit(): void {
     this.currentUserName = this.boardServ.currentUser.name;
     this.boardServ.scrollToBottom(this.boardServ.threadRef);
+  }
+
+  toggleFilePreview() {
+    this.showFile = !this.showFile;
   }
 
   ngAfterViewInit(): void {
@@ -79,8 +84,6 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
     }
   }
 
-  
-
   toggleReactionPopup(event: Event) {
     if (event.type == 'mouseover') {
       this.showReactionPopup = true;
@@ -99,7 +102,4 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
       this.showEmojiBar = !this.showEmojiBar
     }
   }
-
-
- 
 }

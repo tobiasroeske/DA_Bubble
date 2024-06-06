@@ -23,6 +23,9 @@ export class ThreadComponent implements AfterViewInit{
   showReactionPopup = false;
   showEmojiBar = false
   reactionDialogIndicatorbarOpen = false;
+  showFile = false;
+
+  
 
   toggleReactionPopup(event: Event) {
     if (event.type == 'mouseover') {
@@ -32,6 +35,10 @@ export class ThreadComponent implements AfterViewInit{
       this.showReactionPopup = false;
       this.showEmojiBar = false;
     }
+  }
+
+  toggleFilePreview() {
+    this.showFile = !this.showFile;
   }
 
   ngAfterViewInit(): void {

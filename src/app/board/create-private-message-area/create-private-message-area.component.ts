@@ -67,46 +67,26 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
-      if (this.message.message.trim() !== '') {
+      if (this.message.message.trim() !== '' || this.uploadedFile.length > 0) {
         await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
           .then(() => {
-            this.uploadedFile = '';
-            this.checkIfPrivatChatIsEmpty();
-            this.textMessage = "";
-            this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
+            this.resetTextArea();
           });
         setTimeout(() => {
-          let idx = this.firestore.directMessages.findIndex((privChat: PrivateChat) => privChat.guest.id == this.boardServ.currentChatPartner.id)
+          let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
           this.boardServ.startPrivateChat(idx, 'creator', event);
-          console.log(idx);
-        }, 1)
+        })
       }
     }
   }
 
-  // override async sendMessage(event?: Event) {
-  //   if (this.boardServ.privateChatId) {
-  //     let date = new Date().getTime();
-  //     this.message = this.setMessageObject(date);
-  //     if (this.message.message.trim() !== '') {
-  //       let idx = 0;
-  //       let directMessages: PrivateChat[] = [];
-  //       await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
-  //         .then(() => {
-  //           this.uploadedFile = '';
-  //           this.checkIfPrivatChatIsEmpty();
-  //           this.textMessage = "";
-  //           this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
-  //           this.firestore.directMessages$.subscribe(dm => {
-  //             directMessages = dm
-  //             idx = directMessages.findIndex((privChat: PrivateChat) => privChat.guest.id == this.boardServ.currentChatPartner.id)
-  //             this.boardServ.startPrivateChat(idx, 'creator', event);
-  //             console.log(idx);
-  //           });
-  //         });
-  //     }
-  //   }
-  // }
+  override resetTextArea() {
+    this.uploadedFile = '';
+    this.textMessage = '';
+    this.filePath = '';
+    this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
+    this.checkIfPrivatChatIsEmpty();
+  }
 
   checkIfPrivatChatIsEmpty() {
     if (this.privateChat.length > 0) {

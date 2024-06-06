@@ -26,7 +26,7 @@
                         </clipPath>
                     </defs>
                 </svg>
-                <input type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)"
+                <input #fileInput type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)"
                     (click)="boardService.stopPropagation($event)">
             </label>
             
