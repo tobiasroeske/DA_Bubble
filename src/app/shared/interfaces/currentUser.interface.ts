@@ -6,4 +6,5 @@ export interface CurrentUser {
     avatarPath: string;
     selected?:boolean;
     loginState: 'loggedIn' | 'loggedOut' | 'idle';
+    type: 'CurrentUser';
 }

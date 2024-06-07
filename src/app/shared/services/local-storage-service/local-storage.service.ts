@@ -37,7 +37,7 @@ export class LocalStorageService {
     if (currentIndex != null) {
       let currentIndexAsJson = JSON.parse(localStorage.getItem('currentChannelIndex')!);
       return currentIndexAsJson;
-    } 
+    }
   }
 
   loadIntroPlayed() {
@@ -46,7 +46,7 @@ export class LocalStorageService {
       let introPlayedAsJson = JSON.parse(localStorage.getItem('introPlayed')!);
       this.introPlayed = introPlayedAsJson;
       console.log(this.introPlayed);
-      
+
     }
   }
 
@@ -58,7 +58,8 @@ export class LocalStorageService {
       email: obj.email || '',
       avatarPath: obj.photoURL || '',
       seleted: obj.selected || false,
-      loginState: obj.loginState || 'loggedOut'
+      loginState: obj.loginState || 'loggedOut',
+      type: obj.type || 'CurrentUser'
     }
   }
 

@@ -4,15 +4,17 @@ import { BoardService } from '../board.service';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { ShowProfileDialogComponent } from "../../show-profile-dialog/show-profile-dialog.component";
 import { EditProfileDialogComponent } from "../../edit-profile-dialog/edit-profile-dialog.component";
+import { SearchDialogComponent } from './search-dialog/search-dialog.component';
+import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 
 @Component({
-    selector: 'app-board-toolbar',
-    standalone: true,
-    templateUrl: './board-toolbar.component.html',
-    styleUrl: './board-toolbar.component.scss',
-    imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent]
+  selector: 'app-board-toolbar',
+  standalone: true,
+  templateUrl: './board-toolbar.component.html',
+  styleUrl: './board-toolbar.component.scss',
+  imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule]
 })
 export class BoardToolbarComponent {
   authService = inject(SignupService);
@@ -20,6 +22,13 @@ export class BoardToolbarComponent {
   firestoreService = inject(FirestoreService)
   userList: CurrentUser[] = [];
   // userListSubscription!: Subscription;
+  searchText:string = '';
 
-  
+  constructor() {
+  }
+
+  showValue(text: string) {
+    this.searchText = text;
+  }
+
 }

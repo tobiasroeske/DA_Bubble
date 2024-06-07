@@ -75,7 +75,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
         setTimeout(() => {
           let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
           this.boardServ.startPrivateChat(idx, 'creator', event);
-        })
+        }, 1)
       }
     }
   }
@@ -109,7 +109,8 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
       message: this.textMessage.replace('/\n/g', '<br>'),
       answers: [],
       reactions: [],
-      fileUpload: this.uploadedFile
+      fileUpload: this.uploadedFile,
+      type: 'ChatMessage'
     }
   }
 }

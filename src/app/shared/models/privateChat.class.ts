@@ -9,6 +9,7 @@ export class PrivateChat {
     creator: CurrentUser;
     guest: CurrentUser;
     chat: ChatMessage[];
+    type: string;
 
     constructor(obj?: any) {
         this.id = obj ? obj.id : "";
@@ -18,6 +19,7 @@ export class PrivateChat {
         this.creator = obj ? obj.creator : "";
         this.guest = obj ? obj.guest : "";
         this.chat = obj ? obj.chat : [];
+        this.type = obj ? obj.type : 'PrivateChat';
     }
 
     public toJSON(): {} {
@@ -28,7 +30,8 @@ export class PrivateChat {
             lastUpdateAt: this.lastUpdateAt,
             creator: this.creator,
             guest: this.guest,
-            chat: this.chat
+            chat: this.chat,
+            type: this.type
         }
     }
 }

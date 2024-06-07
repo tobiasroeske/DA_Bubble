@@ -8,4 +8,5 @@ export interface ChatMessage {
     answers: ChatMessage[];
     reactions: Reaction[];
     fileUpload: string;
+    type: 'ChatMessage'
 }

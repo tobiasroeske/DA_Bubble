@@ -23,8 +23,8 @@ export class FirestoreService {
   auth = inject(Auth);
   allChannels: any[] = [];
   directMessages: PrivateChat[] = [];
-//  directMessagesSubject = new BehaviorSubject<PrivateChat[]>([]);
-//   directMessages$ = this.directMessagesSubject.asObservable();
+  //  directMessagesSubject = new BehaviorSubject<PrivateChat[]>([]);
+  //   directMessages$ = this.directMessagesSubject.asObservable();
   newChannelId?: string;
   chatRoomId?: string;
   currentUserId?: string;
@@ -112,7 +112,8 @@ export class FirestoreService {
       avatarPath: obj.avatarPath || '',
       selected: obj.selected || false,
       directMessages: obj.directMessages || [],
-      loginState: obj.loginState || 'loggedOut'
+      loginState: obj.loginState || 'loggedOut',
+      type: obj.type || 'CurrentUser'
     }
   }
 
@@ -142,7 +143,6 @@ export class FirestoreService {
       console.log(this.allChannels);
     })
   }
-
 
   subDirectMessages() {
     const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));

@@ -6,6 +6,7 @@ import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { PrivateChat } from '../shared/models/privateChat.class';
+import { Channel } from '../shared/models/channel.class';
 
 
 @Injectable({
@@ -41,6 +42,7 @@ export class BoardService {
   showEmojiPickerInThreads = false;
   blueColorsForTheChatPartersFocus: boolean[] = [];
   blueText!: boolean;
+  allData: (Channel | PrivateChat | CurrentUser | ChatMessage)[] = [];
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser()!;
@@ -200,4 +202,18 @@ export class BoardService {
       this.firstPrivateMessageWasSent = true;
     }
   }
+
+  loadAllData() {
+    this.allData = [];
+    this.firestore.allChannels.forEach((channel: Channel) => {
+      this.allData.push(channel)
+    })
+    this.firestore.userList.forEach((user: CurrentUser) => {
+      this.allData.push(user)
+    })
+    this.firestore.directMessages.forEach((dm: PrivateChat) => {
+      this.allData.push(dm)
+    })
+  }
 }
+

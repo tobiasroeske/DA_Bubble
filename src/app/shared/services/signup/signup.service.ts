@@ -172,7 +172,8 @@ export class SignupService {
       name: this.user.name,
       email: this.user.email,
       avatarPath: this.user.avatarPath,
-      loginState: "loggedOut"
+      loginState: "loggedOut",
+      type: 'CurrentUser'
     };
   }
 
@@ -209,7 +210,7 @@ export class SignupService {
   }
 
   async logout() {
-    
+
     let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
     userWithLoginState.loginState = 'loggedOut';
     this.storageService.saveIntroPlayed(false)

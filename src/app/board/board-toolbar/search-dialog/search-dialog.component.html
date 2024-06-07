@@ -1,0 +1,9 @@
+<div class="search-dialog">
+    @for(result of mainSearchList; track result;){
+    <span>{{result.title}}</span>
+    <div>
+        <img style="width: 24px; height: 24px; border-radius:100%" src="{{result.avatarPath}}" alt="">
+        <span style="font-size: 24px;">{{result.name}}</span>
+    </div>
+    }
+</div>
