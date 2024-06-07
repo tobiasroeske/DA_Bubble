@@ -24,7 +24,22 @@
                     fill="black" />
             </g>
         </svg>
-        <svg class="answer-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
+        @if (boardServ.currentUser.id == privateMessage.user.id) {
+            <svg class="answer-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
+            xmlns="http://www.w3.org/2000/svg" (click)="toggleMessageEditor()">
+            <mask id="mask0_1823_21712" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
+                height="24">
+                <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_1823_21712)">
+                <path
+                    d="M20 28C19.45 28 18.9792 27.8042 18.5875 27.4125C18.1958 27.0208 18 26.55 18 26C18 25.45 18.1958 24.9792 18.5875 24.5875C18.9792 24.1958 19.45 24 20 24C20.55 24 21.0208 24.1958 21.4125 24.5875C21.8042 24.9792 22 25.45 22 26C22 26.55 21.8042 27.0208 21.4125 27.4125C21.0208 27.8042 20.55 28 20 28ZM20 22C19.45 22 18.9792 21.8042 18.5875 21.4125C18.1958 21.0208 18 20.55 18 20C18 19.45 18.1958 18.9792 18.5875 18.5875C18.9792 18.1958 19.45 18 20 18C20.55 18 21.0208 18.1958 21.4125 18.5875C21.8042 18.9792 22 19.45 22 20C22 20.55 21.8042 21.0208 21.4125 21.4125C21.0208 21.8042 20.55 22 20 22ZM20 16C19.45 16 18.9792 15.8042 18.5875 15.4125C18.1958 15.0208 18 14.55 18 14C18 13.45 18.1958 12.9792 18.5875 12.5875C18.9792 12.1958 19.45 12 20 12C20.55 12 21.0208 12.1958 21.4125 12.5875C21.8042 12.9792 22 13.45 22 14C22 14.55 21.8042 15.0208 21.4125 15.4125C21.0208 15.8042 20.55 16 20 16Z"
+                    fill="#1C1B1F" />
+            </g>
+        </svg>
+        }
+        
+        <!-- <svg class="answer-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_1817_19450" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                 height="24">
@@ -35,7 +50,7 @@
                     d="M15 22H25C25.2833 22 25.5207 21.904 25.712 21.712C25.904 21.5207 26 21.2833 26 21C26 20.7167 25.904 20.479 25.712 20.287C25.5207 20.0957 25.2833 20 25 20H15C14.7167 20 14.479 20.0957 14.287 20.287C14.0957 20.479 14 20.7167 14 21C14 21.2833 14.0957 21.5207 14.287 21.712C14.479 21.904 14.7167 22 15 22ZM15 19H25C25.2833 19 25.5207 18.904 25.712 18.712C25.904 18.5207 26 18.2833 26 18C26 17.7167 25.904 17.479 25.712 17.287C25.5207 17.0957 25.2833 17 25 17H15C14.7167 17 14.479 17.0957 14.287 17.287C14.0957 17.479 14 17.7167 14 18C14 18.2833 14.0957 18.5207 14.287 18.712C14.479 18.904 14.7167 19 15 19ZM15 16H25C25.2833 16 25.5207 15.9043 25.712 15.713C25.904 15.521 26 15.2833 26 15C26 14.7167 25.904 14.479 25.712 14.287C25.5207 14.0957 25.2833 14 25 14H15C14.7167 14 14.479 14.0957 14.287 14.287C14.0957 14.479 14 14.7167 14 15C14 15.2833 14.0957 15.521 14.287 15.713C14.479 15.9043 14.7167 16 15 16ZM28.3 28.3L26 26H12C11.45 26 10.9793 25.8043 10.588 25.413C10.196 25.021 10 24.55 10 24V12C10 11.45 10.196 10.979 10.588 10.587C10.9793 10.1957 11.45 10 12 10H28C28.55 10 29.021 10.1957 29.413 10.587C29.8043 10.979 30 11.45 30 12V27.575C30 28.025 29.796 28.3373 29.388 28.512C28.9793 28.6873 28.6167 28.6167 28.3 28.3ZM12 12V24H26.825L28 25.175V12H12Z"
                     fill="black" />
             </g>
-        </svg>
+        </svg> -->
         @if (reactionDialogOpen) {
         <div class="reaction-dialog" [class.reaction-dialog-reverse]="privateMessage.user.id == boardServ.currentUser.id">
             @for (emoji of reactionEmojis; track emoji; let i = $index) {
@@ -57,8 +72,11 @@
                 <div class="uploaded-file-container">
                     <img src="{{ privateMessage.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
                 </div>
-            } @else if (privateMessage.message.length > 0) {
+            }
+            @if (!editorOpen && privateMessage.message.length > 0) {
                 <p class="message" [innerText]="message"></p>
+            } @else if (editorOpen) {
+                <app-private-message-editor (editorOpen)="toggleMessageEditor()" [privateChat]="firestore.directMessages[boardServ.chatPartnerIdx]" [chatMessageIndex]="privateChatIndex" [chat]="privateMessage" style="width:100%"></app-private-message-editor>
             }
             
             <div class="reaction-indicator-bar">

@@ -7,7 +7,7 @@
     right: 0;
     bottom: 0;
     @include d-flex();
-    z-index: 9;
+    z-index: 99;
     background: rgba(0, 0, 0, 0.2);
 }
 

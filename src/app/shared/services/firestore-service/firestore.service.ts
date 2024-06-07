@@ -187,7 +187,7 @@ export class FirestoreService {
       .then((docRef) => {
         if (docRef?.id) {
           this.chatRoomId = docRef?.id;
-          updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId })
+          updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId }).catch(err => console.error(err))
         }
       }).catch((err) => {
         console.error(err);
@@ -228,6 +228,11 @@ export class FirestoreService {
       updateDoc(chatRef, { lastUpdateAt: new Date().getTime() })
       console.log(this.directMessages);
     });
+  }
+
+  async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat) {
+    let pmRef = this.getDirectMessSingleDoc(docId);
+    await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.log(err))
   }
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {

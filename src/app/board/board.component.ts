@@ -60,6 +60,7 @@ export class BoardComponent implements OnInit {
     this.localStorageService.saveIntroPlayed(false);
     let currentUser = this.boardServ.currentUser;
     currentUser.loginState = 'loggedOut';
+    //this.localStorageService.saveCurrentUser('');
     await this.firestore.updateUser(currentUser.id, currentUser);
   }
 

@@ -1,6 +1,9 @@
 <!-- Main Chat Header -->
 <div class="chat-field-header">
-    @if(!boardServ.privateChatIsStarted){
+    @if (boardServ.newMessageInputOpen) {
+        <app-new-message class="new-message-container" [users]="firestore.userList" [channels]="firestore.allChannels"></app-new-message>
+    }
+    @else if(!boardServ.privateChatIsStarted){
     <a (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="chat-field-channel">
         <svg class="hashtagIconChat" width="17" height="17" viewBox="0 0 17 17" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +45,7 @@
             }
         </div>
     </div>
-    } @else {
+    }  @else {
     <div class="user-private-message-header" (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
         <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}"
             alt="">
@@ -51,12 +54,13 @@
     }
 </div>
 
+
 <div class="chat" id="chatMessageArea" #chatMessageArea>
     @if(!boardServ.privateChatIsStarted){
     @for (chat of firestore.allChannels[boardServ.idx]?.chat; track chat.user.id; let i = $index; let lastIndex = $last)
     {
     <app-chat-message [lastIndex]="lastIndex" [chatMessageIndex]="i" [chat]="chat"
-        [channelId]="firestore.allChannels[boardServ.idx]?.id"></app-chat-message>
+        [channelId]="firestore.allChannels[boardServ.idx]?.id" [currentChannel]="firestore.allChannels[boardServ.idx]"></app-chat-message>
     }
     } @else {
     @for(privateMessage of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateMessage ; let index =

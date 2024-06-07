@@ -164,6 +164,7 @@
 }
 
 .message-container {
+    width: 80%;
     min-width: 352px;
     @include d-flex(column, flex-start, flex-start, 8px);
     font-family: "Nunito";

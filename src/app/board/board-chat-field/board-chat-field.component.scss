@@ -33,6 +33,10 @@
     }
 }
 
+.new-message-container {
+    width: 100%;
+}
+
 .members-info-and-add-container {
     @include d-flex($jc: space-between, $g: 10px);
 }

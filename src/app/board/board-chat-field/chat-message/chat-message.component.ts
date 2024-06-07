@@ -7,6 +7,7 @@ import { Reaction } from '../../../shared/interfaces/reaction.interface';
 import { FormsModule } from '@angular/forms';
 import { MessageEditorComponent } from '../message-editor/message-editor.component';
 import { FirebaseStorageService } from '../../../shared/services/firebase-storage-service/firebase-storage.service';
+import { Channel } from '../../../shared/models/channel.class';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class ChatMessageComponent implements OnInit {
   @Input() lastIndex!: boolean;
   @Input() channelId!: string;
   @Input() chatMessageIndex!: number;
+  @Input() currentChannel!: Channel;
   editedMessage?: string;
   showFile = false;
 
@@ -33,7 +35,7 @@ export class ChatMessageComponent implements OnInit {
   firestore = inject(FirestoreService);
   fbStorageService = inject(FirebaseStorageService);
   membersList: any[] = [];
-  currentChannel!: any;
+  //currentChannel!: any;
   currentUserName!: any
   lastReactions: string[] = ['thumbs_up', 'laughing'];
   currentChatMessage!: ChatMessage
@@ -45,8 +47,9 @@ export class ChatMessageComponent implements OnInit {
   ngOnInit(): void {
     this.currentChannel = (this.firestore.allChannels[this.boardServ.idx]);
     this.currentUserName = this.boardServ.currentUser.name;
-    this.currentChatMessage = this.currentChannel.chat[this.chatMessageIndex];
-    this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
+    //this.currentChatMessage = this.currentChannel.chat![this.chatMessageIndex];
+    this.currentChatMessage = this.chat;
+    //this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
     this.editedMessage = this.chat.message;
   }
 
@@ -82,29 +85,30 @@ export class ChatMessageComponent implements OnInit {
     this.chat.message = this.editedMessage!;
     console.log(this.chat);
     
-    this.currentChannel.chat.splice(index, 1, this.chat);
+    this.currentChannel.chat!.splice(index, 1, this.chat);
     console.log(this.currentChannel);
-    this.firestore.updateChannel(this.currentChannel, this.currentChannel.id)
+    this.firestore.updateChannel(this.currentChannel, this.channelId)
 
     //this.firestore.updateAllChats(this.channelId, this.currentChannel.chat)
     .then(() => this.editorOpen = false);
   }
 
   setCurrentMessage() {
-    this.boardServ.currentChatMessage = this.currentChatMessage; 
-    this.boardServ.chatMessageIndex = this.chatMessageIndex
+    this.boardServ.currentChatMessage = this.chat; 
+    this.boardServ.chatMessageIndex = this.chatMessageIndex;
+    this.boardServ.currentChannelTitle = this.currentChannel.title;
   }
 
   updateCompleteChannel(emojiIdx: number, emojiArray: string[]) {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
-    this.currentChannel.chat.splice(this.chatMessageIndex, 1, newChatMessage);
+    this.currentChannel.chat!.splice(this.chatMessageIndex, 1, newChatMessage);
     console.log('current chanel after update', this.currentChannel.chat);
-    this.firestore.updateAllChats(this.channelId, this.currentChannel.chat);
+    this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!);
     this.getLastTwoReactions(emojiIdx);
   }
 
   checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    let chatMessage: ChatMessage = this.currentChannel.chat[this.chatMessageIndex];
+    let chatMessage: ChatMessage = this.currentChannel.chat![this.chatMessageIndex];
     let emojiPath = emojiArray[emojiIdx];
     let existingReaction = chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
     if (existingReaction) {
