@@ -75,7 +75,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
         setTimeout(() => {
           let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
           this.boardServ.startPrivateChat(idx, 'creator', event);
-        })
+        }, 1)
       }
     }
   }

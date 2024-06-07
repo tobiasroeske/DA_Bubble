@@ -1,0 +1,30 @@
+<div>
+    <div class="input-container">
+        <label for="newMessage">Neue Nachricht</label>
+        <input type="text" name="newMessage" id="newMessage" [(ngModel)]="searchInput" #newMessage="ngModel"
+            placeholder="An: #Channel, oder @jemand oder E-Mail Adresse">
+
+        @if (tagMember) {
+        <div class="results">
+            @for (user of filteredUsers; track user.id; let i = $index) {
+            <div class="user" (click)="openMessage(i, $event)">
+                <img src="{{ user.avatarPath }}" alt="">
+                <span>{{ user.name }}</span>
+            </div>
+            }
+        </div>
+
+        }
+        @if (tagChannel) {
+        <div class="results">
+            @for (channel of filteredChannels; track channel.id; let i = $index) {
+            <div class="channel" (click)="openChannel(i, $event)">
+                <span># {{ channel.title }}</span>
+            </div>
+            }
+        </div>
+
+        }
+
+    </div>
+</div>

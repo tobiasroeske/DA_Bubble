@@ -3,11 +3,12 @@ import { Component, Input } from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
+import { PrivateMessageEditorComponent } from './private-message-editor/private-message-editor.component';
 
 @Component({
   selector: 'app-private-chat-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PrivateMessageEditorComponent],
   templateUrl: './private-chat-message.component.html',
   styleUrl: './private-chat-message.component.scss'
 })

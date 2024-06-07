@@ -14,12 +14,13 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { Subscription } from 'rxjs';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 import { PrivateChat } from '../../shared/models/privateChat.class';
+import { NewMessageComponent } from './new-message/new-message.component';
 
 
 @Component({
   selector: 'app-board-chat-field',
   standalone: true,
-  imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent, ChatMessageComponent, ShowMemberPopUpComponent, CreatePrivateMessageAreaComponent, PrivateChatMessageComponent],
+  imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent, ChatMessageComponent, ShowMemberPopUpComponent, CreatePrivateMessageAreaComponent, PrivateChatMessageComponent, NewMessageComponent],
   templateUrl: './board-chat-field.component.html',
   styleUrl: './board-chat-field.component.scss'
 })
@@ -34,7 +35,7 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
-  directMessages:PrivateChat[] = [];
+  directMessages: PrivateChat[] = [];
   //channelId: string;
 
   @ViewChild('chatMessageArea') chatField!: ElementRef;

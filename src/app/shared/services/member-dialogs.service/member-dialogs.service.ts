@@ -53,7 +53,7 @@ export class MemberDialogsService {
     if (!this.boardServ.privateChatIsStarted) {
       this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
       console.log(this.currentChannel);
-      this.currentMember = this.currentChannel.allUsers[index];
+      this.currentMember = this.currentChannel.members[index];
       this.name = this.currentChannel.members[index].name;
       this.avatarPath = this.currentChannel.members[index].avatarPath;
       this.email = this.currentChannel.members[index].email;
@@ -65,17 +65,31 @@ export class MemberDialogsService {
     this.showMemberPopUpisOpen = true;
   }
 
+  chechMemberLoginState(member:CurrentUser) {
+    let allUsers = this.firestore.userList;
+    let user = allUsers.find(user => user.id == member.id);
+    if (user != undefined) {
+      return user.loginState
+    } else {
+      console.error('User not found'); //Später löschen
+      return null
+    }
+  }
+
   async setChatRoom(event: Event) {
     let idxToStartPrivatChat:number;
     event.preventDefault();
     this.setThePrivateChatObject();
     let idxToCheckIfGuestExist = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
     if (idxToCheckIfGuestExist == -1) {
-      await this.firestore.addChatRoom(this.privateChat.toJSON());
-      this.toggleMembersDialog(event);
-      this.closeShowMemberPopUp(event);
-      idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
-      this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
+      await this.firestore.addChatRoom(this.privateChat.toJSON())
+      .then(() => {
+        this.boardServ.privateChatId = this.firestore.chatRoomId;
+        this.toggleMembersDialog(event);
+        this.closeShowMemberPopUp(event);
+        idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
+        this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
+      })
     } else {
       console.log('chat partner existiert bereits');
       idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId)

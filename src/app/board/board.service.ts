@@ -41,6 +41,10 @@ export class BoardService {
   showEmojiPickerInThreads = false;
   blueColorsForTheChatPartersFocus: boolean[] = [];
   blueText!: boolean;
+  currentChannelTitle: string = '';
+  newMessageInputOpen = false;
+
+
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser()!;
@@ -50,9 +54,9 @@ export class BoardService {
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
 
-  getUserLoginState(privateChat: PrivateChat) {
+  getUserLoginState(privateChat: PrivateChat, participant: CurrentUser) {
     let allUsers: CurrentUser[] = this.firestore.userList;
-    let user: CurrentUser = allUsers.find(user => user.id == privateChat.guest.id || user.id == privateChat.creator.id)!;
+    let user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
     //console.log(user.loginState);
 
     return user.loginState
@@ -152,13 +156,14 @@ export class BoardService {
     this.idx = i;
     this.storageService.saveCurrentChannelIndex(this.idx);
     this.privateChatIsStarted = false;
+    this.newMessageInputOpen = false;
     event.preventDefault();
   }
 
   startPrivateChat(index: number, partecipant: string, event?: Event) {
     if (partecipant == "creator") {
       this.chatPartnerIdx = index;
-      this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+      //this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
       this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
       this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
       this.checkIfPrivatChatIsEmpty();
@@ -181,6 +186,7 @@ export class BoardService {
     this.firestore.directMessages.forEach(privateChat => {
       this.blueColorsForTheChatPartersFocus.push(false);
     })
+    this.newMessageInputOpen = false;
     console.log(this.blueColorsForTheChatPartersFocus);
     this.setBlueColorToChatPartner(index)
   }

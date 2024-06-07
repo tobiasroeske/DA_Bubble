@@ -72,26 +72,18 @@ export class CreateMessageAreaComponent {
         this.fbStorageService.getDownLoadUrl(path)
           .then(url => {
             this.uploadedFile = url;
-<<<<<<< HEAD
-=======
             console.log(this.uploadedFile);
->>>>>>> bebcfcc5d2708e12eb8bbba91ffd95e94bc6b63f
           })
       })
   }
 
   async deleteFile() {
-<<<<<<< HEAD
-    await this.fbStorageService.deleteFile(this.uploadedFile)
-      .then(() => this.uploadedFile = '');
-=======
     await this.fbStorageService.deleteFile(this.filePath)
       .then(() => {
         this.uploadedFile = '';
         this.filePath = '';
         console.log(this.uploadedFile);
       });
->>>>>>> bebcfcc5d2708e12eb8bbba91ffd95e94bc6b63f
 
   }
 

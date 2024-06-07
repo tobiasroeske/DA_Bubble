@@ -47,4 +47,9 @@ export class SidenavComponent {
     }
   }
 
+  toggleNewMessageInput(event: Event) {
+    this.boardServ.stopPropagation(event)
+    this.boardServ.newMessageInputOpen = !this.boardServ.newMessageInputOpen;
+  }
+
 }
