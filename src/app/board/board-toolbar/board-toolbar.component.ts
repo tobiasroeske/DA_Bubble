@@ -22,7 +22,7 @@ export class BoardToolbarComponent {
   firestoreService = inject(FirestoreService)
   userList: CurrentUser[] = [];
   // userListSubscription!: Subscription;
-  searchText:string = '';
+  searchText: string = '';
 
   constructor() {
   }

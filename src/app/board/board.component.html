@@ -9,7 +9,9 @@
         <app-sidenav class="sidenav" [ngStyle]="{'width': boardServ.sidenavTranslate ? '366px' : '0' }"></app-sidenav>
         <app-board-chat-field class="chatField"></app-board-chat-field>
 
-        <app-thread [currentChannel]="firestore.allChannels[boardServ.idx]" [chatMessageIndex]="boardServ.chatMessageIndex" [currentChatMessage]="boardServ.currentChatMessage" [ngStyle]="{'width.px': boardServ.threadTranslate ? '485' : '0'}"
+        <app-thread [currentChannel]="firestore.allChannels[boardServ.idx]"
+            [chatMessageIndex]="boardServ.chatMessageIndex" [currentChatMessage]="boardServ.currentChatMessage"
+            [ngStyle]="{'width.px': boardServ.threadTranslate ? '485' : '0'}"
             style="transition: all 0.15s cubic-bezier(.215, .61, .355, 1);"></app-thread>
 
 
@@ -29,4 +31,5 @@
     } @else if(boardServ.editDialogIsOpen){
     <app-edit-channel-dialog></app-edit-channel-dialog>
     }
+    <app-searched-user-pop-up></app-searched-user-pop-up>
 </div>

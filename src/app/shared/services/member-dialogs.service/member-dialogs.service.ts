@@ -27,6 +27,8 @@ export class MemberDialogsService {
   currentMember!: CurrentUser;
   guestId?: string;
   creatorId?: string;
+  searchedUserPopUpId?: string;
+
 
   constructor() { }
 
@@ -65,7 +67,7 @@ export class MemberDialogsService {
     this.showMemberPopUpisOpen = true;
   }
 
-  chechMemberLoginState(member:CurrentUser) {
+  chechMemberLoginState(member: CurrentUser) {
     let allUsers = this.firestore.userList;
     let user = allUsers.find(user => user.id == member.id);
     if (user != undefined) {
@@ -77,19 +79,19 @@ export class MemberDialogsService {
   }
 
   async setChatRoom(event: Event) {
-    let idxToStartPrivatChat:number;
+    let idxToStartPrivatChat: number;
     event.preventDefault();
     this.setThePrivateChatObject();
     let idxToCheckIfGuestExist = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
     if (idxToCheckIfGuestExist == -1) {
       await this.firestore.addChatRoom(this.privateChat.toJSON())
-      .then(() => {
-        this.boardServ.privateChatId = this.firestore.chatRoomId;
-        this.toggleMembersDialog(event);
-        this.closeShowMemberPopUp(event);
-        idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
-        this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
-      })
+        .then(() => {
+          this.boardServ.privateChatId = this.firestore.chatRoomId;
+          this.toggleMembersDialog(event);
+          this.closeShowMemberPopUp(event);
+          idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
+          this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
+        })
     } else {
       console.log('chat partner existiert bereits');
       idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId)

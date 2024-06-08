@@ -74,7 +74,7 @@ export class NewMessageComponent implements AfterViewInit{
   openMessage(index: number, event: Event) {
     let user = this.filteredUsers[index];
     this.memberServ.currentMember = user;
-    this.memberServ.setChatRoom(event)
+    this.memberServ.setChatRoom(event);
   }
 
   openChannel(index: number, event: Event) {

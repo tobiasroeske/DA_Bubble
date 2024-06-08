@@ -1,12 +1,113 @@
 @import '../../../../styles.scss';
 
+.wrapper {
+    min-width: 400px;
+    height: auto;
+    max-height: 500px;
+}
+
 .search-dialog {
     background: #fff;
-    width: 300px;
-    height: 300px;
+    min-width: 400px;
+    height: auto;
+    max-height: 500px;
+    overflow-y: auto;
     position: absolute;
+    padding-left: 24px;
     top: 70px;
     left: 0px;
-    border: 1px solid red;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
     z-index: 20;
+    border-radius: 30px;
+    @include d-flex(column, flex-start, flex-start, 15px);
+    font-family: 'Nunito';
+}
+
+.filtered-channel {
+    @include d-flex($g: 8px);
+    font-size: 16px;
+    padding: 4px 12px;
+    border-radius: 100px;
+
+    &:hover {
+        color: $specialBlue;
+        background: rgba(236, 238, 254, 1);
+        cursor: pointer;
+    }
+
+    >.filtered-channel-name {
+        font-size: 24px;
+        font-weight: 700;
+    }
+}
+
+
+.filtered-user-container {
+    @include d-flex($g: 8px);
+    padding: 4px 12px;
+    border-radius: 100px;
+
+    &:hover {
+        color: $specialBlue;
+        background: rgba(236, 238, 254, 1);
+        cursor: pointer;
+    }
+
+    >span {
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    >.filtered-user {
+        @include d-flex($g: 16px);
+
+        >img {
+            height: 48px;
+            border-radius: 100%;
+            object-fit: cover;
+        }
+
+        >span {
+            font-size: 24px;
+            font-weight: 700;
+        }
+    }
+}
+
+.filtered-chat-container {
+    @include d-flex($g: 8px);
+    padding: 4px 12px;
+    border-radius: 100px;
+
+    &:hover {
+        color: $specialBlue;
+        background: rgba(236, 238, 254, 1);
+        cursor: pointer;
+    }
+
+    >span {
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    >.filtered-partner {
+        @include d-flex($g: 16px);
+
+        >img {
+            height: 48px;
+            object-fit: cover;
+            border-radius: 100%;
+        }
+
+        >span {
+            font-size: 24px;
+            font-weight: 700;
+        }
+    }
+}
+
+.spacer {
+    display: block;
+    height: 32px;
+    width: 100%;
 }

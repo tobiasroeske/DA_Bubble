@@ -1,8 +1,9 @@
-<div class="opacity" (click)="memberServ.closeShowMemberPopUp($event)">
+@if(boardServ.showUserPopUp){
+<div class="opacity" (click)="closeSearchedUserPopUp()">
     <div (click)="boardServ.stopPropagation($event)" class="show-member-pop-up">
         <div class="title-and-cross-icon">
             <span>Profil</span>
-            <svg class="cross-icon-show-member" (click)="memberServ.closeShowMemberPopUp($event)" width="40" height="40"
+            <svg (click)="closeSearchedUserPopUp()" class="cross-icon-show-member" width="40" height="40"
                 viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
@@ -16,22 +17,22 @@
             </svg>
         </div>
         <div class="profil-photo-container">
-            <img class="profil-photo" src="{{memberServ.avatarPath}}" alt="">
+            <img class="profil-photo" src="{{boardServ.userAvatarPopUp}}" alt="">
         </div>
         <div class="name-and-state-container">
-            <h3>{{memberServ.name}}</h3>
+            <h3>{{boardServ.userNamePopUp}}</h3>
             <div class="state-container">
-                @if (memberServ.chechMemberLoginState(memberServ.currentMember) == 'loggedIn') {
+                @if (memberServ.chechMemberLoginState(boardServ.userObjectPopUp) == 'loggedIn') {
                 <div class="point-container">
                     <img src="assets/icons/user_online.png" alt="" class="state-icon">
                     <span>Online</span>
                 </div>
-                } @else if (memberServ.chechMemberLoginState(memberServ.currentMember) == 'loggedOut') {
+                } @else if (memberServ.chechMemberLoginState(boardServ.userObjectPopUp) == 'loggedOut') {
                 <div class="point-container">
                     <img src="assets/icons/user_offline.png" alt="" class="state-icon">
                     <span>Offline</span>
                 </div>
-                } @else if (memberServ.chechMemberLoginState(memberServ.currentMember) == 'idle') {
+                } @else if (memberServ.chechMemberLoginState(boardServ.userObjectPopUp) == 'idle') {
                 <div class="point-container">
                     <img src="assets/icons/user_idle.png" alt="" class="state-icon">
                     <span style="color: #F19E39">Abwesend</span>
@@ -43,11 +44,12 @@
             <img src="assets/icons/mail.png" alt="">
             <div class="email">
                 <h3>E-Mail Addresse</h3>
-                <span>{{memberServ.email}}</span>
+                <span>{{boardServ.userEmailPopUp}}</span>
             </div>
         </div>
-        <div (click)="memberServ.setChatRoom( $event)" class="btn-container">
+        <div (click)="setChatWithSelectedUser($event)" class="btn-container">
             <a href=""> <img src="assets/icons/mode_comment.png" alt=""> Nachricht</a>
         </div>
     </div>
 </div>
+}

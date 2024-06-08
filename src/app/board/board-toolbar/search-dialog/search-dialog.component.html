@@ -1,9 +1,31 @@
-<div class="search-dialog">
-    @for(result of mainSearchList; track result;){
-    <span>{{result.title}}</span>
-    <div>
-        <img style="width: 24px; height: 24px; border-radius:100%" src="{{result.avatarPath}}" alt="">
-        <span style="font-size: 24px;">{{result.name}}</span>
+@if(showSearchDialog){
+<div class="wrapper">
+    <div class="search-dialog">
+        @for(result of mainSearchList; track result; let index = $index){
+        @if(result.title){
+        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-channel">
+            <span>Dein Kanal :</span>
+            <span class="filtered-channel-name">#{{result.title}}</span>
+        </div>
+        } @else if(result.name && result.avatarPath){
+        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-user-container">
+            <span>Benutzer :</span>
+            <div class="filtered-user">
+                <img src="{{result.avatarPath}}" alt="">
+                <span>{{result.name}}</span>
+            </div>
+        </div>
+        }
+        @else if(result.guest){
+        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-chat-container">
+            <span>Direktnachricht :</span>
+            <div class="filtered-partner">
+                <img src="{{result.guest.avatarPath}}" alt="">
+                <span> {{result.guest.name}}</span>
+            </div>
+        </div>
+        }
+        }
     </div>
-    }
 </div>
+}

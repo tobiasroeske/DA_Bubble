@@ -1,7 +1,8 @@
 <!-- Main Chat Header -->
 <div class="chat-field-header">
     @if (boardServ.newMessageInputOpen) {
-        <app-new-message class="new-message-container" [users]="firestore.userList" [channels]="firestore.allChannels"></app-new-message>
+    <app-new-message class="new-message-container" [users]="firestore.userList"
+        [channels]="firestore.allChannels"></app-new-message>
     }
     @else if(!boardServ.privateChatIsStarted){
     <a (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="chat-field-channel">
@@ -45,10 +46,9 @@
             }
         </div>
     </div>
-    }  @else {
+    } @else {
     <div class="user-private-message-header" (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
-        <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}"
-            alt="">
+        <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}" alt="">
         <h3>{{boardServ.currentChatPartner.name}}</h3>
     </div>
     }
@@ -60,16 +60,16 @@
     @for (chat of firestore.allChannels[boardServ.idx]?.chat; track chat.user.id; let i = $index; let lastIndex = $last)
     {
     <app-chat-message [lastIndex]="lastIndex" [chatMessageIndex]="i" [chat]="chat"
-        [channelId]="firestore.allChannels[boardServ.idx]?.id" [currentChannel]="firestore.allChannels[boardServ.idx]"></app-chat-message>
+        [channelId]="firestore.allChannels[boardServ.idx]?.id"
+        [currentChannel]="firestore.allChannels[boardServ.idx]"></app-chat-message>
     }
     } @else {
     @for(privateMessage of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateMessage ; let index =
     $index; let lastIndex = $last;){
-    <div>
-        <app-private-chat-message [lastIndex]="lastIndex" [message]="privateMessage.message"
-            [privateChatId]="firestore.directMessages[boardServ.chatPartnerIdx].id" [privateMessage]="privateMessage"
-            [privateChatIndex]="index"></app-private-chat-message>
-    </div>
+    <app-private-chat-message [lastIndex]="lastIndex" [message]="privateMessage.message"
+        [privateChatId]="firestore.directMessages[boardServ.chatPartnerIdx].id" [privateMessage]="privateMessage"
+        [privateChatIndex]="index"></app-private-chat-message>
+
     }
     }
 </div>
@@ -93,7 +93,8 @@
 
 @if(!boardServ.privateChatIsStarted){
 <app-create-message-area [index]="boardServ.idx" [channelId]="firestore.allChannels[boardServ.idx]?.id"
-    [channelTitle]="firestore.allChannels[boardServ.idx]?.title" [channels]="firestore.allChannels"></app-create-message-area>
+    [channelTitle]="firestore.allChannels[boardServ.idx]?.title"
+    [channels]="firestore.allChannels"></app-create-message-area>
 } @else {
 <app-create-private-message-area [allUsers]="firestore.userList"></app-create-private-message-area>
 }

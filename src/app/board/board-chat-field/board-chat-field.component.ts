@@ -55,16 +55,11 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
     this.boardServ.chatFieldRef = this.chatField;
   }
 
-
-
   scrollToBotom() {
     try {
       this.chatField.nativeElement.scrollTo(0, this.chatField.nativeElement.scrollHeight);
-
-
     } catch (err) {
       console.log(err);
-
     }
   }
 

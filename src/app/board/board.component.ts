@@ -16,11 +16,12 @@ import { IdleService } from '../shared/services/idle-service/idle.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { interval, throttle } from 'rxjs';
 import { ShowChatParterPopUpComponent } from './show-chat-parter-pop-up/show-chat-parter-pop-up.component';
+import { SearchedUserPopUpComponent } from './searched-user-pop-up/searched-user-pop-up.component';
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent, ShowChatParterPopUpComponent],
+  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent, ShowChatParterPopUpComponent, SearchedUserPopUpComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })

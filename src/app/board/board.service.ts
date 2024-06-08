@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, inject } from '@angular/core';
+import { AfterViewInit, ElementRef, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
@@ -42,9 +42,14 @@ export class BoardService {
   showEmojiPickerInThreads = false;
   blueColorsForTheChatPartersFocus: boolean[] = [];
   blueText!: boolean;
-  allData: (Channel | PrivateChat | CurrentUser | ChatMessage)[] = [];
   currentChannelTitle: string = '';
   newMessageInputOpen = false;
+  allData: (Channel | PrivateChat | CurrentUser | ChatMessage)[] = [];
+  showUserPopUp: boolean = false;
+  userObjectPopUp!: CurrentUser;
+  userNamePopUp!: string;
+  userEmailPopUp!: string;
+  userAvatarPopUp!: string;
 
 
 
@@ -165,7 +170,7 @@ export class BoardService {
   startPrivateChat(index: number, partecipant: string, event?: Event) {
     if (partecipant == "creator") {
       this.chatPartnerIdx = index;
-      //this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+      this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
       this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
       this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
       this.checkIfPrivatChatIsEmpty();
@@ -220,6 +225,24 @@ export class BoardService {
     this.firestore.directMessages.forEach((dm: PrivateChat) => {
       this.allData.push(dm)
     })
+    console.log(this.allData);
+  }
+
+  openShowUserPopUp(index: number) {
+    this.userObjectPopUp = this.firestore.userList[index];
+    this.userNamePopUp = this.firestore.userList[index].name;
+    this.userEmailPopUp = this.firestore.userList[index].email;
+    this.userAvatarPopUp = this.firestore.userList[index].avatarPath;
+  }
+
+  scrollToSearchedMessage(index: number) {
+    setTimeout(() => {
+      let element = document.getElementById('message' + index);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        element.style.background = '2px solid #5988FF';
+      }
+    }, 10);
   }
 }
 
