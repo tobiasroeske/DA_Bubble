@@ -15,17 +15,28 @@ import { LocalStorageService } from '../shared/services/local-storage-service/lo
 })
 export class LoginComponent implements OnInit {
   forgotPassword = false;
+  smallScreen = false;
   localStorageService = inject(LocalStorageService)
 
  ngOnInit(): void {
   this.localStorageService.loadIntroPlayed();
   setTimeout(() => this.localStorageService.saveIntroPlayed(true), 3000);
+  if (window.innerWidth <= 760) {this.smallScreen = true}
  }
 
  @HostListener('window:unload', [ '$event' ])
   async unloadHandler(event: Event) {
     event.preventDefault();
     this.localStorageService.saveIntroPlayed(false);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  handleResize(event:Event ) {
+    if (window.innerWidth <= 760) {
+      this.smallScreen = true;
+    } else {
+      this.smallScreen = false;
+    }
   }
   
   openPasswordDialog($event: boolean) {

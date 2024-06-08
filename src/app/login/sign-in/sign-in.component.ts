@@ -40,8 +40,9 @@ export class SignInComponent implements OnInit{
     }
   }
 
-  googleLogin() {
-    this.signupService.googleLogin()
+  async googleLogin() {
+    //this.signupService.googleLogin()
+    await this.signupService.googlePopupLogin();
   }
 
   forgotPassword() {

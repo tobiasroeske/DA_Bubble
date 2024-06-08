@@ -341,6 +341,7 @@
 }
 
 .user-private-message-header {
+    position: relative;
     @include d-flex($g: 15px);
     padding: 4px 8px;
     border-radius: 30px;
@@ -394,6 +395,7 @@
     >p {
         font-size: 20px;
         font-weight: 400;
+        color: #686868;
         @include d-flex($jc: space-between, $g: 8px);
 
         >span {
@@ -410,6 +412,25 @@
 
 .translateX {
     transform: translateX(-200%);
+}
+
+.no-channel-message {
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    @include d-flex()
+}
+
+.chat-current-user {
+    color: #686868;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.state-icon {
+    position: absolute;
+    left: 45px;
+    bottom: 4px;
+    z-index: 15;
 }
 
 .d-none {

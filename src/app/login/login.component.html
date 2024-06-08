@@ -1,32 +1,42 @@
-<header [ngStyle]="{'justify-content': forgotPassword ? 'flex-start' : 'space-between'}">
-    <div class="logo-box">
-        <img src="assets/img/logo.png" alt="">
-        <h1>DABubble</h1>
-        
-    </div>
-    @if (!forgotPassword) {
+<div [class.flex-center]="smallScreen">
+    <header [ngStyle]="{'justify-content': forgotPassword ? 'flex-start' : 'space-between'}">
+        <div class="logo-box">
+            <img src="assets/img/logo.png" alt="">
+            <h1>DABubble</h1>
+    
+        </div>
+        @if (!forgotPassword && !smallScreen) {
         <div class="register-box">
             <span>Neu bei DABubble?</span>
             <a href="register">Konto erstellen</a>
         </div>
-    }
-</header>
-<div class="content">
-    <div class="top">
-        <div class="login-container">
-            @if (!forgotPassword) {
+        }
+    </header>
+    <div class="content">
+        <div class="top">
+            <div class="login-container">
+                @if (!forgotPassword) {
                 <app-sign-in (passwordForgotten)="openPasswordDialog($event)"></app-sign-in>
-            } @else {
-                <app-forgot-password (goBack)="openPasswordDialog($event)" ></app-forgot-password>
-            }
+                } @else {
+                <app-forgot-password (goBack)="openPasswordDialog($event)"></app-forgot-password>
+                }
+            </div>
         </div>
+    
+        @if (smallScreen) {
+        <div class="register-box">
+            <span>Neu bei DABubble?</span>
+            <a href="register">Konto erstellen</a>
+        </div>
+        }
+        @if (!smallScreen) {
+            <footer>
+                <a href="">Impressum</a>
+                <a href="">Datenschutz</a>
+            </footer>
+        }
     </div>
-    <footer>
-        <a href="">Impressum</a>
-        <a href="">Datenschutz</a>
-    </footer>
-</div>
-@if (!localStorageService.introPlayed) {
+    @if (!localStorageService.introPlayed) {
     <div class="intro">
         <div class="max-width-container">
             <div class="intro-logo-container">
@@ -36,6 +46,7 @@
                 </div>
             </div>
         </div>
-        
+    
     </div>
-}
+    }
+</div>

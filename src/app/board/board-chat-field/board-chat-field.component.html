@@ -1,7 +1,12 @@
 <!-- Main Chat Header -->
 <div class="chat-field-header">
-    @if (boardServ.newMessageInputOpen) {
-        <app-new-message class="new-message-container" [users]="firestore.userList" [channels]="firestore.allChannels"></app-new-message>
+    @if (firestore.allChannels.length == 0) {
+    <span class="no-channel-message">Es scheint so, als hättest du noch keinen Channel erstellt. Bitte erstelle einen
+        neuen Channel</span>
+    } @else if
+    (boardServ.newMessageInputOpen) {
+    <app-new-message class="new-message-container" [users]="firestore.userList"
+        [channels]="firestore.allChannels"></app-new-message>
     }
     @else if(!boardServ.privateChatIsStarted){
     <a (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="chat-field-channel">
@@ -45,11 +50,18 @@
             }
         </div>
     </div>
-    }  @else {
+    } @else {
     <div class="user-private-message-header" (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
-        <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}"
-            alt="">
-        <h3>{{boardServ.currentChatPartner.name}}</h3>
+        <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}" alt="">
+        @if (boardServ.getUserLoginState(boardServ.currentChatPartner) == 'loggedIn') {
+            <img src="assets/icons/user_online.png" alt="" class="state-icon">
+        } @else if (boardServ.getUserLoginState(boardServ.currentChatPartner) == 'idle') {
+            <img src="assets/icons/user_idle.png" alt="" class="state-icon">
+        } @else {
+            <img src="assets/icons/user_offline.png" alt="" class="state-icon">
+        }
+        <h3>{{boardServ.currentChatPartner.name}} @if(boardServ.currentChatPartner.id == boardServ.currentUser.id)
+            {(Du)}</h3>
     </div>
     }
 </div>
@@ -60,7 +72,8 @@
     @for (chat of firestore.allChannels[boardServ.idx]?.chat; track chat.user.id; let i = $index; let lastIndex = $last)
     {
     <app-chat-message [lastIndex]="lastIndex" [chatMessageIndex]="i" [chat]="chat"
-        [channelId]="firestore.allChannels[boardServ.idx]?.id" [currentChannel]="firestore.allChannels[boardServ.idx]"></app-chat-message>
+        [channelId]="firestore.allChannels[boardServ.idx]?.id"
+        [currentChannel]="firestore.allChannels[boardServ.idx]"></app-chat-message>
     }
     } @else {
     @for(privateMessage of firestore.directMessages[boardServ.chatPartnerIdx].chat; track privateMessage ; let index =
@@ -75,25 +88,32 @@
 </div>
 
 @if(boardServ.privateChatIsStarted && this.firestore.directMessages[boardServ.chatPartnerIdx].chat.length == 0){
+
 <div [ngClass]="{translateX: boardServ.firstPrivateMessageWasSent, 'd-none': boardServ.hidePopUpChatPartner}"
     id="{{boardServ.chatPartnerIdx}}" class="chat-partner-pop-up">
     <div class="partner-container">
         <img src="{{boardServ.currentChatPartner.avatarPath}}" alt="">
         <h3 (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
-            {{boardServ.currentChatPartner.name}}</h3>
+            {{boardServ.currentChatPartner.name}} @if(boardServ.currentChatPartner.id == boardServ.currentUser.id)
+            {(Du)}</h3>
     </div>
-    <p>Diese Unterhaltung findet nur zwischen
+    @if (boardServ.currentChatPartner.id == boardServ.currentUser.id) {
+    <span class="chat-current-user"><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien
+        griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen</span>
+    } @else {<p>Diese Unterhaltung findet nur zwischen
         <span (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
             &#64;{{firestore.directMessages[boardServ.chatPartnerIdx].guest.name}}
         </span>
         un dir statt
-    </p>
+    </p>}
+    
 </div>
 }
 
 @if(!boardServ.privateChatIsStarted){
 <app-create-message-area [index]="boardServ.idx" [channelId]="firestore.allChannels[boardServ.idx]?.id"
-    [channelTitle]="firestore.allChannels[boardServ.idx]?.title" [channels]="firestore.allChannels"></app-create-message-area>
+    [channelTitle]="firestore.allChannels[boardServ.idx]?.title" [channels]="firestore.allChannels"
+    [hidden]="firestore.allChannels.length == 0"></app-create-message-area>
 } @else {
 <app-create-private-message-area [allUsers]="firestore.userList"></app-create-private-message-area>
 }

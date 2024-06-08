@@ -61,11 +61,12 @@ export class MemberDialogsService {
       this.name = this.firestore.directMessages[index].guest.name;
       this.avatarPath = this.firestore.directMessages[index].guest.avatarPath;
       this.email = this.firestore.directMessages[index].guest.email;
+      this.currentMember = this.firestore.directMessages[index].guest;
     }
     this.showMemberPopUpisOpen = true;
   }
 
-  chechMemberLoginState(member:CurrentUser) {
+  checkMemberLoginState(member:CurrentUser) {
     let allUsers = this.firestore.userList;
     let user = allUsers.find(user => user.id == member.id);
     if (user != undefined) {

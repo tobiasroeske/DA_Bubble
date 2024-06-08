@@ -24,6 +24,7 @@
     padding: 15px;
     border-radius: 50%;
     transition: all .125s ease-in-out;
+
     &:hover {
         background-color: #ECEEFE;
     }
@@ -49,21 +50,24 @@ h3 {
     border: 5px solid transparent;
     transition: border .125s ease-in-out;
     border-radius: 100%;
+
     &:hover {
         border: 5px solid #E6E6E6;
-        
+
     }
 }
 
 .pick-avatar-container {
     width: 100%;
     @include d-flex($fd: column, $ai: flex-start, $g: 16px);
+
     >span {
         font-size: 20px;
     }
 
     .avatar-list {
         @include d-flex($g: 8px);
+
         >img {
             cursor: pointer;
             width: 67px;
@@ -72,7 +76,7 @@ h3 {
             border: 3px solid transparent;
             transition: all .125s ease-in-out;
             border-radius: 100%;
-            
+
             &:hover {
                 border: 3px solid #E6E6E6;
                 transform: scale(1.05);
@@ -83,9 +87,13 @@ h3 {
     .own-avatar {
         margin-top: 24px;
         @include d-flex($g: 24px);
-        .upload-btn {
+
+        .upload-btn, .btn-no-style {
+            @include d-flex();
             color: #797EF3;
-            transition: all .125s ease-in-out; 
+            transition: all .125s ease-in-out;
+            text-align: center;
+
             &:hover {
                 background-color: #5359F1;
                 color: white;
@@ -100,7 +108,8 @@ h3 {
     color: white;
     transition: background-color 0.125s ease-in-out;
     align-self: flex-end;
-    transition: all .125s ease-in-out; 
+    transition: all .125s ease-in-out;
+
     &:hover {
         background-color: #787EF2;
         border-color: #787EF2;
@@ -111,5 +120,103 @@ input[type="file"] {
     display: none;
 }
 
+@media (max-width: 760px) {
+    .content {
+        gap: 20px;
 
+        h2 {
+            font-size: 32px;
+        }
+    }
 
+    .profile-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .pick-avatar-container {
+        >span {
+            font-size: 17px;
+        }
+        .avatar-list {
+            gap: 10px;
+
+            
+
+            >img {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .btn-no-style {
+        padding: 8px 12px;
+    }
+
+    .upload-btn {
+        padding: 8px 12px;
+    }
+
+    .back-arrow {
+        padding: 8px;
+    }
+
+    .pick-avatar-container .own-avatar {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 430px) {
+    .pick-avatar-container .avatar-list {
+        >img {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .btn-no-style, .upload-btn {
+        border-radius: 32px;
+    }
+}
+
+@media (max-width: 390px) {
+    .pick-avatar-container .avatar-list {
+        gap: 4px;
+    }
+}
+
+@media (max-width: 360px) {
+    .pick-avatar-container .avatar-list {
+        gap: 0;
+    }
+}
+
+@media (max-width: 340px) {
+    .pick-avatar-container .avatar-list {
+        >img {
+            width: 44px;
+            height: 44px;
+        }
+    }
+}
+
+@media (max-height: 750px) {
+    .content h2 {
+        font-size: 24px;
+        gap: 12px;
+    }
+    h3 {
+        font-size: 24px;
+    }
+}
+
+@media (max-height: 690px) {
+    .content {
+        gap: 12px;
+    }
+
+    
+}

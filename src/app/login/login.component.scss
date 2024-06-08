@@ -29,6 +29,8 @@ header {
 
 .top {
     flex: 1;
+    width: 90%;
+    max-width: 628px;
 }
 
 .login-container {
@@ -189,5 +191,98 @@ footer {
     to {
         opacity: 0;
         z-index: -1;
+    }
+}
+
+.flex-center {
+    @include d-flex($fd: column);
+    height: 100vh;
+}
+
+@media (max-width: 760px) {
+
+    header {
+        justify-content: center !important;
+
+        .logo-box {
+
+            >img {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    }
+
+    .content {
+        height: auto;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .top {
+        flex: unset;
+    }
+
+    .register-box {
+        @include d-flex($fd: column, $g: 20px);
+        font-size: 18px;
+
+        >a {
+            border: 1px solid #797EF3;
+            color: #444DF2;
+            font-weight: 700;
+            &:active {
+                color: white;
+                background-color: #444DF2;
+            }
+        }
+    }
+}
+
+@media (max-width: 590px) {
+    .login-container {
+        padding: 35px 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    header {
+        padding: 0;
+    }
+
+    .top {
+        width: 95%;
+    }
+}
+
+@media (max-height: 870px) {
+    .flex-center {
+        height: 100vh;
+    }
+
+    header {
+        height:auto;
+        padding: 12px;
+
+        .logo-box {
+            h1 {
+                font-size: 24px;
+            }
+
+            >img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
+    
+    .login-container {
+        padding: 20px;
+        margin-top: 0;
+    }
+
+    .register-box {
+        gap: 8px;
+        font-size: 15px;
     }
 }

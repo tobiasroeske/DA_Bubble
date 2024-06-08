@@ -1,26 +1,28 @@
-<header>
-    <div class="logo-box">
-        <img src="assets/img/logo.png" alt="">
-        <img src="../../assets/img/logoName.png" alt="">
-    </div>
-</header>
-<div class="content">
-    <div class="login-container">
-        @if (!next) {
-            <app-signup (showNextPage)="goToAvatarPicker($event)" (passUserDetail)="getUserDetail($event)"></app-signup>
-        } @else {
-            <app-avatar-picker (signUpSuccessful)="signup($event)" (goBack)="goToAvatarPicker($event)" [userData]="user"></app-avatar-picker>
-        }
-    </div>
-    @if (signupService.errorCode == 'auth/email-already-in-use') {
-        <div class="error-message slide-in">
-            E-Mail-Adresse wir bereits verwendet.
-        </div> 
-
-    } @else {
-        <div [class.slide-in]="signupService.signUpSuccessful" class="confirmation-message">
-            Konto erfolgreich erstellt!
-        </div> 
-    }
+<div [class.flex-center]="smallScreen">
+    <header>
+        <div class="logo-box">
+            <img src="assets/img/logo.png" alt="">
+            <h1>DABubble</h1>
+        </div>
+    </header>
+    <div class="content">
+        <div class="login-container">
+            @if (!next) {
+                <app-signup (showNextPage)="goToAvatarPicker($event)" (passUserDetail)="getUserDetail($event)"></app-signup>
+            } @else {
+                <app-avatar-picker (signUpSuccessful)="signup($event)" (goBack)="goToAvatarPicker($event)" [userData]="user"></app-avatar-picker>
+            }
+        </div>
+        @if (signupService.errorCode == 'auth/email-already-in-use') { 
+             <div class="error-message slide-in">
+                E-Mail-Adresse wir bereits verwendet.
+            </div> 
     
+         } @else {
+            <div [class.slide-in]="signupService.signUpSuccessful" class="confirmation-message">
+                Konto erfolgreich erstellt!
+            </div> 
+        }
+        
+    </div>
 </div>
