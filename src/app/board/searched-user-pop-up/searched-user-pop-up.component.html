@@ -22,17 +22,17 @@
         <div class="name-and-state-container">
             <h3>{{boardServ.userNamePopUp}}</h3>
             <div class="state-container">
-                @if (memberServ.chechMemberLoginState(boardServ.userObjectPopUp) == 'loggedIn') {
+                @if (memberServ.checkMemberLoginState(boardServ.userObjectPopUp) == 'loggedIn') {
                 <div class="point-container">
                     <img src="assets/icons/user_online.png" alt="" class="state-icon">
                     <span>Online</span>
                 </div>
-                } @else if (memberServ.chechMemberLoginState(boardServ.userObjectPopUp) == 'loggedOut') {
+                } @else if (memberServ.checkMemberLoginState(boardServ.userObjectPopUp) == 'loggedOut') {
                 <div class="point-container">
                     <img src="assets/icons/user_offline.png" alt="" class="state-icon">
                     <span>Offline</span>
                 </div>
-                } @else if (memberServ.chechMemberLoginState(boardServ.userObjectPopUp) == 'idle') {
+                } @else if (memberServ.checkMemberLoginState(boardServ.userObjectPopUp) == 'idle') {
                 <div class="point-container">
                     <img src="assets/icons/user_idle.png" alt="" class="state-icon">
                     <span style="color: #F19E39">Abwesend</span>
