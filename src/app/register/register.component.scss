@@ -10,13 +10,17 @@ header {
 
     .logo-box {
         @include d-flex($g: 16px);
+
+        h1 {
+            font-size: 32px;
+        }
     }
 }
 
 .content {
     @include d-flex($fd: column, $g: 8px);
     height: calc(100vh - 126px);
-    overflow-x: hidden;
+    //overflow-x: hidden;
 }
 
 .login-container {
@@ -70,4 +74,100 @@ header {
 
 .slide-in {
     transform: translateX(0);
+}
+
+.flex-center {
+    @include d-flex($fd: column);
+    height: 100vh;
+}
+
+@media (max-width: 760px) {
+
+    header {
+        justify-content: center !important;
+
+        .logo-box {
+
+            >img {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    }
+
+    .content {
+        height: auto;
+        gap: 20px;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .confirmation-message {
+        padding: 25px;
+        font-size: 24px;
+    }
+
+    .error-message {
+        padding: 25px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 590px) {
+    .content {
+        width: 95%;
+    }
+
+    .login-container {
+        padding: 35px 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    header {
+        padding: 0;
+    }
+}
+
+@media (max-width: 410px) {
+    .confirmation-message {
+        font-size: 20px;
+        padding: 15px;
+    }
+
+    .error-message {
+        font-size: 20px;
+        padding: 15px;
+    }
+}
+
+@media (max-height: 870px) {
+    .flex-center {
+        height: 100vh;
+    }
+
+    .content {
+        gap: 8px;
+    }
+
+    header {
+        height:auto;
+        padding: 12px;
+
+        .logo-box {
+            h1 {
+                font-size: 24px;
+            }
+
+            >img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
+    
+    .login-container {
+        padding: 20px;
+        margin-top: 0;
+    }
 }

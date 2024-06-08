@@ -61,7 +61,7 @@ export class BoardService {
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
 
-  getUserLoginState(privateChat: PrivateChat, participant: CurrentUser) {
+  getUserLoginState(participant: CurrentUser) {
     let allUsers: CurrentUser[] = this.firestore.userList;
     let user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
     //console.log(user.loginState);

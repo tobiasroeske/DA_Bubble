@@ -62,6 +62,20 @@ export class SignupService {
     );
   }
 
+  async googlePopupLogin() {
+    await signInWithPopup(this.auth, this.provider).then(result => {
+      if (result != null) {
+        this.getUserData(result);
+        this.firestoreService
+          .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
+          .then(() => {
+            this.storageService.saveCurrentUser(result.user);
+            this.router.navigateByUrl('board');
+          });
+      }
+    })
+  }
+
   async getRedirectIntel() {
     await getRedirectResult(this.auth).then((result) => {
       if (result != null) {
@@ -71,6 +85,7 @@ export class SignupService {
             this.firestoreService
               .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
               .then(() => {
+                this.storageService.saveCurrentUser(result.user);
                 this.router.navigateByUrl('board');
               });
           }

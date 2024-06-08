@@ -9,6 +9,7 @@ import { User } from '../../../shared/models/user.class';
 import { SelectedMembersFullListComponent } from './selected-members-full-list/selected-members-full-list.component';
 import { SuggestedListComponent } from './suggested-list/suggested-list.component';
 import { FirstTwoSelectedMembersComponent } from './first-two-selected-members/first-two-selected-members.component';
+import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
   selector: 'app-add-specific-person-dialog',
@@ -22,6 +23,7 @@ import { FirstTwoSelectedMembersComponent } from './first-two-selected-members/f
 export class AddSpecificPersonDialogComponent implements OnInit {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
+  memmerServ = inject(MemberDialogsService)
   title!: string;
   currentChannel!: Channel;
   channelId!: string;
@@ -74,6 +76,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
     this.addPartecipantsIds();
+    this.memmerServ.addSpecificPerson = false;
   };
 
   addPartecipantsIds() {

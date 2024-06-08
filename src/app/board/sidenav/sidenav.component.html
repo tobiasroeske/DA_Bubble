@@ -13,7 +13,7 @@
     </div>
 
     <!-- Channels Container -->
-    <div class="channel-container" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
+    <div class="channel-container" [ngStyle]="{'display': boardServ.textHidden ? 'none' : '', 'gap.px': firestore.allChannels.length == 0 ? '12' : '25'}">
         <div class="channel-header">
             <div (click)="onHeaderClick()" class="arrow-symbol-title-container">
                 <svg [ngStyle]="{'transform': channelHeaderIsClicked ? 'rotate(0deg)' : 'rotate(-90deg)'}"
@@ -97,9 +97,9 @@
             <div [ngClass]="{'collegue-on-focus': boardServ.blueColorsForTheChatPartersFocus[index]}" id="{{index}}"
                 class="collegue" (click)="boardServ.startPrivateChat(index, 'creator', $event)">
                 <img class="avatar-sidenav" src="{{privateChat.guest.avatarPath}}" alt="">
-                @if (boardServ.getUserLoginState(privateChat, privateChat.guest) == 'idle') {
+                @if (boardServ.getUserLoginState(privateChat.guest) == 'idle') {
                 <img src="assets/icons/user_idle.png" alt="" class="state-icon">
-                } @else if (boardServ.getUserLoginState(privateChat, privateChat.guest) == 'loggedOut') {
+                } @else if (boardServ.getUserLoginState(privateChat.guest) == 'loggedOut') {
                 <img src="assets/icons/user_offline.png" alt="" class="state-icon">
                 } @else {
                 <img src="assets/icons/user_online.png" alt="" class="state-icon">
@@ -110,9 +110,9 @@
             } @else {
             <div id="{{index}}" class="collegue" (click)="boardServ.startPrivateChat(index, 'guest', $event)">
                 <img class="avatar-sidenav" src="{{privateChat.creator.avatarPath}}" alt="">
-                @if (boardServ.getUserLoginState(privateChat, privateChat.creator) == 'idle') {
+                @if (boardServ.getUserLoginState(privateChat.creator) == 'idle') {
                 <img src="assets/icons/user_idle.png" alt="" class="state-icon">
-                } @else if (boardServ.getUserLoginState(privateChat, privateChat.creator) == 'loggedOut') {
+                } @else if (boardServ.getUserLoginState(privateChat.creator) == 'loggedOut') {
                 <img src="assets/icons/user_offline.png" alt="" class="state-icon">
                 } @else {
                 <img src="assets/icons/user_online.png" alt="" class="state-icon">
