@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
@@ -12,8 +12,8 @@ import { PrivateMessageEditorComponent } from './private-message-editor/private-
   templateUrl: './private-chat-message.component.html',
   styleUrl: './private-chat-message.component.scss'
 })
-export class PrivateChatMessageComponent extends ChatMessageComponent {
-
+export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewInit {
+  @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;
   @Input() privateChatId?: string;
   @Input() privateMessage!: ChatMessage;
   @Input() privateChatIndex!: number;
@@ -26,8 +26,26 @@ export class PrivateChatMessageComponent extends ChatMessageComponent {
     super();
   }
 
+
+  scrollToSearchedMessage(index: number) {
+    setTimeout(() => {
+      let elementArray = this.messageElements.toArray();
+      let element = elementArray[index];
+      if (element) {
+        element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        console.warn('Element not found:', 'message-' + index);
+      }
+    }, 100);
+  }
+
   override ngOnInit(): void {
     this.currentPrivatChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
+  }
+
+  ngAfterViewInit() {
+    this.boardServ.privateMessagesElementsToArray = this.messageElements.toArray();
+    console.log(this.boardServ.privateMessagesElementsToArray);
   }
 
   override updateCompleteChannel(emojiIdx: number, emojiArray: string[]): void {

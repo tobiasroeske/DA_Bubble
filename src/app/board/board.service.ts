@@ -7,6 +7,7 @@ import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { PrivateChat } from '../shared/models/privateChat.class';
 import { Channel } from '../shared/models/channel.class';
+import { PrivateChatMessageComponent } from './board-chat-field/private-chat-message/private-chat-message.component';
 
 
 @Injectable({
@@ -50,13 +51,13 @@ export class BoardService {
   userNamePopUp!: string;
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
-
+  selectedChatRoom!: PrivateChat;
+  privateMessagesElementsToArray!: ElementRef<any>[];
 
 
   constructor() {
     this.currentUser = this.storageService.loadCurrentUser()!;
     console.log(this.currentUser);
-
     this.currentUser.loginState = 'loggedIn';
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
@@ -236,13 +237,15 @@ export class BoardService {
   }
 
   scrollToSearchedMessage(index: number) {
-    setTimeout(() => {
-      let element = document.getElementById('message' + index);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        element.style.background = '2px solid #5988FF';
-      }
-    }, 10);
+    // setTimeout(() => {
+      let element = this.privateMessagesElementsToArray[index];
+      console.log(element);
+    //   if (element) {
+    //     element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    //   } else {
+    //     console.warn('Element not found:', 'message-' + index);
+    //   }
+    // }, 100);
   }
 }
 
