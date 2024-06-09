@@ -28,10 +28,16 @@
         <div (click)="memberServ.toggleMembersDialog($event)" class="members-container">
             <span class="avatar-photos-container">
                 @for(member of firestore.allChannels[boardServ.idx]?.members; track member; let i = $index){
-                <img id="{{i}}" src="{{member.avatarPath}}" alt="">
-                }
+
+                @if (i <= 3) { <img id="{{i}}" src="{{member.avatarPath}}" alt="">
+                    }
+                    }
+
             </span>
-            <span class="number-of-members">{{firestore.allChannels[boardServ.idx]?.members.length}}</span>
+            @if (firestore.allChannels[boardServ.idx]?.members.length >= 3) {
+            <span class="number-of-members">+{{ firestore.allChannels[boardServ.idx]?.members.length - 4 }}</span>
+            }
+
             @if(memberServ.membersDialogIsOpen){
             <app-members-dialog [userList]="firestore.userList"
                 [currentChannel]="firestore.allChannels[boardServ.idx]"></app-members-dialog>
@@ -54,11 +60,11 @@
     <div class="user-private-message-header" (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
         <img class="avatar-private" src="{{boardServ.currentChatPartner.avatarPath}}" alt="">
         @if (boardServ.getUserLoginState(boardServ.currentChatPartner) == 'loggedIn') {
-            <img src="assets/icons/user_online.png" alt="" class="state-icon">
+        <img src="assets/icons/user_online.png" alt="" class="state-icon">
         } @else if (boardServ.getUserLoginState(boardServ.currentChatPartner) == 'idle') {
-            <img src="assets/icons/user_idle.png" alt="" class="state-icon">
+        <img src="assets/icons/user_idle.png" alt="" class="state-icon">
         } @else {
-            <img src="assets/icons/user_offline.png" alt="" class="state-icon">
+        <img src="assets/icons/user_offline.png" alt="" class="state-icon">
         }
         <h3>{{boardServ.currentChatPartner.name}} @if(boardServ.currentChatPartner.id == boardServ.currentUser.id)
             {(Du)}</h3>
@@ -81,7 +87,6 @@
     <app-private-chat-message [lastIndex]="lastIndex" [message]="privateMessage.message"
         [privateChatId]="firestore.directMessages[boardServ.chatPartnerIdx].id" [privateMessage]="privateMessage"
         [privateChatIndex]="index"></app-private-chat-message>
-
     }
     }
 </div>
@@ -97,7 +102,8 @@
             {(Du)}</h3>
     </div>
     @if (boardServ.currentChatPartner.id == boardServ.currentUser.id) {
-    <span class="chat-current-user"><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien
+    <span class="chat-current-user"><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf
+        oder bewahre Links und Dateien
         griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen</span>
     } @else {<p>Diese Unterhaltung findet nur zwischen
         <span (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)">
@@ -105,7 +111,7 @@
         </span>
         un dir statt
     </p>}
-    
+
 </div>
 }
 

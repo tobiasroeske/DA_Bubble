@@ -431,8 +431,18 @@
     left: 45px;
     bottom: 4px;
     z-index: 15;
+    width: 16px;
+    height: 16px;    
 }
 
 .d-none {
     display: none;
+}
+
+// Media Queries
+
+@media screen and (max-width: 1100px) {
+    .chat-field-header {
+        padding: 25px 40px;
+    }
 }

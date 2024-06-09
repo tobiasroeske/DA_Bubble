@@ -16,6 +16,7 @@ import { LocalStorageService } from '../shared/services/local-storage-service/lo
 export class LoginComponent implements OnInit {
   forgotPassword = false;
   smallScreen = false;
+  confirmationMessage = false;
   localStorageService = inject(LocalStorageService)
 
  ngOnInit(): void {
@@ -41,5 +42,9 @@ export class LoginComponent implements OnInit {
   
   openPasswordDialog($event: boolean) {
     this.forgotPassword = $event;
+  }
+
+  showConfirmation(event:boolean) {
+    this.confirmationMessage = event;
   }
 }

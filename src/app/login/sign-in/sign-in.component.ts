@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { User } from '../../shared/models/user.class';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -13,6 +13,8 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent implements OnInit{
+  @Input() smallScreen!: boolean;
+
   signupService = inject(SignupService);
   router = inject(Router);
   mail!: string;
@@ -41,6 +43,12 @@ export class SignInComponent implements OnInit{
   }
 
   async googleLogin() {
+    if (this.smallScreen) {
+      await this.signupService.googleLogin();
+    } else {
+      this.signupService.googlePopupLogin();
+    }
+
     //this.signupService.googleLogin()
     await this.signupService.googlePopupLogin();
   }

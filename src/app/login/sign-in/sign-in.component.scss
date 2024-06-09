@@ -166,6 +166,8 @@ input {
     @include d-flex($g: 30px)
 }
 
+// Media queries
+
 @media (max-width: 760px) {
     .content {
         gap: 20px;
@@ -258,6 +260,10 @@ input {
         width: 32px;
         height: 32px;
         }
+    }
+
+    .btn-no-style {
+        padding: 8px 12px;
     }
 
     .error-message {
