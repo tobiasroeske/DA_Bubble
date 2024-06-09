@@ -47,6 +47,18 @@ export class BoardComponent implements OnInit {
     })
   }
 
+  @HostListener('window:resize', ['$event'])
+  handleResize(event:Event ) {
+    event.preventDefault();
+    event.stopPropagation()
+    if (window.innerWidth <= 1100) {
+      this.boardServ.tabletView = true;
+    } else {
+      this.boardServ.tabletView = false;
+    }
+    
+  }
+
 
   @HostListener('window:click', ['$event'])
   async handleClick() {

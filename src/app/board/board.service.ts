@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, Injectable, inject } from '@angular/core';
+import { AfterViewInit, ElementRef, HostListener, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
@@ -50,10 +50,12 @@ export class BoardService {
   userNamePopUp!: string;
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
+  tabletView = false;
 
-
+  
 
   constructor() {
+    this.checkScreenSize();
     this.currentUser = this.storageService.loadCurrentUser()!;
     console.log(this.currentUser);
 
@@ -61,11 +63,18 @@ export class BoardService {
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
 
+  
+
+  checkScreenSize() {
+    if (window.innerWidth <= 1100) {
+      this.tabletView = true;
+      console.log(this.tabletView);
+    }
+  }
+
   getUserLoginState(participant: CurrentUser) {
     let allUsers: CurrentUser[] = this.firestore.userList;
     let user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
-    //console.log(user.loginState);
-
     return user.loginState
   }
 
@@ -78,7 +87,6 @@ export class BoardService {
     }
   }
 
-
   getCurrentUser() {
     return this.authService.currentUser;
   }
@@ -86,9 +94,15 @@ export class BoardService {
   open(element: string) {
     if (element == 'thread') {
       this.threadTranslate = true;
+      if (window.innerWidth <= 1500) {
+        this.sidenavTranslate = false;
+      }
     } else {
       this.sidenavTranslate = !this.sidenavTranslate;
       this.hideText();
+      if (window.innerWidth <= 1500) {
+        this.threadTranslate = false;
+      }
     }
   }
 
@@ -240,7 +254,7 @@ export class BoardService {
       let element = document.getElementById('message' + index);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        element.style.background = '2px solid #5988FF';
+        element.style.background = '2px solid #5988FF !important';
       }
     }, 10);
   }

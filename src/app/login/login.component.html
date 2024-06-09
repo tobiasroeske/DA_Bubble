@@ -12,28 +12,34 @@
         </div>
         }
     </header>
-    <div class="content">
-        <div class="top">
+    <div class="content" [ngStyle]="{'overflow-x': forgotPassword ? 'hidden' : 'unset'}">
+        <div class="top" [ngStyle]="{'flex': forgotPassword ? 'unset' : '1'}">
             <div class="login-container">
                 @if (!forgotPassword) {
-                <app-sign-in (passwordForgotten)="openPasswordDialog($event)"></app-sign-in>
+                <app-sign-in (passwordForgotten)="openPasswordDialog($event)" [smallScreen]="smallScreen"></app-sign-in>
                 } @else {
-                <app-forgot-password (goBack)="openPasswordDialog($event)"></app-forgot-password>
+                <app-forgot-password (emailSent)="showConfirmation($event)" (goBack)="openPasswordDialog($event)"></app-forgot-password>
                 }
             </div>
         </div>
     
-        @if (smallScreen) {
+        @if (smallScreen && !forgotPassword) {
         <div class="register-box">
             <span>Neu bei DABubble?</span>
             <a href="register">Konto erstellen</a>
         </div>
         }
-        @if (!smallScreen) {
+        @if (!smallScreen && !forgotPassword) {
             <footer>
                 <a href="">Impressum</a>
                 <a href="">Datenschutz</a>
             </footer>
+        }
+        @if (forgotPassword) {
+            <div [class.slide-in]="confirmationMessage" class="confirmation-message">
+                <img src="assets/icons/email_send.png" alt="">
+                E-Mail gesendet
+            </div> 
         }
     </div>
     @if (!localStorageService.introPlayed) {

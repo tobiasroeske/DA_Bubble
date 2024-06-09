@@ -281,8 +281,8 @@
 
 
 .answer-container {
-    width: 260px;
-    @include d-flex($jc: space-between);
+    //width: 260px;
+    @include d-flex($jc: space-between, $g: 8px);
 
     >.answers {
         @include d-flex($jc: space-between, $g: 10px);
@@ -483,4 +483,33 @@
         }
     }
 
+// Media Queries
 
+@media (max-width: 1100px) {
+    .message-box {
+        padding: 10px 25px 10px 40px;
+
+        >.avatar-photo {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .message-box-reverse {
+        padding: 10px 25px 10px 40px !important;
+    }
+
+    .answer-icon, .addReaction-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .reaction-indicator-bar > .reaction-indicator img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .answer-container > .answers {
+        font-size: 16px;
+    }
+}
