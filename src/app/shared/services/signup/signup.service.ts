@@ -225,7 +225,6 @@ export class SignupService {
   }
 
   async logout() {
-
     let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
     userWithLoginState.loginState = 'loggedOut';
     this.storageService.saveIntroPlayed(false)

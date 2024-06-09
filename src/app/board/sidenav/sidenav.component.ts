@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
+import { SearchDialogComponent } from "../board-toolbar/search-dialog/search-dialog.component";
 
 @Component({
-  selector: 'app-sidenav',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.scss'
+    selector: 'app-sidenav',
+    standalone: true,
+    templateUrl: './sidenav.component.html',
+    styleUrl: './sidenav.component.scss',
+    imports: [CommonModule, SearchDialogComponent]
 })
 export class SidenavComponent {
   boardServ = inject(BoardService);

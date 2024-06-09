@@ -89,3 +89,20 @@
     background-color: rgba(0, 0, 0, 0.15);
     z-index: 5;
 }
+
+// media queries
+
+@media (max-width: 960px) {
+    .board {
+        gap: 8px;
+    }
+
+    .hide-show-sidebar-btn {
+        width: auto;
+        padding: 14px 8px;
+    }
+
+    .thread {
+        width: 400px !important;
+    }
+}

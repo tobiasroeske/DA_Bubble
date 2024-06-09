@@ -121,3 +121,39 @@ div {
     width: 16px;
     height: 16px;
 }
+
+@media (max-width: 960px) {
+    div {
+        padding: 8px 16px 0 16px;
+    }
+
+    .input-search-container {
+        display: none;
+    }
+
+    .logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .logo-headline {
+        height: 20px;
+    }
+
+    .user-container {
+        >span {
+        font-size: 24px;
+        }
+
+        > .account-photo {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .state-icon {
+        bottom: 0;
+        right: 48px;
+    }
+
+}

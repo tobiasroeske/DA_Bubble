@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -49,14 +49,12 @@ export class BoardComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   handleResize(event:Event ) {
-    event.preventDefault();
-    event.stopPropagation()
-    if (window.innerWidth <= 1100) {
-      this.boardServ.tabletView = true;
-    } else {
-      this.boardServ.tabletView = false;
-    }
-    
+    this.boardServ.checkScreenSize();
+    // if (window.innerWidth <= 1100) {
+    //   this.boardServ.tabletView = true;
+    // } else {
+    //   this.boardServ.tabletView = false;
+    // }
   }
 
 
