@@ -53,8 +53,8 @@ export class BoardService {
   userAvatarPopUp!: string;
   tabletView = false;
   selectedChatRoom!: PrivateChat;
-  privateMessagesElementsToArray!: ElementRef<any>[
-  
+  privateMessagesElementsToArray!: ElementRef<any>[];
+
 
   constructor() {
     this.checkScreenSize();
@@ -63,17 +63,6 @@ export class BoardService {
     this.currentUser.loginState = 'loggedIn';
     this.firestore.updateUser(this.currentUser.id!, this.currentUser);
   }
-
-  
-
-  checkScreenSize() {
-    if (window.innerWidth <= 1100) {
-      this.tabletView = true;
-      console.log(this.tabletView);
-    }
-  }
-
-
 
   checkScreenSize() {
     if (window.innerWidth <= 1100) {
