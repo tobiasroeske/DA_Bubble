@@ -259,3 +259,16 @@
 .d-none {
     display: none;
 }
+
+// media queries
+
+@media (max-width: 960px) {
+    .channel-btn {
+        display: none;
+    }
+
+    .colleagues-container > .collegue > .avatar-sidenav {
+        width: 48px;
+        height: 48px;
+    }
+}

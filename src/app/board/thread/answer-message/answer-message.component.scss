@@ -6,6 +6,7 @@
     align-items: flex-start;
     gap: 20px;
     padding: 10px 10px 10px 40px;
+    width: 100%;
     &:hover {
         background: #ECEEFD;
     }
@@ -40,7 +41,7 @@
 
 .reaction-dialog {
     position: absolute;
-    top: -96px;
+    top: -56px;
     right: 78px;
     @include d-flex($jc: center, $g: 12px);
     flex-wrap: wrap;
@@ -53,7 +54,7 @@
 
 .reaction-dialog-reverse {
     right: auto !important;
-    left: 78px !important;
+    left: 128px !important;
     border-radius: 30px 30px 30px 0px !important;
 }
 
@@ -104,7 +105,7 @@
 
 .reaction-dialog-indicatorbar {
     position: absolute;
-    bottom: 56px;
+    bottom: 38px;
     left: 48px;
     @include d-flex($jc: center, $g: 12px);
     flex-wrap: wrap;
@@ -116,7 +117,8 @@
 }
 
 .reaction-dialog-indicatorbar-reverse {
-    right: 48px !important;
+    right: 24px !important;
+    bottom: 38px;
     left:auto !important;
     border-radius: 30px 30px 0 30px !important;
 }
@@ -130,6 +132,7 @@
 
 .thread-message {
     @include d-flex($fd: column, $jc: flex-start, $ai: flex-end, $g: 8px);
+    width: 80%;
 
     >.time-and-name-container {
         width: 100%;
@@ -346,3 +349,21 @@
             }
         }
     }
+
+// Media Queries
+
+@media (max-width: 1100px) {
+    .avatar-thread-img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .addReaction-icon-thread {
+        width: 32px;
+        height: 32px;
+    }
+
+    .reaction-dialog-reverse {
+        left: 108px
+    }
+}

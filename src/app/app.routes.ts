@@ -6,7 +6,7 @@ import { RegisterComponent } from './register/register.component';
 import { ResetPasswordComponent } from './login/forgot-password/reset-password/reset-password.component';
 
 export const routes: Routes = [
-    {path: '', component: LandingPageComponent},
+    {path: '', component: LoginComponent},
     {path: 'login', component: LoginComponent},
     {path: 'board', component: BoardComponent},
     {path: 'register', component: RegisterComponent},

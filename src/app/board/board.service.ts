@@ -53,21 +53,26 @@ export class BoardService {
   userAvatarPopUp!: string;
   tabletView = false;
   selectedChatRoom!: PrivateChat;
-  privateMessagesElementsToArray!: ElementRef<any>[];
+  privateMessagesElementsToArray!: ElementRef<any>[]
 
 
   constructor() {
     this.checkScreenSize();
     this.currentUser = this.storageService.loadCurrentUser()!;
-    console.log(this.currentUser);
-    this.currentUser.loginState = 'loggedIn';
-    this.firestore.updateUser(this.currentUser.id!, this.currentUser);
+    if (this.currentUser.id != '') {
+      this.currentUser.loginState = 'loggedIn';
+      this.firestore.updateUser(this.currentUser.id!, this.currentUser);
+    } else {
+      window.open('login', '_self');
+    }
   }
 
   checkScreenSize() {
-    if (window.innerWidth <= 1100) {
+    if (window.innerWidth <= 1500) {
       this.tabletView = true;
-      console.log(this.tabletView);
+      if (this.threadTranslate && this.sidenavTranslate) {
+        this.sidenavTranslate = false;
+      }
     }
   }
 

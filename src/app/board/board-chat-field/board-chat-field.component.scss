@@ -441,8 +441,32 @@
 
 // Media Queries
 
-@media screen and (max-width: 1100px) {
+@media (max-width: 1100px) {
     .chat-field-header {
         padding: 25px 40px;
+    }
+}
+
+@media (max-width: 960px) {
+
+    .no-channel-message {
+        padding-left: 12px;
+    }
+    .chat-field-header {
+        padding: 10px 16px;
+        font-size: 20px;
+
+        >.chat-field-channel {
+            font-size: 20px;
+        }
+    }
+
+    .add-person-icon-container {
+        width: 34px;
+        height: 34px;
+    }
+
+    .members-container {
+        display: none;
     }
 }

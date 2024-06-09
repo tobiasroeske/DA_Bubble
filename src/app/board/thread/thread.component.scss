@@ -380,3 +380,18 @@
         height: 18px;
     }
 }
+
+@media (max-width: 960px) {
+    .thread >.thread-header {
+        padding: 8px 16px 8px 26px;
+    }
+    
+    .title-and-channel-container >h2 {
+        font-size: 20px;
+    }
+
+    .cross-icon {
+        width: 32px;
+        height: 32px;
+    }
+}

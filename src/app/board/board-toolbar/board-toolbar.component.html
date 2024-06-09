@@ -1,7 +1,7 @@
 <div>
     <div class="logo-container">
-        <img src="./assets/img/logo.png" alt="logo">
-        <img src="./assets/img/logoName.png" alt="">
+        <img src="./assets/img/logo.png" alt="logo" class="logo">
+        <img src="./assets/img/logoName.png" alt="" class="logo-headline">
     </div>
     <div class="input-search-container">
         <input (focus)="boardServ.loadAllData()" #filter (input)="showValue(filter.value)" name="searchText" type="text"
