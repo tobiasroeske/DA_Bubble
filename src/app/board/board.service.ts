@@ -7,7 +7,6 @@ import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { PrivateChat } from '../shared/models/privateChat.class';
 import { Channel } from '../shared/models/channel.class';
-import { PrivateChatMessageComponent } from './board-chat-field/private-chat-message/private-chat-message.component';
 
 
 @Injectable({
@@ -57,6 +56,8 @@ export class BoardService {
   selectedChatRoom!: PrivateChat;
   public privateMessagesElementsToArray: ElementRef[] = [];
   highlightArrayForTheChildElementSearched: boolean[] = [];
+  showSearchDialog: boolean = false;
+  searchText: string = "";
 
 
 
@@ -294,7 +295,6 @@ export class BoardService {
   scrollToSearchedMessage(index: number) {
     setTimeout(() => {
       let element = this.privateMessagesElementsToArray[index];
-      console.log(element);
       if (element) {
         element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         this.highlightArrayForTheChildElementSearched[index] = true;
@@ -302,6 +302,10 @@ export class BoardService {
         console.warn('Element not found:', 'message-' + index);
       }
     }, 100);
+    this.leaveTheHighlightFromSearchedMessage(index);
+  }
+
+  leaveTheHighlightFromSearchedMessage(index:number) {
     setTimeout(() => {
       this.highlightArrayForTheChildElementSearched[index] = false;
     }, 1500)

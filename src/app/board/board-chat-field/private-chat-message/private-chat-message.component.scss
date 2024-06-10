@@ -413,6 +413,61 @@
     }
 }
 
+// media queries
+
+@media (max-width: 1100px) {
+    .message-box {
+        padding: 10px 25px 10px 40px;
+
+        >.avatar-photo {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .message-box-reverse {
+        padding: 10px 25px 10px 40px !important;
+    }
+
+    .answer-icon,
+    .addReaction-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .reaction-indicator-bar>.reaction-indicator img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .answer-container>.answers {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 960px) {
+    .message-box {
+        padding: 10px 16px;
+    }
+
+    .message-box-reverse {
+        padding: 10px 16px;
+    }
+
+    .reaction-dialog-indicatorbar {
+        bottom: 32px;
+        left: 32px;
+
+        &:hover {
+            background-color: #ECEEFE;
+            transform: scale(1.2);
+        }
+    }
+
+
+}
+
+
 .highlight-background {
     background: #BDBFE1 !important;
 }

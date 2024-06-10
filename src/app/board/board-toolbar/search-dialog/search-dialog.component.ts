@@ -23,42 +23,52 @@ export class SearchDialogComponent implements OnChanges {
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
   mainSearchList: any[] = [];
-  showSearchDialog: boolean = false;
   chatArray: ChatMessage[] = [];
-  @Input() searchValue: string = "";
+  idxToFindPositionOfGuestInDirectMessArray!: number;
+  idxToFindPositionOfClickedMessageInTheChoisedPrivChat!: number;
+  @Input() searchValue!:string;
   @Output() sendEmptyString: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
   }
 
   async showSearchElementClicked(index: number, event: Event) {
-    let idx: number;
-    let idx2: number;
     let clickedElement = this.mainSearchList[index];
     if (clickedElement.type == 'Channel') {
-      let idx = this.firestore.allChannels.findIndex(chann => chann.id == clickedElement.id);
-      this.boardServ.showChannelInChatField(idx, event);
+      this.showTheClickedElementOfTypeChannel(clickedElement, event);
     } else if (clickedElement.type == 'CurrentUser') {
-      let idx = this.firestore.userList.findIndex((user) => user.id == clickedElement.id);
-      this.boardServ.openShowUserPopUp(idx);
-      this.boardServ.showUserPopUp = true;
+      this.showTheClickedElementOfTypeCurrentUser(clickedElement);
     } else if (clickedElement.type == 'PrivateChat') {
-      idx = this.firestore.directMessages.findIndex(privChat => privChat.guest.id == clickedElement.guest.id)
-      this.boardServ.selectedChatRoom = this.firestore.directMessages[idx];
-      this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
-      await this.memberServ.setChatRoom(event);
-      idx2 = this.boardServ.selectedChatRoom.chat.findIndex(chat => chat.message && chat.message.includes(this.searchValue));
-      if (idx2 !== -1) {
-        this.boardServ.scrollToSearchedMessage(idx2);
-      }
+      await this.showTheClickedElementOfTypePrivatChat(clickedElement, event)
     }
-    this.searchValue = "";
-    this.sendEmptyString.emit(this.searchValue);
+    this.boardServ.showSearchDialog = false;
+  }
+
+  showTheClickedElementOfTypeChannel(clickedElement: Channel, event: Event) {
+    let idx = this.firestore.allChannels.findIndex(chann => chann.id == clickedElement.id);
+    this.boardServ.showChannelInChatField(idx, event);
+  }
+
+  showTheClickedElementOfTypeCurrentUser(clickedElement: CurrentUser) {
+    let idx = this.firestore.userList.findIndex((user) => user.id == clickedElement.id);
+    this.boardServ.openShowUserPopUp(idx);
+    this.boardServ.showUserPopUp = true;
+  }
+
+  async showTheClickedElementOfTypePrivatChat(clickedElement: PrivateChat, event: Event) {
+    this.idxToFindPositionOfGuestInDirectMessArray = this.firestore.directMessages.findIndex(privChat => privChat.guest.id == clickedElement.guest.id)
+    this.boardServ.selectedChatRoom = this.firestore.directMessages[this.idxToFindPositionOfGuestInDirectMessArray];
+    this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
+    await this.memberServ.setChatRoom(event);
+    this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat = this.boardServ.selectedChatRoom.chat.findIndex(chat => chat.message && chat.message.includes(this.searchValue));
+    if (this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat !== -1) {
+      this.boardServ.scrollToSearchedMessage(this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['searchValue'] && this.searchValue.length > 0) {
-      this.showSearchDialog = true;
+      this.boardServ.showSearchDialog = true;
       this.mainSearchList = this.boardServ.allData.filter((ad: SearchItem) => {
         if (this.isCurrentUser(ad)) {
           return ad.name.toLowerCase().includes(this.searchValue.toLowerCase());
@@ -72,7 +82,7 @@ export class SearchDialogComponent implements OnChanges {
         }
       })
     } else {
-      this.showSearchDialog = false;
+      this.boardServ.showSearchDialog = false;
     }
     console.log(this.boardServ.allData);
   }

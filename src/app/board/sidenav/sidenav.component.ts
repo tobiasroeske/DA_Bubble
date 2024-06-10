@@ -5,11 +5,11 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { SearchDialogComponent } from "../board-toolbar/search-dialog/search-dialog.component";
 
 @Component({
-    selector: 'app-sidenav',
-    standalone: true,
-    templateUrl: './sidenav.component.html',
-    styleUrl: './sidenav.component.scss',
-    imports: [CommonModule, SearchDialogComponent]
+  selector: 'app-sidenav',
+  standalone: true,
+  templateUrl: './sidenav.component.html',
+  styleUrl: './sidenav.component.scss',
+  imports: [CommonModule, SearchDialogComponent]
 })
 export class SidenavComponent {
   boardServ = inject(BoardService);
@@ -19,6 +19,7 @@ export class SidenavComponent {
   directMessHeaderisClicked: boolean = true;
   canTranslateYChannel: boolean = true;
   canTranslateYUserList: boolean = true;
+  searchText: string = "";
 
   onHeaderClick() {
     if (!this.channelHeaderIsClicked) {
@@ -55,6 +56,10 @@ export class SidenavComponent {
       this.boardServ.sidenavTranslate = false;
       this.boardServ.hideText();
     }
+  }
+
+  showText(text: string) {
+    this.searchText = text;
   }
 
 }

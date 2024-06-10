@@ -12,7 +12,7 @@ import { PrivateMessageEditorComponent } from './private-message-editor/private-
   templateUrl: './private-chat-message.component.html',
   styleUrl: './private-chat-message.component.scss'
 })
-export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewInit {
+export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;
   @Input() privateChatId?: string;
   @Input() privateMessage!: ChatMessage;
@@ -36,13 +36,9 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
 
   ngAfterViewChecked() {
     if (this.messageElements && this.messageElements.length > 0 && !this.elementsInitialized) {
-      const uniqueElements = new Set<ElementRef>();
       this.messageElements.toArray().forEach((me) => {
-        if (!uniqueElements.has(me)) {
-          uniqueElements.add(me);
-          this.boardServ.privateMessagesElementsToArray.push(me);
-          this.boardServ.highlightArrayForTheChildElementSearched.push(false)
-        }
+        this.boardServ.privateMessagesElementsToArray.push(me);
+        this.boardServ.highlightArrayForTheChildElementSearched.push(false);
       })
       this.elementsInitialized = true;
     }
