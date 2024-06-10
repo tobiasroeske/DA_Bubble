@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { BoardService } from '../../board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
@@ -26,11 +26,12 @@ export class SearchDialogComponent implements OnChanges {
   showSearchDialog: boolean = false;
   chatArray: ChatMessage[] = [];
   @Input() searchValue: string = "";
+  @Output() sendEmptyString: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
   }
 
-  showSearchElementClicked(index: number, event: Event) {
+  async showSearchElementClicked(index: number, event: Event) {
     let idx: number;
     let idx2: number;
     let clickedElement = this.mainSearchList[index];
@@ -45,12 +46,14 @@ export class SearchDialogComponent implements OnChanges {
       idx = this.firestore.directMessages.findIndex(privChat => privChat.guest.id == clickedElement.guest.id)
       this.boardServ.selectedChatRoom = this.firestore.directMessages[idx];
       this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
-      this.memberServ.setChatRoom(event);
+      await this.memberServ.setChatRoom(event);
       idx2 = this.boardServ.selectedChatRoom.chat.findIndex(chat => chat.message && chat.message.includes(this.searchValue));
       if (idx2 !== -1) {
         this.boardServ.scrollToSearchedMessage(idx2);
       }
     }
+    this.searchValue = "";
+    this.sendEmptyString.emit(this.searchValue);
   }
 
   ngOnChanges(changes: SimpleChanges) {

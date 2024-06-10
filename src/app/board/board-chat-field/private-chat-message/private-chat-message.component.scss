@@ -106,6 +106,7 @@
     padding: 10px 25px 10px 70px;
     cursor: pointer;
     margin-top: 24px;
+    transition: all 0.5s cubic-bezier(.215, .61, .355, 1);
 
     &:hover {
         background: rgb(236, 238, 254);
@@ -391,22 +392,27 @@
             border-radius: 100%;
             padding: 8px;
             background-color: #e6e6e6;
-            transition: all .125s ease-in-out;}
-        }
-
-
-        .close-icon {
-            cursor: pointer;
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            padding: 4px;
-            border-radius: 100%;
             transition: all .125s ease-in-out;
-
-            &:hover {
-                background-color: #ECEEFE;
-                transform: scale(1.2);
-            }
         }
     }
+
+
+    .close-icon {
+        cursor: pointer;
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        padding: 4px;
+        border-radius: 100%;
+        transition: all .125s ease-in-out;
+
+        &:hover {
+            background-color: #ECEEFE;
+            transform: scale(1.2);
+        }
+    }
+}
+
+.highlight-background {
+    background: #BDBFE1 !important;
+}

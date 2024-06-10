@@ -53,7 +53,8 @@ export class BoardService {
   userAvatarPopUp!: string;
   tabletView = false;
   selectedChatRoom!: PrivateChat;
-  privateMessagesElementsToArray!: ElementRef<any>[]
+  public privateMessagesElementsToArray: ElementRef[] = [];
+  highlightArrayForTheChildElementSearched: boolean[] = [];
 
 
   constructor() {
@@ -255,12 +256,18 @@ export class BoardService {
 
   scrollToSearchedMessage(index: number) {
     setTimeout(() => {
-      let element = document.getElementById('message' + index);
+      let element = this.privateMessagesElementsToArray[index];
+      console.log(element);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        element.style.background = '2px solid #5988FF !important';
+        element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        this.highlightArrayForTheChildElementSearched[index] = true;
+      } else {
+        console.warn('Element not found:', 'message-' + index);
       }
-    }, 10);
+    }, 100);
+    setTimeout(() => {
+      this.highlightArrayForTheChildElementSearched[index] = false;
+    }, 1500)
   }
 }
 

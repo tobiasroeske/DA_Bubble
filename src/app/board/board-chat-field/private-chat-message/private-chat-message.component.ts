@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
@@ -20,23 +20,11 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   @Input() lasIndex!: boolean;
   @Input() message!: string;
   currentPrivatChat!: ChatMessage[];
+  elementsInitialized: boolean = false;
 
 
   constructor() {
     super();
-  }
-
-
-  scrollToSearchedMessage(index: number) {
-    setTimeout(() => {
-      let elementArray = this.messageElements.toArray();
-      let element = elementArray[index];
-      if (element) {
-        element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        console.warn('Element not found:', 'message-' + index);
-      }
-    }, 100);
   }
 
   override ngOnInit(): void {
@@ -44,8 +32,24 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
 
   ngAfterViewInit() {
-    this.boardServ.privateMessagesElementsToArray = this.messageElements.toArray();
-    console.log(this.boardServ.privateMessagesElementsToArray);
+  }
+
+  ngAfterViewChecked() {
+    if (this.messageElements && this.messageElements.length > 0 && !this.elementsInitialized) {
+      const uniqueElements = new Set<ElementRef>();
+      this.messageElements.toArray().forEach((me) => {
+        if (!uniqueElements.has(me)) {
+          uniqueElements.add(me);
+          this.boardServ.privateMessagesElementsToArray.push(me);
+          this.boardServ.highlightArrayForTheChildElementSearched.push(false)
+        }
+      })
+      this.elementsInitialized = true;
+    }
+  }
+
+  ngOnDestroy() {
+    this.boardServ.privateMessagesElementsToArray = []; // applicare l'ngOnDestroy ha fatto si che l'array this.boardServ.privateMessageToArry si svuotasse al cambio utente, evitando l'aggiunta di messaggi esterni che non appartenevano a quella chat, ma svuotando l'array e lasciando spazio all'inserimento dei messaggi nuovi della nuova chat cliccata
   }
 
   override updateCompleteChannel(emojiIdx: number, emojiArray: string[]): void {
