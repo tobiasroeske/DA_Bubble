@@ -48,7 +48,12 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   };
 
   loadUsers() {
-    this.currentChannel.allUsers.forEach((user) => {
+    // this.currentChannel.allUsers.forEach((user) => {
+    //   if (user.selected == false) {
+    //     this.userList.push(user)
+    //   }
+    // })
+    this.firestore.userList.forEach((user)=> {
       if (user.selected == false) {
         this.userList.push(user)
       }
