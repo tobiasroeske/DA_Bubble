@@ -41,11 +41,16 @@ export class AddMemberDialogComponent {
   }
 
   async setAllUsersOnSelectedTrue(event: Event) {
-    this.currentChannel.allUsers.forEach((user) => {
-      user.selected = true;
-    });
-    this.allUsers = this.currentChannel?.allUsers;
-    await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId);
+    this.allUsers = this.firestore.userList;
+    this.allUsers.forEach(u => {
+      u.selected = true;
+    })
+    await this.firestore.updateChannelUsers( this.allUsers, this.currentChannelId)
+    // this.currentChannel.allUsers.forEach((user) => {
+    //   user.selected = true;
+    // });
+    // this.allUsers = this.currentChannel?.allUsers;
+    // await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId);
     this.addUserToMemberArray();
     this.closeAddMemberDialog(event)
   }
