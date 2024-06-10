@@ -1,7 +1,7 @@
 @import '../../styles.scss';
 
 .board {
-    overflow: hidden;
+    //overflow: hidden;
     height: 100vh;
     width: 100%;
     display: flex;
@@ -104,5 +104,29 @@
 
     .thread {
         width: 400px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .board {
+        gap: 0;
+    }
+
+    .sidenav {
+        margin-top: 8px;
+    }
+
+    .thread {
+        width: 100% !important;
+        margin-top: 8px;
+    }
+
+    .hide-show-sidebar-btn {
+        display: none;
+    }
+
+    .view >.chatField {
+        border-radius: 0;
+        margin-top: 8px;
     }
 }

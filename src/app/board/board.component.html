@@ -5,10 +5,10 @@
     }
     <app-board-toolbar></app-board-toolbar>
     <!-- <button (click)="logout()" class="btn-no-style">Logout</button> -->
-    <div class="view">
+    <div class="view" [ngStyle]="{'gap.px': boardServ.mobileView ? '0' : '16'}">
         <app-sidenav class="sidenav" [ngStyle]="{'width': boardServ.mobileView && boardServ.sidenavTranslate ? '100%' : boardServ.sidenavTranslate ? '366px' : '0' }"></app-sidenav>
 
-        <app-board-chat-field class="chatField" [ngStyle]="{'display': boardServ.sidenavTranslate && boardServ.mobileView ? 'none' : 'flex'}" ></app-board-chat-field>
+        <app-board-chat-field class="chatField" [ngStyle]="{'display': boardServ.hideChatField() ? 'none' : 'flex'}" ></app-board-chat-field>
 
 
 

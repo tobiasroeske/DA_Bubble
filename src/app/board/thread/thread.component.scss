@@ -7,7 +7,7 @@
     border-radius: 30px;
     font-family: "Nunito";
     position: relative;
-    @include d-flex(column, flex-start, none, 24px);
+    @include d-flex(column, flex-start, unset, 24px);
     transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
 
     >.thread-header {
@@ -397,5 +397,15 @@
 
     .message {
         padding: 10px 10px 10px 26px;
+    }
+}
+
+@media (max-width: 768px) {
+    .thread {
+        border-radius: 0;
+
+        .thread-header {
+            border-radius: 0;
+        }
     }
 }

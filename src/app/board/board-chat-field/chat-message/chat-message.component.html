@@ -77,7 +77,7 @@
             <p class="message">{{ chat.message }}</p>
             }
             @else if (editorOpen) {
-            <app-message-editor (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat" style="width:100%"></app-message-editor>
+            <app-message-editor (emojiPickerOpen)="stopHover($event)" (editorOpen)="toggleMessageEditor()" [chatMessageIndex]="chatMessageIndex" [chat]="chat" style="width:100%"></app-message-editor>
            
             }
             <div class="reaction-indicator-bar">

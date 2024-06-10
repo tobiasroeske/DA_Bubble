@@ -254,7 +254,7 @@
         }
 
         >h3 {
-            font-weight: 400px;
+            font-weight: 400;
             font-size: 18px;
         }
     }
@@ -345,5 +345,50 @@
                 background: rgba(0, 0, 0, 0.1);
             }
         }
+    }
+}
+
+@media (max-width: 768px) {
+    .new-message-icon-mobile {
+        display: flex;
+    }
+
+    .sidenav {
+        border-radius: 0;
+        position: relative;
+        padding-bottom: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .new-message-icon-mobile {
+        display: flex;
+    }
+
+    .sidenav {
+        border-radius: 0;
+        position: relative;
+        padding-bottom: 12px;
+    }
+}
+
+@media (max-width: 445px) {
+
+    .arrow-down-channel,
+    .arrow-down-directmessages {
+        width: 12px;
+        height: 12px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .channel {
+        font-size: 17px;
+    }
+
+    .colleagues-container>.collegue>h3 {
+        font-size: 17px;
     }
 }

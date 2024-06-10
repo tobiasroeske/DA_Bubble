@@ -52,11 +52,13 @@ export class BoardService {
   userAvatarPopUp!: string;
   tabletView = false;
   mobileView = false;
+  emojiPickerSmall = false;
   selectedChatRoom!: PrivateChat;
   public privateMessagesElementsToArray: ElementRef[] = [];
   highlightArrayForTheChildElementSearched: boolean[] = [];
   showSearchDialog: boolean = false;
   searchText: string = "";
+
 
 
   constructor() {
@@ -81,6 +83,10 @@ export class BoardService {
     if (window.innerWidth <= 768) {
       this.mobileView = true;
       this.tabletView = false;
+      this.emojiPickerSmall = false;
+    }
+    if (window.innerWidth <= 420) {
+      this.emojiPickerSmall = true;
     }
   }
 
@@ -105,23 +111,39 @@ export class BoardService {
 
   open(element: string) {
     if (element == 'thread') {
-      this.threadTranslate = true;
-      if (window.innerWidth <= 1500) {
-        this.sidenavTranslate = false;
-      }
+      this.openThread();
     } else {
-      this.sidenavTranslate = !this.sidenavTranslate;
+      this.toggleSidenav();
+    }
+  }
+
+  openThread() {
+    this.threadTranslate = true;
+    if (window.innerWidth <= 1500) {
+      this.sidenavTranslate = false;
+    } 
+  }
+
+  toggleSidenav() {
+    this.sidenavTranslate = !this.sidenavTranslate;
       this.hideText();
       if (window.innerWidth <= 1500) {
         this.threadTranslate = false;
       }
-    }
+      if (this.mobileView) {
+        this.newMessageInputOpen = false;
+      }
   }
 
   close(element: string) {
     if (element == 'thread') {
       this.threadTranslate = false;
     }
+  }
+
+  hideChatField() {
+    return (this.sidenavTranslate && this.mobileView) || 
+    (this.threadTranslate && this.mobileView);
   }
 
   hideText() {
@@ -190,6 +212,7 @@ export class BoardService {
     this.storageService.saveCurrentChannelIndex(this.idx);
     this.privateChatIsStarted = false;
     this.newMessageInputOpen = false;
+    this.hideSideNav();
     event.preventDefault();
   }
 
@@ -222,6 +245,14 @@ export class BoardService {
     this.newMessageInputOpen = false;
     console.log(this.blueColorsForTheChatPartersFocus);
     this.setBlueColorToChatPartner(index)
+    this.hideSideNav();
+  }
+
+  hideSideNav() {
+    if (this.mobileView) {
+      this.sidenavTranslate = false;
+      this.hideText();
+    }
   }
 
   setBlueColorToChatPartner(index: number) {

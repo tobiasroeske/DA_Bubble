@@ -84,7 +84,7 @@
 @if (boardServ.showEmojiPicker) {
 <div class="emoji-container">
     <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up"
-        (emojiClick)="addEmoji($event)"></emoji-mart>
+        (emojiClick)="addEmoji($event)" [style]="{'width': boardService.emojiPickerSmall ? '160px' : '270px'}"></emoji-mart>
 </div>
 }
 

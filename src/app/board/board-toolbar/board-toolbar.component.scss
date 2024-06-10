@@ -10,6 +10,13 @@ div {
     @include d-flex($g: 16px);
 }
 
+.logo-container-workspace {
+    @include d-flex($g:8px);
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+}
+
 @media (min-width: 960px) {
     .input-search-container {
         position: relative;
@@ -127,7 +134,7 @@ div {
 
 @media (max-width: 960px) {
     div {
-        padding: 8px 16px 0 16px;
+        padding: 8px 16px 0 6px;
     }
 
     .input-search-container {
@@ -159,4 +166,38 @@ div {
         right: 48px;
     }
 
+}
+
+@media (max-width: 560px) {
+    .user-container{
+        > span {
+            display: none;
+        }
+
+        > .arrow-down-user {
+            display: none;
+        }
+    } 
+
+    .state-icon {
+        right: 14px;
+    }
+
+    .logo {
+        width: 45px;
+        height: 45px;
+    }
+
+    .logo-headline {
+        height: 16px;
+    }
+
+    .workspace-logo {
+        width: 45px;
+        height: 45px;
+    }
+
+    .logo-container-workspace > h3 {
+        font-size: 20px;
+    }
 }

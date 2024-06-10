@@ -1,4 +1,4 @@
-<div class="sidenav">
+<div class="sidenav" [ngStyle]="{'display': boardServ.sidenavTranslate ? 'flex' : 'none'}">
     <div class="channel-btn" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
         <span class="channel-btn-logo-name">
             <img class="workspaceLogo" src="assets/img/workspaceLogo.png" alt="">
@@ -11,6 +11,16 @@
                 fill="black" />
         </svg>
     </div>
+    @if (!boardServ.dialogIsOpen) {
+        <div class="new-message-icon-mobile" (click)="toggleNewMessageInput($event)">
+            <svg class="edit_square-icon" width="22" height="22" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M2.77026 20.7C2.22026 20.7 1.74943 20.5042 1.35776 20.1125C0.966097 19.7209 0.770264 19.25 0.770264 18.7V4.70005C0.770264 4.15005 0.966097 3.67922 1.35776 3.28755C1.74943 2.89588 2.22026 2.70005 2.77026 2.70005H11.6953L9.69526 4.70005H2.77026V18.7H16.7703V11.75L18.7703 9.75005V18.7C18.7703 19.25 18.5744 19.7209 18.1828 20.1125C17.7911 20.5042 17.3203 20.7 16.7703 20.7H2.77026ZM13.9453 3.27505L15.3703 4.67505L8.77026 11.275V12.7H10.1703L16.7953 6.07505L18.2203 7.47505L11.5953 14.1C11.4119 14.2834 11.1994 14.4292 10.9578 14.5375C10.7161 14.6459 10.4619 14.7 10.1953 14.7H7.77026C7.48693 14.7 7.24943 14.6042 7.05776 14.4125C6.8661 14.2209 6.77026 13.9834 6.77026 13.7V11.275C6.77026 11.0084 6.82026 10.7542 6.92026 10.5125C7.02026 10.2709 7.16193 10.0584 7.34526 9.87505L13.9453 3.27505ZM18.2203 7.47505L13.9453 3.27505L16.4453 0.775049C16.8453 0.375049 17.3244 0.175049 17.8828 0.175049C18.4411 0.175049 18.9119 0.375049 19.2953 0.775049L20.6953 2.20005C21.0786 2.58338 21.2703 3.05005 21.2703 3.60005C21.2703 4.15005 21.0786 4.61672 20.6953 5.00005L18.2203 7.47505Z"
+                    fill="white" />
+            </svg>
+        </div>
+    }
+    
 
     <div class="input-search-container-sidenav">
         <input (focus)="boardServ.loadAllData()" #filter (input)="showText(filter.value)" name="searchText" type="text"
