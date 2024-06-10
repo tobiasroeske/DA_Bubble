@@ -187,7 +187,7 @@
 
 .message-container {
     width: 80%;
-    min-width: 352px;
+    //min-width: 352px;
     @include d-flex(column, flex-start, flex-start, 8px);
     font-family: "Nunito";
 
@@ -520,11 +520,17 @@
     }
 
     .message-box-reverse {
-        padding: 10px 16px;
+        padding: 10px 16px !important;
     }
 
     .reaction-dialog-indicatorbar {
         bottom: 32px;
         left: 32px;
+        padding: 10px 12px;
+    }
+
+    .emoji-icon {
+        width: 20px;
+        height: 20px;
     }
 }

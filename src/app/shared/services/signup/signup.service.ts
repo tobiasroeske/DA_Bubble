@@ -74,6 +74,9 @@ export class SignupService {
           });
       }
     })
+    .catch(err => {
+      this.googleLogin();
+    })
   }
 
   async getRedirectIntel() {

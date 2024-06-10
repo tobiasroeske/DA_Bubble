@@ -367,3 +367,22 @@
         left: 108px
     }
 }
+
+@media (max-width: 960px) {
+    .reverse {
+        padding: 10px 16px 10px 10px;
+    }
+
+    .message {
+        padding: 10px 10px 10px 26px;
+    }
+
+    .reaction-dialog-indicatorbar {
+        padding: 12px;
+    }
+
+    .emoji-icon {
+        width: 20px;
+        height: 20px;
+    }
+}

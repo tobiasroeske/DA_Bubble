@@ -383,7 +383,7 @@
 
 @media (max-width: 960px) {
     .thread >.thread-header {
-        padding: 8px 16px 8px 26px;
+        padding: 12px 16px 12px 26px;
     }
     
     .title-and-channel-container >h2 {
@@ -393,5 +393,9 @@
     .cross-icon {
         width: 32px;
         height: 32px;
+    }
+
+    .message {
+        padding: 10px 10px 10px 26px;
     }
 }
