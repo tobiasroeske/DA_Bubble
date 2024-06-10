@@ -10,39 +10,41 @@ div {
     @include d-flex($g: 16px);
 }
 
-.input-search-container {
-    position: relative;
-    width: 40%;
-    background: #fff;
-    border-radius: 50px;
-    padding: 17.5px 55px 17.5px 45px;
-    @include d-flex($jc: space-between, $g: 16px);
+@media (min-width: 960px) {
+    .input-search-container {
+        position: relative;
+        width: 40%;
+        background: #fff;
+        border-radius: 50px;
+        padding: 17.5px 55px 17.5px 45px;
+        @include d-flex($jc: space-between, $g: 16px);
 
-    >input {
-        font-family: "Nunito";
-        height: 30px;
-        width: 100%;
-        border: unset;
-        outline: none;
-        font-size: 24px;
-        font-weight: 400;
+        >input {
+            font-family: "Nunito";
+            height: 30px;
+            width: 100%;
+            border: unset;
+            outline: none;
+            font-size: 24px;
+            font-weight: 400;
 
-        &::placeholder {
-            color: rgba(0, 0, 0, 0.5);
+            &::placeholder {
+                color: rgba(0, 0, 0, 0.5);
+            }
         }
-    }
 
-    >img {
-        position: absolute;
-        right: 16px;
-        height: 35px;
-        width: 35px;
-        border-radius: 100%;
-        padding: 4px;
+        >img {
+            position: absolute;
+            right: 16px;
+            height: 35px;
+            width: 35px;
+            border-radius: 100%;
+            padding: 4px;
 
-        &:hover {
-            cursor: pointer;
-            background: rgba(0, 0, 0, 0.1);
+            &:hover {
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.1);
+            }
         }
     }
 }
@@ -105,6 +107,7 @@ div {
         padding: 10px 45px;
         font-size: 24px;
         font-weight: 600;
+
         &:hover {
             background-color: #ECEEFE;
             border-color: transparent;
@@ -142,10 +145,10 @@ div {
 
     .user-container {
         >span {
-        font-size: 24px;
+            font-size: 24px;
         }
 
-        > .account-photo {
+        >.account-photo {
             width: 48px;
             height: 48px;
         }

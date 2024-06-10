@@ -12,12 +12,12 @@
         </svg>
     </div>
 
-    <!-- <div class="input-search-container">
-            <input (focus)="boardServ.loadAllData()" #filter (input)="showValue(filter.value)" name="searchText" type="text"
-                placeholder="Coding learning durchsuchen">
-            <img src="./assets/img/search.png" alt="">
-            <app-search-dialog [searchValue]="searchText"></app-search-dialog>
-        </div> -->
+    <div class="input-search-container-sidenav">
+        <input (focus)="boardServ.loadAllData()" #filter (input)="showText(filter.value)" name="searchText" type="text"
+            placeholder="Coding learning durchsuchen">
+        <img src="./assets/img/search.png" alt="">
+        <app-search-dialog [searchValue]="searchText"></app-search-dialog>
+    </div>
 
     <!-- Channels Container -->
     <div class="scrollable">

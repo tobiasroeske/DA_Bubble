@@ -11,7 +11,7 @@
 }
 
 .scrollable {
-    @include d-flex( $fd: column, $jc: flex-start, $g: 24px);
+    @include d-flex($fd: column, $jc: flex-start, $g: 24px);
     overflow: auto;
     padding-right: 30px;
     width: 100%;
@@ -279,14 +279,71 @@
 }
 
 // media queries
+@media (min-width: 960px) {
+    .input-search-container-sidenav {
+        display: none;
+    }
+}
 
 @media (max-width: 960px) {
+    .sidenav {
+        padding: 0;
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .scrollable {
+        padding: 0;
+        padding: 32px 0px 30px 52px;
+        overflow-x: hidden;
+    }
+
     .channel-btn {
         display: none;
     }
 
-    .colleagues-container > .collegue > .avatar-sidenav {
+    .colleagues-container>.collegue>.avatar-sidenav {
         width: 48px;
         height: 48px;
+    }
+
+    .input-search-container-sidenav {
+        position: relative;
+        background: #fff;
+        border-radius: 50px;
+        border: 1px solid rgba(173, 176, 217, 1);
+        padding: 8px 24px;
+        @include d-flex($jc: space-between, $g: 16px);
+        width: 80%;
+
+        >input {
+            font-family: "Nunito";
+            height: 30px;
+            width: 100%;
+            border: unset;
+            outline: none;
+            font-size: 16px;
+            font-weight: 400;
+            padding-right: 16px;
+
+            &::placeholder {
+                color: rgba(0, 0, 0, 0.5);
+                font-size: 16px;
+            }
+        }
+
+        >img {
+            position: absolute;
+            right: 16px;
+            height: 35px;
+            width: 35px;
+            border-radius: 100%;
+            padding: 4px;
+
+            &:hover {
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-@if(showSearchDialog){
+@if(this.boardServ.showSearchDialog){
 <div class="wrapper">
     <div class="search-dialog">
         @for(result of mainSearchList; track result; let index = $index){
@@ -6,6 +6,7 @@
         <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-channel">
             <span>Dein Kanal :</span>
             <span class="filtered-channel-name">#{{result.title}}</span>
+            <span class="separator-bar"></span>
         </div>
         } @else if(result.name && result.avatarPath){
         <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-user-container">
@@ -14,6 +15,7 @@
                 <img src="{{result.avatarPath}}" alt="">
                 <span>{{result.name}}</span>
             </div>
+            <span class="separator-bar"></span>
         </div>
         }
         @else if(result.guest){
@@ -22,7 +24,8 @@
             <div class="filtered-partner">
                 <img src="{{result.guest.avatarPath}}" alt="">
                 <span> {{result.guest.name}}</span>
-            </div>
+                </div>
+            <span class="separator-bar"></span>
         </div>
         }
         }

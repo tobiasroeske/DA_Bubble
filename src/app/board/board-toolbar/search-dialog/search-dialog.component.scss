@@ -121,3 +121,53 @@
     height: 32px;
     width: 100%;
 }
+
+@media (max-width: 768px) {
+    .wrapper {
+        left: -18px;
+    }
+}
+
+@media (min-width: 480px) {
+    .separator-bar {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .wrapper {
+        min-width: 0;
+        width: 290px;
+    }
+
+    .search-dialog {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .filtered-channel {
+        @include d-flex(column, space-between, flex-start, 8px);
+        border-radius: 20px;
+        padding: 12px 24px;
+    }
+
+    .filtered-user-container {
+        @include d-flex(column, space-between, flex-start, 8px);
+        border-radius: 20px;
+        padding: 12px 24px;
+    }
+
+    .filtered-chat-container {
+        @include d-flex(column, space-between, flex-start, 8px);
+        border-radius: 20px;
+        padding: 12px 24px;
+    }
+
+    .separator-bar {
+        display: block;
+        height: 2px;
+        width: 100%;
+        border-radius: 100px;
+        background: rgba(173, 176, 217, 1)
+    }
+}
