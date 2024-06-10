@@ -52,6 +52,7 @@ export class BoardService {
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
   tabletView = false;
+  mobileView = false;
   selectedChatRoom!: PrivateChat;
   privateMessagesElementsToArray!: ElementRef<any>[]
 
@@ -70,9 +71,14 @@ export class BoardService {
   checkScreenSize() {
     if (window.innerWidth <= 1500) {
       this.tabletView = true;
+      this.mobileView = false;
       if (this.threadTranslate && this.sidenavTranslate) {
         this.sidenavTranslate = false;
       }
+    }
+    if (window.innerWidth <= 768) {
+      this.mobileView = true;
+      this.tabletView = false;
     }
   }
 

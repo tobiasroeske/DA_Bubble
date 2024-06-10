@@ -2,16 +2,34 @@
 
 .sidenav {
     height: 100%;
-    padding: 32px 30px 0px 52px;
+    padding: 32px 0px 32px 52px;
     background: #fff;
     border-radius: 20px;
     font-family: "Nunito";
     @include d-flex($fd: column, $jc: flex-start, $g: 24px);
+    //overflow: auto;
+}
+
+.scrollable {
+    @include d-flex( $fd: column, $jc: flex-start, $g: 24px);
+    overflow: auto;
+    padding-right: 30px;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(173, 176, 217, 1);
+        border-radius: 100px;
+    }
 }
 
 .channel-btn {
     @include d-flex($jc: space-between);
     width: 100%;
+    padding-right: 30px;
 
     >.channel-btn-logo-name {
         @include d-flex($jc: space-between, $g: 16px);
@@ -43,7 +61,7 @@
 .channel-container {
     @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 25px);
     width: 100%;
-    overflow: hidden;
+    //overflow: hidden;
 
     >.channel-header {
         @include d-flex($jc: space-between);
@@ -155,7 +173,7 @@
 
 .add-channel-container {
     @include d-flex($jc: flex-start, $g: 16px);
-    width: 100%;
+    //width: 100%;
     margin-left: 35px;
 
     &:hover {
