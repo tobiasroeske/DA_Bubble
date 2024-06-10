@@ -177,3 +177,24 @@ input[type="file"] {
         height: 72px;
     }
 }
+
+@media (max-width: 835px) {
+    .uploaded-file {
+        width: 72px;
+        height: 72px;
+    }
+}
+
+@media (max-width: 560px) {
+    .emoji-container {
+        bottom: 161px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+    }
+
+    .textarea-container {
+        left: 20px;
+        right: 20px;
+    }
+}

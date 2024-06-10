@@ -74,6 +74,7 @@ export class ChatMessageComponent implements OnInit {
 
   toggleMessageEditor() {
     this.editorOpen =!this.editorOpen
+    this.mouseIsOverMessage = false;
   }
 
   toggleFilePreview() {
@@ -147,6 +148,10 @@ export class ChatMessageComponent implements OnInit {
     // } else {
     //   this.popUpReaction = true;
     // }
+  }
+
+  stopHover(event: boolean) {
+    this.mouseIsOverMessage = false;
   }
 
   onLeave(htmlElement: string) {
