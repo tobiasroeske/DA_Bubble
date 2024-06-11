@@ -23,6 +23,7 @@ export class BoardToolbarComponent {
   userList: CurrentUser[] = [];
   // userListSubscription!: Subscription;
   searchText: string = "";
+  showProfile = false;
 
   constructor() {
   }
@@ -30,4 +31,16 @@ export class BoardToolbarComponent {
   showValue(text: string) {
     this.searchText = text;
   }
+
+  toggleProfileMobile(event: Event) {
+    this.showProfile = !this.showProfile;
+    this.boardServ.toggleProfileOptions();
+    event.stopPropagation()
+  }
+
+  close(event: boolean) {
+    this.showProfile = event;
+  }
+
+
 }

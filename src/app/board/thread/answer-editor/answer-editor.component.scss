@@ -64,3 +64,83 @@
         }
     }
 }
+
+
+// Media queries
+
+@media (max-width: 1100px) {
+    .btn-no-style {
+        padding: 8px 15px;
+    }
+
+    .textarea-container {
+        .tool-panel-textarea {
+            align-items: flex-end;
+        }
+
+        .action-btns {
+            gap: 8px;
+            flex-direction: column;
+    
+            .save-btn {
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media (max-width: 560px) {
+    .textarea-container {
+        left: 50%;
+        right: auto;
+
+        > textarea {
+            margin-bottom: 4px;
+        }
+
+        .action-btns {
+            gap: 8px;
+            flex-direction: row;
+        }
+
+        .tool-panel-textarea {
+            justify-content: flex-end;
+        }
+    }
+
+    .btn-no-style {
+        padding: 4px 12px;
+    }
+
+    .emoji-container {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .textarea-icon {
+        display: none;
+    }
+}
+
+@media (max-width: 470px) {
+    .textarea-container {
+        .tool-panel-textarea {
+            align-items: flex-end;
+        }
+
+        .action-btns {
+            flex-direction: column;
+        }
+    }
+
+    .btn-no-style {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .emoji-container {
+        left:25%;
+        transform: translateX(-25%);
+    }
+}

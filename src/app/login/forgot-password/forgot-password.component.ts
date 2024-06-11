@@ -13,12 +13,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
-  authService = inject(SignupService);
-  mail = '';
-  //emailSent = false;
   @Output() goBack = new EventEmitter<boolean>();
   @Output() emailSent = new EventEmitter<boolean>();
+
+  authService = inject(SignupService);
   
+  mail = '';
   
   onSubmit(ngForm: NgForm) {
     if (ngForm.form.valid && ngForm.submitted) {

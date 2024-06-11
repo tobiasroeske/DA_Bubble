@@ -8,10 +8,10 @@
     <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
         [class.slide-in]="mouseIsOverMessage" class="reaction-bar"
         [class.reaction-bar-reverse]="privateMessage.user.id == boardServ.currentUser.id">
-        <img src="assets/emoji/emoji_{{ lastReactions[0] }}.png" alt="" class="emoji-icon"
-            (click)="updateCompleteChannel(0, lastReactions)">
-        <img src="assets/emoji/emoji_{{ lastReactions[1] }}.png" alt="" class="emoji-icon"
-            (click)="updateCompleteChannel(1, lastReactions)">
+        <img src="assets/emoji/emoji_{{ localStorageServ.loadLastReactions()[0] }}.png" alt="" class="emoji-icon"
+            (click)="updateCompleteChannel(0, localStorageServ.loadLastReactions())">
+        <img src="assets/emoji/emoji_{{ localStorageServ.loadLastReactions()[1] }}.png" alt="" class="emoji-icon"
+            (click)="updateCompleteChannel(1, localStorageServ.loadLastReactions())">
         <svg (click)="toggleReactionDialog('superiorBar')" class="addReaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_1817_19446" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
@@ -83,7 +83,7 @@
                     <div class="pop-up-reaction">
                         <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
                         <div class="pop-up-reacter">
-                        <b>{{ reaction.creator[reaction.creator.length - 1] }}</b> <br>
+                        <b>{{ reaction.creator[reaction.creator.length - 1] }}</b>
                         <p>hat reagiert</p>
                         </div>
                     </div>

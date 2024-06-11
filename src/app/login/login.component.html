@@ -3,7 +3,7 @@
         <div class="logo-box">
             <img src="assets/img/logo.png" alt="">
             <h1>DABubble</h1>
-    
+
         </div>
         @if (!forgotPassword && !smallScreen) {
         <div class="register-box">
@@ -18,11 +18,12 @@
                 @if (!forgotPassword) {
                 <app-sign-in (passwordForgotten)="openPasswordDialog($event)" [smallScreen]="smallScreen"></app-sign-in>
                 } @else {
-                <app-forgot-password (emailSent)="showConfirmation($event)" (goBack)="openPasswordDialog($event)"></app-forgot-password>
+                <app-forgot-password (emailSent)="showConfirmation($event)"
+                    (goBack)="openPasswordDialog($event)"></app-forgot-password>
                 }
             </div>
         </div>
-    
+
         @if (smallScreen && !forgotPassword) {
         <div class="register-box">
             <span>Neu bei DABubble?</span>
@@ -30,16 +31,16 @@
         </div>
         }
         @if (!smallScreen && !forgotPassword) {
-            <footer>
-                <a href="">Impressum</a>
-                <a href="">Datenschutz</a>
-            </footer>
+        <footer>
+            <a href="">Impressum</a>
+            <a href="">Datenschutz</a>
+        </footer>
         }
         @if (forgotPassword) {
-            <div [class.slide-in]="confirmationMessage" class="confirmation-message">
-                <img src="assets/icons/email_send.png" alt="">
-                E-Mail gesendet
-            </div> 
+        <div [class.slide-in]="confirmationMessage" class="confirmation-message">
+            <img src="assets/icons/email_send.png" alt="">
+            E-Mail gesendet
+        </div>
         }
     </div>
     @if (!localStorageService.introPlayed) {
@@ -52,7 +53,7 @@
                 </div>
             </div>
         </div>
-    
+
     </div>
     }
 </div>

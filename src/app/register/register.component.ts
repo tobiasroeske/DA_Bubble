@@ -16,8 +16,9 @@ import { SignupService } from '../shared/services/signup/signup.service';
 export class RegisterComponent implements OnInit {
   router = inject(Router)
   signupService = inject(SignupService)
-  next = false;
   user = new User();
+ 
+  next = false;
   signupSuccessful = false;
   smallScreen = false;
 
@@ -45,7 +46,6 @@ export class RegisterComponent implements OnInit {
   }
 
   async signup($event: boolean) {
-    
     await this.signupService.register()
     .then(() => this.signupSuccessful = $event)
   }

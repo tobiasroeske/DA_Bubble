@@ -12,27 +12,23 @@ import { PrivateChatMessageComponent } from '../../../board/board-chat-field/pri
   providedIn: 'root'
 })
 export class MemberDialogsService {
-
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService)
+
   membersDialogIsOpen: boolean = false;
   addMemberDialogIsOpen: boolean = false;
   addSpecificPerson: boolean = false;
+  showMemberPopUpisOpen: boolean = false;
+
+  privateChat = new PrivateChat();
   currentChannel!: Channel;
   name!: string;
   avatarPath!: string;
   email!: string;
-  showMemberPopUpisOpen: boolean = false;
-  privateChat = new PrivateChat();
   currentMember!: CurrentUser;
   guestId?: string;
   creatorId?: string;
   searchedUserPopUpId?: string;
-
-
-  constructor() { }
-
-
 
   toggleMembersDialog(event: Event) {
     this.membersDialogIsOpen = !this.membersDialogIsOpen;
@@ -62,28 +58,35 @@ export class MemberDialogsService {
 
   openShowMemberPopUp(index: number) {
     if (!this.boardServ.privateChatIsStarted) {
-      this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-      console.log(this.currentChannel);
-      this.currentMember = this.currentChannel.members[index];
-      this.name = this.currentChannel.members[index].name;
-      this.avatarPath = this.currentChannel.members[index].avatarPath;
-      this.email = this.currentChannel.members[index].email;
+      this.startNewChat(index);
     } else {
-      this.name = this.firestore.directMessages[index].guest.name;
-      this.avatarPath = this.firestore.directMessages[index].guest.avatarPath;
-      this.email = this.firestore.directMessages[index].guest.email;
-      this.currentMember = this.firestore.directMessages[index].guest;
+      this.goToChat(index);
     }
     this.showMemberPopUpisOpen = true;
   }
 
-  checkMemberLoginState(member: CurrentUser) {
+  startNewChat(index: number) {
+    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    console.log(this.currentChannel);
+    this.currentMember = this.currentChannel.members[index];
+    this.name = this.currentChannel.members[index].name;
+    this.avatarPath = this.currentChannel.members[index].avatarPath;
+    this.email = this.currentChannel.members[index].email;
+  }
+
+  goToChat(index: number) {
+    this.name = this.firestore.directMessages[index].guest.name;
+    this.avatarPath = this.firestore.directMessages[index].guest.avatarPath;
+    this.email = this.firestore.directMessages[index].guest.email;
+    this.currentMember = this.firestore.directMessages[index].guest;
+  }
+
+  checkMemberLoginState(member:CurrentUser) {
     let allUsers = this.firestore.userList;
     let user = allUsers.find(user => user.id == member.id);
     if (user != undefined) {
       return user.loginState
     } else {
-      console.error('User not found'); //Später löschen
       return null
     }
   }

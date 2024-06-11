@@ -73,11 +73,18 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
             this.resetTextArea();
           });
         setTimeout(() => {
-          let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
-          this.boardServ.startPrivateChat(idx, 'creator', event);
+          this.showMessageInChat();
         }, 1)
       }
     }
+  }
+
+  showMessageInChat() {
+    let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
+          if (idx == -1) {
+            idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id)
+          }
+          this.boardServ.startPrivateChat(idx, 'creator', event);
   }
 
   override resetTextArea() {

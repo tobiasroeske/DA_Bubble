@@ -176,3 +176,21 @@ form {
 input[type="file"] {
     display: none;
 }
+
+// media queries
+
+@media (max-width: 560px) {
+    .content {
+        width: 100%;
+    }
+}
+
+@media (max-width: 450px) {
+    .form-actions {
+        gap: 8px;
+    }
+
+    .form-actions .cancel-btn, .form-actions .submit-btn {
+        padding: 8px 12px;
+    }
+}

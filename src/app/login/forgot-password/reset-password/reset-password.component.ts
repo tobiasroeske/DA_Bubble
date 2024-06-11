@@ -15,13 +15,14 @@ export class ResetPasswordComponent implements OnInit {
   authService = inject(SignupService);
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router)
+
   newPassword = '';
   passwordConfirmation = '';
-  passwordNotConfirmed = false;
   resetCode!: string;
-  passwordChanged = false;
   actionMode!: string;
-
+  passwordNotConfirmed = false;
+  passwordChanged = false;
+  
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((val) => {
       this.resetCode = val['oobCode']
@@ -61,12 +62,11 @@ export class ResetPasswordComponent implements OnInit {
       this.authService.resetPassword(this.resetCode, this.newPassword)
       .then(() => {
         this.passwordChanged = true;
-        setTimeout(() => {
-          this.backToLogin();
-        },1500)
+        setTimeout(() => { this.backToLogin() },1500)
       })
     } else if (ngForm.submitted && ngForm.form.valid && !this.comparePasswords()) {
       this.passwordNotConfirmed = true;
     }
   }
+  
 }

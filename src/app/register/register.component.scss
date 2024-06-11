@@ -20,7 +20,7 @@ header {
 .content {
     @include d-flex($fd: column, $g: 8px);
     height: calc(100vh - 126px);
-    //overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 .login-container {

@@ -6,32 +6,34 @@
             <div class="input-container">
                 <div class="input-box">
                     @if (mail== '') {
-                        <img src="assets/img/mail.png" alt="">
+                    <img src="assets/img/mail.png" alt="">
                     } @else {
-                        <img src="assets/img/mail_black.png" alt="">
+                    <img src="assets/img/mail_black.png" alt="">
                     }
                     <label for="email"></label>
-                    <input [(ngModel)]="mail" #email type="email" id="email" name="email" placeholder="beispielname@email.com">
+                    <input [(ngModel)]="mail" #email type="email" id="email" name="email"
+                        placeholder="beispielname@email.com">
                 </div>
-                @if (signupService.errorCode == 'auth/missing-email' || signupService.errorCode == 'auth/invalid-email') {
-                    <span class="error-message">Bitte gültige E-Mail-Adresse eingeben</span>
+                @if (signupService.errorCode == 'auth/missing-email' || signupService.errorCode == 'auth/invalid-email')
+                {
+                <span class="error-message">Bitte gültige E-Mail-Adresse eingeben</span>
                 }
             </div>
 
             <div class="input-container">
                 <div class="input-box">
                     @if (password == '') {
-                        <img src="assets/img/lock.png" alt="">
+                    <img src="assets/img/lock.png" alt="">
                     } @else {
-                        <img src="assets/img/lock_black.png" alt="">
+                    <img src="assets/img/lock_black.png" alt="">
                     }
                     <label for="password"></label>
                     <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="Passwort">
                 </div>
                 @if(signupService.errorCode == 'auth/invalid-credential') {
-                    <span class="error-message">E-Mail-Adresse oder Passwort falsch. Bitte noch einmal versuchen.</span>
+                <span class="error-message">E-Mail-Adresse oder Passwort falsch. Bitte noch einmal versuchen.</span>
                 } @else if(signupService.errorCode == 'auth/missing-password') {
-                    <span class="error-message">Bitte Passwort eingeben</span>
+                <span class="error-message">Bitte Passwort eingeben</span>
                 }
             </div>
         </div>
@@ -44,7 +46,8 @@
         </div>
 
         <div class="google-container">
-            <div class="btn-no-style google-btn" (click)="googleLogin()"><img src="assets/img/google_logo.png" alt="">Anmelden mit
+            <div class="btn-no-style google-btn" (click)="googleLogin()"><img src="assets/img/google_logo.png"
+                    alt="">Anmelden mit
                 Google</div>
         </div>
         <div class="submit-container">
@@ -53,4 +56,3 @@
         </div>
     </form>
 </div>
-

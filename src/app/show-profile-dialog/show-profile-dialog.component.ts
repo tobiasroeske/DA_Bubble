@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { BoardService } from '../board/board.service';
 
 @Component({
@@ -9,11 +9,19 @@ import { BoardService } from '../board/board.service';
   styleUrl: './show-profile-dialog.component.scss'
 })
 export class ShowProfileDialogComponent {
+  @Output() mobileOpen = new EventEmitter<boolean>();
   boardServ = inject(BoardService);
 
   closeDialog($event:Event) {
-    this.boardServ.toggleProfileOptions(); 
+    this.boardServ.profileOptionsOpen = false;
+    this.boardServ.editMode = false;
+    this.boardServ.authService.errorCode = '';
+    this.boardServ.profileOpen = false;
     this.boardServ.stopPropagation($event);
-    this.boardServ.toggleProfileView();
+    this.closeMobileDialog();
+  }
+
+  closeMobileDialog() {
+    this.mobileOpen.emit(false);
   }
 }

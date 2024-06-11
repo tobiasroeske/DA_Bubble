@@ -108,6 +108,15 @@
         > textarea {
             margin-bottom: 4px;
         }
+
+        .action-btns {
+            gap: 8px;
+            flex-direction: row;
+        }
+
+        .tool-panel-textarea {
+            justify-content: flex-end;
+        }
     }
 
     .btn-no-style {
@@ -119,8 +128,8 @@
         transform: translateX(-50%);
     }
 
-    .textarea-container .action-btns {
-        gap: 8px;
+    .textarea-icon {
+        display: none;
     }
 }
 

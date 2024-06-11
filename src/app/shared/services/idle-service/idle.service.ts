@@ -43,7 +43,6 @@ export class IdleService {
 
   startIdleTimer() {
     this.timeoutId = setTimeout(() => {
-      console.log('Inactivity detected');
       this.startCountdown();
     }, IdleUserTimes.IdleTime);
   }

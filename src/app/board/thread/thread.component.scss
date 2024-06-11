@@ -165,6 +165,7 @@
 
 .thread-message {
     @include d-flex($fd: column, $jc: flex-start, $g: 8px, $ai: flex-start);
+    width: 80%;
 
     >.time-and-name-container {
         width: 100%;

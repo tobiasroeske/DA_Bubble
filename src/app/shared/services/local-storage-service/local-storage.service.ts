@@ -32,6 +32,20 @@ export class LocalStorageService {
     localStorage.setItem('currentChannelIndex', JSON.stringify(i));
   }
 
+  saveLastReactions(reactions: string []) {
+    localStorage.setItem('lastReactions', JSON.stringify(reactions));
+  }
+
+  loadLastReactions(){
+    let reactionsExist = localStorage.getItem('lastReactions');
+    if (reactionsExist != null) {
+      let reactionsAsJson = JSON.parse(localStorage.getItem('lastReactions')!);
+      return reactionsAsJson;
+    } else {
+      return ['thumbs_up', 'laughing']
+    }
+  }
+
   loadCurrentChannelIndex() {
     let currentIndex = localStorage.getItem('currentChannelIndex');
     if (currentIndex != null) {
@@ -49,7 +63,6 @@ export class LocalStorageService {
 
     }
   }
-
 
   setCurrentUserObject(obj: any) {
     return {
