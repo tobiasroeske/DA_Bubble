@@ -13,13 +13,13 @@ import { SignupService } from '../../shared/services/signup/signup.service';
   styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
-  signupService = inject(SignupService);
-  user = new User();
-  checkboxChecked = false;
   @Output() showNextPage = new EventEmitter<boolean>();
   @Output() passUserDetail = new EventEmitter<User>();
 
-
+  signupService = inject(SignupService);
+  user = new User();
+  checkboxChecked = false;
+  
   onSubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid) {
       this.showNextPage.emit(true);

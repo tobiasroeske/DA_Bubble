@@ -1,30 +1,26 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc, query, where, orderBy } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
 import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
-import { Auth, user } from '@angular/fire/auth';
-import { BehaviorSubject } from 'rxjs';
-import { User } from '../../models/user.class';
-// import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { Auth } from '@angular/fire/auth';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
   firestore = inject(Firestore);
-  // usersListSubject = new BehaviorSubject<CurrentUser[]>([])
-  // usersList$ = this.usersListSubject.asObservable();
+  auth = inject(Auth);
+
   userList: CurrentUser[] = [];
+  allChannels: any[] = [];
+  directMessages: PrivateChat[] = [];
   unsubscribeUsers;
   unsubChannel: any;
   unsubDirectMess: any;
-  auth = inject(Auth);
-  allChannels: any[] = [];
-  directMessages: PrivateChat[] = [];
-  //  directMessagesSubject = new BehaviorSubject<PrivateChat[]>([]);
-  //   directMessages$ = this.directMessagesSubject.asObservable();
+  
   newChannelId?: string;
   chatRoomId?: string;
   currentUserId?: string;
@@ -38,15 +34,12 @@ export class FirestoreService {
         this.unsubDirectMess = this.subDirectMessages();
       }
     });
-    console.log(this.allChannels);
   }
 
   ngOnDestroy(): void {
     this.unsubscribeUsers();
     this.unsubChannel();
     this.unsubDirectMess();
-    // this.unsubChannelAlternative;
-    // this.unsubUserListAlternative();
   }
 
   getUsersRef() {
@@ -71,8 +64,6 @@ export class FirestoreService {
 
   subUsersList() {
     return onSnapshot(this.getUsersRef(), list => {
-      // const userList = list.docs.map(doc => this.setUserObject(doc.data(), doc.id))
-      // this.userListSubject.next(userList);
       this.userList = [];
       list.forEach(user => {
         let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
@@ -81,17 +72,6 @@ export class FirestoreService {
       console.log(this.userList);
     });
   }
-
-  // subUsersListAlternative() {
-  //   return onSnapshot(this.getUsersRef(), list => {
-  //     let usersList: CurrentUser[] = [];
-  //     list.forEach(user => {
-  //       let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
-  //       usersList.push(singleUser);
-  //     })
-  //     this.usersListSubject.next(usersList);
-  //   })
-  // }
 
   getCleanUserJson(obj: any) {
     return {
@@ -117,20 +97,6 @@ export class FirestoreService {
     }
   }
 
-  // subChannelListAlternative() {
-  //   return onSnapshot(this.getChannelsRef(), (list) => {
-  //     let allChannels: any[] = [];
-  //     list.forEach((el) => {
-  //       let channel = new Channel(el.data());
-  //       channel.id = el.id;
-  //       allChannels.push(channel.toJSON());
-  //     });
-  //     console.log(allChannels);
-
-  //     this.allChannelsSubject.next(allChannels);
-  //   });
-  // }
-
   subChannelList() {
     const q = query(this.getChannelsRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
     return onSnapshot(q, (list) => {
@@ -144,31 +110,6 @@ export class FirestoreService {
     })
   }
 
-  subDirectMessages() {
-    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
-    return onSnapshot(q, (list) => {
-      this.directMessages = [];
-      list.forEach(el => {
-        let privateChat = new PrivateChat(el.data());
-        this.directMessages.push(privateChat);
-      });
-      console.log(this.directMessages);
-    });
-  }
-
-  // subDirectMessages2(){
-  //   const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
-  //   return onSnapshot(q, (list) => {
-  //     let directMessages:PrivateChat[] = [];
-  //     list.forEach(el => {
-  //       let privateChat = new PrivateChat(el.data());
-  //       directMessages.push(privateChat);
-  //     });
-  //     console.log(this.directMessages);
-  //     this.directMessagesSubject.next(directMessages);
-  //   });
-  // }
-
   async addChannel(obj: {}) {
     await addDoc(this.getChannelsRef(), obj)
       .then(docRef => {
@@ -177,21 +118,7 @@ export class FirestoreService {
           updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId }).catch(err => console.log(err))
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  async addChatRoom(obj: {}) {
-    await addDoc(this.getDirectMessRef(), obj)
-      .then((docRef) => {
-        if (docRef?.id) {
-          this.chatRoomId = docRef?.id;
-          updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId }).catch(err => console.error(err))
-        }
-      }).catch((err) => {
-        console.error(err);
-      })
+      .catch((err) => { console.error(err) });
   }
 
   async updateChannel(item: {}, docId: string) {
@@ -199,6 +126,13 @@ export class FirestoreService {
     await updateDoc(docRef, item).catch((err) => {
       console.log(err);
     })
+  }
+
+  async updateAllChats(docId: string, newChats: ChatMessage[]) {
+    let chatRef = this.getSingleChannelRef('channels', docId);
+    await updateDoc(chatRef, { chat: newChats }).then((data) => console.log(data)
+    )
+      .catch(err => console.log(err));
   }
 
   async updateChannelUsers(updatedUser: any, docId: string) {
@@ -222,6 +156,30 @@ export class FirestoreService {
       .catch(err => console.log(err));
   }
 
+  subDirectMessages() {
+    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
+    return onSnapshot(q, (list) => {
+      this.directMessages = [];
+      list.forEach(el => {
+        let privateChat = new PrivateChat(el.data());
+        this.directMessages.push(privateChat);
+      });
+      console.log(this.directMessages);
+    });
+  }
+
+  async addChatRoom(obj: {}) {
+    await addDoc(this.getDirectMessRef(), obj)
+      .then((docRef) => {
+        if (docRef?.id) {
+          this.chatRoomId = docRef?.id;
+          updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId }).catch(err => console.error(err))
+        }
+      }).catch((err) => {
+        console.error(err);
+      })
+  }
+
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
@@ -238,13 +196,6 @@ export class FirestoreService {
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
     let chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: messageObject })
-  }
-
-  async updateAllChats(docId: string, newChats: ChatMessage[]) {
-    let chatRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(chatRef, { chat: newChats }).then((data) => console.log(data)
-    )
-      .catch(err => console.log(err));
   }
 
   getChatsRef(channelId: string) {

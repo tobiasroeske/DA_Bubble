@@ -174,3 +174,17 @@ input[type="file"] {
     border: 2px solid #ED1E79;
 }
 
+.textarea-icon {
+    width: 40px;
+    height: 40px;
+    @include d-flex()
+}
+
+// media queries
+
+@media (max-width: 560px) {
+    .emoji-icon {
+        display: none;
+    }
+}
+

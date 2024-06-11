@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { User } from '../../shared/models/user.class';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SignupService } from '../../shared/services/signup/signup.service';
@@ -14,14 +13,14 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class SignInComponent implements OnInit{
   @Input() smallScreen!: boolean;
+  @Output() passwordForgotten = new EventEmitter<boolean>();
 
   signupService = inject(SignupService);
   router = inject(Router);
+
   mail!: string;
   password!: string;
   errorMessage = false;
-
-  @Output() passwordForgotten = new EventEmitter<boolean>();
 
   ngOnInit(): void {
     this.signupService.getRedirectIntel()

@@ -16,50 +16,58 @@ export class BoardService {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
   firestore = inject(FirestoreService);
+
+  currentUser: any;
+  currentChatMessage!: any;
+  currentChatPartner!: CurrentUser;
+  privateChat!: ChatMessage[];
+  currentChannelTitle: string = '';
+  allData: (Channel | PrivateChat | CurrentUser | ChatMessage)[] = [];
+  selectedChatRoom!: PrivateChat;
+  public privateMessagesElementsToArray: ElementRef[] = [];
+  highlightArrayForTheChildElementSearched: boolean[] = [];
+
+  chatFieldRef!: ElementRef;
+  threadRef!: ElementRef;
+
   threadTranslate: boolean = false;
   sidenavTranslate: boolean = true;
   textHidden: boolean = false;
   dialogIsOpen: boolean = false;
   editDialogIsOpen: boolean = false;
-  status: string = 'öffen';
+
   profileOptionsOpen = false;
   profileOpen = false;
   editMode = false;
-  currentUser: any;
-  idx!: number;
-  chatPartnerIdx!: number;
-  firstPrivateMessageWasSent: boolean = false;
-  hidePopUpChatPartner: boolean = false;
-  currentChatMessage!: any;
-  chatMessageIndex!: number;
-  privateChatIsStarted: boolean = false;
-  chatFieldRef!: ElementRef;
-  threadRef!: ElementRef;
-  currentChatPartner!: CurrentUser;
-  privateChat!: ChatMessage[];
-  privateChatId?: string
+  newMessageInputOpen = false;
   showEmojiPicker = false;
   showEmojiPickerInThreads = false;
+  showUserPopUp: boolean = false;
+  tabletView = false;
+  mobileView = false;
+  emojiPickerSmall = false;
+
+  status: string = 'öffen';
+
+  idx!: number;
+  chatPartnerIdx!: number;
+  chatMessageIndex!: number;
+
+  firstPrivateMessageWasSent: boolean = false;
+  hidePopUpChatPartner: boolean = false;
+  privateChatIsStarted: boolean = false;
   blueColorsForTheChatPartersFocus: boolean[] = [];
   blueText!: boolean;
-  currentChannelTitle: string = '';
-  newMessageInputOpen = false;
-  allData: (Channel | PrivateChat | CurrentUser | ChatMessage)[] = [];
-  showUserPopUp: boolean = false;
+
+  privateChatId?: string
+
   userObjectPopUp!: CurrentUser;
   userNamePopUp!: string;
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
-  tabletView = false;
-  mobileView = false;
-  emojiPickerSmall = false;
-  selectedChatRoom!: PrivateChat;
-  public privateMessagesElementsToArray: ElementRef[] = [];
-  highlightArrayForTheChildElementSearched: boolean[] = [];
+
   showSearchDialog: boolean = false;
   searchText: string = "";
-
-
 
   constructor() {
     this.checkScreenSize();
@@ -74,20 +82,28 @@ export class BoardService {
 
   checkScreenSize() {
     if (window.innerWidth <= 1500) {
-      this.tabletView = true;
-      this.mobileView = false;
-      if (this.threadTranslate && this.sidenavTranslate) {
-        this.sidenavTranslate = false;
-      }
+      this.showDesktopView();
     }
     if (window.innerWidth <= 768) {
-      this.mobileView = true;
-      this.tabletView = false;
-      this.emojiPickerSmall = false;
+      this.showMobileView();
     }
     if (window.innerWidth <= 420) {
       this.emojiPickerSmall = true;
     }
+  }
+
+  showDesktopView() {
+    this.tabletView = true;
+    this.mobileView = false;
+    if (this.threadTranslate && this.sidenavTranslate) {
+      this.sidenavTranslate = false;
+    }
+  }
+
+  showMobileView() {
+    this.mobileView = true;
+    this.tabletView = false;
+    this.emojiPickerSmall = false;
   }
 
   getUserLoginState(participant: CurrentUser) {
@@ -121,18 +137,18 @@ export class BoardService {
     this.threadTranslate = true;
     if (window.innerWidth <= 1500) {
       this.sidenavTranslate = false;
-    } 
+    }
   }
 
   toggleSidenav() {
     this.sidenavTranslate = !this.sidenavTranslate;
-      this.hideText();
-      if (window.innerWidth <= 1500) {
-        this.threadTranslate = false;
-      }
-      if (this.mobileView) {
-        this.newMessageInputOpen = false;
-      }
+    this.hideText();
+    if (window.innerWidth <= 1500) {
+      this.threadTranslate = false;
+    }
+    if (this.mobileView) {
+      this.newMessageInputOpen = false;
+    }
   }
 
   close(element: string) {
@@ -142,8 +158,8 @@ export class BoardService {
   }
 
   hideChatField() {
-    return (this.sidenavTranslate && this.mobileView) || 
-    (this.threadTranslate && this.mobileView);
+    return (this.sidenavTranslate && this.mobileView) ||
+      (this.threadTranslate && this.mobileView);
   }
 
   hideText() {
@@ -228,7 +244,7 @@ export class BoardService {
     this.markCurrentChat(index);
   }
 
-  markCurrentChat(index:number) {
+  markCurrentChat(index: number) {
     this.blueColorsForTheChatPartersFocus = [];
     this.firestore.directMessages.forEach(privateChat => {
       this.blueColorsForTheChatPartersFocus.push(false);
@@ -239,7 +255,7 @@ export class BoardService {
     this.hideSideNav();
   }
 
-  startChatAsGuest(index:number) {
+  startChatAsGuest(index: number) {
     this.chatPartnerIdx = index;
     this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
     if (this.privateChatId == '') {
@@ -250,6 +266,22 @@ export class BoardService {
     this.checkIfPrivatChatIsEmpty();
     this.privateChatIsStarted = true;
   }
+
+//   startChat(index: number, asGuest: boolean) {
+//     this.chatPartnerIdx = index;
+//     this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+//     if (this.privateChatId == '') {
+//         this.privateChatId = this.firestore.chatRoomId;
+//     }
+//     if (asGuest) {
+//         this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].creator;
+//     } else {
+//         this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
+//     }
+//     this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
+//     this.checkIfPrivatChatIsEmpty();
+//     this.privateChatIsStarted = true;
+// }
 
   startChatAsCreator(index: number) {
     this.chatPartnerIdx = index;
@@ -288,16 +320,9 @@ export class BoardService {
 
   loadAllData() {
     this.allData = [];
-    this.firestore.allChannels.forEach((channel: Channel) => {
-      this.allData.push(channel)
-    })
-    this.firestore.userList.forEach((user: CurrentUser) => {
-      this.allData.push(user)
-    })
-    this.firestore.directMessages.forEach((dm: PrivateChat) => {
-      this.allData.push(dm)
-    })
-    console.log(this.allData);
+    this.firestore.allChannels.forEach((channel: Channel) => { this.allData.push(channel) })
+    this.firestore.userList.forEach((user: CurrentUser) => { this.allData.push(user) })
+    this.firestore.directMessages.forEach((dm: PrivateChat) => { this.allData.push(dm) })
   }
 
   openShowUserPopUp(index: number) {
@@ -320,7 +345,7 @@ export class BoardService {
     this.leaveTheHighlightFromSearchedMessage(index);
   }
 
-  leaveTheHighlightFromSearchedMessage(index:number) {
+  leaveTheHighlightFromSearchedMessage(index: number) {
     setTimeout(() => {
       this.highlightArrayForTheChildElementSearched[index] = false;
     }, 1500)

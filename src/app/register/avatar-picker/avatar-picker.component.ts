@@ -12,39 +12,37 @@ import { FirebaseStorageService } from '../../shared/services/firebase-storage-s
   templateUrl: './avatar-picker.component.html',
   styleUrl: './avatar-picker.component.scss'
 })
-export class AvatarPickerComponent implements OnInit{
+export class AvatarPickerComponent implements OnInit {
+  @Input() userData!: User;
+  @Output() goBack = new EventEmitter<boolean>();
+  @Output() signUpSuccessful = new EventEmitter<boolean>();
+
   signupService = inject(SignupService);
   firebaseStorageService = inject(FirebaseStorageService);
-  @Input() userData!:User;
-  @Output() goBack = new EventEmitter<boolean>();
+
   user!: User;
-  avatarPicked = false;
-  @Output() signUpSuccessful = new EventEmitter<boolean>();
   avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png']
   avatarImgPath = 'assets/img/profile_big.png';
-
+  avatarPicked = false;
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.user = this.userData;
   }
 
-  async onFileChange(event:any) {
+  async onFileChange(event: any) {
     let file = event.target.files[0];
     if (file) {
       let path = `avatarImages/${file.name}`;
       await this.firebaseStorageService.uploadFile(path, file)
-      .then(() => {
-        this.firebaseStorageService.getDownLoadUrl(path)
-        .then(url => {
-          this.user.avatarPath = url;
-          this.avatarImgPath = url;
-          this.avatarPicked = true;
+        .then(() => {
+          this.firebaseStorageService.getDownLoadUrl(path)
+            .then(url => {
+              this.user.avatarPath = url;
+              this.avatarImgPath = url;
+              this.avatarPicked = true;
+            })
+            .catch(err => console.log(err))
         })
-        .catch(err => console.log(err))
-      })
-      
     }
   }
 
@@ -59,7 +57,7 @@ export class AvatarPickerComponent implements OnInit{
     this.signUpSuccessful.emit(true);
   }
 
-  pickAvatar(i:number) {
+  pickAvatar(i: number) {
     this.user.avatarPath = this.avatars[i];
     this.avatarImgPath = this.avatars[i];
     this.avatarPicked = true;

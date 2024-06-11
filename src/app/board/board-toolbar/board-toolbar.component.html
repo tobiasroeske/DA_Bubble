@@ -5,11 +5,11 @@
         <img src="./assets/img/logoName.png" alt="" class="logo-headline">
     </div>
     } @else {
-        <div class="logo-container-workspace">
-            <img src="assets/icons/toolbar_back_arrow.png" alt="" class="back-arrow" (click)="boardServ.open('sidenav')">
-            <img src="assets/img/workspaceLogo.png" alt="" class="workspace-logo">
-            <h3>Devspace</h3>
-        </div>
+    <div class="logo-container-workspace">
+        <img src="assets/icons/toolbar_back_arrow.png" alt="" class="back-arrow" (click)="boardServ.open('sidenav')">
+        <img src="assets/img/workspaceLogo.png" alt="" class="workspace-logo">
+        <h3>Devspace</h3>
+    </div>
     }
     <div class="input-search-container">
         <input (focus)="boardServ.loadAllData()" #filter (input)="showValue(filter.value)" name="searchText" type="text"
@@ -43,6 +43,31 @@
             <button class="btn-no-style profile-btn" (click)="authService.logout()">Log out</button>
             }
         </div>
+
+        <div class="profile-options-mobile"
+            [ngClass]="{'slide-in': boardServ.profileOptionsOpen, 'slide-out': !boardServ.profileOptionsOpen}"
+            (click)="boardServ.stopPropagation($event)">
+
+            <img src="assets/icons/profile_slide_icon.png" alt="">
+            <div class="options">
+                <button class="btn-no-style profile-btn" (click)="toggleProfileMobile($event)"><img
+                        src="assets/icons/profile_icon.png" alt="">Profil</button>
+                <button class="btn-no-style profile-btn" (click)="authService.logout()"><img src="assets/icons/logout_icon.png" alt="">Logout</button>
+            </div>
+
+        </div>
         }
     </div>
 </div>
+
+@if (showProfile) {
+    <div class="popup">
+        <div class="profile">
+            @if (boardServ.editMode) {
+                <app-edit-profile-dialog></app-edit-profile-dialog>
+            } @else {
+            <app-show-profile-dialog (mobileOpen)="close($event)" class="width-100"></app-show-profile-dialog>
+            }
+        </div>
+    </div>
+}

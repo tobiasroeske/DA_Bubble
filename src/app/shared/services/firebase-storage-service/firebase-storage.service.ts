@@ -8,13 +8,10 @@ export class FirebaseStorageService {
   storage = inject(Storage);
   fileUrl!:string ;
   
-
   async uploadFile(path:string, file:File) {
     await uploadBytes(this.getStorageRef(path), file)
     .catch(err => console.log(err));
   }
-
-  
 
   getStorageRef(path: string) {
     return ref(this.storage, path);
@@ -23,8 +20,6 @@ export class FirebaseStorageService {
   async getDownLoadUrl(path: string): Promise<string> {
     return (await getDownloadURL(this.getStorageRef(path)));
   }
-
-  
 
   async deleteFile(path: string) {
     await deleteObject(this.getStorageRef(path))

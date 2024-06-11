@@ -100,12 +100,12 @@ export class ChatMessageComponent implements OnInit {
     this.boardServ.currentChannelTitle = this.currentChannel.title;
   }
 
-  updateCompleteChannel(emojiIdx: number, emojiArray: string[]) {
+  async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
     this.currentChannel.chat!.splice(this.chatMessageIndex, 1, newChatMessage);
     console.log('current chanel after update', this.currentChannel.chat);
-    this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!);
-    this.getLastTwoReactions(emojiIdx);
+    await this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!)
+    .then(() => this.getLastTwoReactions(emojiIdx, emojiArray));
   }
 
   checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
@@ -118,13 +118,13 @@ export class ChatMessageComponent implements OnInit {
         existingReaction.creator.push(this.currentUserName);
       }
     } else {
-      chatMessage.reactions.push(this.setReactionObject(emojiIdx));
+      chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
     }
     return chatMessage
   }
 
-  getLastTwoReactions(index: number) {
-    let newReaction = this.reactionEmojis[index];
+  getLastTwoReactions(index: number, emojiArray: string[]) {
+    let newReaction = emojiArray[index];
     if (this.lastReactions[this.lastReactions.length - 1] !== newReaction) {
       if (this.lastReactions.length >= 2) {
         this.lastReactions.splice(0, 1);
@@ -133,9 +133,9 @@ export class ChatMessageComponent implements OnInit {
     }
   }
 
-  setReactionObject(i: number): Reaction {
+  setReactionObject(i: number, emojiArray: string[]): Reaction {
     return {
-      emojiPath: this.reactionEmojis[i],
+      emojiPath: emojiArray[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
     }

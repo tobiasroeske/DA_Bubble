@@ -1,132 +1,138 @@
-@import '../../styles.scss';
+@import "../../styles.scss";
 
 .board {
-    //overflow: hidden;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    position: relative;
+  //overflow: hidden;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
 }
 
 .view {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex: 1;
-    overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+
+  > .sidenav {
+    transition: all 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  > .chatField {
     position: relative;
-
-    >.sidenav {
-        transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
-    }
-
-    >.chatField {
-        position: relative;
-        height: 100%;
-        width: 100%;
-        @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 24px);
-        flex: 1;
-        background: #fff;
-        border-radius: 30px;
-        // padding: 25px;
-        transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
-        overflow: hidden;
-    }
-}
-
-.hide-show-sidebar-btn {
-    @include d-flex($fd: column, $g: 10px);
-    border-radius: 30px 30px 30px 0px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 347px;
-    width: 60px;
+    height: 100%;
+    width: 100%;
+    @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 24px);
+    flex: 1;
     background: #fff;
-    padding: 14px 23px;
-    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-
-    >span {
-        font-family: "Nunito";
-        font-weight: 500;
-        font-size: 20px;
-        writing-mode: tb-rl;
-        transform: rotate(-180deg);
-    }
-
-    .hide-show-icon {
-        height: 16px;
-        width: 16px;
-        object-fit: cover;
-    }
+    border-radius: 30px;
+    // padding: 25px;
+    transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+    overflow: hidden;
+  }
 }
 
 .hide-show-sidebar-btn {
-    &:hover span {
-        color: $specialBlue;
-    }
+  @include d-flex($fd: column, $g: 10px);
+  border-radius: 30px 30px 30px 0px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 347px;
+  width: 60px;
+  background: #fff;
+  padding: 14px 23px;
+  box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 
-    &:hover .hide-show-icon path {
-        fill: $specialBlue;
-        stroke: $specialBlue;
-    }
+  > span {
+    font-family: "Nunito";
+    font-weight: 500;
+    font-size: 20px;
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+  }
 
-    &:hover .hide-show-icon rect {
-        stroke: $specialBlue;
-    }
+  .hide-show-icon {
+    height: 16px;
+    width: 16px;
+    object-fit: cover;
+  }
+}
+
+.hide-show-sidebar-btn {
+  &:hover span {
+    color: $specialBlue;
+  }
+
+  &:hover .hide-show-icon path {
+    fill: $specialBlue;
+    stroke: $specialBlue;
+  }
+
+  &:hover .hide-show-icon rect {
+    stroke: $specialBlue;
+  }
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.15);
-    z-index: 5;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+  z-index: 5;
 }
 
 // media queries
 
+@media (max-width: 1080px) {
+  .thread {
+    width: 420px !important;
+  }
+}
+
 @media (max-width: 960px) {
-    .board {
-        gap: 8px;
-    }
+  .board {
+    gap: 8px;
+  }
 
-    .hide-show-sidebar-btn {
-        width: auto;
-        padding: 14px 8px;
-    }
+  .hide-show-sidebar-btn {
+    width: auto;
+    padding: 14px 8px;
+  }
 
-    .thread {
-        width: 400px !important;
-    }
+  .thread {
+    width: 400px !important;
+  }
 }
 
 @media (max-width: 768px) {
-    .board {
-        gap: 0;
-    }
+  .board {
+    gap: 0;
+  }
 
-    .sidenav {
-        margin-top: 8px;
-    }
+  .sidenav {
+    margin-top: 8px;
+  }
 
-    .thread {
-        width: 100% !important;
-        margin-top: 8px;
-    }
+  .thread {
+    width: 100% !important;
+    margin-top: 8px;
+  }
 
-    .hide-show-sidebar-btn {
-        display: none;
-    }
+  .hide-show-sidebar-btn {
+    display: none;
+  }
 
-    .view >.chatField {
-        border-radius: 0;
-        margin-top: 8px;
-    }
+  .view > .chatField {
+    border-radius: 0;
+    margin-top: 8px;
+  }
 }
