@@ -21,9 +21,9 @@
         </div>
     }
     
-
+<!--  (input)="showText(search.value)" -->
     <div class="input-search-container-sidenav">
-        <input (focus)="boardServ.loadAllData()" #filter (input)="showText(filter.value)" name="searchText" type="text"
+        <input (focus)="boardServ.loadAllData()" #search [(ngModel)]="searchText" name="searchText" type="text"
             placeholder="Coding learning durchsuchen">
         <img src="./assets/img/search.png" alt="">
         <app-search-dialog [searchValue]="searchText"></app-search-dialog>

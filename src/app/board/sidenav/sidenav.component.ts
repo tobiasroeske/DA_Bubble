@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { BoardService } from '../board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { SearchDialogComponent } from "../board-toolbar/search-dialog/search-dialog.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
-  imports: [CommonModule, SearchDialogComponent]
+  imports: [CommonModule, SearchDialogComponent, FormsModule]
 })
 export class SidenavComponent {
   boardServ = inject(BoardService);
@@ -56,10 +57,6 @@ export class SidenavComponent {
       this.boardServ.sidenavTranslate = false;
       this.boardServ.hideText();
     }
-  }
-
-  showText(text: string) {
-    this.searchText = text;
   }
 
 }

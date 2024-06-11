@@ -26,7 +26,7 @@ export class SearchDialogComponent implements OnChanges {
   chatArray: ChatMessage[] = [];
   idxToFindPositionOfGuestInDirectMessArray!: number;
   idxToFindPositionOfClickedMessageInTheChoisedPrivChat!: number;
-  @Input() searchValue!:string;
+  @Input() searchValue!: string;
   @Output() sendEmptyString: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
@@ -67,24 +67,24 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['searchValue'] && this.searchValue.length > 0) {
-      this.boardServ.showSearchDialog = true;
-      this.mainSearchList = this.boardServ.allData.filter((ad: SearchItem) => {
-        if (this.isCurrentUser(ad)) {
-          return ad.name.toLowerCase().includes(this.searchValue.toLowerCase());
-        } else if (this.isChannel(ad)) {
-          return ad.title.toLowerCase().includes(this.searchValue.toLowerCase());
-        } else if (this.isPrivateChat(ad)) {
-          console.log('Current Chat', ad.chat);
-          return ad.chat.some((chat) => chat.message.toLowerCase().includes(this.searchValue.toLowerCase()))
-        } else {
-          return false;
-        }
-      })
-    } else {
-      this.boardServ.showSearchDialog = false;
-    }
-    console.log(this.boardServ.allData);
+    setTimeout(() => {
+      if (changes['searchValue'] && this.searchValue.length > 0) {
+        this.boardServ.showSearchDialog = true;
+        this.mainSearchList = this.boardServ.allData.filter((ad: SearchItem) => {
+          if (this.isCurrentUser(ad)) {
+            return ad.name.toLowerCase().includes(this.searchValue.toLowerCase());
+          } else if (this.isChannel(ad)) {
+            return ad.title.toLowerCase().includes(this.searchValue.toLowerCase());
+          } else if (this.isPrivateChat(ad)) {
+            return ad.chat.some((chat) => chat.message.toLowerCase().includes(this.searchValue.toLowerCase()))
+          } else {
+            return false
+          }
+        })
+      } else {
+        this.boardServ.showSearchDialog = false;
+      };
+    }, 100);
   }
 
   isCurrentUser(item: SearchItem): item is CurrentUser {
