@@ -1,4 +1,4 @@
-import { Injectable, OnInit, inject } from '@angular/core';
+import { Injectable, OnInit, inject, HostListener } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { PrivateChat } from '../../models/privateChat.class';
 import { Channel } from '../../models/channel.class';
@@ -11,7 +11,7 @@ import { PrivateChatMessageComponent } from '../../../board/board-chat-field/pri
 @Injectable({
   providedIn: 'root'
 })
-export class MemberDialogsService {
+export class MemberDialogsService implements OnInit {
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService)
 
@@ -29,6 +29,10 @@ export class MemberDialogsService {
   guestId?: string;
   creatorId?: string;
   searchedUserPopUpId?: string;
+
+
+  ngOnInit(){
+  }
 
   toggleMembersDialog(event: Event) {
     this.membersDialogIsOpen = !this.membersDialogIsOpen;
@@ -81,7 +85,7 @@ export class MemberDialogsService {
     this.currentMember = this.firestore.directMessages[index].guest;
   }
 
-  checkMemberLoginState(member:CurrentUser) {
+  checkMemberLoginState(member: CurrentUser) {
     let allUsers = this.firestore.userList;
     let user = allUsers.find(user => user.id == member.id);
     if (user != undefined) {

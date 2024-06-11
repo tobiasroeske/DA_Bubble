@@ -52,3 +52,23 @@
         fill: $specialBlue;
     }
 }
+
+@media (max-width: 480px) {
+    .selected-member-in-full-list {
+        padding: 8px;
+        width: 100%;
+        @include d-flex(row, space-between, center, 0px)
+    }
+
+    .avatar-and-name-selected-member-container {
+        >.avatar-selected-member {
+            height: 25px;
+            width: 25px;
+        }
+
+        >span {
+            font-size: 16px;
+        }
+
+    }
+}

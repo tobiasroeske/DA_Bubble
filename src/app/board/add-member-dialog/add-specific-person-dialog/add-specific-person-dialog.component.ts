@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { BoardService } from '../../board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
@@ -36,11 +36,18 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   filteredUsersList: any[] = [];
   selectedList: any = [];
   channel: Channel = new Channel();
+  currentWindowWidth!: number;
 
   constructor() {
-      this.title = this.firestore.allChannels[this.boardServ.idx].title;
-      this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
-      this.channelId = this.currentChannel.id!
+    this.title = this.firestore.allChannels[this.boardServ.idx].title;
+    this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
+    this.channelId = this.currentChannel.id!
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.currentWindowWidth = event.target.innerWidth;
+    console.log('Window width: ', this.currentWindowWidth);
   }
 
   ngOnInit(): void {

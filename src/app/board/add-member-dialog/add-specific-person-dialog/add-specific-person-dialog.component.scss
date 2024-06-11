@@ -1,5 +1,10 @@
 @import '../../../../styles.scss';
 
+app-first-two-selected-members {
+    display: flex;
+    align-items: center;
+}
+
 .add-specific-person-container {
     font-family: "Nunito";
     width: 100%;
@@ -154,5 +159,38 @@
         left: 26px;
         padding: 20px 0px 20px 20px;
     }
+}
 
+@media (max-width: 768px) {
+    app-first-two-selected-members {
+        @include d-flex(column, space-between, flex-start, 8px)
+    }
+
+    .selected-members-container {
+        @include d-flex(column-reverse, space-between, flex-start, 16px);
+
+        >.search {
+            width: 100%;
+        }
+    }
+
+}
+
+@media (max-width: 480px) {
+    .mobile-title-add-persons {
+        >span {
+            font-size: 18px
+        }
+    }
+
+    .cross-icon-add-spec-pers-mobile {
+        height: 32px;
+        width: 32px;
+    }
+
+    .selected-members-full-list-container {
+        width: 300px;
+        left: -24px;
+        border-radius: 30px;
+    }
 }

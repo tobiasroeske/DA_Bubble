@@ -69,6 +69,7 @@
             font-weight: 400;
             border: unset;
             outline: none;
+            width: 100%;
         }
     }
 }
@@ -102,6 +103,15 @@
         resize: none;
         outline: none;
         font-family: "Nunito";
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-radius: 100px;
+            background: rgba(173, 176, 217, 1);
+        }
     }
 
     >.line {
@@ -158,6 +168,12 @@
 .desc-container-editModus {
     padding: 0;
     border: none;
+}
+
+.editChannel-desc-editModus {
+    padding: 0;
+    padding: 18px 20px;
+    border: 1px solid rgba(173, 176, 217, 1);
 }
 
 .editChannel-name-editModus {
@@ -227,7 +243,6 @@
             height: 100vh;
             width: 80%;
             overflow: hidden;
-            width: auto;
             font-family: 'Nunito';
 
             >.edit-dialog {
@@ -245,6 +260,59 @@
 
     .mobile-d-none {
         display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .edit-dialog-container {
+        >.edit-dialog-wrapper {
+            padding: 20px;
+            width: 100%;
+        }
+    }
+
+    .edit-channel-name-header {
+        >h3 {
+            font-size: 16px;
+            font-weight: 700
+        }
+    }
+
+    .edit-channel-description-header {
+        >h3 {
+            font-size: 16px;
+            font-weight: 700
+        }
+    }
+
+    .edit-channel-header {
+        >.channel {
+            >h3 {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .hashtag-icon {
+        height: 16px;
+        width: 16px;
+        object-fit: contain;
+    }
+
+    .creator-container {
+        >h3 {
+            font-size: 16px;
+        }
+
+        >span {
+            font-size: 18px;
+        }
+    }
+
+    .btn-container {
+        >button {
+            font-size: 16px;
+        }
     }
 }
 

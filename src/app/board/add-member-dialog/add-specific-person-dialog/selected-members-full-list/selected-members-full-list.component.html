@@ -1,7 +1,7 @@
 <div class="selected-members-full-list">
     @for(selectedMember of selectedListFromParent; track selectedMember; let index = $index){
     @if(index >= 2){
-    <div id="{{index}}" style="justify-content: flex-start" class="selected-member-in-full-list">
+    <div id="{{index}}" class="selected-member-in-full-list">
         <div class="avatar-and-name-selected-member-container">
             <img class="avatar-selected-member" src="{{selectedMember.avatarPath}}" alt="">
             <span>{{selectedMember.name}}</span>
