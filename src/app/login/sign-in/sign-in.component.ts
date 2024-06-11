@@ -31,14 +31,6 @@ export class SignInComponent implements OnInit{
     if (ngForm.submitted) {
       let rawForm = ngForm.form.getRawValue()
       await this.signupService.login(rawForm.email, rawForm.password)
-      // .then(() => this.router.navigateByUrl('board'))
-      // .catch(err => {
-        
-      //   this.errorMessage = true;
-      //   console.log(err);
-      //   console.log(err.code);
-        
-      // })
     }
   }
 
@@ -46,11 +38,8 @@ export class SignInComponent implements OnInit{
     if (this.smallScreen) {
       await this.signupService.googleLogin();
     } else {
-      this.signupService.googlePopupLogin();
+      await this.signupService.googlePopupLogin();
     }
-
-    //this.signupService.googleLogin()
-    await this.signupService.googlePopupLogin();
   }
 
   forgotPassword() {

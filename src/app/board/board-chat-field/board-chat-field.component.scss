@@ -376,6 +376,7 @@
 
         >img {
             height: 100px;
+            width: 100px;
             object-fit: cover;
             border-radius: 100px;
             cursor: pointer;
@@ -396,7 +397,7 @@
         font-size: 20px;
         font-weight: 400;
         color: #686868;
-        @include d-flex($jc: space-between, $g: 8px);
+        //@include d-flex($jc: space-between, $g: 8px);
 
         >span {
             color: $specialBlue;
@@ -472,5 +473,25 @@
 
     .user-private-message-header > h3 {
         font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-field-header {
+        padding: 10px 16px;
+    }
+
+    .chat-partner-pop-up {
+        gap: 24px; 
+        width: 100%;
+        padding: 25px 24px;
+
+        > .partner-container {
+            gap: 10px;
+            > img {
+                width: 88px;
+                height: 88px;
+            }
+        }
     }
 }

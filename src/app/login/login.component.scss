@@ -367,35 +367,10 @@ footer {
     }
 }
 
-@media (max-width: 590px) {
-    .login-container {
-        padding: 35px 20px;
-    }
-}
-
-@media (max-width: 500px) {
-    header {
-        padding: 0;
-    }
-
-    .top {
-        width: 95%;
-    }
-}
-
-@media (max-width: 410px) {
-    .confirmation-message {
-        font-size: 20px;
-        padding: 15px;
-    }
-}
-
-// Small screen height queries
-
-@media (max-height: 870px) {
+@media (max-height: 770px) and (max-width: 760px) {
     .intro {
         .max-width-container {
-            height: 626px;
+            height: 604px;
         }
     }
 
@@ -417,6 +392,89 @@ footer {
 
         }
     }
+}
+
+@media (max-width: 590px) {
+    .login-container {
+        padding: 35px 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    header {
+        padding: 0;
+    }
+
+    .top {
+        width: 95%;
+    }
+}
+
+@media (max-width: 432px) {
+    .intro .max-width-container {
+        height: 800px;
+    }
+}
+
+@media (max-width: 415px) {
+    .intro .max-width-container {
+        height: 800px;
+    }
+}
+
+@media (max-width: 410px) {
+    .confirmation-message {
+        font-size: 20px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 392px) {
+    .intro .max-width-container {
+        height: 814px;
+    }
+}
+
+@media (max-width: 377px) {
+    .intro .max-width-container {
+        height: 624px;
+    }
+}
+
+@media (max-width: 360px) {
+    .intro .max-width-container {
+        height: 624px;
+    }
+}
+
+// Small screen height queries
+
+@media (max-height: 860px) {
+    .content {
+        gap: 24px;
+    }
+}
+
+// @media (max-height: 915px) and (max-width: 415px) {
+//     .intro .max-width-container {
+//         height: 802px;
+//     }
+// }
+
+// @media (max-height: 740px) and (max-width: 360px) {
+//     .intro .max-width-container {
+//         height: 624px;
+//     }
+// }
+
+// @media (max-height: 910px) and (max-width: 410) {
+//     .intro .max-width-container {
+//         height: 802px;
+//     }
+// }
+
+@media (max-height: 770px) {
+   
 
     .flex-center {
         height: 100vh;

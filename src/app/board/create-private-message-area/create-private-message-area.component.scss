@@ -296,6 +296,13 @@ input[type="file"] {
     }
 }
 
+@media (max-width: 768px) {
+    .textarea-container {
+        left: 24px;
+        right: 24ppx;
+    }
+}
+
 @media (max-width: 560px) {
     .emoji-container {
         bottom: 161px;
@@ -307,5 +314,9 @@ input[type="file"] {
     .textarea-container {
         left: 20px;
         right: 20px;
+    }
+
+    .add-emoji-icon {
+        display: none;
     }
 }

@@ -82,17 +82,13 @@ export class SignupService {
   async getRedirectIntel() {
     await getRedirectResult(this.auth).then((result) => {
       if (result != null) {
-        this.updateUserProfile({ photoURL: 'assets/img/avatar0.png' }).then(
-          () => {
-            this.getUserData(result);
-            this.firestoreService
-              .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
-              .then(() => {
-                this.storageService.saveCurrentUser(result.user);
-                this.router.navigateByUrl('board');
-              });
-          }
-        );
+        this.getUserData(result);
+        this.firestoreService
+          .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
+          .then(() => {
+            this.storageService.saveCurrentUser(result.user);
+            this.router.navigateByUrl('board');
+          });
       }
     });
   }

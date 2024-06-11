@@ -413,6 +413,11 @@
     }
 }
 
+.highlight-background {
+    background: #BDBFE1 !important;
+}
+
+
 // media queries
 
 @media (max-width: 1100px) {
@@ -443,15 +448,20 @@
     .answer-container>.answers {
         font-size: 16px;
     }
+
+    .reaction-dialog-reverse {
+        top: 32px;
+        right: -112px;
+    }
 }
 
 @media (max-width: 960px) {
     .message-box {
-        padding: 10px 16px;
+        padding: 10px 16px !important;
     }
 
     .message-box-reverse {
-        padding: 10px 16px;
+        padding: 10px 16px !important;
     }
 
     .reaction-dialog-indicatorbar {
@@ -465,68 +475,6 @@
     }
 
 
-}
-
-
-.highlight-background {
-    background: #BDBFE1 !important;
-}
-
-// media queries
-
-@media (max-width: 1100px) {
-    .message-box {
-        padding: 10px 25px 10px 40px;
-
-        >.avatar-photo {
-            width: 48px;
-            height: 48px;
-        }
-    }
-
-    .message-box-reverse {
-        padding: 10px 25px 10px 40px !important;
-    }
-
-    .answer-icon,
-    .addReaction-icon {
-        width: 32px !important;
-        height: 32px !important;
-    }
-
-    .reaction-indicator-bar>.reaction-indicator img {
-        width: 18px;
-        height: 18px;
-    }
-
-    .answer-container>.answers {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 960px) {
-    .message-box {
-        padding: 10px 16px;
-    }
-
-    .message-box-reverse {
-        padding: 10px 16px !important;
-    }
-
-    .reaction-dialog-indicatorbar {
-        bottom: 32px;
-        left: 32px;
-        padding: 10px 12px;
-    }
-
-    .emoji-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .file-popup .img-container {
-        width: 55%;
-    }
 }
 
 @media (max-width: 690px) {
@@ -557,7 +505,7 @@
     }
 
     .reaction-dialog-reverse {
-        right: -80px;
+        right: -112px;
     }
 }
 

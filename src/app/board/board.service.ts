@@ -218,26 +218,17 @@ export class BoardService {
 
   startPrivateChat(index: number, partecipant: string, event?: Event) {
     if (partecipant == "creator") {
-      this.chatPartnerIdx = index;
-      this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
-      this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
-      this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-      this.checkIfPrivatChatIsEmpty();
-      this.privateChatIsStarted = true;
-      if (event) {
-        event.stopPropagation();
-      }
+      this.startChatAsCreator(index);
     } else {
-      this.chatPartnerIdx = index;
-      this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
-      this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].creator;
-      this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-      this.checkIfPrivatChatIsEmpty();
-      this.privateChatIsStarted = true;
-      if (event) {
-        event.stopPropagation();
-      }
+      this.startChatAsGuest(index);
     }
+    if (event) {
+      event.stopPropagation();
+    }
+    this.markCurrentChat(index);
+  }
+
+  markCurrentChat(index:number) {
     this.blueColorsForTheChatPartersFocus = [];
     this.firestore.directMessages.forEach(privateChat => {
       this.blueColorsForTheChatPartersFocus.push(false);
@@ -246,6 +237,30 @@ export class BoardService {
     console.log(this.blueColorsForTheChatPartersFocus);
     this.setBlueColorToChatPartner(index)
     this.hideSideNav();
+  }
+
+  startChatAsGuest(index:number) {
+    this.chatPartnerIdx = index;
+    this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+    if (this.privateChatId == '') {
+      this.privateChatId = this.firestore.chatRoomId;
+    }
+    this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].creator;
+    this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
+    this.checkIfPrivatChatIsEmpty();
+    this.privateChatIsStarted = true;
+  }
+
+  startChatAsCreator(index: number) {
+    this.chatPartnerIdx = index;
+    this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
+    if (this.privateChatId == '') {
+      this.privateChatId = this.firestore.chatRoomId;
+    }
+    this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
+    this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
+    this.checkIfPrivatChatIsEmpty();
+    this.privateChatIsStarted = true;
   }
 
   hideSideNav() {
