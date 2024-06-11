@@ -37,3 +37,16 @@
         font-weight: 400;
     }
 }
+
+@media (max-width: 960px) {
+    .suggested-member-list {
+        @include d-flex(column, space-between, flex-start, 13px)
+    }
+
+    .suggested-member {
+        >.avatar-member {
+            width: 25px;
+            height: 25px;
+        }
+    }
+}

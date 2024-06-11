@@ -6,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { Channel } from '../../shared/models/channel.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
-
+import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
+import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
+import { AddSpecificPersonDialogComponent } from '../add-member-dialog/add-specific-person-dialog/add-specific-person-dialog.component';
 
 @Component({
   selector: 'app-edit-channel-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MembersDialogComponent, AddSpecificPersonDialogComponent],
   templateUrl: './edit-channel-dialog.component.html',
   styleUrl: './edit-channel-dialog.component.scss'
 })
@@ -19,6 +21,7 @@ export class EditChannelDialogComponent {
 
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
+  memberServ = inject(MemberDialogsService);
   signUpServ = inject(SignupService);
   editName: string = "Bearbeiten";
   editDesc: string = "Bearbeiten"

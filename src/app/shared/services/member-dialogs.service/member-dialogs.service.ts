@@ -40,14 +40,23 @@ export class MemberDialogsService {
   }
 
   openAddMembersDialog(event: Event) {
-    this.addMemberDialogIsOpen = true;
-    if (this.membersDialogIsOpen) {
-      this.toggleMembersDialog(event)
+    if (window.innerWidth > 960 && !this.boardServ.editDialogIsOpen) {
+      if (this.membersDialogIsOpen) {
+        this.toggleMembersDialog(event)
+      }
+
+    } else {
+      this.goToAddSpecificPerson(event);
     }
   }
 
   goToAddSpecificPerson(event: Event) {
     this.addSpecificPerson = true;
+    event.stopPropagation();
+  }
+
+  closeAddSpecDialogMobile(event: Event) {
+    this.addSpecificPerson = false;
     event.stopPropagation();
   }
 
@@ -68,7 +77,7 @@ export class MemberDialogsService {
     this.showMemberPopUpisOpen = true;
   }
 
-  checkMemberLoginState(member:CurrentUser) {
+  checkMemberLoginState(member: CurrentUser) {
     let allUsers = this.firestore.userList;
     let user = allUsers.find(user => user.id == member.id);
     if (user != undefined) {

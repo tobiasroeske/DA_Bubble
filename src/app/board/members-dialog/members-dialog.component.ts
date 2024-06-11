@@ -18,13 +18,16 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 })
 export class MembersDialogComponent implements OnInit {
   @Input() dialog!: boolean;
-  @Input() currentChannel!:Channel
-  @Input() userList!:any [];
+  // @Input() currentChannel!:Channel
+  currentChannel!: Channel;
+  userList!: CurrentUser[];
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
   memberServ = inject(MemberDialogsService);
 
   ngOnInit(): void {
+    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    this.userList = this.firestore.userList;
     let updatedUsers = this.updateLoginState();
     this.firestore.updateChannelUsers(updatedUsers, this.currentChannel.id!);
   }

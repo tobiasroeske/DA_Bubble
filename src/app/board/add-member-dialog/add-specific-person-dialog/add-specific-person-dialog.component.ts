@@ -23,7 +23,7 @@ import { MemberDialogsService } from '../../../shared/services/member-dialogs.se
 export class AddSpecificPersonDialogComponent implements OnInit {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  memmerServ = inject(MemberDialogsService)
+  memberServ = inject(MemberDialogsService)
   title!: string;
   currentChannel!: Channel;
   channelId!: string;
@@ -89,7 +89,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
     this.addPartecipantsIds();
-    this.memmerServ.addSpecificPerson = false;
+    this.memberServ.addSpecificPerson = false;
   };
 
   addPartecipantsIds() {

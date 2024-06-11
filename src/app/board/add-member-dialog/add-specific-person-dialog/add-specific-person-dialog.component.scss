@@ -104,3 +104,55 @@
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 
 }
+
+@media (max-width: 960px) {
+    .add-specific-person-container {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: #fff;
+        width: auto;
+        border-radius: 30px 30px 0 0;
+        box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2);
+        padding: 30px 16px 100px 16px;
+        border: 1px solid red;
+        transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+    }
+
+    .mobile-title-add-persons {
+        @include d-flex($jc: space-between);
+
+        >span {
+            font-size: 24px;
+            font-weight: 700;
+        }
+    }
+
+    .cross-icon-add-spec-pers-mobile {
+        height: 40px;
+        width: 40px;
+        object-fit: contain;
+        border-radius: 100%;
+
+        &:hover {
+            cursor: pointer;
+            background: rgba(236, 238, 254, 1);
+        }
+
+        &:hover path {
+            fill: $specialBlue;
+        }
+    }
+
+    .translateY {
+        transform: translateY(0%);
+    }
+
+    .suggested-member-list-container {
+        top: 200px;
+        left: 26px;
+        padding: 20px 0px 20px 20px;
+    }
+
+}

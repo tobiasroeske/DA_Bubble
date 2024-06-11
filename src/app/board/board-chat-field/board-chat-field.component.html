@@ -39,8 +39,7 @@
             }
 
             @if(memberServ.membersDialogIsOpen){
-            <app-members-dialog [userList]="firestore.userList"
-                [currentChannel]="firestore.allChannels[boardServ.idx]"></app-members-dialog>
+            <app-members-dialog></app-members-dialog>
             }
         </div>
         <div (click)="memberServ.openAddMembersDialog($event)" class="add-person-icon-container">

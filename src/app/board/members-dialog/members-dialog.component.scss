@@ -122,3 +122,38 @@
     height: 22px;
     object-fit: contain;
 }
+
+.cross-icon-member-dialog {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+}
+
+@media (max-width: 960px) {
+    .members-dialog {
+        position: static;
+        width: 100%;
+        padding: 0;
+        border: 1px solid rgba(173, 176, 217, 1);
+        border-radius: 20px;
+        padding: 20px 0 16px 20px;
+
+        >.dialog-header {
+            padding: 0
+        }
+
+        .cross-icon-member-dialog {
+            display: none;
+        }
+    }
+}
