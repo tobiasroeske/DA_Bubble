@@ -31,30 +31,13 @@ export class BoardComponent implements OnInit {
   boardServ = inject(BoardService);
   idleUserService = inject(IdleService);
   localStorageService = inject(LocalStorageService)
+  
   isUserIdle = false;
   profileOptionContainerOpen = false;
-
-  constructor() {
-    this.authService.getLoggedInUser()
-  }
-
-  ngOnInit() {
-    this.idleUserService.userInactive.subscribe(isIdle => {
-      if (isIdle) {
-        this.boardServ.currentUser.loginState = 'idle';
-        this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
-      }
-    })
-  }
 
   @HostListener('window:resize', ['$event'])
   handleResize(event:Event ) {
     this.boardServ.checkScreenSize();
-    // if (window.innerWidth <= 1100) {
-    //   this.boardServ.tabletView = true;
-    // } else {
-    //   this.boardServ.tabletView = false;
-    // }
   }
 
 
@@ -67,12 +50,20 @@ export class BoardComponent implements OnInit {
   @HostListener('window:unload', ['$event'])
   async unloadHandler(event: Event) {
     event.preventDefault();
-    console.log(event);
     this.localStorageService.saveIntroPlayed(false);
     let currentUser = this.boardServ.currentUser;
     currentUser.loginState = 'loggedOut';
-    //this.localStorageService.saveCurrentUser('');
     await this.firestore.updateUser(currentUser.id, currentUser);
+  }
+
+  ngOnInit() {
+    this.authService.getLoggedInUser()
+    this.idleUserService.userInactive.subscribe(isIdle => {
+      if (isIdle) {
+        this.boardServ.currentUser.loginState = 'idle';
+        this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+      }
+    })
   }
 
   openProfileOptions($event: boolean) {

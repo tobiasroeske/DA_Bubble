@@ -52,7 +52,7 @@ export class SignupService {
     this.user$.subscribe((val) => {
       this.user = new User(val);
     });
-    this.actionCodeSettings = { url: 'http://localhost:4200/resetpassword' };
+    this.actionCodeSettings = { url: 'https://dabubble-212.developerakademie.net/angular-projects/dabubble/resetpassword' };
   }
 
   async googleLogin() {
@@ -125,11 +125,11 @@ export class SignupService {
 
   async handleEmailUpdate(actionCode: string) {
     let restoredMail = null;
-    checkActionCode(this.auth, actionCode)
+    await checkActionCode(this.auth, actionCode)
       .then(info => {
         restoredMail = info['data']['email'];
         return applyActionCode(this.auth, actionCode)
-          .catch(err => console.log(err))
+          .catch(err => console.error(err))
       })
   }
 
@@ -167,7 +167,7 @@ export class SignupService {
 
   pipeRegisterData(userCredential: UserCredential) {
     this.updateStorages(userCredential)
-    sendEmailVerification(userCredential.user);
+    sendEmailVerification(userCredential.user, this.actionCodeSettings);
     this.signUpSuccessful = true;
     setTimeout(() => {
       this.router.navigateByUrl('board');
@@ -198,6 +198,17 @@ export class SignupService {
       .catch((err) => {
         this.errorCode = err.code;
       });
+  }
+  async guestLogin() {
+    await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678')
+    .then((userCredential) => {
+      this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' })
+      this.storageService.saveCurrentUser(userCredential.user);
+      this.router.navigateByUrl('board');
+    })
+    .catch(err => {
+      this.errorCode = err.code;
+    })
   }
 
   getLoggedInUser() {

@@ -19,7 +19,7 @@ header {
 
 .content {
     @include d-flex($fd: column, $g: 8px);
-    height: calc(100vh - 126px);
+    //height: calc(100vh - 126px);
     overflow-x: hidden;
 }
 
@@ -141,17 +141,26 @@ header {
     }
 }
 
-@media (max-height: 870px) {
-    .flex-center {
-        height: 100vh;
+@media (max-height: 860px) {
+    .content {
+        gap: 16px;
     }
 
-    .content {
-        gap: 8px;
+    .login-container {
+        margin-top: 0;
     }
+
+    .confirmation-message {
+        padding: 20px;
+        font-size: 24px
+    }
+}
+
+@media (max-height: 770px) {
+
 
     header {
-        height:auto;
+        height: auto;
         padding: 12px;
 
         .logo-box {
@@ -165,9 +174,14 @@ header {
             }
         }
     }
-    
+
     .login-container {
         padding: 20px;
         margin-top: 0;
+    }
+
+    .register-box {
+        gap: 8px;
+        font-size: 15px;
     }
 }

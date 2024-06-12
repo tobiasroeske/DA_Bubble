@@ -21,14 +21,10 @@ export class AddChannelDialogComponent {
   signUpServ = inject(SignupService);
   memberServ = inject(MemberDialogsService);
   localStorageService = inject(LocalStorageService);
+
   channelAlreadyExist: boolean = false;
   existingChannelIndex?: number;
-
   channel: Channel = new Channel();
-
-  constructor() {
-    console.log(this.firestore.allChannels);
-  }
 
   async onSubmit(ngForm: NgForm, event: Event) {
     await this.shapeChannel();
@@ -73,19 +69,46 @@ export class AddChannelDialogComponent {
   }
 
   async shapeChannel() {
-    this.channel.creatorId = this.signUpServ.currentUser.uid; // take the id of the logged-in user that a new channel creates
-    this.channel.creatorName = this.signUpServ.currentUser.displayName;
-    this.channel.allUsers = [];
-    this.channel.partecipantsIds = [];
-    this.channel.partecipantsIds.push(this.signUpServ.currentUser.uid);
-    this.channel.members = [];
-    this.firestore.userList.forEach((user) => {
-      if (user.id == this.channel.creatorId) {
-        user.selected = true;
-        this.channel.members.push(user)
-      }
-      this.channel.allUsers.push(user)
-    })
+    this.setCreatorInfo();
+    this.initializeChannel();
+    await this.populateAllUsers();
   }
+
+  setCreatorInfo(): void {
+    this.channel.creatorId = this.signUpServ.currentUser.uid;
+    this.channel.creatorName = this.signUpServ.currentUser.displayName;
+  }
+
+  initializeChannel(): void {
+    this.channel.allUsers = [];
+    this.channel.partecipantsIds = [this.channel.creatorId];
+    this.channel.members = [];
+  }
+
+  async populateAllUsers(): Promise<void> {
+    for (const user of this.firestore.userList) {
+      if (user.id === this.channel.creatorId) {
+        user.selected = true;
+        this.channel.members.push(user);
+      }
+      this.channel.allUsers.push(user);
+    }
+  }
+
+  // async shapeChannel() {
+  //   this.channel.creatorId = this.signUpServ.currentUser.uid; // take the id of the logged-in user that a new channel creates
+  //   this.channel.creatorName = this.signUpServ.currentUser.displayName;
+  //   this.channel.allUsers = [];
+  //   this.channel.partecipantsIds = [];
+  //   this.channel.partecipantsIds.push(this.signUpServ.currentUser.uid);
+  //   this.channel.members = [];
+  //   this.firestore.userList.forEach((user) => {
+  //     if (user.id == this.channel.creatorId) {
+  //       user.selected = true;
+  //       this.channel.members.push(user)
+  //     }
+  //     this.channel.allUsers.push(user)
+  //   })
+  // }
 }
 

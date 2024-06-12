@@ -33,6 +33,10 @@ export class SignInComponent implements OnInit{
     }
   }
 
+  async guestLogin() {
+    await this.signupService.guestLogin();
+  }
+
   async googleLogin() {
     if (this.smallScreen) {
       await this.signupService.googleLogin();

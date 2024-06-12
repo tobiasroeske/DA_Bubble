@@ -16,10 +16,11 @@ export class ThreadComponent implements AfterViewInit{
   @Input() currentChannel?: Channel
   @Input() currentChatMessage?: ChatMessage;
   @Input() chatMessageIndex?:number;
-
   @ViewChild('threadChat') threadChatField!: ElementRef;
   boardServ = inject(BoardService)
+
   specialBlue: string = "rgba(83, 90, 241, 1)"
+  reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
   showReactionPopup = false;
   showEmojiBar = false
   reactionDialogIndicatorbarOpen = false;
@@ -44,8 +45,6 @@ export class ThreadComponent implements AfterViewInit{
   ngAfterViewInit(): void {
     this.boardServ.threadRef = this.threadChatField;
   }
-
-  reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
 
   showEmmojibar(boolean: boolean) {
     if (boolean == true) {

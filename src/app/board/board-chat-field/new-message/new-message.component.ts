@@ -30,8 +30,6 @@ export class NewMessageComponent implements AfterViewInit{
   filteredUsers: CurrentUser[] = [];
   filteredChannels: Channel[] = [];
 
-
-
   @HostListener('keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
     if (event.key == '@') {

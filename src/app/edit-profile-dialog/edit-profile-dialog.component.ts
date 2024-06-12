@@ -60,7 +60,7 @@ export class EditProfileDialogComponent {
           this.avatarPath = url;
           this.changeAvatar = false;
         })
-        .catch(err => console.log(err))
+        .catch(err => console.error(err))
       })
     }
   }

@@ -52,7 +52,8 @@
             <div class="options">
                 <button class="btn-no-style profile-btn" (click)="toggleProfileMobile($event)"><img
                         src="assets/icons/profile_icon.png" alt="">Profil</button>
-                <button class="btn-no-style profile-btn" (click)="authService.logout()"><img src="assets/icons/logout_icon.png" alt="">Logout</button>
+                <button class="btn-no-style profile-btn" (click)="authService.logout()"><img
+                        src="assets/icons/logout_icon.png" alt="">Logout</button>
             </div>
 
         </div>
@@ -61,13 +62,13 @@
 </div>
 
 @if (showProfile) {
-    <div class="popup">
-        <div class="profile">
-            @if (boardServ.editMode) {
-                <app-edit-profile-dialog></app-edit-profile-dialog>
-            } @else {
-            <app-show-profile-dialog (mobileOpen)="close($event)" class="width-100"></app-show-profile-dialog>
-            }
-        </div>
+<div class="popup">
+    <div class="profile">
+        @if (boardServ.editMode) {
+        <app-edit-profile-dialog></app-edit-profile-dialog>
+        } @else {
+        <app-show-profile-dialog (mobileOpen)="close($event)" class="width-100"></app-show-profile-dialog>
+        }
     </div>
+</div>
 }

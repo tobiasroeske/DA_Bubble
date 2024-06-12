@@ -18,21 +18,24 @@
         </svg>
     </div>
     <div class="members-list">
-        @for (user of firestore.allChannels[boardServ.idx].members; track user.id; let i = $index) {
-            @if (user.selected) {
-                <div id="{{i}}" class="member" (click)="memberServ.openShowMemberPopUp(i); memberServ.toggleMembersDialog($event)">
-                    <img class="avatar-members" src="{{user.avatarPath}}" alt="">
-                    <span>{{user.name}}</span>
-                    @if (memberServ.checkMemberLoginState(user) == 'loggedIn') {
-                        <img src="assets/icons/user_online.png" alt="" class="status-bullet">
-                    } @else if (memberServ.checkMemberLoginState(user) == 'loggedOut') {
-                        <img src="assets/icons/user_offline.png" alt="" class="status-bullet">
-                    } @else if (memberServ.checkMemberLoginState(user) == 'idle') {
-                        <img src="assets/icons/user_idle.png" alt="" class="status-bullet">
-                    }
-                </div>
+        @if (firestore.allChannels[boardServ.idx]?.members.length > 0) {
+            @for (user of firestore.allChannels[boardServ.idx].members; track user.id; let i = $index) {
+                @if (user.selected) {
+                    <div id="{{i}}" class="member" (click)="memberServ.openShowMemberPopUp(i); memberServ.toggleMembersDialog($event)">
+                        <img class="avatar-members" src="{{user.avatarPath}}" alt="">
+                        <span>{{user.name}}</span>
+                        @if (memberServ.checkMemberLoginState(user) == 'loggedIn') {
+                            <img src="assets/icons/user_online.png" alt="" class="status-bullet">
+                        } @else if (memberServ.checkMemberLoginState(user) == 'loggedOut') {
+                            <img src="assets/icons/user_offline.png" alt="" class="status-bullet">
+                        } @else if (memberServ.checkMemberLoginState(user) == 'idle') {
+                            <img src="assets/icons/user_idle.png" alt="" class="status-bullet">
+                        }
+                    </div>
+                }
             }
         }
+        
 
         <!-- @for(member of firestore.allChannels[boardServ.idx].members; track member; let index = $index){
         <div id="{{index}}" class="member" (click)="memberServ.openShowMemberPopUp(index)">

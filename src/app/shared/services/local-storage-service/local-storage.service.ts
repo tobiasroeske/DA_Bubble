@@ -59,8 +59,6 @@ export class LocalStorageService {
     if (introPlayed != null) {
       let introPlayedAsJson = JSON.parse(localStorage.getItem('introPlayed')!);
       this.introPlayed = introPlayedAsJson;
-      console.log(this.introPlayed);
-
     }
   }
 

@@ -10,7 +10,6 @@ import { CurrentUser } from '../../../../shared/interfaces/currentUser.interface
   styleUrl: './first-two-selected-members.component.scss'
 })
 export class FirstTwoSelectedMembersComponent {
-
   @Input() selectedList?: CurrentUser[];
   @Output() sendIndexToParent: EventEmitter<number> = new EventEmitter<number>();
 

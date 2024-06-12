@@ -19,9 +19,17 @@ import { FirebaseStorageService } from '../../shared/services/firebase-storage-s
   styleUrl: './create-message-area.component.scss'
 })
 export class CreateMessageAreaComponent {
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  @Input() index!: number;
+  @Input() channelId!: string;
+  @Input() channelTitle!: string;
+  @Input() channels!: Channel[];
+  @Input() showEmojiPicker = false;
+
   boardService = inject(BoardService);
   firestoreService = inject(FirestoreService);
   fbStorageService = inject(FirebaseStorageService)
+
   textMessage: string = '';
   memberToTag: string = '';
   channelToTag: string = '';
@@ -36,20 +44,88 @@ export class CreateMessageAreaComponent {
   filteredChannels: Channel[] = [];
   uploadedFile: string = '';
   filePath: string = '';
-
-  @ViewChild('fileInput') fileInput!: ElementRef;
-  @Input() index!: number;
-  @Input() channelId!: string;
-  @Input() channelTitle!: string;
-  @Input() channels!: Channel[];
-
-
   preview = 'false';
-  @Input() showEmojiPicker = false;
+
+  @HostListener('keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent): void {
+    const { key } = event;
+    if (key === 'Shift') {
+      this.handleShiftKey(true);
+    } else if (key === 'Enter') {
+      this.handleEnterKey(true);
+    } else if (key === 'Backspace') {
+      this.handleBackspaceKey();
+    }
+    this.checkShiftEnter();
+  }
+
+  @HostListener('keypress', ['$event'])
+  handleKeyPress(event: KeyboardEvent): void {
+    const { key } = event;
+    if (key === '@') {
+      this.toggleTagMembers();
+    } else if (key === '#') {
+      this.tagChannels = true;
+    }
+    if (this.tagMembers) {
+      this.handleTaggingMembers(key);
+    }
+    if (this.tagChannels) {
+      this.handleTaggingChannels(key);
+    }
+  }
+
+  @HostListener('keyup', ['$event'])
+  handleKeyUp(event: KeyboardEvent): void {
+    if (event.key === 'Shift') {
+      this.shiftPressed = false;
+    }
+    if (event.key === 'Enter') {
+      this.enterPressed = false;
+    }
+  }
 
   constructor() {
     this.currentUser = this.boardService.currentUser;
     this.filteredChannels = this.channels;
+  }
+
+  toggleTagMembers(): void {
+    this.tagMembers = !this.tagMembers;
+    if (this.tagMembers) {
+      this.memberToTag = '';
+    }
+  }
+
+  handleTaggingMembers(key: string): void {
+    this.memberToTag += key;
+    this.filterMember();
+  }
+
+  handleTaggingChannels(key: string): void {
+    this.channelToTag += key;
+    this.filterChannels();
+  }
+
+  handleShiftKey(pressed: boolean): void {
+    this.shiftPressed = pressed;
+  }
+
+  handleEnterKey(pressed: boolean): void {
+    this.enterPressed = pressed;
+  }
+
+  handleBackspaceKey(): void {
+    if (this.tagMembers) {
+      this.memberToTag = this.memberToTag.slice(0, -1);
+      this.filterMember();
+      this.tagMembers = this.memberToTag.length !== 0;
+    }
+    if (this.tagChannels) {
+      this.channelToTag = this.channelToTag.slice(0, -1);
+      this.filterChannels();
+      this.tagChannels = this.channelToTag.length !== 0;
+    }
   }
 
   async onFileChange(event: any) {
@@ -59,7 +135,7 @@ export class CreateMessageAreaComponent {
       this.filePath = `fileUploads/${file.name}`;
       await this.uploadFile(this.filePath, file)
         .then(() => {
-          this.fileInput.nativeElement.value = ''; // so the next event change can get detected
+          this.fileInput.nativeElement.value = '';
         })
     } else {
       this.fileSizeToGreat = true;
@@ -139,49 +215,6 @@ export class CreateMessageAreaComponent {
     this.boardService.showEmojiPicker = false;
   }
 
-  @HostListener('keydown', ['$event'])
-  handleKeyDown(event: KeyboardEvent): void {
-    let { key } = event;
-    if (key === 'Shift') {
-      this.shiftPressed = true;
-    } else if (key === 'Enter') {
-      this.enterPressed = true;
-    } else if (key === 'Backspace') {
-      if (this.tagMembers) {
-        this.memberToTag = this.memberToTag.slice(0, -1);
-        this.filterMember();
-        this.tagMembers = this.memberToTag.length !== 0;
-      }
-      if (this.tagChannels) {
-        this.channelToTag = this.channelToTag.slice(0, -1);
-        this.filterChannels();
-        this.tagChannels = this.channelToTag.length !== 0;
-      }
-    }
-    this.checkShiftEnter();
-  }
-
-  @HostListener('keypress', ['$event'])
-  handleKeyPress(event: KeyboardEvent): void {
-    let { key } = event;
-    if (key === '@') {
-      this.tagMembers = !this.tagMembers;
-      if (this.tagMembers) {
-        this.memberToTag = '';
-      }
-    } else if (key === '#') {
-      this.tagChannels = true;
-    }
-    if (this.tagMembers) {
-      this.memberToTag += key;
-      this.filterMember();
-    }
-    if (this.tagChannels) {
-      this.channelToTag += key;
-      this.filterChannels();
-    }
-  }
-
   filterMember() {
     let members: CurrentUser[] = this.firestoreService.allChannels[this.boardService.idx].members
     let lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
@@ -192,16 +225,6 @@ export class CreateMessageAreaComponent {
     let channels: Channel[] = this.firestoreService.allChannels;
     let lowerCaseTag = this.channelToTag.slice(1).toLowerCase();
     this.filteredChannels = channels.filter(channel => channel.title.toLowerCase().includes(lowerCaseTag));
-  }
-
-  @HostListener('keyup', ['$event'])
-  handleKeyUp(event: KeyboardEvent): void {
-    if (event.key === 'Shift') {
-      this.shiftPressed = false;
-    }
-    if (event.key === 'Enter') {
-      this.enterPressed = false;
-    }
   }
 
   checkShiftEnter() {

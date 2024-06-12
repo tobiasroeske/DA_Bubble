@@ -1,12 +1,11 @@
 <div class="textarea-container" (click)="closeEmojiDialog()">
     <label for="messageEditor{{ chatMessageIndex }}"></label>
-    <textarea name="messageEditor" id="messageEditor{{ chatMessageIndex }}"
-        [(ngModel)]="editedMessage"></textarea>
+    <textarea name="messageEditor" id="messageEditor{{ chatMessageIndex }}" [(ngModel)]="editedMessage"></textarea>
     <div class="tool-panel-textarea">
-        <svg (click)="toggleEmojiPicker($event)" class="textarea-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <mask id="mask0_51470_671" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
-                width="24" height="24">
+        <svg (click)="toggleEmojiPicker($event)" class="textarea-icon" width="40" height="40" viewBox="0 0 40 40"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <mask id="mask0_51470_671" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
+                height="24">
                 <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
             </mask>
             <g mask="url(#mask0_51470_671)">
@@ -22,12 +21,10 @@
 
     </div>
     @if (showEmojiPicker) {
-        <div class="emoji-container">
-            <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up"
-                (emojiClick)="addEmoji($event)" [style]="{'width': boardServ.emojiPickerSmall ? '160px' : '270px'}" ></emoji-mart>
-        </div>
+    <div class="emoji-container">
+        <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"
+            [style]="{'width': boardServ.emojiPickerSmall ? '160px' : '270px'}"></emoji-mart>
+    </div>
     }
-    
+
 </div>
-
-

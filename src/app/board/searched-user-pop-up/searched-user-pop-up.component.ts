@@ -16,15 +16,15 @@ export class SearchedUserPopUpComponent {
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
 
-  closeSearchedUserPopUp(){
+  closeSearchedUserPopUp() {
     this.boardServ.showUserPopUp = false;
   }
 
-  setChatWithSelectedUser(event:Event){
-   this.memberServ.currentMember = this.boardServ.userObjectPopUp;
-   this.memberServ.setChatRoom(event);
-   this.closeSearchedUserPopUp();
-   event.preventDefault();
+  setChatWithSelectedUser(event: Event) {
+    this.memberServ.currentMember = this.boardServ.userObjectPopUp;
+    this.memberServ.setChatRoom(event);
+    this.closeSearchedUserPopUp();
+    event.preventDefault();
   }
 
 }

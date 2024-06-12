@@ -13,7 +13,6 @@ interface SelectedMember {
   styleUrl: './selected-members-full-list.component.scss'
 })
 export class SelectedMembersFullListComponent {
-
   @Input() selectedListFromParent?: SelectedMember[];
   @Output() sendIndexToParent: EventEmitter<number> = new EventEmitter<number>()
 

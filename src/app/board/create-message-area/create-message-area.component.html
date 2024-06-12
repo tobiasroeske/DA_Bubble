@@ -29,7 +29,7 @@
                 <input #fileInput type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)"
                     (click)="boardService.stopPropagation($event)">
             </label>
-            
+
 
 
 
@@ -63,13 +63,13 @@
                 </g>
             </svg>
             @if (uploadedFile.length > 0) {
-                <div class="uploaded-file">
-                    <img src="{{ uploadedFile }}" alt="" class="uploaded-img">
-                    <img src="assets/icons/close.svg" alt="close-icon" class="close-icon" (click)="deleteFile()">
-                </div>
-                }
+            <div class="uploaded-file">
+                <img src="{{ uploadedFile }}" alt="" class="uploaded-img">
+                <img src="assets/icons/close.svg" alt="close-icon" class="close-icon" (click)="deleteFile()">
+            </div>
+            }
             @if (fileSizeToGreat) {
-                <span class="uploaded-file red">Die Datei ist zu groß. Maximal 500kb</span>
+            <span class="uploaded-file red">Die Datei ist zu groß. Maximal 500kb</span>
             }
         </div>
         <!-- Send message Icon -->
@@ -89,15 +89,15 @@
 </div>
 @if (boardService.showEmojiPicker) {
 <div class="emoji-container">
-    <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up"
-        (emojiClick)="addEmoji($event)" [style]="{'width': boardService.emojiPickerSmall ? '160px' : '270px'}"></emoji-mart>
+    <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"
+        [style]="{'width': boardService.emojiPickerSmall ? '160px' : '270px'}"></emoji-mart>
 </div>
 }
 
 @if (tagMembers) {
 <div class="tag-member-dialog">
     @if (filteredMembers.length == 0) {
-        <span class="err-meesage">Niemand gefunden</span>
+    <span class="err-meesage">Niemand gefunden</span>
     }
     @for (member of filteredMembers; track member.id; let i = $index) {
     <div class="member" (click)="tagMember(i)">
@@ -114,7 +114,7 @@
 @if (tagChannels) {
 <div class="tag-member-dialog">
     @if (filteredChannels.length == 0) {
-        <span class="err-meesage">Nichts gefunden</span>
+    <span class="err-meesage">Nichts gefunden</span>
     }
     @for (channel of filteredChannels; track channel.id; let i = $index) {
     <div class="member" (click)="tagChannel(i)">

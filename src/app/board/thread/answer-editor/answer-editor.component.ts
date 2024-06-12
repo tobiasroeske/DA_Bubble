@@ -14,6 +14,7 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 export class AnswerEditorComponent extends MessageEditorComponent implements OnInit{
   @Input() answer!: ChatMessage;
   @Input() answerIndex!: number;
+  
   editedAnswer?: string
 
   constructor() {

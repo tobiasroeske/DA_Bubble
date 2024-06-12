@@ -20,13 +20,10 @@ export class BoardToolbarComponent {
   authService = inject(SignupService);
   boardServ = inject(BoardService);
   firestoreService = inject(FirestoreService)
+
   userList: CurrentUser[] = [];
-  // userListSubscription!: Subscription;
   searchText: string = "";
   showProfile = false;
-
-  constructor() {
-  }
 
   showValue(text: string) {
     this.searchText = text;

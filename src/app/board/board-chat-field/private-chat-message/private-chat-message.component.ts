@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChildren, QueryList, ElementRef, AfterViewInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, ElementRef, AfterViewInit, OnDestroy, inject, AfterViewChecked } from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
@@ -13,7 +13,7 @@ import { LocalStorageService } from '../../../shared/services/local-storage-serv
   templateUrl: './private-chat-message.component.html',
   styleUrl: './private-chat-message.component.scss'
 })
-export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewInit, OnDestroy {
+export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewChecked, OnDestroy {
   @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;
   @Input() privateChatId?: string;
   @Input() privateMessage!: ChatMessage;
@@ -22,11 +22,10 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   @Input() message!: string;
 
   localStorageServ = inject(LocalStorageService)
+
   currentPrivatChat!: ChatMessage[];
   elementsInitialized: boolean = false;
-
   lastReactionEmojis: string[] = ['thumbs_up', 'laughing'];
-
 
   constructor() {
     super();
@@ -36,21 +35,26 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     this.currentPrivatChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
-  ngAfterViewInit() {
-  }
-
   ngAfterViewChecked() {
-    if (this.messageElements && this.messageElements.length > 0 && !this.elementsInitialized) {
-      this.messageElements.toArray().forEach((me) => {
-        this.boardServ.privateMessagesElementsToArray.push(me);
-        this.boardServ.highlightArrayForTheChildElementSearched.push(false);
-      })
-      this.elementsInitialized = true;
+    if (this.shouldInitializeElements()) {
+      this.initializeElements();
     }
   }
 
+  shouldInitializeElements(): boolean {
+    return this.messageElements && this.messageElements.length > 0 && !this.elementsInitialized;
+  }
+
+  initializeElements(): void {
+    this.messageElements.toArray().forEach((me) => {
+      this.boardServ.privateMessagesElementsToArray.push(me);
+      this.boardServ.highlightArrayForTheChildElementSearched.push(false);
+    });
+    this.elementsInitialized = true;
+  }
+
   ngOnDestroy() {
-    this.boardServ.privateMessagesElementsToArray = []; // applicare l'ngOnDestroy ha fatto si che l'array this.boardServ.privateMessageToArry si svuotasse al cambio utente, evitando l'aggiunta di messaggi esterni che non appartenevano a quella chat, ma svuotando l'array e lasciando spazio all'inserimento dei messaggi nuovi della nuova chat cliccata
+    this.boardServ.privateMessagesElementsToArray = [];
   }
 
   override async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
@@ -58,24 +62,39 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
       let newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
       this.currentPrivatChat.splice(this.privateChatIndex, 1, newPrivateMessage);
       await this.firestore.updateCompletlyPrivateChat(this.privateChatId, this.currentPrivatChat)
-      .then(() => this.getLastTwoReactions(emojiIdx, emojiArray))
+        .then(() => this.getLastTwoReactions(emojiIdx, emojiArray))
     }
   }
 
   override checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    let privateChatMessage = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex]
+    let privateChatMessage = this.getCurrentPrivateChatMessage();
     let emojiPath = emojiArray[emojiIdx];
-    let existingReaction = privateChatMessage.reactions.find(reaction => reaction.emojiPath == emojiPath);
+    let existingReaction = this.findExistingReaction(privateChatMessage, emojiPath);
     if (existingReaction) {
-      existingReaction.count++;
-      if (existingReaction.creator.includes(this.currentUserName)) {
-        existingReaction.creator.push(this.currentUserName);
-      }
+      this.updateExistingReaction(existingReaction);
     } else {
-      privateChatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray))
+      this.addNewReaction(privateChatMessage, emojiIdx, emojiArray);
     }
+    return privateChatMessage;
+  }
 
-    return privateChatMessage
+  getCurrentPrivateChatMessage(): ChatMessage {
+    return this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex];
+  }
+
+   override findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
+    return chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
+  }
+
+  override updateExistingReaction(reaction: Reaction): void {
+    reaction.count++;
+    if (!reaction.creator.includes(this.currentUserName)) {
+      reaction.creator.push(this.currentUserName);
+    }
+  }
+
+  override addNewReaction(chatMessage: ChatMessage, emojiIdx: number, emojiArray: string[]): void {
+    chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
   }
 
   override getLastTwoReactions(index: number, emojiArray: string[]) {
@@ -89,15 +108,12 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     }
   }
 
-  override setReactionObject(i: number, emojiArray: string []): Reaction {
+  override setReactionObject(i: number, emojiArray: string[]): Reaction {
     return {
       emojiPath: emojiArray[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
     }
   }
-
-
-
 
 }

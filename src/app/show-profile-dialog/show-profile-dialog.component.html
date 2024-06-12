@@ -11,21 +11,21 @@
                 <span (click)="boardServ.toggleProfileEditor(); boardServ.stopPropagation($event)">Bearbeiten</span>
             </div>
             @if (boardServ.currentUser.loginState == 'loggedIn') {
-                <span class="status">
-                    <img src="assets/img/status_online.png" alt="" class="state-icon"> Online
-                </span>
+            <span class="status">
+                <img src="assets/img/status_online.png" alt="" class="state-icon"> Online
+            </span>
             } @else if (boardServ.currentUser.loginState == 'idle') {
-                <span class="status">
-                    <img src="assets/icons/user_idle.png" alt="" class="state-icon"> Abwesend
-                </span>
+            <span class="status">
+                <img src="assets/icons/user_idle.png" alt="" class="state-icon"> Abwesend
+            </span>
             } @else if (boardServ.currentUser.loginState == 'loggedOut') {
-                <span class="status">
-                    <img src="assets/icons/user_offline.png" alt="" class="state-icon"> Offline
-                </span>
+            <span class="status">
+                <img src="assets/icons/user_offline.png" alt="" class="state-icon"> Offline
+            </span>
             }
-            
+
         </div>
-    
+
         <div class="email-container">
             <img src="assets/img/mail_black.png" alt="">
             <div>
@@ -34,7 +34,7 @@
             </div>
         </div>
     </ng-container>
-    
-    
-    
+
+
+
 </div>

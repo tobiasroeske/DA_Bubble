@@ -5,10 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
-import { User } from '../../shared/models/user.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
-
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivateChat } from '../../shared/models/privateChat.class';
 
@@ -19,23 +17,26 @@ import { PrivateChat } from '../../shared/models/privateChat.class';
   templateUrl: './create-private-message-area.component.html',
   styleUrl: './create-private-message-area.component.scss'
 })
+
 export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponent implements OnInit {
+  @Input() allUsers!: CurrentUser[]
+  @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>()
+
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
   memberServ = inject(MemberDialogsService);
+
   currentChatPartner!: CurrentUser;
   privateChat!: ChatMessage[];
   chatId?: string;
   override message!: ChatMessage;
 
-
-  @Input() allUsers!: CurrentUser[]
-
-  @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>()
-
   constructor() {
     super();
-    console.log(this.boardServ.currentChatPartner);
+  }
+
+  ngOnInit(): void {
+    this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
   override toggleTagMemberDialog() {
@@ -47,20 +48,6 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     let members: CurrentUser[] = this.allUsers;
     let lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
     this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
-  }
-
-  // onEnterPress(event: KeyboardEvent) {
-  //   if (event.key == 'Enter' && !event.shiftKey) {
-  //     this.sendMessage();
-  //     this.showEmojiPicker = false;
-  //     event.preventDefault();
-  //   } else if (event.key == 'Enter' && event.shiftKey) {
-  //     console.log('works!');
-  //   }
-  // }
-
-  ngOnInit(): void {
-    this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
   override async sendMessage(event?: Event) {
@@ -81,10 +68,10 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
 
   showMessageInChat() {
     let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
-          if (idx == -1) {
-            idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id)
-          }
-          this.boardServ.startPrivateChat(idx, 'creator', event);
+    if (idx == -1) {
+      idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id)
+    }
+    this.boardServ.startPrivateChat(idx, 'creator', event);
   }
 
   override resetTextArea() {

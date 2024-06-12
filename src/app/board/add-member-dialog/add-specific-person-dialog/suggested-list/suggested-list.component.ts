@@ -14,7 +14,6 @@ interface SuggestedUser {
   styleUrl: './suggested-list.component.scss'
 })
 export class SuggestedListComponent {
-
   @Input() filteredUsersListFromParent?: SuggestedUser[];
   @Output() sendIndexToParent: EventEmitter<number> = new EventEmitter<number>();
 

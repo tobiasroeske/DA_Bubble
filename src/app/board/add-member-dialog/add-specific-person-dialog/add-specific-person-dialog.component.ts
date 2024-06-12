@@ -24,6 +24,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService)
+
   title!: string;
   currentChannel!: Channel;
   channelId!: string;
@@ -38,16 +39,15 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   channel: Channel = new Channel();
   currentWindowWidth!: number;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.currentWindowWidth = event.target.innerWidth;
+  }
+
   constructor() {
     this.title = this.firestore.allChannels[this.boardServ.idx].title;
     this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
     this.channelId = this.currentChannel.id!
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.currentWindowWidth = event.target.innerWidth;
-    console.log('Window width: ', this.currentWindowWidth);
   }
 
   ngOnInit(): void {
@@ -71,7 +71,6 @@ export class AddSpecificPersonDialogComponent implements OnInit {
         this.currentChannel.allUsers.push(user)
       }
     })
-    console.log(this.currentChannel.allUsers);
     await this.firestore.updateChannelUsers(this.currentChannel.allUsers, this.channelId);
   }
 
@@ -92,12 +91,16 @@ export class AddSpecificPersonDialogComponent implements OnInit {
         }
       })
     })
+    this.updateParticipants();
+  };
+
+  updateParticipants() {
     let updatedUsers = this.currentChannel.allUsers;
     this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
     this.addPartecipantsIds();
     this.memberServ.addSpecificPerson = false;
-  };
+  }
 
   addPartecipantsIds() {
     this.currentChannel.partecipantsIds.forEach(id => {
@@ -122,7 +125,6 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     this.selectedMember = this.filteredUsersList[index];
     this.selectedMember.selected = true;
     this.selectedList.push(this.selectedMember);
-    console.log(this.selectedList);
     this.searchValue = "";
   }
 

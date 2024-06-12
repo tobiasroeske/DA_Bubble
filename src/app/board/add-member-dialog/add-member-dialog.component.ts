@@ -17,18 +17,14 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 export class AddMemberDialogComponent {
   @Input() currentChannel!: Channel;
   @Input() currentChannelId!: string;
-  specificMember: boolean = false;
-  allMembers: boolean = false;
+
   memberServ = inject(MemberDialogsService);
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  allUsers: CurrentUser[] = []
 
-  constructor() {
-    console.log('Current channel Id', this.currentChannelId);
-    console.log('current channel ', this.currentChannel);
-    console.log('boardserv id', this.boardServ.idx);
-  }
+  specificMember: boolean = false;
+  allMembers: boolean = false;
+  allUsers: CurrentUser[] = []
 
   onCheck(condition: string) {
     if (condition == "allMembers") {
@@ -46,11 +42,6 @@ export class AddMemberDialogComponent {
       u.selected = true;
     })
     await this.firestore.updateChannelUsers( this.allUsers, this.currentChannelId)
-    // this.currentChannel.allUsers.forEach((user) => {
-    //   user.selected = true;
-    // });
-    // this.allUsers = this.currentChannel?.allUsers;
-    // await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId);
     this.addUserToMemberArray();
     this.closeAddMemberDialog(event)
   }
@@ -77,7 +68,6 @@ export class AddMemberDialogComponent {
       }
     })
   }
-
 
   closeAddMemberDialog(event: Event) {
     this.memberServ.addMemberDialogIsOpen = false;

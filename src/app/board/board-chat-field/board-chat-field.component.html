@@ -34,7 +34,7 @@
                     }
 
             </span>
-            @if (firestore.allChannels[boardServ.idx].members.length > 4) {
+            @if (firestore.allChannels[boardServ.idx]?.members.length > 4) {
             <span class="number-of-members">+{{ firestore.allChannels[boardServ.idx]?.members.length - 4 }}</span>
             }
 

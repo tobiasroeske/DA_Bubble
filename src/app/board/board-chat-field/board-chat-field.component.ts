@@ -25,29 +25,24 @@ import { NewMessageComponent } from './new-message/new-message.component';
   styleUrl: './board-chat-field.component.scss'
 })
 export class BoardChatFieldComponent implements OnInit, AfterViewInit {
-  mouseIsOverMessage: boolean = false;
-  popUpReaction: boolean = false;
-  memberDialogIsOpen: boolean = false;
+  @ViewChild('chatMessageArea') chatField!: ElementRef;
+
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
   storageService = inject(LocalStorageService)
+  
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
   directMessages: PrivateChat[] = [];
-  //channelId: string;
 
-  @ViewChild('chatMessageArea') chatField!: ElementRef;
-
-  constructor() {
-    this.boardServ.idx = this.storageService.loadCurrentChannelIndex()
-    // this.firestore.directMessages$.subscribe(pm => {
-    //   this.directMessages = pm;
-    // })
-  }
+  mouseIsOverMessage: boolean = false;
+  popUpReaction: boolean = false;
+  memberDialogIsOpen: boolean = false;
 
   ngOnInit(): void {
+    this.boardServ.idx = this.storageService.loadCurrentChannelIndex()
     this.boardServ.chatFieldRef = this.chatField;
   }
 

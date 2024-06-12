@@ -16,15 +16,16 @@ import { AnswerEditorComponent } from '../answer-editor/answer-editor.component'
   templateUrl: './answer-message.component.html',
   styleUrl: './answer-message.component.scss'
 })
-export class AnswerMessageComponent implements OnInit, AfterViewInit{
+export class AnswerMessageComponent implements OnInit, AfterViewInit {
   firestoreService = inject(FirestoreService)
+  boardServ = inject(BoardService)
 
   @Input() currentChannel!: Channel
   @Input() currentChatMessage?: ChatMessage;
   @Input() answer!: ChatMessage;
-  @Input() lastIndex!:boolean;
-  @Input() chatMessagaeIndex?:number;
-  @Input() answerIndex?:number
+  @Input() lastIndex!: boolean;
+  @Input() chatMessagaeIndex?: number;
+  @Input() answerIndex?: number
 
   currentUserName!: User;
   showReactionPopup = false;
@@ -32,9 +33,6 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
   reactionDialogIndicatorbarOpen = false;
   editorOpen = false;
   showFile = false;
-
-  boardServ = inject(BoardService)
-
   reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
 
   ngOnInit(): void {
@@ -51,29 +49,40 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
   }
 
   updateAllChannels(emojiIdx: number) {
-    let newAnswer =  this.checkIfReactionExists(emojiIdx);
-      console.log(this.currentChannel);
-      this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage)
-      this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
+    let newAnswer = this.checkIfReactionExists(emojiIdx);
+    this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage)
+    this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
     console.log(this.currentChatMessage);
   }
 
   toggleMessageEditor() {
-    this.editorOpen =!this.editorOpen
+    this.editorOpen = !this.editorOpen
   }
 
-  checkIfReactionExists(emojiIdx: number){
+  checkIfReactionExists(emojiIdx: number) {
     let emojiPath = this.reactionEmojis[emojiIdx];
-    let existingReaction = this.answer.reactions.find(reaction => reaction.emojiPath === emojiPath);
+    let existingReaction = this.findExistingReaction(emojiPath);
     if (existingReaction) {
-      existingReaction.count++;
-      if (!existingReaction.creator.includes(this.currentUserName)) {
-        existingReaction.creator.push(this.currentUserName);
-      }
+      this.updateExistingReaction(existingReaction);
     } else {
-      this.answer.reactions.push(this.setReactionObject(emojiIdx));
+      this.addNewReaction(emojiIdx);
     }
     return this.answer;
+  }
+
+  findExistingReaction(emojiPath: string) {
+    return this.answer.reactions.find(reaction => reaction.emojiPath === emojiPath);
+  }
+
+  updateExistingReaction(reaction: any) {
+    reaction.count++;
+    if (!reaction.creator.includes(this.currentUserName)) {
+      reaction.creator.push(this.currentUserName);
+    }
+  }
+
+  addNewReaction(emojiIdx: number) {
+    this.answer.reactions.push(this.setReactionObject(emojiIdx));
   }
 
   setReactionObject(i: number): Reaction {
@@ -87,7 +96,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit{
   toggleReactionPopup(event: Event) {
     if (event.type == 'mouseover') {
       this.showReactionPopup = true;
-    } 
+    }
     if (event.type == 'mouseleave') {
       this.showReactionPopup = false;
       this.showEmojiBar = false;

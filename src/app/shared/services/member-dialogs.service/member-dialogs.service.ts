@@ -31,7 +31,7 @@ export class MemberDialogsService implements OnInit {
   searchedUserPopUpId?: string;
 
 
-  ngOnInit(){
+  ngOnInit() {
   }
 
   toggleMembersDialog(event: Event) {
@@ -71,7 +71,6 @@ export class MemberDialogsService implements OnInit {
 
   startNewChat(index: number) {
     this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    console.log(this.currentChannel);
     this.currentMember = this.currentChannel.members[index];
     this.name = this.currentChannel.members[index].name;
     this.avatarPath = this.currentChannel.members[index].avatarPath;
@@ -96,25 +95,37 @@ export class MemberDialogsService implements OnInit {
   }
 
   async setChatRoom(event: Event) {
-    let idxToStartPrivatChat: number;
     event.preventDefault();
     this.setThePrivateChatObject();
-    let idxToCheckIfGuestExist = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
-    if (idxToCheckIfGuestExist == -1) {
-      await this.firestore.addChatRoom(this.privateChat.toJSON())
-        .then(() => {
-          this.boardServ.privateChatId = this.firestore.chatRoomId;
-          this.toggleMembersDialog(event);
-          this.closeShowMemberPopUp(event);
-          idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
-          this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
-        })
+
+    if (this.isGuestExist()) {
+      this.handleExistingGuest(event);
     } else {
-      console.log('chat partner existiert bereits');
-      idxToStartPrivatChat = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId)
-      this.boardServ.startPrivateChat(idxToStartPrivatChat, 'creator', event);
-      this.closeShowMemberPopUp(event);
+      await this.addNewChatRoom(event);
     }
+  }
+
+  isGuestExist(): boolean {
+    return this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId) !== -1;
+  }
+
+  async addNewChatRoom(event: Event) {
+    await this.firestore.addChatRoom(this.privateChat.toJSON()).then(() => {
+      this.boardServ.privateChatId = this.firestore.chatRoomId;
+      this.toggleMembersDialog(event);
+      this.closeShowMemberPopUp(event);
+      this.startPrivateChat(event);
+    });
+  }
+
+  handleExistingGuest(event: Event) {
+    this.startPrivateChat(event);
+    this.closeShowMemberPopUp(event);
+  }
+
+  startPrivateChat(event: Event) {
+    const idx = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
+    this.boardServ.startPrivateChat(idx, 'creator', event);
   }
 
   setThePrivateChatObject() {

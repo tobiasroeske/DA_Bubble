@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, HostListener, Injectable, inject } from '@angular/core';
+import { ElementRef, Injectable, inject } from '@angular/core';
 
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
@@ -232,11 +232,11 @@ export class BoardService {
     event.preventDefault();
   }
 
-  startPrivateChat(index: number, partecipant: string, event?: Event) {
-    if (partecipant == "creator") {
-      this.startChatAsCreator(index);
+  startPrivateChat(index: number, participant: string, event?: Event) {
+    if (participant === "creator") {
+      this.startChat(index, 'creator');
     } else {
-      this.startChatAsGuest(index);
+      this.startChat(index, 'guest');
     }
     if (event) {
       event.stopPropagation();
@@ -244,55 +244,20 @@ export class BoardService {
     this.markCurrentChat(index);
   }
 
+  startChat(index: number, role: 'creator' | 'guest') {
+    this.chatPartnerIdx = index;
+    this.privateChatId = this.firestore.directMessages[index].id || this.firestore.chatRoomId;
+    this.currentChatPartner = role === 'creator' ? this.firestore.directMessages[index].guest : this.firestore.directMessages[index].creator;
+    this.privateChat = this.firestore.directMessages[index].chat;
+    this.checkIfPrivateChatIsEmpty();
+    this.privateChatIsStarted = true;
+  }
+
   markCurrentChat(index: number) {
-    this.blueColorsForTheChatPartersFocus = [];
-    this.firestore.directMessages.forEach(privateChat => {
-      this.blueColorsForTheChatPartersFocus.push(false);
-    })
+    this.blueColorsForTheChatPartersFocus = this.firestore.directMessages.map(() => false);
     this.newMessageInputOpen = false;
-    console.log(this.blueColorsForTheChatPartersFocus);
-    this.setBlueColorToChatPartner(index)
+    this.setBlueColorToChatPartner(index);
     this.hideSideNav();
-  }
-
-  startChatAsGuest(index: number) {
-    this.chatPartnerIdx = index;
-    this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
-    if (this.privateChatId == '') {
-      this.privateChatId = this.firestore.chatRoomId;
-    }
-    this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].creator;
-    this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-    this.checkIfPrivatChatIsEmpty();
-    this.privateChatIsStarted = true;
-  }
-
-//   startChat(index: number, asGuest: boolean) {
-//     this.chatPartnerIdx = index;
-//     this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
-//     if (this.privateChatId == '') {
-//         this.privateChatId = this.firestore.chatRoomId;
-//     }
-//     if (asGuest) {
-//         this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].creator;
-//     } else {
-//         this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
-//     }
-//     this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-//     this.checkIfPrivatChatIsEmpty();
-//     this.privateChatIsStarted = true;
-// }
-
-  startChatAsCreator(index: number) {
-    this.chatPartnerIdx = index;
-    this.privateChatId = this.firestore.directMessages[this.chatPartnerIdx].id;
-    if (this.privateChatId == '') {
-      this.privateChatId = this.firestore.chatRoomId;
-    }
-    this.currentChatPartner = this.firestore.directMessages[this.chatPartnerIdx].guest;
-    this.privateChat = this.firestore.directMessages[this.chatPartnerIdx].chat;
-    this.checkIfPrivatChatIsEmpty();
-    this.privateChatIsStarted = true;
   }
 
   hideSideNav() {
@@ -306,7 +271,7 @@ export class BoardService {
     this.blueColorsForTheChatPartersFocus[index] = true
   }
 
-  checkIfPrivatChatIsEmpty() {
+  checkIfPrivateChatIsEmpty() {
     if (this.privateChat.length == 0) {
       this.hidePopUpChatPartner = false;
       setTimeout(() => {

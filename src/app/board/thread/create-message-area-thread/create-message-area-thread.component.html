@@ -1,6 +1,7 @@
 <div class="textarea-container">
     <label for="answer"></label>
-    <textarea name="message" id="answer" [(ngModel)]="textMessage" #message="ngModel" placeholder="Nachricht an #{{ currentChannel?.title }}"></textarea>
+    <textarea name="message" id="answer" [(ngModel)]="textMessage" #message="ngModel"
+        placeholder="Nachricht an #{{ currentChannel?.title }}"></textarea>
     <div class="tool-panel-textarea">
         <div class="icons-container">
             <!-- Add Files Icon -->
@@ -54,7 +55,7 @@
                         fill="#686868" />
                 </g>
             </svg>
-            
+
         </div>
         <!-- Send message Icon -->
         <svg class="sendMsg-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
@@ -73,44 +74,45 @@
 </div>
 
 @if (uploadedFile.length > 0) {
-    <div class="upload-container">
-        <div class="uploaded-file">
-            <img src="{{ uploadedFile }}" alt="" class="uploaded-img">
-            <img src="assets/icons/close.svg" alt="close-icon" class="close-icon" (click)="deleteFile()">
-        </div>
+<div class="upload-container">
+    <div class="uploaded-file">
+        <img src="{{ uploadedFile }}" alt="" class="uploaded-img">
+        <img src="assets/icons/close.svg" alt="close-icon" class="close-icon" (click)="deleteFile()">
     </div>
-    }
+</div>
+}
 @if (fileSizeToGreat) {
-    <span class="uploaded-file red">Die Datei ist zu groß. Maximal 500kb</span>
+<span class="uploaded-file red">Die Datei ist zu groß. Maximal 500kb</span>
 }
 
 @if (boardService.showEmojiPickerInThreads) {
-    <div class="emoji-container">
-        <emoji-mart [showPreview]="false"  [style]="{'width': '75%', 'min-width.px': '200'}" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>
-    </div>
+<div class="emoji-container">
+    <emoji-mart [showPreview]="false" [style]="{'width': '75%', 'min-width.px': '200'}" title="Pick your emoji…"
+        emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>
+</div>
 }
 
 @if (tagMembers) {
-    <div class="tag-member-dialog">
-        
-            @for (member of filteredMembers; track member.id; let i = $index) {
-                <div class="member" (click)="tagMember(i)">
-                    <img src="{{ member.avatarPath }}" alt="">
-                    <span>{{ member.name }}</span>
-                </div>
-            }
-      
-       
+<div class="tag-member-dialog">
+
+    @for (member of filteredMembers; track member.id; let i = $index) {
+    <div class="member" (click)="tagMember(i)">
+        <img src="{{ member.avatarPath }}" alt="">
+        <span>{{ member.name }}</span>
     </div>
-    
+    }
+
+
+</div>
+
 }
 
 @if (tagChannels) {
-    <div class="tag-member-dialog">
-        @for (channel of filteredChannels; track channel.id; let i = $index) {
-            <div class="member" (click)="tagChannel(i)">
-                # {{ channel.title }}
-            </div>
-        }
+<div class="tag-member-dialog">
+    @for (channel of filteredChannels; track channel.id; let i = $index) {
+    <div class="member" (click)="tagChannel(i)">
+        # {{ channel.title }}
     </div>
+    }
+</div>
 }

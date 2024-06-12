@@ -23,33 +23,29 @@ export class ChatMessageComponent implements OnInit {
   @Input() channelId!: string;
   @Input() chatMessageIndex!: number;
   @Input() currentChannel!: Channel;
+
+  boardServ = inject(BoardService);
+  firestore = inject(FirestoreService);
+  fbStorageService = inject(FirebaseStorageService);
+
   editedMessage?: string;
   showFile = false;
-
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
   memberDialogIsOpen: boolean = false;
   reactionDialogOpen = false;
   reactionDialogIndicatorbarOpen = false;
-  boardServ = inject(BoardService);
-  firestore = inject(FirestoreService);
-  fbStorageService = inject(FirebaseStorageService);
   membersList: any[] = [];
-  //currentChannel!: any;
   currentUserName!: any
   lastReactions: string[] = ['thumbs_up', 'laughing'];
   currentChatMessage!: ChatMessage
   editorOpen = false;
-
-
   reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
 
   ngOnInit(): void {
     this.currentChannel = (this.firestore.allChannels[this.boardServ.idx]);
     this.currentUserName = this.boardServ.currentUser.name;
-    //this.currentChatMessage = this.currentChannel.chat![this.chatMessageIndex];
     this.currentChatMessage = this.chat;
-    //this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
     this.editedMessage = this.chat.message;
   }
 
@@ -64,7 +60,7 @@ export class ChatMessageComponent implements OnInit {
     }
   }
 
-  toggleReactionDialog(htmlElement:string) {
+  toggleReactionDialog(htmlElement: string) {
     if (htmlElement == 'reactionIdicator') {
       this.reactionDialogIndicatorbarOpen = !this.reactionDialogIndicatorbarOpen;
     } else {
@@ -73,7 +69,7 @@ export class ChatMessageComponent implements OnInit {
   }
 
   toggleMessageEditor() {
-    this.editorOpen =!this.editorOpen
+    this.editorOpen = !this.editorOpen
     this.mouseIsOverMessage = false;
   }
 
@@ -81,21 +77,16 @@ export class ChatMessageComponent implements OnInit {
     this.showFile = !this.showFile;
   }
 
-  editMessage(index:number) {
-    console.log(this.currentChannel);
+  editMessage(index: number) {
     this.chat.message = this.editedMessage!;
-    console.log(this.chat);
-    
     this.currentChannel.chat!.splice(index, 1, this.chat);
     console.log(this.currentChannel);
     this.firestore.updateChannel(this.currentChannel, this.channelId)
-
-    //this.firestore.updateAllChats(this.channelId, this.currentChannel.chat)
-    .then(() => this.editorOpen = false);
+      .then(() => this.editorOpen = false);
   }
 
   setCurrentMessage() {
-    this.boardServ.currentChatMessage = this.chat; 
+    this.boardServ.currentChatMessage = this.chat;
     this.boardServ.chatMessageIndex = this.chatMessageIndex;
     this.boardServ.currentChannelTitle = this.currentChannel.title;
   }
@@ -103,25 +94,55 @@ export class ChatMessageComponent implements OnInit {
   async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
     this.currentChannel.chat!.splice(this.chatMessageIndex, 1, newChatMessage);
-    console.log('current chanel after update', this.currentChannel.chat);
     await this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!)
-    .then(() => this.getLastTwoReactions(emojiIdx, emojiArray));
+      .then(() => this.getLastTwoReactions(emojiIdx, emojiArray));
   }
 
   checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    let chatMessage: ChatMessage = this.currentChannel.chat![this.chatMessageIndex];
+    let chatMessage = this.getCurrentChatMessage();
     let emojiPath = emojiArray[emojiIdx];
-    let existingReaction = chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
+    let existingReaction = this.findExistingReaction(chatMessage, emojiPath);
     if (existingReaction) {
-      existingReaction.count += 1;
-      if (!existingReaction.creator.includes(this.currentUserName)) {
-        existingReaction.creator.push(this.currentUserName);
-      }
+      this.updateExistingReaction(existingReaction);
     } else {
-      chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
+      this.addNewReaction(chatMessage, emojiIdx, emojiArray);
     }
-    return chatMessage
+    return chatMessage;
   }
+
+  getCurrentChatMessage(): ChatMessage {
+    return this.currentChannel.chat![this.chatMessageIndex];
+  }
+
+  findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
+    return chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
+  }
+
+  updateExistingReaction(existingReaction: Reaction): void {
+    existingReaction.count += 1;
+    if (!existingReaction.creator.includes(this.currentUserName)) {
+      existingReaction.creator.push(this.currentUserName);
+    }
+  }
+
+  addNewReaction(chatMessage: ChatMessage, emojiIdx: number, emojiArray: string[]): void {
+    chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
+  }
+
+  // checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
+  //   let chatMessage: ChatMessage = this.currentChannel.chat![this.chatMessageIndex];
+  //   let emojiPath = emojiArray[emojiIdx];
+  //   let existingReaction = chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
+  //   if (existingReaction) {
+  //     existingReaction.count += 1;
+  //     if (!existingReaction.creator.includes(this.currentUserName)) {
+  //       existingReaction.creator.push(this.currentUserName);
+  //     }
+  //   } else {
+  //     chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
+  //   }
+  //   return chatMessage
+  // }
 
   getLastTwoReactions(index: number, emojiArray: string[]) {
     let newReaction = emojiArray[index];

@@ -19,18 +19,17 @@ type SearchItem = CurrentUser | PrivateChat | Channel | ChatMessage;
   styleUrl: './search-dialog.component.scss'
 })
 export class SearchDialogComponent implements OnChanges {
+  @Input() searchValue!: string;
+  @Output() sendEmptyString: EventEmitter<string> = new EventEmitter<string>();
+
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
+
   mainSearchList: any[] = [];
   chatArray: ChatMessage[] = [];
   idxToFindPositionOfGuestInDirectMessArray!: number;
   idxToFindPositionOfClickedMessageInTheChoisedPrivChat!: number;
-  @Input() searchValue!: string;
-  @Output() sendEmptyString: EventEmitter<string> = new EventEmitter<string>();
-
-  constructor() {
-  }
 
   async showSearchElementClicked(index: number, event: Event) {
     let clickedElement = this.mainSearchList[index];
@@ -56,35 +55,67 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   async showTheClickedElementOfTypePrivatChat(clickedElement: PrivateChat, event: Event) {
-    this.idxToFindPositionOfGuestInDirectMessArray = this.firestore.directMessages.findIndex(privChat => privChat.guest.id == clickedElement.guest.id)
+    this.idxToFindPositionOfGuestInDirectMessArray = this.findGuestIndexInDirectMessages(clickedElement);
+    this.selectChatRoomAndMember();
+    await this.setChatRoomAndScrollToMessage(event);
+  }
+
+  findGuestIndexInDirectMessages(clickedElement: PrivateChat): number {
+    return this.firestore.directMessages.findIndex(privChat => privChat.guest.id == clickedElement.guest.id);
+  }
+
+  selectChatRoomAndMember(): void {
     this.boardServ.selectedChatRoom = this.firestore.directMessages[this.idxToFindPositionOfGuestInDirectMessArray];
     this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
+  }
+
+  async setChatRoomAndScrollToMessage(event: Event): Promise<void> {
     await this.memberServ.setChatRoom(event);
-    this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat = this.boardServ.selectedChatRoom.chat.findIndex(chat => chat.message && chat.message.includes(this.searchValue));
+    this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat = this.findMessageIndexInSelectedChatRoom();
     if (this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat !== -1) {
       this.boardServ.scrollToSearchedMessage(this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat);
     }
   }
 
+  findMessageIndexInSelectedChatRoom(): number {
+    return this.boardServ.selectedChatRoom.chat.findIndex(chat => chat.message && chat.message.includes(this.searchValue));
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     setTimeout(() => {
-      if (changes['searchValue'] && this.searchValue.length > 0) {
-        this.boardServ.showSearchDialog = true;
-        this.mainSearchList = this.boardServ.allData.filter((ad: SearchItem) => {
-          if (this.isCurrentUser(ad)) {
-            return ad.name.toLowerCase().includes(this.searchValue.toLowerCase());
-          } else if (this.isChannel(ad)) {
-            return ad.title.toLowerCase().includes(this.searchValue.toLowerCase());
-          } else if (this.isPrivateChat(ad)) {
-            return ad.chat.some((chat) => chat.message.toLowerCase().includes(this.searchValue.toLowerCase()))
-          } else {
-            return false
-          }
-        })
-      } else {
-        this.boardServ.showSearchDialog = false;
-      };
+      this.handleSearchChanges(changes);
     }, 100);
+  }
+
+  handleSearchChanges(changes: SimpleChanges): void {
+    if (changes['searchValue'] && this.searchValue.length > 0) {
+      this.showSearchDialogAndFilterItems();
+    } else {
+      this.hideSearchDialog();
+    }
+  }
+
+  showSearchDialogAndFilterItems(): void {
+    this.boardServ.showSearchDialog = true;
+    this.mainSearchList = this.filterSearchItems();
+  }
+
+  filterSearchItems(): SearchItem[] {
+    return this.boardServ.allData.filter((ad: SearchItem) => {
+      if (this.isCurrentUser(ad)) {
+        return ad.name.toLowerCase().includes(this.searchValue.toLowerCase());
+      } else if (this.isChannel(ad)) {
+        return ad.title.toLowerCase().includes(this.searchValue.toLowerCase());
+      } else if (this.isPrivateChat(ad)) {
+        return ad.chat.some((chat) => chat.message.toLowerCase().includes(this.searchValue.toLowerCase()))
+      } else {
+        return false
+      }
+    });
+  }
+
+  hideSearchDialog(): void {
+    this.boardServ.showSearchDialog = false;
   }
 
   isCurrentUser(item: SearchItem): item is CurrentUser {

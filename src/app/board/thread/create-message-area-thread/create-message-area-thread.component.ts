@@ -18,6 +18,7 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
   @Input() currentChatMessage?: ChatMessage;
   @Input() currentChannel?: Channel
   @ViewChild('fileInput') override fileInput!: ElementRef<any>;
+
   override memberToTag: string = '';
   override channelToTag: string = '';
   override filteredChannels: Channel[] = [];
@@ -32,29 +33,31 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
     super();
   }
 
-
-
   override sendMessage(): void {
-    if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
-      let date = new Date().getTime();
-      let newAnswer = this.setMessageObject(date);
-      this.currentChatMessage?.answers.push(newAnswer)
+    if (this.canSendMessage()) {
+      const date = new Date().getTime();
+      const newAnswer = this.setMessageObject(date);
+      this.currentChatMessage?.answers.push(newAnswer);
       if (this.currentChannel) {
-        this.currentChannel.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage)
-        this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
-          .then(() => {
-            this.resetTextArea();
-            this.boardService.scrollToBottom(this.boardService.threadRef);
-          })
+        this.updateChat().then(() => {
+          this.postUpdateActions();
+        });
       }
     }
   }
 
-  // override resetTextArea() {
-  //   this.textMessage = '';
-  //   this.uploadedFile = '';
-  //   this.filePath = '';
-  //   this.showEmojiPicker = false;
-  // }
+  canSendMessage(): boolean {
+    return this.textMessage.length > 0 || this.uploadedFile.length > 0;
+  }
+
+  updateChat(): Promise<void> {
+    this.currentChannel!.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage);
+    return this.firestoreService.updateAllChats(this.currentChannel!.id!, this.currentChannel!.chat!);
+  }
+
+  postUpdateActions(): void {
+    this.resetTextArea();
+    this.boardService.scrollToBottom(this.boardService.threadRef);
+  }
 
 }

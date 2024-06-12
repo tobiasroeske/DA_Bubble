@@ -63,6 +63,13 @@ form {
         font-size: 18px;
         font-weight: 500;
         color: #686868;
+        &:hover {
+            border: 1px solid black;
+        }
+    
+        &:focus {
+            border-color: #444DF2;
+        }
     }
 }
 

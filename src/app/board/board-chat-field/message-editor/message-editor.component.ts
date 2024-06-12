@@ -13,48 +13,47 @@ import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
   templateUrl: './message-editor.component.html',
   styleUrl: './message-editor.component.scss'
 })
-export class MessageEditorComponent implements OnInit{
- @Input() chatMessageIndex!: number;
- @Input() chat!: ChatMessage;
- firestore = inject(FirestoreService);
- boardServ = inject(BoardService);
- editedMessage?: string;
- @Output() editorOpen = new EventEmitter<boolean>();
- @Output() emojiPickerOpen = new EventEmitter<boolean>();
- currentChannel!: any;
- showEmojiPicker = false;
+export class MessageEditorComponent implements OnInit {
+  @Input() chatMessageIndex!: number;
+  @Input() chat!: ChatMessage;
+  @Output() editorOpen = new EventEmitter<boolean>();
+  @Output() emojiPickerOpen = new EventEmitter<boolean>();
 
- ngOnInit(): void {
-   this.editedMessage = this.chat.message;
- }
+  firestore = inject(FirestoreService);
+  boardServ = inject(BoardService);
 
+  editedMessage?: string;
+  currentChannel!: any;
+  showEmojiPicker = false;
 
- editMessage(index:number) {
-  this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-  this.chat.message = this.editedMessage!;
-  this.currentChannel.chat.splice(index, 1, this.chat);
-  this.firestore.updateChannel(this.currentChannel, this.currentChannel.id)
-  .then(() => this.closeEditor());
-}
+  ngOnInit(): void {
+    this.editedMessage = this.chat.message;
+  }
 
-closeEmojiDialog() {
-  this.showEmojiPicker = false;
-}
+  editMessage(index: number) {
+    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    this.chat.message = this.editedMessage!;
+    this.currentChannel.chat.splice(index, 1, this.chat);
+    this.firestore.updateChannel(this.currentChannel, this.currentChannel.id)
+      .then(() => this.closeEditor());
+  }
 
+  closeEmojiDialog() {
+    this.showEmojiPicker = false;
+  }
 
+  addEmoji(event: any) {
+    this.editedMessage = this.editedMessage + event.emoji.native;
+  }
 
-addEmoji(event: any) {
-  this.editedMessage = this.editedMessage + event.emoji.native;
-}
+  toggleEmojiPicker(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.emojiPickerOpen.emit(true);
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
 
-toggleEmojiPicker(event: Event){
-  event.preventDefault();
-  event.stopPropagation();
-  this.emojiPickerOpen.emit(true);
-  this.showEmojiPicker = !this.showEmojiPicker;
-}
-
-closeEditor() {
-  this.editorOpen.emit(false);
-}
+  closeEditor() {
+    this.editorOpen.emit(false);
+  }
 }

@@ -21,7 +21,7 @@
 
     <div [ngClass]="{'d-none': memberServ.addSpecificPerson}" class="add-members-options">
         <div class="checkbox-and-text-container" (click)="onCheck('allMembers')">
-            <div  class="ellipse-container">
+            <div class="ellipse-container">
                 @if(allMembers){
                 <img class="ellipse" src="assets/icons/ellipse.png" alt="">
                 }
@@ -30,7 +30,7 @@
         </div>
 
         <div class="checkbox-and-text-container" (click)="onCheck('specificMember')">
-            <div  class="ellipse-container">
+            <div class="ellipse-container">
                 @if(specificMember){
                 <img class="ellipse" src="assets/icons/ellipse.png" alt="">
                 }
