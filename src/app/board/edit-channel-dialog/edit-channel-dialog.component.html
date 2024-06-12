@@ -6,7 +6,7 @@
                     <img class="hashtag-icon" src="assets/icons/hashtag.svg" alt="">
                     <h3>{{title}}</h3>
                 </span>
-                <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="cross-icon" width="40"
+                <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="cross-icon-edit-channel" width="40"
                     height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                         height="24">
@@ -119,6 +119,6 @@
                 <button (click)="leaveThisChannel($event)">Channel verlassen</button>
             </div>
         </div>
-        <app-add-specific-person-dialog (click)="memberServ.stopPropagation($event)"></app-add-specific-person-dialog>
+        <app-add-specific-person-dialog-mobile (click)="memberServ.stopPropagation($event)"></app-add-specific-person-dialog-mobile>
     </div>
 </div>

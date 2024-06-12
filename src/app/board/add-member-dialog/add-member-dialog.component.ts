@@ -7,10 +7,11 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { Channel } from '../../shared/models/channel.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { AddSpecificPersonDialogMobileComponent } from './add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
   selector: 'app-add-member-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddSpecificPersonDialogComponent],
+  imports: [CommonModule, FormsModule, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
   templateUrl: './add-member-dialog.component.html',
   styleUrl: './add-member-dialog.component.scss'
 })
@@ -41,7 +42,7 @@ export class AddMemberDialogComponent {
     this.allUsers.forEach(u => {
       u.selected = true;
     })
-    await this.firestore.updateChannelUsers( this.allUsers, this.currentChannelId)
+    await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId)
     this.addUserToMemberArray();
     this.closeAddMemberDialog(event)
   }

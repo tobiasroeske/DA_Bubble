@@ -10,15 +10,18 @@
     z-index: 99;
     @include d-flex();
 
-    >.edit-dialog {
+    >.edit-dialog-wrapper {
         background: #fff;
         min-height: 616px;
+        padding: 40px;
         width: 50%;
         border-radius: 0px 30px 30px 30px;
         box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
-        padding: 40px;
-        font-family: "Nunito";
-        @include d-flex(column, space-between, flex-start, 20px);
+
+        >.edit-dialog {
+            font-family: "Nunito";
+            @include d-flex(column, space-between, flex-start, 20px);
+        }
     }
 }
 
@@ -241,7 +244,7 @@
             border-radius: 30px;
             padding: 40px 40px 40px 40px;
             height: 100vh;
-            width: 80%;
+            width: 90%;
             overflow: hidden;
             font-family: 'Nunito';
 
@@ -260,6 +263,22 @@
 
     .mobile-d-none {
         display: none;
+    }
+}
+
+.cross-icon-edit-channel {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover path {
+        fill: $specialBlue;
     }
 }
 
@@ -313,6 +332,11 @@
         >button {
             font-size: 16px;
         }
+    }
+
+    .cross-icon-edit-channel {
+        height: 32px;
+        width: 32px;
     }
 }
 

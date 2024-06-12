@@ -69,6 +69,78 @@
     }
 }
 
+.cross-icon-add-member {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(236, 238, 254, 1);
+    }
+
+    &:hover path {
+        fill: $specialBlue;
+    }
+}
+
+@media (max-width: 960px) {
+    .add-member-dialog {
+        padding: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .add-member-dialog {
+        width: 455px;
+        padding: 24px;
+        right: -5px;
+    }
+
+    .checkbox-and-text-container {
+        @include d-flex(row, flex-start, flex-start, 20px);
+    }
+}
+
+@media (max-width: 480px) {
+
+    .add-member-dialog {
+        width: 300px;
+        padding: 16px;
+
+        >.add-member-dialog-header {
+            >span {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .checkbox-and-text-container {
+        @include d-flex(row, flex-start, center, 8px);
+
+        >span {
+            font-size: 12px;
+        }
+
+        >.ellipse-container {
+            height: 10px;
+            width: 10px;
+        }
+    }
+
+    .btn-container {
+        >button {
+            font-size: 16px;
+        }
+    }
+
+    .cross-icon-add-member{
+        height: 32px;
+        width: 32px;
+    }
+}
+
 .d-none {
     display: none;
 }

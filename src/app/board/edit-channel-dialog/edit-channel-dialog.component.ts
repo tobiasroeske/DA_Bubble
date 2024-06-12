@@ -9,11 +9,11 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { AddSpecificPersonDialogComponent } from '../add-member-dialog/add-specific-person-dialog/add-specific-person-dialog.component';
-
+import { AddSpecificPersonDialogMobileComponent } from '../add-member-dialog/add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
   selector: 'app-edit-channel-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, MembersDialogComponent, AddSpecificPersonDialogComponent],
+  imports: [CommonModule, FormsModule, MembersDialogComponent, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
   templateUrl: './edit-channel-dialog.component.html',
   styleUrl: './edit-channel-dialog.component.scss'
 })
