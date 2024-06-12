@@ -1,0 +1,143 @@
+@import "../../styles.scss";
+
+* {
+  font-family: "Nunito", sans-serif;
+}
+
+a {
+  padding: unset;
+  border: unset;
+  outline: unset;
+}
+
+h1 {
+  font-size: 46px;
+  font-weight: 700;
+  color: #444df2;
+  align-self: center;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+.fullheight {
+  width: 100%;
+  @include d-flex($fd: column, $jc: flex-start, $g: 32px);
+  height: 100vh;
+}
+
+header {
+  @include d-flex($jc: flex-start);
+  padding: 32px 75px 0px;
+  width: 100%;
+
+  .logo-box {
+    @include d-flex($g: 16px);
+
+    h1 {
+      font-size: 32px;
+    }
+  }
+}
+
+.content {
+  @include d-flex();
+  flex: 1;
+}
+
+.container {
+  padding: 48px 56px;
+  background-color: white;
+  border-radius: 30px;
+  width: 75%;
+  overflow: auto;
+  position: relative;
+
+  @include d-flex($fd: column, $ai: flex-start, $jc: flex-start, $g: 16px);
+  > div {
+    @include d-flex($fd: column, $g: 16px);
+    font-size: 17px;
+    > h3 {
+      font-size: 20px;
+      color: #444df2;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(173, 176, 217, 1);
+    border-radius: 100px;
+  }
+
+  .back-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 48px;
+    left: 56px;
+    padding: 15px;
+    border-radius: 50%;
+    transition: all 0.125s ease-in-out;
+    &:hover {
+      background-color: #eceefe;
+    }
+  }
+}
+
+@media (max-width: 950px) {
+  .container .back-icon {
+    padding: 8px;
+    left: 32px;
+    top: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  header {
+    justify-content: center;
+  }
+
+  .container {
+    width: 95%;
+  }
+}
+
+@media (max-width: 535px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+  .container {
+    padding: 40px;
+
+    .back-icon {
+      padding: 6px;
+    }
+  }
+}
+
+@media (max-width: 470px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    .container .back-icon {
+        padding: 4px;
+        left: 18px;
+        top: 16px;
+    }
+}
+
+
+
+@media (max-width: 370px) {
+  .container {
+    padding: 40px 24px;
+  }
+}

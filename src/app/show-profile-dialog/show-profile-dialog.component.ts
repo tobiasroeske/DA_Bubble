@@ -9,19 +9,16 @@ import { BoardService } from '../board/board.service';
   styleUrl: './show-profile-dialog.component.scss'
 })
 export class ShowProfileDialogComponent {
-  @Output() mobileOpen = new EventEmitter<boolean>();
+  @Output() profileOpen = new EventEmitter<boolean>();
+  @Output() editorOpen = new EventEmitter<boolean>();
   boardServ = inject(BoardService);
 
-  closeDialog($event:Event) {
-    this.boardServ.profileOptionsOpen = false;
-    this.boardServ.editMode = false;
-    this.boardServ.authService.errorCode = '';
-    this.boardServ.profileOpen = false;
-    this.boardServ.stopPropagation($event);
-    this.closeMobileDialog();
+  closeDialog() {
+    this.profileOpen.emit(false);
   }
 
-  closeMobileDialog() {
-    this.mobileOpen.emit(false);
+  openEditor(event:Event) {
+    event.stopPropagation();
+    this.editorOpen.emit(true);
   }
 }

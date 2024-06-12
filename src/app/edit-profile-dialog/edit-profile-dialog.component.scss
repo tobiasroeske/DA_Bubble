@@ -2,9 +2,8 @@
 
 .content {
     @include d-flex($fd: column, $g: 45px);
-    width: 450px;
+    width: 400px;
     font-family: 'Nunito', sans-serif;
-    padding: 15px 10px;
 
     .avatar-img {
         cursor: pointer;
@@ -135,8 +134,8 @@ form {
 
             >img {
                 cursor: pointer;
-                width: 67px;
-                height: 67px;
+                width: 56px;
+                height: 56px;
                 object-fit: cover;
                 border: 3px solid transparent;
                 transition: all .125s ease-in-out;
@@ -199,5 +198,18 @@ input[type="file"] {
 
     .form-actions .cancel-btn, .form-actions .submit-btn {
         padding: 8px 12px;
+    }
+}
+
+@media (max-height: 870px) {
+    .content {
+        gap: 16px;
+    }
+}
+
+@media (max-height: 810px) {
+    .content .avatar-img {
+        width: 120px;
+        height: 120px;
     }
 }

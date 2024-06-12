@@ -99,9 +99,9 @@ div {
   background-color: white;
   padding: 30px;
   gap: 15px;
-  right: 0;
-  top: 108px;
-  z-index: 10;
+  right: 18px;
+  top: 126px;
+  z-index: 52;
   border-radius: 30px 0 30px 30px;
   box-shadow: 0px 6px 10px 0px #00000033;
 
@@ -143,7 +143,7 @@ div {
   border-radius: 30px 30px 0 0;
   padding: 30px 26px;
   transform: translateY(220px);
-  transition: all .125s ease-in;
+  transition: all 0.125s ease-in;
   display: none;
 
   .options {
@@ -151,7 +151,7 @@ div {
     align-self: flex-start;
 
     > .profile-btn {
-        @include d-flex($g: 15px);
+      @include d-flex($g: 15px);
       width: fit-content;
       background-color: transparent;
       color: black;
@@ -171,58 +171,78 @@ div {
 }
 
 .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.15);
-    z-index: 51;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+  z-index: 51;
+  @include d-flex();
 }
 
 .width-100 {
-    width: 100% !important;
+  width: 100% !important;
+}
+
+.profile-dialog {
+  @include d-flex($fd: column, $g: 38px);
+  position: absolute;
+  top: 126px;
+  right: 18px;
+  background-color: white;
+  padding: 45px 40px;
+  border-radius: 30px 0 30px 30px;
+  box-shadow: 0px 6px 10px 0px #00000033;
+  z-index: 52;
+}
+
+.profile-dialog-mobile {
+  @include d-flex($fd: column, $g: 38px);
+  background-color: white;
+  padding: 45px 40px;
+  border-radius: 30px 30px 30px 30px;
+  box-shadow: 0px 6px 10px 0px #00000033;
+  z-index: 52;
+  display: none;
 }
 
 .profile {
-    @include d-flex($fd: column, $g: 38px);
-    background-color: white;
-    padding: 45px 20px;
-    border-radius: 30px;
-    box-shadow: 0px 6px 10px 0px #00000033;
-    z-index: 11;
-    display: none;
+  @include d-flex($fd: column, $g: 38px);
+  background-color: white;
+  padding: 45px 20px;
+  border-radius: 30px;
+  box-shadow: 0px 6px 10px 0px #00000033;
+  z-index: 11;
+  display: none;
 }
 
 .slide-in {
-    animation: slide-in .125s .05s ease-in-out forwards;
+  animation: slide-in 0.125s 0.05s ease-in-out forwards;
 }
 
 .slide-out {
-    animation: slide-out .125s .05s ease-in-out forwards;
+  animation: slide-out 0.125s 0.05s ease-in-out forwards;
 }
 
 @keyframes slide-out {
-    from {
-        transform: translateY(0);
-    }
+  from {
+    transform: translateY(0);
+  }
 
-    to {
-        transform: translateY(220px);
-    }
+  to {
+    transform: translateY(220px);
+  }
 }
 
 @keyframes slide-in {
-    from {
-        transform: translateY(220px);
-    }
+  from {
+    transform: translateY(220px);
+  }
 
-    to {
-        transform: translateY(0);
-    }
+  to {
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 960px) {
@@ -258,19 +278,32 @@ div {
     bottom: 0;
     right: 48px;
   }
+
+  .profile-options {
+    top: 70px;
+  }
+
+  .profile-dialog {
+    top: 70px;
+  }
 }
 
 @media (max-width: 768px) {
+  .profile-dialog {
+    display: none;
+  }
+
+  .profile-dialog-mobile {
+    display: flex;
+  }
+
   .profile-options {
     display: none;
   }
 
   .profile-options-mobile {
     display: flex;
-  }
-
-  .profile {
-    display: flex;
+    padding: 45px 40px;
   }
 }
 
@@ -313,7 +346,13 @@ div {
 }
 
 @media (max-width: 495px) {
-    .profile {
-        width: 100%;
-    }
+  .profile {
+    width: 100%;
+  }
+}
+
+@media (max-height: 760px) {
+  .profile-dialog {
+    padding: 20px;
+  }
 }

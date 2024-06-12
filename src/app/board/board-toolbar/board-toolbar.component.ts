@@ -23,7 +23,10 @@ export class BoardToolbarComponent {
 
   userList: CurrentUser[] = [];
   searchText: string = "";
+  showProfileOptions = false;
   showProfile = false;
+  showOverlay = false;
+  editorOpen = false;
 
   showValue(text: string) {
     this.searchText = text;
@@ -39,5 +42,29 @@ export class BoardToolbarComponent {
     this.showProfile = event;
   }
 
+  toggleProfileOptions(event: Event) {
+    this.showOverlay = !this.showOverlay;
+    this.showProfileOptions = !this.showProfileOptions;
+  }
+
+  showProfileDialog(event: Event) {
+    event.stopPropagation();
+    this.showProfile = true;
+    this.showProfileOptions = false;
+  }
+
+  closeProfileDialog(event: boolean) {
+    this.showProfile = event;
+    this.showProfileOptions = false;
+    this.showOverlay = false;
+    this.editorOpen = false;
+  }
+
+  openEditor(event: boolean) {
+    this.editorOpen = event;
+    console.log(this.editorOpen);
+    
+    this.showProfile = false;
+  }
 
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { BoardService } from '../board/board.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,8 @@ import { FirebaseStorageService } from '../shared/services/firebase-storage-serv
   styleUrl: './edit-profile-dialog.component.scss'
 })
 export class EditProfileDialogComponent {
+  @Output() editorOpen = new EventEmitter<boolean>();
+
   boardServ = inject(BoardService);
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
@@ -76,11 +78,7 @@ export class EditProfileDialogComponent {
   }
 
   closeDialog() {
-    this.boardServ.profileOptionsOpen = false;
-    this.boardServ.profileOpen = false;
-    this.boardServ.editMode = false;
-    this.authService.errorCode = '';
-    this.changesSuccessful = false;
+    this.editorOpen.emit(false);
   }
 
 }

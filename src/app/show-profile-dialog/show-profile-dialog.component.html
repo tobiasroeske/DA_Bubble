@@ -2,13 +2,19 @@
     <ng-container>
         <div class="headline">
             <h3>Profil</h3>
-            <img src="assets/icons/close.svg" alt="" (click)="closeDialog($event)">
+            <img src="assets/icons/close.svg" alt="" (click)="closeDialog()">
         </div>
         <img src="{{ boardServ.currentUser.avatarPath }}" alt="" class="avatar-img">
         <div class="name-box">
             <div>
                 <h2>{{ boardServ.currentUser.name }}</h2>
-                <span (click)="boardServ.toggleProfileEditor(); boardServ.stopPropagation($event)">Bearbeiten</span>
+                @if (boardServ.mobileView) {
+                <img (click)="openEditor($event)" src="assets/icons/edit_square.svg" alt="" class="edit-icon">
+                } @else {
+                <span (click)="openEditor($event)">Bearbeiten</span>
+                }
+
+
             </div>
             @if (boardServ.currentUser.loginState == 'loggedIn') {
             <span class="status">

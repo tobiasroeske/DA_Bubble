@@ -5,8 +5,7 @@
 .container {
     @include d-flex($fd: column, $g: 38px);
     font-family: 'Nunito', sans-serif;
-    padding: 15px 10px;
-    width: 450px;
+    width: 400px;
 
     .avatar-img {
         object-fit: cover;
@@ -28,6 +27,14 @@
         h2 {
             font-size: 32px;
             font-weight: 700;
+        }
+
+        .edit-icon {
+            cursor: pointer;
+            transition: all .125s ease-in-out;
+            &:hover {
+                transform: scale(1.05);
+            }
         }
 
         >span {
