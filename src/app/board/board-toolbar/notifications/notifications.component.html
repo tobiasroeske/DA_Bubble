@@ -4,54 +4,17 @@
         <img src="assets/icons/close.svg" alt="" class="" (click)="closeDialog(); boardServ.stopPropagation($event)">
     </div>
     <div class="notifications-container" (click)="findCurrentUser()">
-        
-        <div class="notification active">
-            <div class="user-container ">
-                <img src="assets/img/avatar1.png" alt="" class="avatar-img">
-                <span>User Name</span>
-            </div>
-            <span>hat dich in <b># Willkommen</b> markiert</span>
-        </div>
-
-        <div class="notification active">
-            <div class="user-container">
-                <img src="assets/img/avatar1.png" alt="" class="avatar-img">
-                <span>User Name</span>
-            </div>
-            <span>hat dich in <b># Willkommen</b> markiert</span>
-        </div>
-
-        <div class="notification">
-            <div class="user-container">
-                <img src="assets/img/avatar1.png" alt="" class="avatar-img">
-                <span>User Name</span>
-            </div>
-            <span>hat dich in <b># Willkommen</b> markiert</span>
-        </div>
-
-        <div class="notification">
-            <div class="user-container">
-                <img src="assets/img/avatar1.png" alt="" class="avatar-img">
-                <span>User Name</span>
-            </div>
-            <span>hat dich in <b># Willkommen</b> markiert</span>
-        </div>
-
-        <div class="notification">
-            <div class="user-container">
-                <img src="assets/img/avatar1.png" alt="" class="avatar-img">
-                <span>User Name</span>
-            </div>
-            <span>hat dich in <b># Willkommen</b> markiert</span>
-        </div>
-
-        <div class="notification">
-            <div class="user-container">
-                <img src="assets/img/avatar1.png" alt="" class="avatar-img">
-                <span>User Name</span>
-            </div>
-            <span>hat dich in <b># Willkommen</b> markiert</span>
-        </div>
+        @for (notification of boardServ.currentUser.notification; track notification; let i = $index) {
+            @if (notification.receiverId == boardServ.currentUser.id) {
+                <div class="notification active">
+                    <div class="user-container ">
+                        <img src="{{ notification.senderImage }}" alt="" class="avatar-img">
+                        <span>{{ notification.senderName }}</span>
+                    </div>
+                    <span>hat dich in <b># {{ notification.channelName }}</b> markiert</span>
+                </div>
+            }
+        }
 
     </div>
 </div>

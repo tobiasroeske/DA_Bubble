@@ -1,4 +1,4 @@
-<div class="textarea-container">
+<div class="textarea-container" (click)="boardService.stopPropagation($event)">
     <label for="message"></label>
     <textarea name="message" id="message" [(ngModel)]="textMessage" #message="ngModel"
         placeholder="Nachricht an #{{ channelTitle }}"></textarea>

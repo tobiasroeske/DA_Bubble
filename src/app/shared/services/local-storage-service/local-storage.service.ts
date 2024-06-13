@@ -17,8 +17,12 @@ export class LocalStorageService {
     let userExists = localStorage.getItem('currentUser');
     if (userExists != null) {
       let userAsText = JSON.parse(localStorage.getItem('currentUser')!);
-      this.currentUser = this.setCurrentUserObject(userAsText);
-      return this.currentUser;
+      if (userAsText.uid) {
+        this.currentUser = this.setCurrentUserObject(userAsText);
+        return this.currentUser
+      } else {
+        return userAsText;
+      }
     } else {
       return;
     }

@@ -32,6 +32,7 @@ export class CreateMessageAreaComponent {
   signUpServ = inject(SignupService);
   firestoreService = inject(FirestoreService);
   fbStorageService = inject(FirebaseStorageService)
+  localStorageServ = inject(LocalStorageService)
 
   textMessage: string = '';
   memberToTag: string = '';
@@ -181,6 +182,7 @@ export class CreateMessageAreaComponent {
     if (this.memberToTag.length > 0) {
       this.removeStringToTagFromTextMessage(this.memberToTag);
     }
+    //this.notificationObject = new NotificationObj();
     this.member = this.filteredMembers[i];
     this.textMessage += ` @${this.member.name} `;
     this.tagMembers = false;
@@ -215,30 +217,39 @@ export class CreateMessageAreaComponent {
       await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
         .then(() => {
           if (this.member != null) {
+            this.notificationObject = new NotificationObj();
             this.setNotificationObject();
             this.member.notification.push(this.notificationObject)
             console.log('member beim senden', this.member);
             console.log(this.member.notification);
             if (this.member.id) {
+              if (this.member.id == this.boardService.currentUser.id) {
+                this.boardService.currentUser.notification.push(this.notificationObject.toJSON());
+                this.localStorageServ.saveCurrentUser(this.boardService.currentUser);
+              }
               this.firestoreService.updateUserNotification(this.member.id, this.notificationObject.toJSON())
+                .then(() => {
+                  this.resetTextArea();
+                  this.boardService.scrollToBottom(this.boardService.chatFieldRef);
+                })
             }
           }
-          this.resetTextArea();
-          this.boardService.scrollToBottom(this.boardService.chatFieldRef);
+
+
         })
     }
   }
 
   setNotificationObject() {
-      this.notificationObject.channelName = this.channelTitle;
-      this.notificationObject.channelId = this.channelId;
-      this.notificationObject.receiverImage = this.member!.avatarPath;
-      this.notificationObject.receiverName = this.member!.name;
-      this.notificationObject.receiverId = this.member!.id;
-      this.notificationObject.date = new Date().getTime();
-      this.notificationObject.senderImage = this.boardService.currentUser.avatarPath;
-      this.notificationObject.senderName = this.boardService.currentUser.name;
-      this.notificationObject.senderId = this.boardService.currentUser.id;
+    this.notificationObject.channelName = this.channelTitle;
+    this.notificationObject.channelId = this.channelId;
+    this.notificationObject.receiverImage = this.member!.avatarPath;
+    this.notificationObject.receiverName = this.member!.name;
+    this.notificationObject.receiverId = this.member!.id;
+    this.notificationObject.date = new Date().getTime();
+    this.notificationObject.senderImage = this.boardService.currentUser.avatarPath;
+    this.notificationObject.senderName = this.boardService.currentUser.name;
+    this.notificationObject.senderId = this.boardService.currentUser.id;
   }
 
   resetTextArea() {
@@ -247,7 +258,6 @@ export class CreateMessageAreaComponent {
     this.filePath = '';
     this.boardService.showEmojiPicker = false;
     this.member = null;
-    console.log('member nach dem senden', this.member);
 
   }
 
