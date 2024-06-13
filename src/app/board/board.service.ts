@@ -69,6 +69,8 @@ export class BoardService {
   showSearchDialog: boolean = false;
   searchText: string = "";
 
+  channelMessageElementsToArray = [];
+
   constructor() {
     this.checkScreenSize();
     this.currentUser = this.storageService.loadCurrentUser()!;

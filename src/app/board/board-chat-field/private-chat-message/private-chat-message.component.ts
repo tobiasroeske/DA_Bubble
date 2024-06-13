@@ -35,7 +35,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     this.currentPrivatChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
   }
 
-  ngAfterViewChecked() {
+  override ngAfterViewChecked() {
     if (this.shouldInitializeElements()) {
       this.initializeElements();
     }

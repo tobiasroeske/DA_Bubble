@@ -17,11 +17,15 @@ export class NotificationsComponent {
   firestoreService = inject(FirestoreService);
   boardServ = inject(BoardService);
 
+  constructor(){
+    this.firestoreService.userList.forEach(user => {
+    console.log(user.notification);
+    })
+  }
   findCurrentUser() {
     let allUsers = this.firestoreService.userList;
     let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id);
     console.log(currentUser);
-    
   }
 
   closeDialog() {

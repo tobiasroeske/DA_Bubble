@@ -222,6 +222,7 @@ export class CreateMessageAreaComponent {
             this.member.notification.push(this.notificationObject)
             console.log('member beim senden', this.member);
             console.log(this.member.notification);
+            console.log(this.textMessage);
             if (this.member.id) {
               if (this.member.id == this.boardService.currentUser.id) {
                 this.boardService.currentUser.notification.push(this.notificationObject.toJSON());

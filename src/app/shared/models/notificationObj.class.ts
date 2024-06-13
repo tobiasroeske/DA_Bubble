@@ -5,10 +5,11 @@ export class NotificationObj {
     channelId: string;
     senderName: string;
     senderId: string;
-    senderImage:string;
-    receiverImage:string;
+    senderImage: string;
+    receiverImage: string;
     receiverName: string;
     receiverId?: string;
+    message: string;
 
 
     constructor(obj?: any) {
@@ -20,7 +21,8 @@ export class NotificationObj {
             this.senderId = obj ? obj.senderId : '',
             this.receiverImage = obj ? obj.receiverImage : '',
             this.receiverName = obj ? obj.receiverName : '',
-            this.receiverId = obj ? obj.receiverId : ''
+            this.receiverId = obj ? obj.receiverId : '',
+            this.message = obj ? obj.message : ''
     }
 
     public toJSON(): {} {
@@ -33,7 +35,8 @@ export class NotificationObj {
             senderId: this.senderId,
             receiverImage: this.receiverImage,
             receiverName: this.receiverName,
-            receiverId: this.receiverId
+            receiverId: this.receiverId,
+            message: this.message
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren } from '@angular/core';
 import { BoardService } from '../../board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,7 @@ import { Channel } from '../../../shared/models/channel.class';
   styleUrl: './chat-message.component.scss'
 })
 export class ChatMessageComponent implements OnInit {
+  @ViewChildren('messageElements') channelMessages!: QueryList<ElementRef>;
   @Input() chat!: ChatMessage;
   @Input() lastIndex!: boolean;
   @Input() channelId!: string;
@@ -47,6 +48,10 @@ export class ChatMessageComponent implements OnInit {
     this.currentUserName = this.boardServ.currentUser.name;
     this.currentChatMessage = this.chat;
     this.editedMessage = this.chat.message;
+  }
+
+  ngAfterViewChecked() {
+   
   }
 
   checkIfDateIsToday(date: number) {
