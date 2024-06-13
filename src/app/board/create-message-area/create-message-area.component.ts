@@ -216,14 +216,6 @@ export class CreateMessageAreaComponent {
         .then(() => {
           if (this.member != null) {
             this.setNotificationObject();
-            // this.notificationObject.channelName = this.channelTitle;
-            // this.notificationObject.channelId = this.channelId;
-            // this.notificationObject.receiverImage = this.member.avatarPath;
-            // this.notificationObject.receiverName = this.member.name;
-            // this.notificationObject.receiverId = this.member.id;
-            // this.notificationObject.senderImage = this.boardService.currentUser.avatarPath
-            // this.notificationObject.senderName = this.boardService.currentUser.name;
-            // this.notificationObject.senderId = this.boardService.currentUser.id;
             this.member.notification.push(this.notificationObject)
             console.log('member beim senden', this.member);
             console.log(this.member.notification);
