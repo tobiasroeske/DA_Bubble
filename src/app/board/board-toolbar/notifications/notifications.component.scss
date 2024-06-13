@@ -1,0 +1,78 @@
+@import "../../../../styles.scss";
+
+.content {
+  @include d-flex($fd: column, $g: 45px);
+  width: 400px;
+  font-family: "Nunito", sans-serif;
+}
+
+.headline {
+  width: 100%;
+  @include d-flex($jc: space-between);
+  font-size: 24px;
+  font-weight: 700;
+  padding-right: 40px;
+
+  > img {
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 8px;
+    transition: all 0.125s ease-in-out;
+
+    &:hover {
+      background-color: #eceefd;
+    }
+  }
+}
+
+.notifications-container {
+  @include d-flex($fd: column, $ai: flex-start, $jc: flex-start, $g: 8px);
+  max-height: 300px;
+  overflow: auto;
+  padding-right: 40px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(173, 176, 217, 1);
+    border-radius: 100px;
+  }
+}
+
+.notification {
+  @include d-flex($jc: flex-start, $g: 8px);
+  padding: 4px 12px;
+  border-radius: 30px;
+  transition: all 0.125s ease-in-out;
+
+  .user-container {
+    @include d-flex($jc: flex-start, $g: 8px);
+
+    .avatar-img {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
+      border-radius: 100%;
+    }
+
+    > span {
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+
+  &:hover {
+    background-color: #eceefd;
+  }
+}
+
+.active {
+  background-color: #eceefd;
+  transition: all 0.125s ease-in-out;
+
+  &:hover {
+    background-color: #797ef3;
+  }
+}

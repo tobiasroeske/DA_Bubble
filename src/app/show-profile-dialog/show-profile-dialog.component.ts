@@ -13,6 +13,8 @@ export class ShowProfileDialogComponent {
   @Output() editorOpen = new EventEmitter<boolean>();
   boardServ = inject(BoardService);
 
+  readonly GUESTID = 'C6Nks516RWTDa1iwvRk2AMCeopj1';
+
   closeDialog() {
     this.profileOpen.emit(false);
   }

@@ -225,6 +225,22 @@ div {
   animation: slide-out 0.125s 0.05s ease-in-out forwards;
 }
 
+.notification-icon {
+  position: absolute;
+  top: 26px;
+  right: 106px;
+  width: 16px;
+  height: 16px;
+  background-color: #c50707;
+  padding: 0;
+  margin: 0;
+  border-radius: 100%;
+}
+
+.padding-right {
+  padding-right: 0px !important;
+}
+
 @keyframes slide-out {
   from {
     transform: translateY(0);
@@ -279,6 +295,13 @@ div {
     right: 48px;
   }
 
+  .notification-icon {
+    width: 14px;
+    height: 14px;
+    top: 11px;
+    right: 88px;
+  }
+
   .profile-options {
     top: 70px;
   }
@@ -320,6 +343,10 @@ div {
 
   .state-icon {
     right: 14px;
+  }
+
+  .notification-icon {
+    right: 52px;
   }
 
   .logo {
