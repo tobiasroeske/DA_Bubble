@@ -194,13 +194,35 @@ export class SignupService {
   async login(email: string, password: string) {
     await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        this.storageService.saveCurrentUser(userCredential.user);
+        this.storageService.saveCurrentUser(this.findCurrentUser(userCredential.user));
         this.router.navigateByUrl('board');
       })
       .catch((err) => {
         this.errorCode = err.code;
       });
   }
+
+  findCurrentUser(user: any) {
+    let allUsers = this.firestoreService.userList;
+    let currentUser = allUsers.find(u => u.id == user.uid)
+    console.log('currentUser from signup', currentUser);
+    let currentUserAsUC = this.setCurrentUserObject(currentUser)
+    return currentUserAsUC;
+  }
+
+  setCurrentUserObject(obj: any) {
+    return {
+      uid: obj.id,
+      displayName: obj.name,
+      email: obj.email,
+      photoURL: obj.avatarPath,
+      seleted: obj.seleted || false,
+      loginState: obj.loginState,
+      type: obj.type,
+      notification: obj.notification
+    }
+  }
+
   async guestLogin() {
     await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678')
       .then((userCredential) => {
@@ -226,10 +248,12 @@ export class SignupService {
   }
 
   async logout() {
-    let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
-    userWithLoginState.loginState = 'loggedOut';
+    let currentUser = this.storageService.loadCurrentUser();
+    //let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
+    //userWithLoginState.loginState = 'loggedOut';
+    currentUser.loginState = 'loggedOut';
     this.storageService.saveIntroPlayed(false)
-    await this.firestoreService.updateUser(userWithLoginState.id, userWithLoginState)
+    await this.firestoreService.updateUser(currentUser.id, currentUser)
       .then(() => {
         signOut(this.auth).then(() => {
           this.storageService.saveCurrentUser('');

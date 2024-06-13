@@ -79,7 +79,6 @@ export class BoardService {
       window.open('login', '_self');
     }
     console.log(this.currentUser);
-    
   }
 
   checkScreenSize() {

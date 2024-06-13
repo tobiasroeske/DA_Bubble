@@ -43,6 +43,7 @@ export class BoardComponent implements OnInit {
 
   @HostListener('window:click', ['$event'])
   async handleClick() {
+    this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
     this.boardServ.currentUser.loginState = 'loggedIn'
     await this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
   }
@@ -51,19 +52,27 @@ export class BoardComponent implements OnInit {
   async unloadHandler(event: Event) {
     event.preventDefault();
     this.localStorageService.saveIntroPlayed(false);
-    let currentUser = this.boardServ.currentUser;
+    let currentUser = this.localStorageService.loadCurrentUser();
     currentUser.loginState = 'loggedOut';
     await this.firestore.updateUser(currentUser.id, currentUser);
   }
 
   ngOnInit() {
-    this.authService.getLoggedInUser()
+    //this.authService.getLoggedInUser()
+    this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
     this.idleUserService.userInactive.subscribe(isIdle => {
       if (isIdle) {
+        
         this.boardServ.currentUser.loginState = 'idle';
         this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
       }
     })
+  }
+
+  getUserNotifications() {
+    let allUsers = this.firestore.userList;
+    let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id)
+    return currentUser;
   }
 
   openProfileOptions($event: boolean) {
