@@ -75,8 +75,9 @@ export class AddChannelDialogComponent {
   }
 
   setCreatorInfo(): void {
-    this.channel.creatorId = this.signUpServ.currentUser.uid;
-    this.channel.creatorName = this.signUpServ.currentUser.displayName;
+    let currentUser = this.localStorageService.loadCurrentUser();
+    this.channel.creatorId = currentUser.id
+    this.channel.creatorName = currentUser.name;
   }
 
   initializeChannel(): void {
