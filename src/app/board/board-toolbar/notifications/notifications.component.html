@@ -3,7 +3,8 @@
         <h3>Benachrichtigungen</h3>
         <img src="assets/icons/close.svg" alt="" class="" (click)="closeDialog(); boardServ.stopPropagation($event)">
     </div>
-    <div class="notifications-container">
+    <div class="notifications-container" (click)="findCurrentUser()">
+        
         <div class="notification active">
             <div class="user-container ">
                 <img src="assets/img/avatar1.png" alt="" class="avatar-img">

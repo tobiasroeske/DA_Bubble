@@ -78,6 +78,8 @@ export class BoardService {
     } else {
       window.open('login', '_self');
     }
+    console.log(this.currentUser);
+    
   }
 
   checkScreenSize() {

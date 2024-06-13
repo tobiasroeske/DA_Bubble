@@ -9,5 +9,5 @@ export interface CurrentUser {
     selected?:boolean;
     loginState: 'loggedIn' | 'loggedOut' | 'idle';
     type: 'CurrentUser';
-    notification: NotificationObj[];
+    notification: any[];
 }

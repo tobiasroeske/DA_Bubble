@@ -10,7 +10,7 @@ export class User {
     avatarPath!: string;
     selected: boolean;
     loginState: 'loggedIn' | 'loggedOut' | 'idle';
-    notification: NotificationObj[];
+    notification: any[];
 
     constructor(obj?: any) {
         this.id = obj ? obj.id : '';

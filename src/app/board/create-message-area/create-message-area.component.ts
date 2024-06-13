@@ -10,6 +10,7 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { FirebaseStorageService } from '../../shared/services/firebase-storage-service/firebase-storage.service';
 import { NotificationObj } from '../../shared/models/notificationObj.class';
 import { SignupService } from '../../shared/services/signup/signup.service';
+import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 
 @Component({
@@ -49,7 +50,7 @@ export class CreateMessageAreaComponent {
   preview = 'false';
   member: CurrentUser | null = null;
 
-  notificationObject: NotificationObj = new NotificationObj();
+  notificationObject = new NotificationObj();
 
   @HostListener('keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
@@ -184,9 +185,6 @@ export class CreateMessageAreaComponent {
     this.textMessage += ` @${this.member.name} `;
     this.tagMembers = false;
     this.memberToTag = '';
-    console.log(this.member);
-    console.log(this.channels[this.boardService.idx]);
-    console.log(this.boardService.currentUser);
   }
 
   tagChannel(i: number, event: Event) {
@@ -217,25 +215,38 @@ export class CreateMessageAreaComponent {
       await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
         .then(() => {
           if (this.member != null) {
-            this.notificationObject.channelName = this.channelTitle;
-            this.notificationObject.channelId = this.channelId;
-            this.notificationObject.receiverImage = this.member.avatarPath;
-            this.notificationObject.receiverName = this.member.name;
-            this.notificationObject.receiverId = this.member.id;
-            this.notificationObject.senderImage = this.boardService.currentUser.avatarPath
-            this.notificationObject.senderName = this.boardService.currentUser.name;
-            this.notificationObject.senderId = this.boardService.currentUser.id;
+            this.setNotificationObject();
+            // this.notificationObject.channelName = this.channelTitle;
+            // this.notificationObject.channelId = this.channelId;
+            // this.notificationObject.receiverImage = this.member.avatarPath;
+            // this.notificationObject.receiverName = this.member.name;
+            // this.notificationObject.receiverId = this.member.id;
+            // this.notificationObject.senderImage = this.boardService.currentUser.avatarPath
+            // this.notificationObject.senderName = this.boardService.currentUser.name;
+            // this.notificationObject.senderId = this.boardService.currentUser.id;
             this.member.notification.push(this.notificationObject)
             console.log('member beim senden', this.member);
             console.log(this.member.notification);
             if (this.member.id) {
-              this.firestoreService.updateUser(this.member.id, this.member);
+              this.firestoreService.updateUserNotification(this.member.id, this.notificationObject.toJSON())
             }
           }
           this.resetTextArea();
           this.boardService.scrollToBottom(this.boardService.chatFieldRef);
         })
     }
+  }
+
+  setNotificationObject() {
+      this.notificationObject.channelName = this.channelTitle;
+      this.notificationObject.channelId = this.channelId;
+      this.notificationObject.receiverImage = this.member!.avatarPath;
+      this.notificationObject.receiverName = this.member!.name;
+      this.notificationObject.receiverId = this.member!.id;
+      this.notificationObject.date = new Date().getTime();
+      this.notificationObject.senderImage = this.boardService.currentUser.avatarPath;
+      this.notificationObject.senderName = this.boardService.currentUser.name;
+      this.notificationObject.senderId = this.boardService.currentUser.id;
   }
 
   resetTextArea() {

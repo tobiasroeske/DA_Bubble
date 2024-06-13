@@ -5,6 +5,8 @@ import { Channel } from '../../models/channel.class';
 import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
 import { Auth } from '@angular/fire/auth';
+import { NotificationObj } from '../../models/notificationObj.class';
+import { LocalStorageService } from '../local-storage-service/local-storage.service';
 
 
 @Injectable({
@@ -64,6 +66,11 @@ export class FirestoreService {
     await updateDoc(userRef, userUpdate)
       .then(() => { })
       .catch(err => console.log(err))
+  }
+
+  async updateUserNotification(userId: string, notification: any) {
+    let userRef = this.getUserDocRef(userId);
+    await updateDoc(userRef, { notification: arrayUnion(notification) })
   }
 
   subUsersList() {
