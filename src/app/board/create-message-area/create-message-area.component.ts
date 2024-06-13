@@ -45,6 +45,7 @@ export class CreateMessageAreaComponent {
   uploadedFile: string = '';
   filePath: string = '';
   preview = 'false';
+  member: CurrentUser | null = null;
 
   @HostListener('keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
@@ -175,10 +176,13 @@ export class CreateMessageAreaComponent {
     if (this.memberToTag.length > 0) {
       this.removeStringToTagFromTextMessage(this.memberToTag);
     }
-    let member = this.filteredMembers[i];
-    this.textMessage += ` @${member.name} `;
+    this.member = this.filteredMembers[i];
+    this.textMessage += ` @${this.member.name} `;
     this.tagMembers = false;
     this.memberToTag = '';
+    console.log(this.member);
+    console.log(this.channels[this.boardService.idx]);
+    console.log(this.boardService.currentUser);
   }
 
   tagChannel(i: number) {
@@ -202,6 +206,9 @@ export class CreateMessageAreaComponent {
       let date = new Date().getTime();
       this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
         .then(() => {
+          if (this.member != null) {
+            console.log('member beim senden', this.member);
+          }
           this.resetTextArea();
           this.boardService.scrollToBottom(this.boardService.chatFieldRef);
         })
@@ -213,6 +220,9 @@ export class CreateMessageAreaComponent {
     this.uploadedFile = '';
     this.filePath = '';
     this.boardService.showEmojiPicker = false;
+    this.member = null;
+    console.log('member nach dem senden', this.member);
+    
   }
 
   filterMember() {
