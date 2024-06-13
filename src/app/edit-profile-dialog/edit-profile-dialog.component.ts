@@ -16,7 +16,6 @@ import { FirebaseStorageService } from '../shared/services/firebase-storage-serv
 })
 export class EditProfileDialogComponent {
   @Output() editorOpen = new EventEmitter<boolean>();
-
   boardServ = inject(BoardService);
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
@@ -28,6 +27,8 @@ export class EditProfileDialogComponent {
   avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png'];
   changeAvatar = false;
   changesSuccessful = false;
+
+  
 
   constructor() {
     this.fullname = this.boardServ.currentUser.name;

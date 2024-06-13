@@ -117,7 +117,7 @@
     <span class="err-meesage">Nichts gefunden</span>
     }
     @for (channel of filteredChannels; track channel.id; let i = $index) {
-    <div class="member" (click)="tagChannel(i)">
+    <div class="member" (click)="tagChannel(i, $event)">
         # {{ channel.title }}
     </div>
     }

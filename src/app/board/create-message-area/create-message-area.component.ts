@@ -189,14 +189,20 @@ export class CreateMessageAreaComponent {
     console.log(this.boardService.currentUser);
   }
 
-  tagChannel(i: number) {
+  tagChannel(i: number, event: Event) {
     if (this.channelToTag.length > 0) {
       this.removeStringToTagFromTextMessage(this.channelToTag);
     }
     let channel = this.filteredChannels[i];
-    this.textMessage += ` #${channel.title}`;
+    let channelIndex = this.findIndexOfChannel(channel);
+    this.boardService.showChannelInChatField(channelIndex, event)
     this.tagChannels = false;
     this.channelToTag = '';
+  }
+
+  findIndexOfChannel(channel: Channel) {
+    let allChannels = this.firestoreService.allChannels;
+    return allChannels.findIndex(c => c.id == channel.id);
   }
 
   removeStringToTagFromTextMessage(string: string) {

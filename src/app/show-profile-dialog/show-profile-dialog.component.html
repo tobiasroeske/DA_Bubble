@@ -8,13 +8,13 @@
         <div class="name-box">
             <div>
                 <h2>{{ boardServ.currentUser.name }}</h2>
+                @if (boardServ.currentUser.id != GUESTID) {
                 @if (boardServ.mobileView) {
                 <img (click)="openEditor($event)" src="assets/icons/edit_square.svg" alt="" class="edit-icon">
                 } @else {
                 <span (click)="openEditor($event)">Bearbeiten</span>
                 }
-
-
+                }
             </div>
             @if (boardServ.currentUser.loginState == 'loggedIn') {
             <span class="status">

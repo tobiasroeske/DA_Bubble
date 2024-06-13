@@ -8,13 +8,14 @@ import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @Component({
   selector: 'app-board-toolbar',
   standalone: true,
   templateUrl: './board-toolbar.component.html',
   styleUrl: './board-toolbar.component.scss',
-  imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule]
+  imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule, NotificationsComponent]
 })
 export class BoardToolbarComponent {
   authService = inject(SignupService);
@@ -27,6 +28,7 @@ export class BoardToolbarComponent {
   showProfile = false;
   showOverlay = false;
   editorOpen = false;
+  notificationsOpen = false;
 
   showValue(text: string) {
     this.searchText = text;
@@ -53,11 +55,24 @@ export class BoardToolbarComponent {
     this.showProfileOptions = false;
   }
 
+  showNotificationDialog(event: Event) {
+    event.stopPropagation();
+    this.notificationsOpen = true;
+    this.showProfileOptions = false;
+  }
+
   closeProfileDialog(event: boolean) {
     this.showProfile = event;
     this.showProfileOptions = false;
     this.showOverlay = false;
     this.editorOpen = false;
+  }
+
+  closeNotificationsDialog(event: boolean) {
+    this.notificationsOpen = event;
+    this.showProfileOptions = false;
+    this.showOverlay = false
+    this.showProfile = false;
   }
 
   openEditor(event: boolean) {

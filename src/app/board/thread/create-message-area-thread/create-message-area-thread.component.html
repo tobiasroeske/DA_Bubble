@@ -110,7 +110,7 @@
 @if (tagChannels) {
 <div class="tag-member-dialog">
     @for (channel of filteredChannels; track channel.id; let i = $index) {
-    <div class="member" (click)="tagChannel(i)">
+    <div class="member" (click)="tagChannel(i, $event)">
         # {{ channel.title }}
     </div>
     }
