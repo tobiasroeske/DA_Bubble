@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { NotificationObj } from '../../shared/models/notificationObj.class';
 
 @Component({
   selector: 'app-board-toolbar',
@@ -29,6 +30,7 @@ export class BoardToolbarComponent {
   showOverlay = false;
   editorOpen = false;
   notificationsOpen = false;
+  unredNotifications: NotificationObj[] = [];
 
   showValue(text: string) {
     this.searchText = text;
@@ -42,6 +44,21 @@ export class BoardToolbarComponent {
 
   close(event: boolean) {
     this.showProfile = event;
+  }
+
+  allNotificationsRed() {
+    this.unredNotifications = [];
+    let notifications = this.boardServ.currentUser.notification;
+    notifications.forEach((n:NotificationObj) => {
+      if (n.notificationRed = false) {
+        this.unredNotifications.push(n);
+      }
+    })
+    if (this.unredNotifications.length >= 0) {
+      return true
+    } else {
+      return false
+    }
   }
 
   toggleProfileOptions(event: Event) {
