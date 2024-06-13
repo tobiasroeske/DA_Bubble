@@ -5,6 +5,8 @@ export class NotificationObj {
     channelId: string;
     senderName: string;
     senderId: string;
+    senderImage:string;
+    receiverImage:string;
     receiverName: string;
     receiverId?: string;
 
@@ -14,7 +16,9 @@ export class NotificationObj {
             this.channelName = obj ? obj.channelName : '',
             this.channelId = obj ? obj.channelId : '',
             this.senderName = obj ? obj.senderName : '',
+            this.senderImage = obj ? obj.senderImage : '',
             this.senderId = obj ? obj.senderId : '',
+            this.receiverImage = obj ? obj.receiverImage : '',
             this.receiverName = obj ? obj.receiverName : '',
             this.receiverId = obj ? obj.receiverId : ''
     }
@@ -24,8 +28,10 @@ export class NotificationObj {
             date: this.date,
             channelName: this.channelName,
             channelId: this.channelId,
+            senderImage: this.senderImage,
             senderName: this.senderName,
             senderId: this.senderId,
+            receiverImage: this.receiverImage,
             receiverName: this.receiverName,
             receiverId: this.receiverId
         }

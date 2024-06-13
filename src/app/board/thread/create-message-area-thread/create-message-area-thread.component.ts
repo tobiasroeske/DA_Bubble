@@ -33,13 +33,13 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
     super();
   }
 
-  override sendMessage(): void {
+  override async sendMessage() {
     if (this.canSendMessage()) {
       const date = new Date().getTime();
       const newAnswer = this.setMessageObject(date);
       this.currentChatMessage?.answers.push(newAnswer);
       if (this.currentChannel) {
-        this.updateChat().then(() => {
+        await this.updateChat().then(() => {
           this.postUpdateActions();
         });
       }

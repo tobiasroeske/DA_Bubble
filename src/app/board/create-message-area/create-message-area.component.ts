@@ -49,7 +49,7 @@ export class CreateMessageAreaComponent {
   preview = 'false';
   member: CurrentUser | null = null;
 
-  notificationObject:NotificationObj = new NotificationObj();
+  notificationObject: NotificationObj = new NotificationObj();
 
   @HostListener('keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
@@ -211,20 +211,26 @@ export class CreateMessageAreaComponent {
     string = '';
   }
 
-  sendMessage() {
+  async sendMessage() {
     if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       let date = new Date().getTime();
-      this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
+      await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
         .then(() => {
           if (this.member != null) {
             this.notificationObject.channelName = this.channelTitle;
             this.notificationObject.channelId = this.channelId;
+            this.notificationObject.receiverImage = this.member.avatarPath;
             this.notificationObject.receiverName = this.member.name;
             this.notificationObject.receiverId = this.member.id;
-            this.notificationObject.senderName = this.boardService.currentUser;
+            this.notificationObject.senderImage = this.boardService.currentUser.avatarPath
+            this.notificationObject.senderName = this.boardService.currentUser.name;
             this.notificationObject.senderId = this.boardService.currentUser.id;
-            this.member.notification.push(this.notificationObject);
+            this.member.notification.push(this.notificationObject)
             console.log('member beim senden', this.member);
+            console.log(this.member.notification);
+            if (this.member.id) {
+              this.firestoreService.updateUser(this.member.id, this.member);
+            }
           }
           this.resetTextArea();
           this.boardService.scrollToBottom(this.boardService.chatFieldRef);
