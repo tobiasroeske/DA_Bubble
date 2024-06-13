@@ -70,7 +70,8 @@ export class LocalStorageService {
       avatarPath: obj.photoURL || '',
       seleted: obj.selected || false,
       loginState: obj.loginState || 'loggedOut',
-      type: obj.type || 'CurrentUser'
+      type: obj.type || 'CurrentUser',
+      notification: obj.notification || []
     }
   }
 

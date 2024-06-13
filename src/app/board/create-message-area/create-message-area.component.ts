@@ -8,7 +8,8 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { Channel } from '../../shared/models/channel.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { FirebaseStorageService } from '../../shared/services/firebase-storage-service/firebase-storage.service';
-
+import { NotificationObj } from '../../shared/models/notificationObj.class';
+import { SignupService } from '../../shared/services/signup/signup.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class CreateMessageAreaComponent {
   @Input() showEmojiPicker = false;
 
   boardService = inject(BoardService);
+  signUpServ = inject(SignupService);
   firestoreService = inject(FirestoreService);
   fbStorageService = inject(FirebaseStorageService)
 
@@ -46,6 +48,8 @@ export class CreateMessageAreaComponent {
   filePath: string = '';
   preview = 'false';
   member: CurrentUser | null = null;
+
+  notificationObject:NotificationObj = new NotificationObj();
 
   @HostListener('keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
@@ -207,6 +211,13 @@ export class CreateMessageAreaComponent {
       this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
         .then(() => {
           if (this.member != null) {
+            this.notificationObject.channelName = this.channelTitle;
+            this.notificationObject.channelId = this.channelId;
+            this.notificationObject.receiverName = this.member.name;
+            this.notificationObject.receiverId = this.member.id;
+            this.notificationObject.senderName = this.boardService.currentUser;
+            this.notificationObject.senderId = this.boardService.currentUser.id;
+            this.member.notification.push(this.notificationObject);
             console.log('member beim senden', this.member);
           }
           this.resetTextArea();
@@ -222,7 +233,7 @@ export class CreateMessageAreaComponent {
     this.boardService.showEmojiPicker = false;
     this.member = null;
     console.log('member nach dem senden', this.member);
-    
+
   }
 
   filterMember() {

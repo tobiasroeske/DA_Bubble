@@ -96,7 +96,8 @@ export class FirestoreService {
       selected: obj.selected || false,
       directMessages: obj.directMessages || [],
       loginState: obj.loginState || 'loggedOut',
-      type: obj.type || 'CurrentUser'
+      type: obj.type || 'CurrentUser',
+      notification: obj.notification || [],
     }
   }
 
@@ -203,7 +204,9 @@ export class FirestoreService {
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
-      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() })
+      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(()=>{
+         
+      })
     });
   }
 

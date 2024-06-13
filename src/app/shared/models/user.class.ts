@@ -1,3 +1,5 @@
+
+import { NotificationObj } from "./notificationObj.class";
 import { PrivateChat } from "./privateChat.class";
 
 export class User {
@@ -6,8 +8,9 @@ export class User {
     email!: string;
     password!: string;
     avatarPath!: string;
-    selected:boolean;
+    selected: boolean;
     loginState: 'loggedIn' | 'loggedOut' | 'idle';
+    notification: NotificationObj[];
 
     constructor(obj?: any) {
         this.id = obj ? obj.id : '';
@@ -17,5 +20,6 @@ export class User {
         this.avatarPath = obj ? obj.avatarPath : '';
         this.selected = false;
         this.loginState = 'loggedOut';
+        this.notification = obj ? obj.notification : [];
     }
 }

@@ -28,6 +28,7 @@ import { LocalStorageService } from '../local-storage-service/local-storage.serv
 import { User } from '../../models/user.class';
 import { appConfig } from '../../../app.config';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
+import { NotificationObj } from '../../models/notificationObj.class';
 
 
 @Injectable({
@@ -181,7 +182,8 @@ export class SignupService {
       email: this.user.email,
       avatarPath: this.user.avatarPath,
       loginState: "loggedOut",
-      type: 'CurrentUser'
+      type: 'CurrentUser',
+      notification: []
     };
   }
 
@@ -201,14 +203,14 @@ export class SignupService {
   }
   async guestLogin() {
     await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678')
-    .then((userCredential) => {
-      this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' })
-      this.storageService.saveCurrentUser(userCredential.user);
-      this.router.navigateByUrl('board');
-    })
-    .catch(err => {
-      this.errorCode = err.code;
-    })
+      .then((userCredential) => {
+        this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' })
+        this.storageService.saveCurrentUser(userCredential.user);
+        this.router.navigateByUrl('board');
+      })
+      .catch(err => {
+        this.errorCode = err.code;
+      })
   }
 
   getLoggedInUser() {

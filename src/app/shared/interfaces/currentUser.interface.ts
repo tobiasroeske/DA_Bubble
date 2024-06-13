@@ -1,3 +1,5 @@
+import { NotificationObj } from "../models/notificationObj.class";
+
 
 export interface CurrentUser {
     id?: string;
@@ -7,4 +9,5 @@ export interface CurrentUser {
     selected?:boolean;
     loginState: 'loggedIn' | 'loggedOut' | 'idle';
     type: 'CurrentUser';
+    notification: NotificationObj[];
 }
