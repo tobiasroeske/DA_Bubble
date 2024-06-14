@@ -106,6 +106,7 @@ div {
   box-shadow: 0px 6px 10px 0px #00000033;
 
   .profile-btn {
+    position: relative;
     width: fit-content;
     background-color: transparent;
     color: black;
@@ -114,6 +115,18 @@ div {
     padding: 10px 45px;
     font-size: 24px;
     font-weight: 600;
+
+    .alert-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      background-color: #c50707;
+      border-radius: 100%;
+      padding: 0px;
+    }
 
     &:hover {
       background-color: #eceefe;
@@ -151,6 +164,7 @@ div {
     align-self: flex-start;
 
     > .profile-btn {
+      position: relative;
       @include d-flex($g: 15px);
       width: fit-content;
       background-color: transparent;
@@ -160,6 +174,18 @@ div {
       padding: 10px 45px;
       font-size: 24px;
       font-weight: 600;
+
+      .alert-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        background-color: #c50707;
+        border-radius: 100%;
+        padding: 0px;
+      }
 
       &:hover {
         background-color: #eceefe;
@@ -258,6 +284,12 @@ div {
 
   to {
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 1100px) {
+  .user-container {
+    gap: 16px;
   }
 }
 

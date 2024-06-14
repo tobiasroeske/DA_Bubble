@@ -6,7 +6,7 @@
     right: 0;
     left: 0;
     bottom: 0;
-    z-index: 3;
+    z-index: 9;
     background: rgba(0, 0, 0, 0.2);
 }
 
@@ -18,7 +18,7 @@
     padding: 40px;
     background: #fff;
     width: 710px;
-    z-index: 3;
+    z-index: 48;
     @include d-flex($fd: column, $jc: space-between, $ai: flex-start);
 
     >.add-member-dialog-header {

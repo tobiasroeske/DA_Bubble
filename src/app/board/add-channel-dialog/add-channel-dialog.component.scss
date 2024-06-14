@@ -10,6 +10,7 @@
     background: rgba(0, 0, 0, 0.15);
     @include d-flex();
     font-family: "Nunito";
+    z-index: 51;
 
     >.add-channel-dialog {
         width: 50%;
