@@ -6,6 +6,7 @@ import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { FirebaseStorageService } from '../shared/services/firebase-storage-service/firebase-storage.service';
+import { CurrentUser } from '../shared/interfaces/currentUser.interface';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -28,7 +29,9 @@ export class EditProfileDialogComponent {
   changeAvatar = false;
   changesSuccessful = false;
 
-  
+  allMembers: CurrentUser[] = [];
+
+
 
   constructor() {
     this.fullname = this.boardServ.currentUser.name;
@@ -57,20 +60,21 @@ export class EditProfileDialogComponent {
     if (file) {
       let path = `avatarImages/${file.name}`;
       this.firebaseStorageService.uploadFile(path, file)
-      .then(() => {
-        this.firebaseStorageService.getDownLoadUrl(path)
-        .then(url => {
-          this.avatarPath = url;
-          this.changeAvatar = false;
+        .then(() => {
+          this.firebaseStorageService.getDownLoadUrl(path)
+            .then(url => {
+              this.avatarPath = url;
+              this.changeAvatar = false;
+            })
+            .catch(err => console.error(err))
         })
-        .catch(err => console.error(err))
-      })
     }
   }
 
   async updateUsers() {
     this.boardServ.currentUser = this.storageService.loadCurrentUser();
-    await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+    this.boardServ.loadCurrentUser();
+    // await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
   }
 
   pickAvatar(i: number) {

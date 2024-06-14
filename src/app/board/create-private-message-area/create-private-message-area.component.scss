@@ -353,4 +353,9 @@ input[type="file"] {
     .add-emoji-icon {
         display: none;
     }
+
+    .answer-container {
+        @include d-flex(column, space-between, center, 8px);
+        width: 90%;
+    }
 }

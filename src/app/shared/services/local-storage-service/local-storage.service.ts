@@ -36,11 +36,11 @@ export class LocalStorageService {
     localStorage.setItem('currentChannelIndex', JSON.stringify(i));
   }
 
-  saveLastReactions(reactions: string []) {
+  saveLastReactions(reactions: string[]) {
     localStorage.setItem('lastReactions', JSON.stringify(reactions));
   }
 
-  loadLastReactions(){
+  loadLastReactions() {
     let reactionsExist = localStorage.getItem('lastReactions');
     if (reactionsExist != null) {
       let reactionsAsJson = JSON.parse(localStorage.getItem('lastReactions')!);

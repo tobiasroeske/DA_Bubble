@@ -38,7 +38,7 @@ export class CreateMessageAreaComponent {
   memberToTag: string = '';
   channelToTag: string = '';
   message!: ChatMessage;
-  currentUser: any;
+  // currentUser: any;
   shiftPressed = false;
   enterPressed = false;
   tagMembers = false;
@@ -93,7 +93,7 @@ export class CreateMessageAreaComponent {
   }
 
   constructor() {
-    this.currentUser = this.boardService.currentUser;
+    // this.currentUser = this.boardService.currentUser;
     this.filteredChannels = this.channels;
   }
 
@@ -235,9 +235,8 @@ export class CreateMessageAreaComponent {
                 })
             }
           }
-
-
         })
+        this.textMessage = "";
     }
   }
 
@@ -286,7 +285,7 @@ export class CreateMessageAreaComponent {
   setMessageObject(date: number): ChatMessage {
     return {
       date: date,
-      user: this.currentUser,
+      user: this.boardService.currentUser,
       message: this.textMessage,
       answers: [],
       reactions: [],

@@ -107,7 +107,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   override setMessageObject(date: number): ChatMessage {
     return {
       date: date,
-      user: this.currentUser,
+      user: this.boardService.currentUser,
       message: this.textMessage.replace('/\n/g', '<br>'),
       answers: [],
       reactions: [],
