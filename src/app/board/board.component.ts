@@ -58,7 +58,6 @@ export class BoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.authService.getLoggedInUser()
     this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
     this.idleUserService.userInactive.subscribe(isIdle => {
       if (isIdle) {

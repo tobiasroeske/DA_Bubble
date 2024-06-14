@@ -16,6 +16,4 @@ export class FirstTwoSelectedMembersComponent {
   removeThisMember(index: number) {
     this.sendIndexToParent.emit(index);
   }
-
-
 }

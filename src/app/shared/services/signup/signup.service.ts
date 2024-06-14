@@ -252,8 +252,6 @@ export class SignupService {
 
   async logout() {
     let currentUser = this.storageService.loadCurrentUser();
-    //let userWithLoginState = this.storageService.setCurrentUserObject(this.currentUser);
-    //userWithLoginState.loginState = 'loggedOut';
     currentUser.loginState = 'loggedOut';
     this.storageService.saveIntroPlayed(false)
     await this.firestoreService.updateUser(currentUser.id, currentUser)

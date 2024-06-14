@@ -95,21 +95,5 @@ export class AddChannelDialogComponent {
       this.channel.allUsers.push(user);
     }
   }
-
-  // async shapeChannel() {
-  //   this.channel.creatorId = this.signUpServ.currentUser.uid; // take the id of the logged-in user that a new channel creates
-  //   this.channel.creatorName = this.signUpServ.currentUser.displayName;
-  //   this.channel.allUsers = [];
-  //   this.channel.partecipantsIds = [];
-  //   this.channel.partecipantsIds.push(this.signUpServ.currentUser.uid);
-  //   this.channel.members = [];
-  //   this.firestore.userList.forEach((user) => {
-  //     if (user.id == this.channel.creatorId) {
-  //       user.selected = true;
-  //       this.channel.members.push(user)
-  //     }
-  //     this.channel.allUsers.push(user)
-  //   })
-  // }
 }
 

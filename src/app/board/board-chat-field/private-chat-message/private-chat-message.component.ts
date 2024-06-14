@@ -11,7 +11,7 @@ import { LocalStorageService } from '../../../shared/services/local-storage-serv
   standalone: true,
   imports: [CommonModule, PrivateMessageEditorComponent],
   templateUrl: './private-chat-message.component.html',
-  styleUrl: './private-chat-message.component.scss'
+  styleUrls: ['./private-chat-message.component.scss', './private-chat-media-queries.component.scss']
 })
 export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewChecked, OnDestroy {
   @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;
@@ -87,7 +87,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     return this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex];
   }
 
-   override findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
+  override findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
     return chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
   }
 

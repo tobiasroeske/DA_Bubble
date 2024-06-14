@@ -281,7 +281,7 @@
     display: none;
     align-items: center;
     justify-content: center;
-    background-color:  $specialBlue;
+    background-color: $specialBlue;
     width: 60px;
     height: 60px;
     border-radius: 100%;
@@ -289,7 +289,7 @@
     box-shadow: 0px 6px 10px 0px #00000033;
     transition: all .125s ease-in-out;
 
-    &:hover{
+    &:hover {
         background-color: #797EF3;
     }
 }
@@ -320,6 +320,10 @@
 
     .channel-btn {
         display: none;
+    }
+
+    .channel-container>.channel-header {
+        padding-right: 24px;
     }
 
     .colleagues-container>.collegue>.avatar-sidenav {
@@ -378,6 +382,7 @@
         position: relative;
         padding-bottom: 12px;
     }
+
 }
 
 @media (max-width: 445px) {
@@ -404,7 +409,7 @@
         padding: 32px 0 20px 32px;
     }
 
-    .channel-container > .channel-header {
+    .channel-container>.channel-header {
         width: 95%;
     }
 }

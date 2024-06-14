@@ -1,0 +1,56 @@
+@import '../../../styles.scss';
+// Media Queries
+
+@media (max-width: 1100px) {
+    .chat-field-header {
+        padding: 25px 40px;
+    }
+}
+
+@media (max-width: 960px) {
+
+    .no-channel-message {
+        padding-left: 12px;
+    }
+    .chat-field-header {
+        padding: 10px 16px;
+        font-size: 20px;
+
+        >.chat-field-channel {
+            font-size: 20px;
+        }
+    }
+
+    .add-person-icon-container {
+        width: 34px;
+        height: 34px;
+    }
+
+    .members-container {
+        display: none;
+    }
+
+    .user-private-message-header > h3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-field-header {
+        padding: 10px 16px;
+    }
+
+    .chat-partner-pop-up {
+        gap: 24px; 
+        width: 100%;
+        padding: 25px 24px;
+
+        > .partner-container {
+            gap: 10px;
+            > img {
+                width: 88px;
+                height: 88px;
+            }
+        }
+    }
+}
