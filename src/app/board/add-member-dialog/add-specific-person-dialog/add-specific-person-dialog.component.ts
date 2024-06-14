@@ -92,9 +92,15 @@ export class AddSpecificPersonDialogComponent implements OnInit {
       })
     })
     this.updateParticipants();
-    this.memberServ.addMemberDialogIsOpen = false;
-    this.memberServ.addSpecificPerson = false;
+    this.closeTheAddMembersDialogs();
   };
+
+  closeTheAddMembersDialogs() {
+    this.memberServ.addSpecificPerson = false;
+    setTimeout(() => {
+      this.memberServ.addMemberDialogIsOpen = false;
+    })
+  }
 
   updateParticipants() {
     let updatedUsers = this.currentChannel.allUsers;
