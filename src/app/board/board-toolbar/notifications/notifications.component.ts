@@ -46,7 +46,6 @@ export class NotificationsComponent {
     let idxOfCurrentNotificMessage = currentChannel.chat.findIndex((chat: ChatMessage) => chat.message.trim() == notificMessage.trim());
     this.boardServ.showChannelInChatField(indexOfCurrentChannel, event);
     this.boardServ.scrollToChannelMessageAfterClickOnNotific(idxOfCurrentNotificMessage);
-
   }
 
   async markAsRed(index: number) {
@@ -54,24 +53,6 @@ export class NotificationsComponent {
     this.localStorageServ.saveCurrentUser(this.boardServ.currentUser);
     await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
   }
-
-
-
-  // let currentUser = this.boardServ.currentUser;
-  // let notifications: NotificationObj[] = [];
-  // currentUser.notification.forEach((n: NotificationObj) => {
-  //   if (n.receiverId == currentUser.id) {
-  //     notifications.push(n);
-  //   }
-  // })
-
-
-
-  // let currentNotification = notifications[index];
-  // let notificationIndex = this.findNotificationIndex(currentNotification, currentUser);
-  // currentUser.notification[notificationIndex].notificationRed = true;
-  // this.localStorageServ.saveCurrentUser(currentUser);
-  // await this.firestoreService.updateUser(currentUser.id, currentUser);
 
   findNotificationIndex(notification: NotificationObj, currentUser: CurrentUser) {
     let idx = currentUser.notification.findIndex(n => n.date === notification.date)

@@ -260,18 +260,6 @@ footer {
     }
 }
 
-// @keyframes mobile-animation {
-//     from {
-//         left: 50%;
-//         top: 50%;
-//         transform: translate(-50%, -50%);
-//     }
-
-//     to {
-        
-//     }
-// }
-
 // Small Screen Height Keyframes
 
 @keyframes small-intro-headline {
@@ -461,22 +449,6 @@ footer {
     .content {
         gap: 24px;
     }
-
-    // .intro-logo-container {
-    //     animation: mobile-animation .5s ease-in forwards 2.2s !important;
-    //     >img {
-    //         width: 56px;
-    //         height: 56px;
-    //         animation-name: logo-animation, small-intro-logo;
-    //     }
-
-    //     .headline {
-    //         h1 {
-    //             font-size: 24px;
-    //             animation-name: headline-animation, small-intro-headline;
-    //         }
-    //     }
-    // }
 }
 
 @media (max-height: 770px) {

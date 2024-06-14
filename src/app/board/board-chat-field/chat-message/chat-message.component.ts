@@ -15,8 +15,9 @@ import { Channel } from '../../../shared/models/channel.class';
   standalone: true,
   imports: [CommonModule, FormsModule, MessageEditorComponent],
   templateUrl: './chat-message.component.html',
-  styleUrl: './chat-message.component.scss'
+  styleUrls: ['./chat-message.component.scss', './chat-message-media-queries.component.scss', 'chat-message-textarea-elements.component.scss']
 })
+
 export class ChatMessageComponent implements OnInit {
   @ViewChildren('channelMessages') channelMessages!: QueryList<ElementRef>;
   @Input() chat!: ChatMessage;
@@ -65,7 +66,7 @@ export class ChatMessageComponent implements OnInit {
   }
 
   onArrayChange() {
-    this.cdr.detectChanges(); 
+    this.cdr.detectChanges();
   }
 
   checkIfDateIsToday(date: number) {
@@ -148,21 +149,6 @@ export class ChatMessageComponent implements OnInit {
     chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
   }
 
-  // checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-  //   let chatMessage: ChatMessage = this.currentChannel.chat![this.chatMessageIndex];
-  //   let emojiPath = emojiArray[emojiIdx];
-  //   let existingReaction = chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
-  //   if (existingReaction) {
-  //     existingReaction.count += 1;
-  //     if (!existingReaction.creator.includes(this.currentUserName)) {
-  //       existingReaction.creator.push(this.currentUserName);
-  //     }
-  //   } else {
-  //     chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
-  //   }
-  //   return chatMessage
-  // }
-
   getLastTwoReactions(index: number, emojiArray: string[]) {
     let newReaction = emojiArray[index];
     if (this.lastReactions[this.lastReactions.length - 1] !== newReaction) {
@@ -185,9 +171,6 @@ export class ChatMessageComponent implements OnInit {
     if (htmlElement == 'message-box') {
       this.mouseIsOverMessage = true;
     }
-    // } else {
-    //   this.popUpReaction = true;
-    // }
   }
 
   stopHover(event: boolean) {
@@ -199,9 +182,6 @@ export class ChatMessageComponent implements OnInit {
       this.mouseIsOverMessage = false;
       this.reactionDialogOpen = false;
     }
-    // } else {
-    //   this.popUpReaction = false;
-    // }
   }
 
   showMembersDialogToggle() {

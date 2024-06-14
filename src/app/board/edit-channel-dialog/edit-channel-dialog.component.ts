@@ -96,23 +96,6 @@ export class EditChannelDialogComponent {
     }
   }
 
-  // async onChannelUpdate(event: Event) {
-  //   if (this.leaveFromChannel) {
-  //     let channel: Channel = new Channel(this.currentChannel);
-  //     await this.firestore.updateChannel(channel.toJSON(), this.currentChannel.id);
-  //     this.leaveFromChannel = false;
-  //     this.randomIndex = Math.floor(Math.random() * this.firestore.allChannels.length);
-  //     this.boardServ.showChannelInChatField(this.randomIndex, event);
-  //     this.boardServ.toggleDialogEditChannel(this.boardServ.idx);
-  //   } else {
-  //     if (this.checkIfThisChannelAlreadyExist() == -1) {
-  //       await this.updateChannelWithNewTitleAndDescription();
-  //     } else {
-  //       this.channelAlreadyExist = true;
-  //     }
-  //   }
-  // }
-
   async updateChannelWithNewTitleAndDescription() {
     this.currentChannel.title = this.title;
     this.currentChannel.description = this.description;
@@ -122,17 +105,6 @@ export class EditChannelDialogComponent {
       this.channelAlreadyExist = false;
     }
   }
-
-  // async leaveThisChannel(event: Event) {
-  //   let idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(this.currentChannel.creatorId);
-  //   this.currentChannel.partecipantsIds.splice(idxOfCurrentPartecipant, 1);
-  //   let indexOfCurrentMember = this.currentChannel.members.findIndex((m: CurrentUser) => m.id == this.currentChannel.creatorId);
-  //   this.currentChannel.members.splice(indexOfCurrentMember, 1);
-  //   let indexInAllUsers = this.currentChannel.allUsers.findIndex((u: CurrentUser) => u.id == this.currentChannel.creatorId);
-  //   this.currentChannel.allUsers[indexInAllUsers].selected = false;
-  //   this.leaveFromChannel = true;
-  //   await this.onChannelUpdate(event);
-  // }
 
   async leaveThisChannel(event: Event) {
     this.currentChannel = this.firestore.allChannels[this.boardServ.idx];

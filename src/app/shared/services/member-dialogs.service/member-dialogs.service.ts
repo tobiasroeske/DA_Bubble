@@ -41,10 +41,10 @@ export class MemberDialogsService implements OnInit {
 
   openAddMembersDialog(event: Event) {
     if (!this.boardServ.editDialogIsOpen) {
-      // if (this.membersDialogIsOpen) {
-      // this.toggleMembersDialog(event)
+      if (this.membersDialogIsOpen) {
+        this.toggleMembersDialog(event);
+      }
       this.addMemberDialogIsOpen = true;
-      // }
     } else {
       this.goToAddSpecificPerson(event);
     }
