@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChildren, QueryList, ElementRef, AfterViewInit, OnDestroy, inject, AfterViewChecked } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList, ElementRef, HostListener, AfterViewInit, OnDestroy, inject, AfterViewChecked } from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
@@ -20,19 +20,24 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   @Input() privateChatIndex!: number;
   @Input() lasIndex!: boolean;
   @Input() message!: string;
+  override mouseIsOverMessage: boolean = false;
 
-  localStorageServ = inject(LocalStorageService)
+  localStorageServ = inject(LocalStorageService);
 
   currentPrivatChat!: ChatMessage[];
   override elementsInitialized: boolean = false;
   lastReactionEmojis: string[] = ['thumbs_up', 'laughing'];
+  openTheIndicatorBarTools: boolean = false;
+  currentWindowWidth!: number;
 
   constructor() {
     super();
   }
 
+
   override ngOnInit(): void {
     this.currentPrivatChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
+    this.currentWindowWidth = window.innerWidth;
   }
 
   override ngAfterViewChecked() {
@@ -41,6 +46,19 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.currentWindowWidth = event.target.innerWidth;
+    // console.log(this.currentWindowWidth);
+  }
+
+  openTheTools() {
+    this.openTheIndicatorBarTools = true;
+  }
+
+  closeTheTools() {
+    this.openTheIndicatorBarTools = false;
+  }
   setCurrentPrivateChatMessage() {
     this.boardServ.privateAnswerMessage = this.privateMessage;
     this.boardServ.privateAnswerIndex = this.privateChatIndex;
