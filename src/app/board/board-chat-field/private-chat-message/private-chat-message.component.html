@@ -60,6 +60,10 @@
                     <img src="{{ privateMessage.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
                 </div>
             }
+                <div class="answer">
+                    <img src="assets/icons/answer_arrow.svg" alt="">
+                    <span>Antwort auf: Hier steht die ursprüngliche Nachricht</span>
+                </div>
             @if (!editorOpen && privateMessage.message.length > 0) {
                 <p class="message" [innerText]="message"></p>
             } @else if (editorOpen) {
@@ -92,6 +96,7 @@
                     </div>
                 }
             </div>
+            <div class="answer-btn">Antworten</div>
         </div>
     </div>
 </div>

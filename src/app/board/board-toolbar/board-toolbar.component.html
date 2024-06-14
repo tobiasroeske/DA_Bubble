@@ -45,8 +45,13 @@
 
             <img src="assets/icons/profile_slide_icon.png" alt="">
             <div class="options">
-                <button class="btn-no-style profile-btn" (click)="showNotificationDialog($event)"><img
-                        src="assets/icons/notification_icon.svg" alt="">Benachrichtigungen</button>
+                <button class="btn-no-style profile-btn" (click)="showNotificationDialog($event)">
+                    <img src="assets/icons/notification_icon.svg" alt="">
+                    @if (boardServ.currentUser.notification.length > 0) {
+                    <div class="alert-icon"></div>
+                    }
+                    Benachrichtigungen
+                </button>
                 <button class="btn-no-style profile-btn" (click)="showProfileDialog($event)"><img
                         src="assets/icons/profile_icon.png" alt="">Profil</button>
                 <button class="btn-no-style profile-btn" (click)="authService.logout()"><img
@@ -64,14 +69,20 @@
             <app-edit-profile-dialog (editorOpen)="closeProfileDialog($event)"></app-edit-profile-dialog>
         </div>
         } @else if (notificationsOpen) {
-        <div class="profile-dialog-mobile" [class.padding-right]="notificationsOpen">
+        <div class="profile-dialog-mobile" [class.padding-right]="notificationsOpen"
+            (click)="boardServ.stopPropagation($event)">
             <app-notifications (notificationsOpen)="closeNotificationsDialog($event)"></app-notifications>
         </div>
         }
     </div>
     @if (showProfileOptions) {
     <div class="profile-options">
-        <button class="btn-no-style profile-btn" (click)="showNotificationDialog($event)">Benachrichtigungen</button>
+        <button class="btn-no-style profile-btn" (click)="showNotificationDialog($event)">
+            @if (boardServ.currentUser.notification.length > 0) {
+            <div class="alert-icon"></div>
+            }
+            Benachrichtigungen
+        </button>
         <button class="btn-no-style profile-btn" (click)="showProfileDialog($event)">Profil</button>
         <button class="btn-no-style profile-btn" (click)="authService.logout()">Log out</button>
     </div>

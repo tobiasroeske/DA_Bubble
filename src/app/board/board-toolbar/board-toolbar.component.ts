@@ -79,10 +79,11 @@ export class BoardToolbarComponent {
   }
 
   closeProfileDialog(event: boolean) {
-    this.showProfile = event;
+    this.showProfile = false;
     this.showProfileOptions = false;
     this.showOverlay = false;
     this.editorOpen = false;
+    this.notificationsOpen = false;
   }
 
   closeNotificationsDialog(event: boolean) {
