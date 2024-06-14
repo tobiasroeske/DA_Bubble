@@ -54,6 +54,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     if (this.boardServ.privateChatId) {
       let date = new Date().getTime();
       this.message = this.setMessageObject(date);
+      this.setAnswerMessage();
       if (this.message.message.trim() !== '' || this.uploadedFile.length > 0) {
         await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
           .then(() => {
@@ -63,6 +64,12 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
           this.showMessageInChat();
         }, 1)
       }
+    }
+  }
+
+  setAnswerMessage() {
+    if (this.boardServ.privateAnswerMessage != null) {
+      this.message.answers.push(this.boardServ.privateAnswerMessage);
     }
   }
 
@@ -80,6 +87,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
     this.filePath = '';
     this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
     this.checkIfPrivatChatIsEmpty();
+    this.boardServ.privateAnswerMessage = null;
   }
 
   checkIfPrivatChatIsEmpty() {

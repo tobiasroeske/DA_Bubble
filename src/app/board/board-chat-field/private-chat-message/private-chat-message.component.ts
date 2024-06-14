@@ -41,6 +41,11 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     }
   }
 
+  setCurrentPrivateChatMessage() {
+    this.boardServ.privateAnswerMessage = this.privateMessage;
+    this.boardServ.privateAnswerIndex = this.privateChatIndex;
+  }
+
   shouldInitializeElements(): boolean {
     return this.messageElements && this.messageElements.length > 0 && !this.elementsInitialized;
   }

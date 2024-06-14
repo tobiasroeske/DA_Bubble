@@ -224,11 +224,14 @@ export class SignupService {
   }
 
   async guestLogin() {
-    await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678')
+    await signInWithEmailAndPassword(this.auth, 'gast@gast.de', '12345678')
       .then((userCredential) => {
         this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' })
-        this.storageService.saveCurrentUser(userCredential.user);
-        this.router.navigateByUrl('board');
+        .then(() => {
+          this.storageService.saveCurrentUser(this.findCurrentUser(userCredential.user));
+          this.router.navigateByUrl('board');
+        })
+        
       })
       .catch(err => {
         this.errorCode = err.code;

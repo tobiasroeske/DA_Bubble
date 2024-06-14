@@ -80,7 +80,17 @@
             </g>
         </svg>
     </div>
+    @if (boardServ.privateAnswerMessage) {
+    <div class="answer-container">
+        <img src="assets/icons/answer_arrow.svg" alt="">Antworten auf <div class="user-box"><img
+                src="{{ boardServ.privateAnswerMessage.user.avatarPath }}" alt=""> {{
+            boardServ.privateAnswerMessage.user.name }}:</div> {{ boardServ.privateAnswerMessage.message }}
+    </div>
+    }
+
 </div>
+
+
 @if (boardServ.showEmojiPicker) {
 <div class="emoji-container">
     <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"

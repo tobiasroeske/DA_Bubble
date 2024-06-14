@@ -288,6 +288,34 @@ input[type="file"] {
     @include d-flex()
 }
 
+.answer-container {
+    position: absolute;
+    bottom: 160px;
+    left: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-family: 'Nunito';
+    border-radius: 30px;
+    background-color: #787ef2;
+    padding: 8px 12px;
+    color: white;
+}
+
+.user-box {
+    @include d-flex($jc: flex-start, $g: 4px);
+
+    >img {
+        width: 24px;
+        height: 24px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+}
+
 // media queries
 
 @media (max-width: 960px) {

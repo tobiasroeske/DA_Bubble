@@ -55,6 +55,8 @@ export class BoardService {
   idx!: number;
   chatPartnerIdx!: number;
   chatMessageIndex!: number;
+  privateAnswerMessage!: ChatMessage | null;
+  privateAnswerIndex!: number;
 
   firstPrivateMessageWasSent: boolean = false;
   hidePopUpChatPartner: boolean = false;
