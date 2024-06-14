@@ -27,6 +27,9 @@ export class BoardService {
   public privateMessagesElementsToArray: ElementRef[] = [];
   highlightArrayForTheChildElementSearched: boolean[] = [];
 
+  channelMessageElementsToArray: ElementRef[] = [];
+  highlightArrayForTheChannelElementSearched: boolean[] = [];
+
   chatFieldRef!: ElementRef;
   threadRef!: ElementRef;
 
@@ -68,8 +71,6 @@ export class BoardService {
 
   showSearchDialog: boolean = false;
   searchText: string = "";
-
-  channelMessageElementsToArray = [];
 
   constructor() {
     this.checkScreenSize();
@@ -316,6 +317,23 @@ export class BoardService {
   leaveTheHighlightFromSearchedMessage(index: number) {
     setTimeout(() => {
       this.highlightArrayForTheChildElementSearched[index] = false;
+    }, 1500)
+  }
+
+  scrollToChannelMessageAfterClickOnNotific(index: number) {
+    setTimeout(() => {
+      let element = this.channelMessageElementsToArray[index];
+      if (element) {
+        element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        this.highlightArrayForTheChannelElementSearched[index] = true;
+      }
+      this.leaveTheHighlightFromSearchedChannelMessage(index);
+    }, 100);
+  }
+
+  leaveTheHighlightFromSearchedChannelMessage(index: number) {
+    setTimeout(() => {
+      this.highlightArrayForTheChannelElementSearched[index] = false;
     }, 1500)
   }
 }

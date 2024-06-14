@@ -251,6 +251,7 @@ export class CreateMessageAreaComponent {
     this.notificationObject.senderImage = this.boardService.currentUser.avatarPath;
     this.notificationObject.senderName = this.boardService.currentUser.name;
     this.notificationObject.senderId = this.boardService.currentUser.id;
+    this.notificationObject.message = this.textMessage;
   }
 
   resetTextArea() {

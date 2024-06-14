@@ -5,22 +5,20 @@
     </div>
     <div class="notifications-container">
         @if (boardServ.currentUser.notification.length == 0) {
-            <div class="notification">Keine neuen Benachrichtigungen</div>
+        <div class="notification">Keine neuen Benachrichtigungen</div>
+        }
+        @for (notification of boardServ.currentUser.notification; track notification; let i = $index) {
+        @if (notification.receiverId == boardServ.currentUser.id) {
+        <div (click)="checkPositionOfThisNotific(i, $event)" class="notification"
+            [class.active]="!notification.notificationRed" (click)="markAsRed(i)">
+            <div class="user-container ">
+                <img src="{{ notification.senderImage }}" alt="" class="avatar-img">
+                <span>{{ notification.senderName }}</span>
+            </div>
+            <span>hat dich in <b># {{ notification.channelName }}</b> markiert</span>
+        </div>
+        }
         }
 
-
-    @for (notification of boardServ.currentUser.notification; track notification; let i = $index) {
-
-    @if (notification.receiverId == boardServ.currentUser.id) {
-    <div class="notification" [class.active]="!notification.notificationRed" (click)="markAsRed(i)">
-        <div class="user-container ">
-            <img src="{{ notification.senderImage }}" alt="" class="avatar-img">
-            <span>{{ notification.senderName }}</span>
-        </div>
-        <span>hat dich in <b># {{ notification.channelName }}</b> markiert</span>
     </div>
-    }
-    }
-
-</div>
 </div>

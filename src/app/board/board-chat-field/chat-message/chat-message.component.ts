@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { BoardService } from '../../board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ import { Channel } from '../../../shared/models/channel.class';
   styleUrl: './chat-message.component.scss'
 })
 export class ChatMessageComponent implements OnInit {
-  @ViewChildren('messageElements') channelMessages!: QueryList<ElementRef>;
+  @ViewChildren('channelMessages') channelMessages!: QueryList<ElementRef>;
   @Input() chat!: ChatMessage;
   @Input() lastIndex!: boolean;
   @Input() channelId!: string;
@@ -42,6 +42,9 @@ export class ChatMessageComponent implements OnInit {
   currentChatMessage!: ChatMessage
   editorOpen = false;
   reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
+  elementsInitialized: boolean = false;
+
+  cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.currentChannel = (this.firestore.allChannels[this.boardServ.idx]);
@@ -51,7 +54,18 @@ export class ChatMessageComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-   
+    if (this.channelMessages && this.channelMessages.length > 0 && !this.elementsInitialized) {
+      this.channelMessages.toArray().forEach(chanMe => {
+        this.boardServ.channelMessageElementsToArray.push(chanMe);
+        this.boardServ.highlightArrayForTheChannelElementSearched.push(false)
+      })
+      this.elementsInitialized = true;
+      this.cdr.detectChanges();
+    }
+  }
+
+  onArrayChange() {
+    this.cdr.detectChanges(); 
   }
 
   checkIfDateIsToday(date: number) {

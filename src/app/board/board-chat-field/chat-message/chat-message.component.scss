@@ -469,7 +469,7 @@
             background-color: #e6e6e6;
             transition: all .125s ease-in-out;
 
-            > img {
+            >img {
                 width: 64px;
                 height: 64px;
             }
@@ -493,10 +493,14 @@
     }
 }
 
+.background-highlight {
+    background-color: #BDBFE1 !important;
+}
+
 // Media Queries
 
 @media (max-width: 1200px) {
-    .reaction-indicator-bar > .reaction-indicator > .pop-up-reaction {
+    .reaction-indicator-bar>.reaction-indicator>.pop-up-reaction {
         width: auto;
         padding: 20px 24px;
     }
@@ -579,7 +583,7 @@
         }
     }
 
-    .message-container > .message {
+    .message-container>.message {
         padding: 15px;
         font-size: 17px;
     }

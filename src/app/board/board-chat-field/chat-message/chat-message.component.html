@@ -59,7 +59,7 @@
         </div>
         }
     </span>
-    <div (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
+    <div [ngClass]="{'background-highlight': boardServ.highlightArrayForTheChannelElementSearched[chatMessageIndex]}" (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
         [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}" class="message-box"
         [class.message-box-reverse]="chat.user.id == boardServ.currentUser.id">
         <img class="avatar-photo" src="{{ chat.user.avatarPath }}" alt="">

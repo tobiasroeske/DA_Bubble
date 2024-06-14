@@ -24,7 +24,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   localStorageServ = inject(LocalStorageService)
 
   currentPrivatChat!: ChatMessage[];
-  elementsInitialized: boolean = false;
+  override elementsInitialized: boolean = false;
   lastReactionEmojis: string[] = ['thumbs_up', 'laughing'];
 
   constructor() {

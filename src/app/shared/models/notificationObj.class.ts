@@ -24,7 +24,6 @@ export class NotificationObj {
             this.receiverName = obj ? obj.receiverName : '',
             this.receiverId = obj ? obj.receiverId : '',
             this.message = obj ? obj.message : ''
-            this.receiverId = obj ? obj.receiverId : ''
             this.notificationRed = obj ? obj.notificationRed : false
     }
 

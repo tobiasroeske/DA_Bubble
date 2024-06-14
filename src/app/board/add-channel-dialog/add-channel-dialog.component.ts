@@ -57,7 +57,7 @@ export class AddChannelDialogComponent {
   }
 
   checkIfChannelTitleAleadyExist() {
-    let idx = this.firestore.allChannels.findIndex((chan) => chan.title === this.channel.title);
+    let idx = this.firestore.allExistingChannels.findIndex((chan) => chan.title === this.channel.title);
     this.existingChannelIndex = idx;
   }
 

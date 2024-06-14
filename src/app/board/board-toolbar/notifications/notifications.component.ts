@@ -5,6 +5,8 @@ import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { NotificationObj } from '../../../shared/models/notificationObj.class';
 import { LocalStorageService } from '../../../shared/services/local-storage-service/local-storage.service';
+import { Channel } from '../../../shared/models/channel.class';
+import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
 
 @Component({
@@ -19,46 +21,57 @@ export class NotificationsComponent {
   @Input() allUsers!: CurrentUser[];
   firestoreService = inject(FirestoreService);
   boardServ = inject(BoardService);
+  channelChats!: Channel[];
 
-  constructor(){
-    this.firestoreService.userList.forEach(user => {
-    console.log(user.notification);
-    })
+  constructor() {
+
   }
   findCurrentUser() {
     let allUsers = this.firestoreService.userList;
     let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id);
     console.log(currentUser);
   }
+
   localStorageServ = inject(LocalStorageService)
 
   closeDialog() {
     this.notificationsOpen.emit(false);
   }
 
+  checkPositionOfThisNotific(index: number, event: Event) {
+    let notificChannel = this.boardServ.currentUser.notification[index].channelName;
+    let notificMessage = this.boardServ.currentUser.notification[index].message;
+    let indexOfCurrentChannel = this.firestoreService.allChannels.findIndex((chan: Channel) => chan.title === notificChannel)
+    let currentChannel = this.firestoreService.allChannels[indexOfCurrentChannel];
+    let idxOfCurrentNotificMessage = currentChannel.chat.findIndex((chat: ChatMessage) => chat.message.trim() == notificMessage.trim());
+    this.boardServ.showChannelInChatField(indexOfCurrentChannel, event);
+    this.boardServ.scrollToChannelMessageAfterClickOnNotific(idxOfCurrentNotificMessage);
+
+  }
+
   async markAsRed(index: number) {
     this.boardServ.currentUser.notification.splice(index, 1);
     this.localStorageServ.saveCurrentUser(this.boardServ.currentUser);
     await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
-
-
-
-    // let currentUser = this.boardServ.currentUser;
-    // let notifications: NotificationObj[] = [];
-    // currentUser.notification.forEach((n: NotificationObj) => {
-    //   if (n.receiverId == currentUser.id) {
-    //     notifications.push(n);
-    //   }
-    // })
-
-
-
-    // let currentNotification = notifications[index];
-    // let notificationIndex = this.findNotificationIndex(currentNotification, currentUser);
-    // currentUser.notification[notificationIndex].notificationRed = true;
-    // this.localStorageServ.saveCurrentUser(currentUser);
-    // await this.firestoreService.updateUser(currentUser.id, currentUser);
   }
+
+
+
+  // let currentUser = this.boardServ.currentUser;
+  // let notifications: NotificationObj[] = [];
+  // currentUser.notification.forEach((n: NotificationObj) => {
+  //   if (n.receiverId == currentUser.id) {
+  //     notifications.push(n);
+  //   }
+  // })
+
+
+
+  // let currentNotification = notifications[index];
+  // let notificationIndex = this.findNotificationIndex(currentNotification, currentUser);
+  // currentUser.notification[notificationIndex].notificationRed = true;
+  // this.localStorageServ.saveCurrentUser(currentUser);
+  // await this.firestoreService.updateUser(currentUser.id, currentUser);
 
   findNotificationIndex(notification: NotificationObj, currentUser: CurrentUser) {
     let idx = currentUser.notification.findIndex(n => n.date === notification.date)

@@ -46,6 +46,7 @@
   padding: 4px 12px;
   border-radius: 30px;
   transition: all 0.125s ease-in-out;
+  cursor: pointer;
 
   .user-container {
     @include d-flex($jc: flex-start, $g: 8px);
