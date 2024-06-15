@@ -20,11 +20,13 @@ export class FirestoreService {
   allChannels: any[] = [];
   allExistingChannels: Channel[] = [];
   directMessages: PrivateChat[] = [];
+  allDirectMessages: PrivateChat[] = [];
   unsubscribeUsers;
   unsubChannel: any;
-  unsubAllChannels: any
+  unsubAllChannels: any;
   unsubDirectMess: any;
-  
+  unsubAllDirectMessages: any;
+
   newChannelId?: string;
   chatRoomId?: string;
   currentUserId?: string;
@@ -37,6 +39,7 @@ export class FirestoreService {
         this.unsubChannel = this.subChannelList();
         this.unsubDirectMess = this.subDirectMessages();
         this.unsubAllChannels = this.subAllExistingChannelList();
+        this.unsubAllDirectMessages = this.subAllExistingChatRooms();
       }
     });
   }
@@ -46,6 +49,7 @@ export class FirestoreService {
     this.unsubChannel();
     this.unsubDirectMess();
     this.unsubAllChannels();
+    this.unsubAllDirectMessages();
   }
 
   getUsersRef() {
@@ -134,9 +138,9 @@ export class FirestoreService {
 
   async checkIfChannelHasMembers(channel: Channel, channelId: string) {
     if (channel.members.length <= 0) {
-      await deleteDoc(this.getSingleChannelRef('channels' ,channelId))
-      .then(() => console.log(`channel with channel-Id: ${channelId} got deleted`))
-      .catch(err => console.error(err))
+      await deleteDoc(this.getSingleChannelRef('channels', channelId))
+        .then(() => console.log(`channel with channel-Id: ${channelId} got deleted`))
+        .catch(err => console.error(err))
     }
   }
 
@@ -161,7 +165,7 @@ export class FirestoreService {
   async updateAllChats(docId: string, newChats: ChatMessage[]) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: newChats })
-    .catch(err => console.log(err));
+      .catch(err => console.log(err));
   }
 
   async updateChannelUsers(updatedUser: any, docId: string) {
@@ -196,6 +200,16 @@ export class FirestoreService {
     });
   }
 
+  subAllExistingChatRooms() {
+    return onSnapshot(this.getDirectMessRef(), (list) => {
+      this.allDirectMessages = [];
+      list.forEach(el => {
+        let privateChat = new PrivateChat(el.data());
+        this.allDirectMessages.push(privateChat);
+      });
+    });
+  }
+
   async addChatRoom(obj: {}) {
     await addDoc(this.getDirectMessRef(), obj)
       .then((docRef) => {
@@ -211,8 +225,8 @@ export class FirestoreService {
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
-      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(()=>{
-         
+      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(() => {
+
       })
     });
   }

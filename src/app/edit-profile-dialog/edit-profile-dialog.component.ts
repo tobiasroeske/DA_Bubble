@@ -7,6 +7,8 @@ import { LocalStorageService } from '../shared/services/local-storage-service/lo
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { FirebaseStorageService } from '../shared/services/firebase-storage-service/firebase-storage.service';
 import { CurrentUser } from '../shared/interfaces/currentUser.interface';
+import { Channel } from '../shared/models/channel.class';
+import { PrivateChat } from '../shared/models/privateChat.class';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -28,6 +30,8 @@ export class EditProfileDialogComponent {
   avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png'];
   changeAvatar = false;
   changesSuccessful = false;
+  allChannels: Channel[] = [];
+  allDirectMessages: PrivateChat[] = [];
 
   allMembers: CurrentUser[] = [];
 
@@ -51,6 +55,12 @@ export class EditProfileDialogComponent {
         })
         .then(() => {
           this.updateUsers().then(() => this.changesSuccessful = true)
+        }).then(() => {
+          this.updateMember();
+        }).then(() => {
+          this.updateChatMessage();
+        }).then(() => {
+          this.updateDirectMessages();
         })
     }
   }
@@ -76,6 +86,56 @@ export class EditProfileDialogComponent {
     this.boardServ.loadCurrentUser();
     // await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
   }
+
+  async updateMember() {
+    this.allChannels = this.firestoreService.allExistingChannels;
+    this.allChannels.forEach((chan) => {
+      chan.members.forEach(member => {
+        if (member.id == this.boardServ.currentUser.id) {
+          member.name = this.boardServ.currentUser.name;
+        }
+      })
+      if (chan.id) {
+        this.firestoreService.updateChannel(chan.toJSON(), chan.id)
+      }
+    })
+  }
+
+  async updateChatMessage() {
+    this.allChannels.forEach((chan => {
+      if (chan.chat) {
+        chan.chat.forEach((chat) => {
+          if (chat.user.id == this.boardServ.currentUser.id) {
+            chat.user.name = this.boardServ.currentUser.name;
+          }
+        })
+        if (chan.id) {
+          this.firestoreService.updateChannel(chan.toJSON(), chan.id);
+        }
+      }
+    }))
+  }
+
+  async updateDirectMessages() {
+    this.allDirectMessages = this.firestoreService.allDirectMessages;
+    this.allDirectMessages.forEach((dm) => {
+      if (dm.guest.id == this.boardServ.currentUser.id) {
+        dm.guest.name = this.boardServ.currentUser.name
+      } else if (dm.creator.id == this.boardServ.currentUser.id) {
+        dm.creator.name = this.boardServ.currentUser.name;
+      }
+      dm.chat.forEach((chat)=> {
+        if(chat.user.id == this.boardServ.currentUser.id){
+         chat.user.name = this.boardServ.currentUser.name;
+        }
+      })
+      if (dm.id) {
+        this.firestoreService.updateCompletePrivateMessage(dm.id, dm);
+      }
+    })
+  }
+
+
 
   pickAvatar(i: number) {
     this.avatarPath = this.avatars[i];
