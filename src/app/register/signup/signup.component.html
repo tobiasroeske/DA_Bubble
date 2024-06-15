@@ -61,7 +61,8 @@
             <div class="checkbox-container">
                 <input type="checkbox" id="privacyPolicy" required [(ngModel)]="checkboxChecked" #checkbox="ngModel"
                     name="checkbox">
-               <label for="privacyPolicy">Ich stimme der <a href="datenschutz" target="_blank">Datenschutzerklärung</a> zu.</label>
+                <label for="privacyPolicy">Ich stimme der <a href="datenschutz" target="_blank">Datenschutzerklärung</a>
+                    zu.</label>
             </div>
 
             <input [disabled]="!signupForm.valid" [class.disabled-btn]="!signupForm.valid"
