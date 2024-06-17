@@ -10,6 +10,7 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { NotificationObj } from '../../shared/models/notificationObj.class';
+import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
   selector: 'app-board-toolbar',
@@ -22,6 +23,7 @@ export class BoardToolbarComponent {
   authService = inject(SignupService);
   boardServ = inject(BoardService);
   firestoreService = inject(FirestoreService)
+  localStorageService = inject(LocalStorageService)
 
   userList: CurrentUser[] = [];
   searchText: string = "";
@@ -99,5 +101,16 @@ export class BoardToolbarComponent {
     
     this.showProfile = false;
   }
+
+  async logout() {
+    this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
+    this.boardServ.currentUser.loginState = 'loggedOut';
+    this.localStorageService.saveCurrentUser(this.boardServ.currentUser);
+    await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+    await this.authService.logout()
+    
+
+  }
+
 
 }

@@ -50,7 +50,9 @@ export class EditProfileDialogComponent {
         .then(() => {
           let emailChanged = this.mail != this.authService.auth.currentUser?.email
           if (emailChanged) {
-            this.authService.updateEmail(this.mail)
+            this.authService.updateEmail(this.mail).then(() => {
+              this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+            })
           }
         })
         .then(() => {
@@ -93,6 +95,7 @@ export class EditProfileDialogComponent {
       chan.members.forEach(member => {
         if (member.id == this.boardServ.currentUser.id) {
           member.name = this.boardServ.currentUser.name;
+          member.avatarPath = this.boardServ.currentUser.avatarPath;
         }
       })
       if (chan.id) {
@@ -107,6 +110,7 @@ export class EditProfileDialogComponent {
         chan.chat.forEach((chat) => {
           if (chat.user.id == this.boardServ.currentUser.id) {
             chat.user.name = this.boardServ.currentUser.name;
+            chat.user.avatarPath = this.boardServ.currentUser.avatarPath;
           }
         })
         if (chan.id) {
@@ -121,12 +125,15 @@ export class EditProfileDialogComponent {
     this.allDirectMessages.forEach((dm) => {
       if (dm.guest.id == this.boardServ.currentUser.id) {
         dm.guest.name = this.boardServ.currentUser.name
+        dm.guest.avatarPath = this.boardServ.currentUser.avatarPath;
       } else if (dm.creator.id == this.boardServ.currentUser.id) {
         dm.creator.name = this.boardServ.currentUser.name;
+        dm.creator.avatarPath = this.boardServ.currentUser.avatarPath;
       }
       dm.chat.forEach((chat)=> {
         if(chat.user.id == this.boardServ.currentUser.id){
          chat.user.name = this.boardServ.currentUser.name;
+         chat.user.avatarPath = this.boardServ.currentUser.avatarPath;
         }
       })
       if (dm.id) {

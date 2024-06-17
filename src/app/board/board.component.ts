@@ -43,9 +43,12 @@ export class BoardComponent implements OnInit {
 
   @HostListener('window:click', ['$event'])
   async handleClick() {
-    this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
-    this.boardServ.currentUser.loginState = 'loggedIn'
-    await this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+    if (this.boardServ.currentUser.loginState != 'loggedOut') {
+      this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
+      this.boardServ.currentUser.loginState = 'loggedIn'
+      await this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+    }
+    
   }
 
   @HostListener('window:unload', ['$event'])

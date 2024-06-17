@@ -53,7 +53,8 @@ export class SignupService {
     this.user$.subscribe((val) => {
       this.user = new User(val);
     });
-    this.actionCodeSettings = { url: 'https://dabubble-212.developerakademie.net/angular-projects/dabubble/resetpassword' };
+    //this.actionCodeSettings = { url: 'https://dabubble-212.developerakademie.net/angular-projects/dabubble/resetpassword' };
+    this.actionCodeSettings = { url: 'http://localhost:4200/resetpassword' };
   }
 
   async googleLogin() {
@@ -68,7 +69,8 @@ export class SignupService {
         this.getUserData(result);
         this.firestoreService.addUser(result.user.uid, this.setNewUserObject(result.user.uid))
           .then(() => {
-            this.storageService.saveCurrentUser(result.user);
+            this.updateLoggedInUser(result.user)
+            
             this.router.navigateByUrl('board');
           });
       }
@@ -86,7 +88,7 @@ export class SignupService {
         this.firestoreService
           .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
           .then(() => {
-            this.storageService.saveCurrentUser(result.user);
+            this.updateLoggedInUser(result.user);
             this.router.navigateByUrl('board');
           });
       }
@@ -194,7 +196,7 @@ export class SignupService {
   async login(email: string, password: string) {
     await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        this.storageService.saveCurrentUser(this.findCurrentUser(userCredential.user));
+        this.updateLoggedInUser(userCredential.user)
         this.router.navigateByUrl('board');
       })
       .catch((err) => {
@@ -224,19 +226,29 @@ export class SignupService {
   }
 
   async guestLogin() {
-    await signInWithEmailAndPassword(this.auth, 'gast@gast.de', '12345678')
+    await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678')
       .then((userCredential) => {
         this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' })
         .then(() => {
-          this.storageService.saveCurrentUser(this.findCurrentUser(userCredential.user));
+          this.updateLoggedInUser(userCredential.user);
           this.router.navigateByUrl('board');
         })
-        
       })
       .catch(err => {
         this.errorCode = err.code;
       })
   }
+
+  updateLoggedInUser(user: any) {
+    let currentUser = this.findCurrentUser(user)
+          currentUser.loginState = 'loggedIn';
+          this.storageService.saveCurrentUser(currentUser);
+          debugger
+          this.firestoreService.updateUser(currentUser.uid, this.storageService.setCurrentUserObject(currentUser));
+  }
+
+
+
 
   getLoggedInUser() {
     onAuthStateChanged(this.auth, (user) => {
@@ -251,15 +263,20 @@ export class SignupService {
   }
 
   async logout() {
-    let currentUser = this.storageService.loadCurrentUser();
-    currentUser.loginState = 'loggedOut';
-    this.storageService.saveIntroPlayed(false)
-    await this.firestoreService.updateUser(currentUser.id, currentUser)
-      .then(() => {
-        signOut(this.auth).then(() => {
-          this.storageService.saveCurrentUser('');
-          window.open('login', '_self');
-        })
-      })
+    await signOut(this.auth)
+    .then(() => {
+      this.storageService.saveCurrentUser('')
+      window.open('login', '_self');
+    });
+    // let currentUser = this.storageService.loadCurrentUser();
+    // currentUser.loginState = 'loggedOut';
+    // this.storageService.saveIntroPlayed(false)
+    // await this.firestoreService.updateUser(currentUser.id, currentUser)
+    //   .then(() => {
+    //     signOut(this.auth).then(() => {
+    //       this.storageService.saveCurrentUser('');
+    //       window.open('login', '_self');
+    //     })
+    //   })
   }
 }
