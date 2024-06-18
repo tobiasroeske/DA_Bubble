@@ -97,8 +97,6 @@ export class BoardToolbarComponent {
 
   openEditor(event: boolean) {
     this.editorOpen = event;
-    console.log(this.editorOpen);
-    
     this.showProfile = false;
   }
 

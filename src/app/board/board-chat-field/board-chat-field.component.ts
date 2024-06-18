@@ -54,7 +54,7 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
     try {
       this.chatField.nativeElement.scrollTo(0, this.chatField.nativeElement.scrollHeight);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 

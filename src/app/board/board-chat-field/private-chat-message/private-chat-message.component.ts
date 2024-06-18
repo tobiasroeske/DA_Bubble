@@ -49,7 +49,6 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.currentWindowWidth = event.target.innerWidth;
-    // console.log(this.currentWindowWidth);
   }
 
   openTheTools() {

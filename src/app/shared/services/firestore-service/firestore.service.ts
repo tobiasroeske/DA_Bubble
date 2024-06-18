@@ -69,7 +69,7 @@ export class FirestoreService {
     let userUpdate = this.setUserObject(newUser, userId);
     await updateDoc(userRef, userUpdate)
       .then(() => { })
-      .catch(err => console.log(err))
+      .catch(err => console.error(err))
   }
 
   async updateUserNotification(userId: string, notification: any) {
@@ -139,7 +139,7 @@ export class FirestoreService {
   async checkIfChannelHasMembers(channel: Channel, channelId: string) {
     if (channel.members.length <= 0) {
       await deleteDoc(this.getSingleChannelRef('channels', channelId))
-        .then(() => console.log(`channel with channel-Id: ${channelId} got deleted`))
+        .then(() => {})
         .catch(err => console.error(err))
     }
   }
@@ -149,7 +149,7 @@ export class FirestoreService {
       .then(docRef => {
         if (docRef?.id) {
           this.newChannelId = docRef?.id;
-          updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId }).catch(err => console.log(err))
+          updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId }).catch(err => console.error(err))
         }
       })
       .catch((err) => { console.error(err) });
@@ -158,14 +158,14 @@ export class FirestoreService {
   async updateChannel(item: {}, docId: string) {
     let docRef = this.getSingleChannelRef('channels', docId)
     await updateDoc(docRef, item).catch((err) => {
-      console.log(err);
+      console.error(err);
     })
   }
 
   async updateAllChats(docId: string, newChats: ChatMessage[]) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: newChats })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }
 
   async updateChannelUsers(updatedUser: any, docId: string) {
@@ -186,7 +186,7 @@ export class FirestoreService {
   async updateChats(docId: string, messageObject: ChatMessage) {
     let chatRef = this.getSingleChannelRef('channels', docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }
 
   subDirectMessages() {
@@ -233,7 +233,7 @@ export class FirestoreService {
 
   async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat) {
     let pmRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.log(err))
+    await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.error(err))
   }
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {

@@ -100,7 +100,6 @@ export class ChatMessageComponent implements OnInit {
   editMessage(index: number) {
     this.chat.message = this.editedMessage!;
     this.currentChannel.chat!.splice(index, 1, this.chat);
-    console.log(this.currentChannel);
     this.firestore.updateChannel(this.currentChannel, this.channelId)
       .then(() => this.editorOpen = false);
   }

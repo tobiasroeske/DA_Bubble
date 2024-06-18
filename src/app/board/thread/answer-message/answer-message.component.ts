@@ -52,7 +52,6 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
     let newAnswer = this.checkIfReactionExists(emojiIdx);
     this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage)
     this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
-    console.log(this.currentChatMessage);
   }
 
   toggleMessageEditor() {

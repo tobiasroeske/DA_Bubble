@@ -53,8 +53,8 @@ export class SignupService {
     this.user$.subscribe((val) => {
       this.user = new User(val);
     });
-    //this.actionCodeSettings = { url: 'https://dabubble-212.developerakademie.net/angular-projects/dabubble/resetpassword' };
-    this.actionCodeSettings = { url: 'http://localhost:4200/resetpassword' };
+    this.actionCodeSettings = { url: 'https://dabubble.tobias-roeske.ch//resetpassword' };
+    //this.actionCodeSettings = { url: 'http://localhost:4200/resetpassword' };
   }
 
   async googleLogin() {
@@ -103,14 +103,14 @@ export class SignupService {
 
   async sendPasswordResetMail(mail: string) {
     await sendPasswordResetEmail(this.auth, mail, this.actionCodeSettings)
-      .then(() => console.log('Email sent'))
-      .catch((err) => console.log(err));
+      .then(() => {})
+      .catch((err) => console.error(err));
   }
 
   async resetPassword(code: string, password: string) {
     await confirmPasswordReset(this.auth, code, password)
-      .then(() => console.log('password changed'))
-      .catch((err) => console.log(err));
+      .then(() => {})
+      .catch((err) => console.error(err));
   }
 
   async updateEmail(email: string) {
@@ -207,7 +207,6 @@ export class SignupService {
   findCurrentUser(user: any) {
     let allUsers = this.firestoreService.userList;
     let currentUser = allUsers.find(u => u.id == user.uid)
-    console.log('currentUser from signup', currentUser);
     let currentUserAsUC = this.setCurrentUserObject(currentUser)
     return currentUserAsUC;
   }
@@ -243,7 +242,6 @@ export class SignupService {
     let currentUser = this.findCurrentUser(user)
           currentUser.loginState = 'loggedIn';
           this.storageService.saveCurrentUser(currentUser);
-          debugger
           this.firestoreService.updateUser(currentUser.uid, this.storageService.setCurrentUserObject(currentUser));
   }
 

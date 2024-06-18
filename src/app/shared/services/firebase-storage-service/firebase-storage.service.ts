@@ -10,7 +10,7 @@ export class FirebaseStorageService {
   
   async uploadFile(path:string, file:File) {
     await uploadBytes(this.getStorageRef(path), file)
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
   }
 
   getStorageRef(path: string) {
@@ -23,7 +23,7 @@ export class FirebaseStorageService {
 
   async deleteFile(path: string) {
     await deleteObject(this.getStorageRef(path))
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
   }
 
 }

@@ -41,7 +41,7 @@ export class AvatarPickerComponent implements OnInit {
               this.avatarImgPath = url;
               this.avatarPicked = true;
             })
-            .catch(err => console.log(err))
+            .catch(err => console.error(err))
         })
     }
   }

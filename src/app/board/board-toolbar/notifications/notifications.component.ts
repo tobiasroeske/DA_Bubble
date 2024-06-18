@@ -29,7 +29,6 @@ export class NotificationsComponent {
   findCurrentUser() {
     let allUsers = this.firestoreService.userList;
     let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id);
-    console.log(currentUser);
   }
 
   localStorageServ = inject(LocalStorageService)

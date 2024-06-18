@@ -155,7 +155,6 @@ export class CreateMessageAreaComponent {
         this.fbStorageService.getDownLoadUrl(path)
           .then(url => {
             this.uploadedFile = url;
-            console.log(this.uploadedFile);
           })
       })
   }
@@ -165,7 +164,6 @@ export class CreateMessageAreaComponent {
       .then(() => {
         this.uploadedFile = '';
         this.filePath = '';
-        console.log(this.uploadedFile);
       });
   }
 
@@ -220,9 +218,6 @@ export class CreateMessageAreaComponent {
             this.notificationObject = new NotificationObj();
             this.setNotificationObject();
             this.member.notification.push(this.notificationObject)
-            console.log('member beim senden', this.member);
-            console.log(this.member.notification);
-            console.log(this.textMessage);
             if (this.member.id) {
               if (this.member.id == this.boardService.currentUser.id) {
                 this.boardService.currentUser.notification.push(this.notificationObject.toJSON());

@@ -74,18 +74,6 @@ export class BoardService {
   showSearchDialog: boolean = false;
   searchText: string = "";
 
-  constructor() {
-    // this.checkScreenSize();
-    // this.currentUser = this.storageService.loadCurrentUser()!;
-    // if (this.currentUser.id != '') {
-    //   this.currentUser.loginState = 'loggedIn';
-    //   this.firestore.updateUser(this.currentUser.id!, this.currentUser);
-    // } else {
-    //   window.open('login', '_self');
-    // }
-    // console.log(this.currentUser);
-  }
-
   ngOnInit(){
    this.loadCurrentUser();
   }
