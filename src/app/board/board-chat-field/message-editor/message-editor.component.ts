@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
-import { BoardService } from '../../../shared/services/board.service';
+import { BoardService } from '../../../shared/services/board-service/board.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 

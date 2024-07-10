@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { BoardService } from '../../shared/services/board.service';
+import { BoardService } from '../../shared/services/board-service/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { ShowMemberPopUpComponent } from './show-member-pop-up/show-member-pop-up.component';
 import { Channel } from '../../shared/models/channel.class';

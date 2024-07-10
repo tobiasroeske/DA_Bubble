@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, HostListener } from '@angular/core';
-import { BoardService } from '../../../shared/services/board.service';
+import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/models/channel.class';

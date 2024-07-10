@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { BoardService } from '../../../shared/services/board.service';
+import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 import { PrivateChat } from '../../../shared/models/privateChat.class';
@@ -31,14 +31,14 @@ export class SearchDialogComponent implements OnChanges {
   idxToFindPositionOfGuestInDirectMessArray!: number;
   idxToFindPositionOfClickedMessageInTheChoisedPrivChat!: number;
 
-  async showSearchElementClicked(index: number, event: Event) {
+  showSearchElementClicked(index: number, event: Event) {
     let clickedElement = this.mainSearchList[index];
     if (clickedElement.type == 'Channel') {
       this.showTheClickedElementOfTypeChannel(clickedElement, event);
     } else if (clickedElement.type == 'CurrentUser') {
       this.showTheClickedElementOfTypeCurrentUser(clickedElement);
     } else if (clickedElement.type == 'PrivateChat') {
-      await this.showTheClickedElementOfTypePrivatChat(clickedElement, event)
+      this.showTheClickedElementOfTypePrivatChat(clickedElement, event)
     }
     this.boardServ.showSearchDialog = false;
   }

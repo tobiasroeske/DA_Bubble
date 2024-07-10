@@ -10,7 +10,7 @@ import { EditChannelDialogComponent } from './edit-channel-dialog/edit-channel-d
 import { MembersDialogComponent } from './members-dialog/members-dialog.component';
 import { SignupService } from '../shared/services/signup/signup.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
-import { BoardService } from '../shared/services/board.service';
+import { BoardService } from '../shared/services/board-service/board.service';
 import { Auth, User } from '@angular/fire/auth';
 import { IdleService } from '../shared/services/idle-service/idle.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';

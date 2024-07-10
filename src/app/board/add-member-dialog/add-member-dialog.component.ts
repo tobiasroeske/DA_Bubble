@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BoardService } from '../../shared/services/board.service';
+import { BoardService } from '../../shared/services/board-service/board.service';
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';

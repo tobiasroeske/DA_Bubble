@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { BoardService } from '../shared/services/board.service';
+import { BoardService } from '../shared/services/board-service/board.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SignupService } from '../shared/services/signup/signup.service';

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { CreateMessageAreaThreadComponent } from './create-message-area-thread/create-message-area-thread.component';
-import { BoardService } from '../../shared/services/board.service';
+import { BoardService } from '../../shared/services/board-service/board.service';
 import { Channel } from '../../shared/models/channel.class';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { AnswerMessageComponent } from './answer-message/answer-message.component';

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 import { Channel } from '../../../shared/models/channel.class';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
-import { BoardService } from '../../../shared/services/board.service';
+import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 
 

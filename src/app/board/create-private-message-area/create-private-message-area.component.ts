@@ -3,7 +3,7 @@ import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } 
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { BoardService } from '../../shared/services/board.service';
+import { BoardService } from '../../shared/services/board-service/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';

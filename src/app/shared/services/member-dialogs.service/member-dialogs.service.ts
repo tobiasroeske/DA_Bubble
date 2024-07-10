@@ -3,7 +3,7 @@ import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { PrivateChat } from '../../models/privateChat.class';
 import { Channel } from '../../models/channel.class';
 import { FirestoreService } from '../firestore-service/firestore.service';
-import { BoardService } from '../board.service';
+import { BoardService } from '../board-service/board.service';
 
 @Injectable({
   providedIn: 'root'

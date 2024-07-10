@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Channel } from '../../../shared/models/channel.class';
-import { BoardService } from '../../../shared/services/board.service';
+import { BoardService } from '../../../shared/services/board-service/board.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../shared/models/user.class';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';

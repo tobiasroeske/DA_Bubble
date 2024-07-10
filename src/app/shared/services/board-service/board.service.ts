@@ -1,12 +1,12 @@
 import { ElementRef, Injectable, inject } from '@angular/core';
 
-import { SignupService } from './signup/signup.service';
-import { LocalStorageService } from './local-storage-service/local-storage.service';
-import { CurrentUser } from '../interfaces/currentUser.interface';
-import { ChatMessage } from '../interfaces/chatMessage.interface';
-import { FirestoreService } from './firestore-service/firestore.service';
-import { PrivateChat } from '../models/privateChat.class';
-import { Channel } from '../models/channel.class';
+import { SignupService } from '../signup/signup.service';
+import { LocalStorageService } from '../local-storage-service/local-storage.service';
+import { CurrentUser } from '../../interfaces/currentUser.interface';
+import { ChatMessage } from '../../interfaces/chatMessage.interface';
+import { FirestoreService } from '../firestore-service/firestore.service';
+import { PrivateChat } from '../../models/privateChat.class';
+import { Channel } from '../../models/channel.class';
 
 
 @Injectable({
