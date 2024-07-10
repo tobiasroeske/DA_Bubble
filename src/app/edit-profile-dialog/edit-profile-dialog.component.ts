@@ -67,19 +67,18 @@ export class EditProfileDialogComponent {
     }
   }
 
-  onFileChange(event: any) {
-    let file = event.target.files[0];
+  async onFileChange(event: any) {
+    const file = event.target.files[0];
     if (file) {
-      let path = `avatarImages/${file.name}`;
-      this.firebaseStorageService.uploadFile(path, file)
-        .then(() => {
-          this.firebaseStorageService.getDownLoadUrl(path)
-            .then(url => {
-              this.avatarPath = url;
-              this.changeAvatar = false;
-            })
-            .catch(err => console.error(err))
-        })
+      const path = `avatarImages/${file.name}`;
+      try {
+        await this.firebaseStorageService.uploadFile(path, file);
+        const url = await this.firebaseStorageService.getDownloadUrl(path);
+        this.avatarPath = url;
+        this.changeAvatar = false;
+      } catch (err) {
+        console.error('Error handling file change:', err);
+      }
     }
   }
 

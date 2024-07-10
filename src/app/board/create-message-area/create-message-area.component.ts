@@ -150,14 +150,16 @@ export class CreateMessageAreaComponent {
   }
 
   async uploadFile(path: string, file: File) {
-    await this.fbStorageService.uploadFile(path, file)
-      .then(() => {
-        this.fbStorageService.getDownLoadUrl(path)
-          .then(url => {
-            this.uploadedFile = url;
-          })
-      })
+    try {
+      await this.fbStorageService.uploadFile(path, file);
+      const url = await this.fbStorageService.getDownloadUrl(path);
+      this.uploadedFile = url;
+    } catch (err) {
+      console.error('Error uploading and fetching download URL:', err);
+      // Handle error as needed
+    }
   }
+  
 
   async deleteFile() {
     await this.fbStorageService.deleteFile(this.filePath)

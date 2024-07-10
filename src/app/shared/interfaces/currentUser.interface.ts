@@ -1,5 +1,3 @@
-import { NotificationObj } from "../models/notificationObj.class";
-
 
 export interface CurrentUser {
     id?: string;

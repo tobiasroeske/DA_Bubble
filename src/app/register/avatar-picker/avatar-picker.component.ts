@@ -30,19 +30,18 @@ export class AvatarPickerComponent implements OnInit {
   }
 
   async onFileChange(event: any) {
-    let file = event.target.files[0];
+    const file = event.target.files[0];
     if (file) {
-      let path = `avatarImages/${file.name}`;
-      await this.firebaseStorageService.uploadFile(path, file)
-        .then(() => {
-          this.firebaseStorageService.getDownLoadUrl(path)
-            .then(url => {
-              this.user.avatarPath = url;
-              this.avatarImgPath = url;
-              this.avatarPicked = true;
-            })
-            .catch(err => console.error(err))
-        })
+      const path = `avatarImages/${file.name}`;
+      try {
+        await this.firebaseStorageService.uploadFile(path, file);
+        const url = await this.firebaseStorageService.getDownloadUrl(path);
+        this.user.avatarPath = url;
+        this.avatarImgPath = url;
+        this.avatarPicked = true;
+      } catch (err) {
+        console.error('Error handling file change:', err);
+      }
     }
   }
 

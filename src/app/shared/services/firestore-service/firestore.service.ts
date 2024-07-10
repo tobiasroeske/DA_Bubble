@@ -4,38 +4,43 @@ import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, upd
 import { Channel } from '../../models/channel.class';
 import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
-import { Auth } from '@angular/fire/auth';
-import { NotificationObj } from '../../models/notificationObj.class';
-import { LocalStorageService } from '../local-storage-service/local-storage.service';
+import { Auth, Unsubscribe } from '@angular/fire/auth';
+import { User } from '../../models/user.class';
+import { Subscribable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
-  firestore = inject(Firestore);
-  auth = inject(Auth);
+  private firestore: Firestore = inject(Firestore);
+  private auth: Auth = inject(Auth);
 
   userList: CurrentUser[] = [];
   allChannels: any[] = [];
   allExistingChannels: Channel[] = [];
   directMessages: PrivateChat[] = [];
   allDirectMessages: PrivateChat[] = [];
-  unsubscribeUsers;
-  unsubChannel: any;
-  unsubAllChannels: any;
-  unsubDirectMess: any;
-  unsubAllDirectMessages: any;
+
+  private unsubscribeUsers: Unsubscribe | undefined;
+  private unsubChannel: Unsubscribe | undefined;
+  private unsubAllChannels: Unsubscribe | undefined;
+  private unsubDirectMess: Unsubscribe | undefined;
+  private unsubAllDirectMessages: Unsubscribe | undefined;
 
   newChannelId?: string;
   chatRoomId?: string;
   currentUserId?: string;
 
   constructor() {
+    this.initSubscriptions();
+  }
+
+  private initSubscriptions(): void {
     this.unsubscribeUsers = this.subUsersList();
-    this.auth.onAuthStateChanged((user) => {
+    this.auth.onAuthStateChanged(user => {
       if (user) {
-        this.currentUserId = user.uid; // take the current user id from authentication;
+        this.currentUserId = user.uid;
         this.unsubChannel = this.subChannelList();
         this.unsubDirectMess = this.subDirectMessages();
         this.unsubAllChannels = this.subAllExistingChannelList();
@@ -45,11 +50,15 @@ export class FirestoreService {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeUsers();
-    this.unsubChannel();
-    this.unsubDirectMess();
-    this.unsubAllChannels();
-    this.unsubAllDirectMessages();
+    this.unsubscribeAll();
+  }
+
+  private unsubscribeAll(): void {
+    this.unsubscribeUsers?.();
+    this.unsubChannel?.();
+    this.unsubDirectMess?.();
+    this.unsubAllChannels?.();
+    this.unsubAllDirectMessages?.();
   }
 
   getUsersRef() {
@@ -60,24 +69,34 @@ export class FirestoreService {
     return doc(this.getUsersRef(), userId);
   }
 
-  async addUser(userId: string, user: CurrentUser) {
-    await setDoc(this.getUserDocRef(userId), user);
+  async addUser(userId: string, user: CurrentUser): Promise<void> {
+    try {
+      await setDoc(this.getUserDocRef(userId), user);
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
   }
 
-  async updateUser(userId: string, newUser: CurrentUser) {
-    let userRef = this.getUserDocRef(userId);
-    let userUpdate = this.setUserObject(newUser, userId);
-    await updateDoc(userRef, userUpdate)
-      .then(() => { })
-      .catch(err => console.error(err))
+  async updateUser(userId: string, newUser: CurrentUser): Promise<void> {
+    try {
+      const userRef = this.getUserDocRef(userId);
+      const userUpdate = this.setUserObject(newUser, userId);
+      await updateDoc(userRef, userUpdate);
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
   }
 
-  async updateUserNotification(userId: string, notification: any) {
-    let userRef = this.getUserDocRef(userId);
-    await updateDoc(userRef, { notification: arrayUnion(notification) })
+  async updateUserNotification(userId: string, notification: any): Promise<void> {
+    try {
+      const userRef = this.getUserDocRef(userId);
+      await updateDoc(userRef, { notification: arrayUnion(notification) });
+    } catch (error) {
+      console.error('Error updating user notification:', error);
+    }
   }
 
-  subUsersList() {
+  subUsersList(): Unsubscribe {
     return onSnapshot(this.getUsersRef(), list => {
       this.userList = [];
       list.forEach(user => {
@@ -112,7 +131,7 @@ export class FirestoreService {
     }
   }
 
-  subChannelList() {
+  subChannelList(): Unsubscribe {
     const q = query(this.getChannelsRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
     return onSnapshot(q, (list) => {
       this.allChannels = [];
@@ -124,7 +143,7 @@ export class FirestoreService {
     })
   }
 
-  subAllExistingChannelList() {
+  subAllExistingChannelList(): Unsubscribe {
     return onSnapshot(this.getChannelsRef(), list => {
       this.allExistingChannels = [];
       list.forEach(c => {
@@ -136,60 +155,83 @@ export class FirestoreService {
     })
   }
 
-  async checkIfChannelHasMembers(channel: Channel, channelId: string) {
+  private async checkIfChannelHasMembers(channel: Channel, channelId: string): Promise<void> {
     if (channel.members.length <= 0) {
-      await deleteDoc(this.getSingleChannelRef('channels', channelId))
-        .then(() => {})
-        .catch(err => console.error(err))
+      try {
+        await deleteDoc(this.getSingleChannelRef('channels', channelId));
+      } catch (error) {
+        console.error('Error deleting empty channel:', error);
+      }
     }
   }
 
-  async addChannel(obj: {}) {
-    await addDoc(this.getChannelsRef(), obj)
-      .then(docRef => {
-        if (docRef?.id) {
-          this.newChannelId = docRef?.id;
-          updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId }).catch(err => console.error(err))
-        }
-      })
-      .catch((err) => { console.error(err) });
+  async addChannel(obj: {}): Promise<void> {
+    try {
+      const docRef = await addDoc(this.getChannelsRef(), obj);
+      if (docRef?.id) {
+        this.newChannelId = docRef.id;
+        await updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId });
+      }
+    } catch (error) {
+      console.error('Error adding channel:', error);
+    }
   }
 
-  async updateChannel(item: {}, docId: string) {
-    let docRef = this.getSingleChannelRef('channels', docId)
-    await updateDoc(docRef, item).catch((err) => {
-      console.error(err);
-    })
+  async updateChannel(item: {}, docId: string): Promise<void> {
+    try {
+      const docRef = this.getSingleChannelRef('channels', docId);
+      await updateDoc(docRef, item);
+    } catch (error) {
+      console.error('Error updating channel:', error);
+    }
   }
 
-  async updateAllChats(docId: string, newChats: ChatMessage[]) {
-    let chatRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(chatRef, { chat: newChats })
-      .catch(err => console.error(err));
+  async updateAllChats(docId: string, newChats: ChatMessage[]): Promise<void> {
+    try {
+      const chatRef = this.getSingleChannelRef('channels', docId);
+      await updateDoc(chatRef, { chat: newChats });
+    } catch (error) {
+      console.error('Error updating all chats:', error);
+    }
   }
 
-  async updateChannelUsers(updatedUser: any, docId: string) {
-    let channelRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(channelRef, { allUsers: updatedUser });
+  async updateChannelUsers(updatedUser: any, docId: string): Promise<void> {
+    try {
+      const channelRef = this.getSingleChannelRef('channels', docId);
+      await updateDoc(channelRef, { allUsers: updatedUser });
+    } catch (error) {
+      console.error('Error updating channel users:', error);
+    }
   }
 
-  async updateMembers(updateMembers: string | CurrentUser, docId: string) {
-    let channelRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(channelRef, { members: arrayUnion(updateMembers) })
+  async updateMembers(updateMembers: string | CurrentUser, docId: string): Promise<void> {
+    try {
+      const channelRef = this.getSingleChannelRef('channels', docId);
+      await updateDoc(channelRef, { members: arrayUnion(updateMembers) });
+    } catch (error) {
+      console.error('Error updating members:', error);
+    }
   }
 
-  async updatePartecipantsIds(id: string, docId: string) {
-    let channelRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(channelRef, { partecipantsIds: arrayUnion(id) })
+  async updatePartecipantsIds(id: string, docId: string): Promise<void> {
+    try {
+      const channelRef = this.getSingleChannelRef('channels', docId);
+      await updateDoc(channelRef, { partecipantsIds: arrayUnion(id) });
+    } catch (error) {
+      console.error('Error updating participants IDs:', error);
+    }
   }
 
-  async updateChats(docId: string, messageObject: ChatMessage) {
-    let chatRef = this.getSingleChannelRef('channels', docId);
-    await updateDoc(chatRef, { chat: arrayUnion(messageObject) })
-      .catch(err => console.error(err));
+  async updateChats(docId: string, messageObject: ChatMessage): Promise<void> {
+    try {
+      const chatRef = this.getSingleChannelRef('channels', docId);
+      await updateDoc(chatRef, { chat: arrayUnion(messageObject) });
+    } catch (error) {
+      console.error('Error updating chats:', error);
+    }
   }
 
-  subDirectMessages() {
+  subDirectMessages(): Unsubscribe {
     const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
     return onSnapshot(q, (list) => {
       this.directMessages = [];
@@ -200,7 +242,7 @@ export class FirestoreService {
     });
   }
 
-  subAllExistingChatRooms() {
+  subAllExistingChatRooms(): Unsubscribe {
     return onSnapshot(this.getDirectMessRef(), (list) => {
       this.allDirectMessages = [];
       list.forEach(el => {
@@ -210,16 +252,16 @@ export class FirestoreService {
     });
   }
 
-  async addChatRoom(obj: {}) {
-    await addDoc(this.getDirectMessRef(), obj)
-      .then((docRef) => {
-        if (docRef?.id) {
-          this.chatRoomId = docRef?.id;
-          updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId }).catch(err => console.error(err))
-        }
-      }).catch((err) => {
-        console.error(err);
-      })
+  async addChatRoom(obj: {}): Promise<void> {
+    try {
+      const docRef = await addDoc(this.getDirectMessRef(), obj);
+      if (docRef?.id) {
+        this.chatRoomId = docRef.id;
+        await updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId });
+      }
+    } catch (error) {
+      console.error('Error adding chat room:', error);
+    }
   }
 
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
@@ -232,13 +274,23 @@ export class FirestoreService {
   }
 
   async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat) {
-    let pmRef = this.getDirectMessSingleDoc(docId);
+    try {
+      let pmRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.error(err))
+    } catch (error) {
+      console.error("Error updating complete private messages", error)
+    }
+    
   }
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
-    let chatRef = this.getDirectMessSingleDoc(docId);
+    try {
+      let chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: messageObject })
+    } catch (error) {
+      console.error('Error updating complete private chats', error)
+    }
+    
   }
 
   getChatsRef(channelId: string) {
