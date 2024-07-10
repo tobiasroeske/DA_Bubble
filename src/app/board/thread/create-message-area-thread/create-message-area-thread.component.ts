@@ -39,9 +39,12 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
       const newAnswer = this.setMessageObject(date);
       this.currentChatMessage?.answers.push(newAnswer);
       if (this.currentChannel) {
-        await this.updateChat().then(() => {
+        try {
+          await this.updateChat()
           this.postUpdateActions();
-        });
+        } catch (error) {
+          console.error('Error updating chat', error)
+        }
       }
     }
   }

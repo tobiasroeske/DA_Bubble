@@ -1,12 +1,12 @@
 import { ElementRef, Injectable, inject } from '@angular/core';
 
-import { SignupService } from '../shared/services/signup/signup.service';
-import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
-import { CurrentUser } from '../shared/interfaces/currentUser.interface';
-import { ChatMessage } from '../shared/interfaces/chatMessage.interface';
-import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
-import { PrivateChat } from '../shared/models/privateChat.class';
-import { Channel } from '../shared/models/channel.class';
+import { SignupService } from './signup/signup.service';
+import { LocalStorageService } from './local-storage-service/local-storage.service';
+import { CurrentUser } from '../interfaces/currentUser.interface';
+import { ChatMessage } from '../interfaces/chatMessage.interface';
+import { FirestoreService } from './firestore-service/firestore.service';
+import { PrivateChat } from '../models/privateChat.class';
+import { Channel } from '../models/channel.class';
 
 
 @Injectable({
@@ -115,17 +115,14 @@ export class BoardService {
     this.emojiPickerSmall = false;
   }
 
-  getUserLoginState(participant: CurrentUser) {
+  getUserLoginState(participant: CurrentUser): string {
     let allUsers: CurrentUser[] = this.firestore.userList;
     let user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
     return user.loginState
   }
 
   scrollToBottom(elementRef: ElementRef) {
-    if (elementRef == this.chatFieldRef) {
-      elementRef.nativeElement.scrollTo(0, elementRef.nativeElement.scrollHeight)
-    }
-    if (elementRef == this.threadRef) {
+    if (elementRef === this.chatFieldRef || elementRef === this.threadRef) {
       elementRef.nativeElement.scrollTo(0, elementRef.nativeElement.scrollHeight);
     }
   }
@@ -172,17 +169,10 @@ export class BoardService {
   }
 
   hideText() {
-    if (!this.sidenavTranslate) {
-      this.status = 'öffnen';
-      setTimeout(() => {
-        this.textHidden = true;
-      }, 50)
-    } else {
-      this.status = 'schließen'
-      setTimeout(() => {
-        this.textHidden = false;
-      }, 100);
-    }
+    this.status = this.sidenavTranslate ? 'schließen' : 'öffnen';
+    setTimeout(() => {
+      this.textHidden = !this.sidenavTranslate;
+    }, this.sidenavTranslate ? 100 : 50);
   }
 
   openDialogAddChannel() {
@@ -242,11 +232,8 @@ export class BoardService {
   }
 
   startPrivateChat(index: number, participant: string, event?: Event) {
-    if (participant === "creator") {
-      this.startChat(index, 'creator');
-    } else {
-      this.startChat(index, 'guest');
-    }
+    const role = participant === 'creator' ? 'creator' : 'guest';
+    this.startChat(index, role);
     if (event) {
       event.stopPropagation();
     }

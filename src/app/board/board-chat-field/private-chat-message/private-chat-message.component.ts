@@ -83,8 +83,12 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
     if (this.privateChatId) {
       let newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
       this.currentPrivatChat.splice(this.privateChatIndex, 1, newPrivateMessage);
-      await this.firestore.updateCompletlyPrivateChat(this.privateChatId, this.currentPrivatChat)
-        .then(() => this.getLastTwoReactions(emojiIdx, emojiArray))
+      try {
+        await this.firestore.updateCompletlyPrivateChat(this.privateChatId, this.currentPrivatChat);
+        this.getLastTwoReactions(emojiIdx, emojiArray)
+      } catch (error) {
+        console.error('Error updating complete private chats', error)
+      }
     }
   }
 

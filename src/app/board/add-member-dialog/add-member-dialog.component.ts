@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -47,14 +47,14 @@ export class AddMemberDialogComponent {
     this.closeAddMemberDialog(event)
   }
 
-  addUserToMemberArray() {
+  async addUserToMemberArray() {
     this.currentChannel.members = [];
     this.currentChannel.partecipantsIds = [];
     this.allUsers.forEach(user => {
       this.currentChannel.members.push(user);
     });
-    this.currentChannel.members.forEach(members => {
-      this.firestore.updateMembers(members, this.currentChannelId);
+    this.currentChannel.members.forEach(async (members) => {
+      await this.firestore.updateMembers(members, this.currentChannelId);
       if (members.id) {
         this.currentChannel.partecipantsIds.push(members.id)
       }

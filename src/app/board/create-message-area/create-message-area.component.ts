@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Host, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { Channel } from '../../shared/models/channel.class';
@@ -135,15 +135,17 @@ export class CreateMessageAreaComponent {
     }
   }
 
-  async onFileChange(event: any) {
+  async onFileChange(event: any): Promise<void> {
     this.fileSizeToGreat = false;
     let file = event.target.files[0];
     if (file && file.size <= 500000) {
       this.filePath = `fileUploads/${file.name}`;
-      await this.uploadFile(this.filePath, file)
-        .then(() => {
-          this.fileInput.nativeElement.value = '';
-        })
+      try {
+        await this.uploadFile(this.filePath, file);
+        this.fileInput.nativeElement.value = '';
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     } else {
       this.fileSizeToGreat = true;
     }
@@ -161,12 +163,14 @@ export class CreateMessageAreaComponent {
   }
   
 
-  async deleteFile() {
-    await this.fbStorageService.deleteFile(this.filePath)
-      .then(() => {
-        this.uploadedFile = '';
-        this.filePath = '';
-      });
+  async deleteFile(): Promise<void> {
+    try {
+      await this.fbStorageService.deleteFile(this.filePath);
+      this.uploadedFile = '';
+      this.filePath = '';
+    } catch (error) {
+      console.error('Error deleting file:', error);
+    }
   }
 
   addEmoji(event: any) {
@@ -182,7 +186,6 @@ export class CreateMessageAreaComponent {
     if (this.memberToTag.length > 0) {
       this.removeStringToTagFromTextMessage(this.memberToTag);
     }
-    //this.notificationObject = new NotificationObj();
     this.member = this.filteredMembers[i];
     this.textMessage += ` @${this.member.name} `;
     this.tagMembers = false;
@@ -213,27 +216,27 @@ export class CreateMessageAreaComponent {
 
   async sendMessage() {
     if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
-      let date = new Date().getTime();
-      await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date))
-        .then(() => {
-          if (this.member != null) {
-            this.notificationObject = new NotificationObj();
-            this.setNotificationObject();
-            this.member.notification.push(this.notificationObject)
-            if (this.member.id) {
-              if (this.member.id == this.boardService.currentUser.id) {
-                this.boardService.currentUser.notification.push(this.notificationObject.toJSON());
-                this.localStorageServ.saveCurrentUser(this.boardService.currentUser);
-              }
-              this.firestoreService.updateUserNotification(this.member.id, this.notificationObject.toJSON())
-                .then(() => {
-                  this.resetTextArea();
-                  this.boardService.scrollToBottom(this.boardService.chatFieldRef);
-                })
+      try {
+        let date = new Date().getTime();
+        await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date));
+        if (this.member != null) {
+          this.notificationObject = new NotificationObj();
+          this.setNotificationObject();
+          this.member.notification.push(this.notificationObject);
+          if (this.member.id) {
+            if (this.member.id == this.boardService.currentUser.id) {
+              this.boardService.currentUser.notification.push(this.notificationObject.toJSON());
+              this.localStorageServ.saveCurrentUser(this.boardService.currentUser);
             }
+            await this.firestoreService.updateUserNotification(this.member.id, this.notificationObject.toJSON());
+            this.resetTextArea();
+            this.boardService.scrollToBottom(this.boardService.chatFieldRef);
           }
-        })
+        }
         this.textMessage = "";
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BoardService } from '../../../board/board.service';
+import { BoardService } from '../board.service';
 import { FirestoreService } from '../firestore-service/firestore.service';
 
 export enum IdleUserTimes {

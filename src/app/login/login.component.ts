@@ -20,13 +20,13 @@ export class LoginComponent implements OnInit {
   confirmationMessage = false;
 
   @HostListener('window:unload', ['$event'])
-  async unloadHandler(event: Event) {
+  unloadHandler(event: Event): void {
     event.preventDefault();
     this.localStorageService.saveIntroPlayed(false);
   }
 
   @HostListener('window:resize', ['$event'])
-  handleResize(event: Event) {
+  handleResize(event: Event): void {
     if (window.innerWidth <= 760) {
       this.smallScreen = true;
     } else {

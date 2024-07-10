@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { Channel } from '../../shared/models/channel.class';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -40,12 +40,14 @@ export class AddChannelDialogComponent {
   }
 
   async sendFormDataToDatabase(ngForm: NgForm) {
-    await this.firestore.addChannel(this.channel.toJSON())
-      .then((res) => {
-        this.boardServ.idx = this.getNewChannelIndex()
-        this.localStorageService.saveCurrentChannelIndex(this.getNewChannelIndex());
-      });
-    ngForm.resetForm();
+    try {
+      await this.firestore.addChannel(this.channel.toJSON())
+      this.boardServ.idx = this.getNewChannelIndex()
+      this.localStorageService.saveCurrentChannelIndex(this.getNewChannelIndex());
+      ngForm.resetForm();
+    } catch (error) {
+      console.error('Error adding channel', error)
+    }
   }
 
   closeDialogsAndSetTheChannelVariableToFalse(event: Event) {

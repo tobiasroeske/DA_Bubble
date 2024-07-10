@@ -3,7 +3,7 @@ import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } 
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
@@ -56,13 +56,15 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
       this.message = this.setMessageObject(date);
       this.setAnswerMessage();
       if (this.message.message.trim() !== '' || this.uploadedFile.length > 0) {
-        await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message)
-          .then(() => {
-            this.resetTextArea();
-          });
-        setTimeout(() => {
-          this.showMessageInChat();
-        }, 1)
+        try {
+          await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
+          this.resetTextArea();
+          setTimeout(() => {
+            this.showMessageInChat();
+          }, 1)
+        } catch (error) {
+          console.error('Error updating private chat:', error);
+        }
       }
     }
   }

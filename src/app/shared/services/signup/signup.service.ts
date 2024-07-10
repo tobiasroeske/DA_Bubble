@@ -17,19 +17,14 @@ import {
   signInWithPopup,
   signInWithRedirect,
   signOut,
-  updateEmail,
   updateProfile,
-  user,
   verifyBeforeUpdateEmail,
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
 import { User } from '../../models/user.class';
-import { appConfig } from '../../../app.config';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { NotificationObj } from '../../models/notificationObj.class';
-
 
 @Injectable({
   providedIn: 'root',
@@ -41,177 +36,213 @@ export class SignupService {
   storageService = inject(LocalStorageService);
 
   provider = new GoogleAuthProvider();
-  user$ = new Subject();
-  user = new User();
+  user$ = new Subject<User | null>();
+  user: User = new User();
 
   currentUser!: any;
   errorCode!: string;
   signUpSuccessful = false;
-  actionCodeSettings: ActionCodeSettings;
+  actionCodeSettings: ActionCodeSettings = { url: 'https://dabubble.tobias-roeske.ch/resetpassword' };
 
   constructor() {
     this.user$.subscribe((val) => {
-      this.user = new User(val);
-    });
-    this.actionCodeSettings = { url: 'https://dabubble.tobias-roeske.ch//resetpassword' };
-    //this.actionCodeSettings = { url: 'http://localhost:4200/resetpassword' };
-  }
-
-  async googleLogin() {
-    await signInWithRedirect(this.auth, this.provider).catch((err) =>
-      console.error(err)
-    );
-  }
-
-  async googlePopupLogin() {
-    await signInWithPopup(this.auth, this.provider).then(result => {
-      if (result != null) {
-        this.getUserData(result);
-        this.firestoreService.addUser(result.user.uid, this.setNewUserObject(result.user.uid))
-          .then(() => {
-            this.updateLoggedInUser(result.user)
-            
-            this.router.navigateByUrl('board');
-          });
-      }
-    })
-      .catch(err => {
-        console.error(err);
-        this.googleLogin();
-      })
-  }
-
-  async getRedirectIntel() {
-    await getRedirectResult(this.auth).then((result) => {
-      if (result != null) {
-        this.getUserData(result);
-        this.firestoreService
-          .addUser(result.user.uid, this.setNewUserObject(result.user.uid))
-          .then(() => {
-            this.updateLoggedInUser(result.user);
-            this.router.navigateByUrl('board');
-          });
+      if (val) {
+        this.user = val;
       }
     });
   }
 
-  getUserData(uc: UserCredential) {
+  async googleLogin(): Promise<void> {
+    try {
+      await signInWithRedirect(this.auth, this.provider);
+    } catch (err: any) {
+      console.error(err);
+      throw err; // Rethrow the error to propagate it upwards
+    }
+  }
+
+  async googlePopupLogin(): Promise<void> {
+    try {
+      const result = await signInWithPopup(this.auth, this.provider);
+      if (result.user) {
+        await this.handleSuccessfulLogin(result.user);
+      }
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  private async handleSuccessfulLogin(user: any): Promise<void> {
+    try {
+      if (user) {
+        await this.storageService.saveCurrentUser(user);
+        this.router.navigateByUrl('board');
+      }
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async getRedirectIntel(): Promise<void> {
+    try {
+      const result = await getRedirectResult(this.auth);
+      if (result?.user) {
+        await this.handleSuccessfulLogin(result.user);
+      }
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  getUserData(uc: UserCredential): void {
     this.user.name = uc.user.displayName!;
     this.user.email = uc.user.email!;
     this.user.avatarPath = uc.user.photoURL!;
   }
 
-  async sendPasswordResetMail(mail: string) {
-    await sendPasswordResetEmail(this.auth, mail, this.actionCodeSettings)
-      .then(() => {})
-      .catch((err) => console.error(err));
-  }
-
-  async resetPassword(code: string, password: string) {
-    await confirmPasswordReset(this.auth, code, password)
-      .then(() => {})
-      .catch((err) => console.error(err));
-  }
-
-  async updateEmail(email: string) {
-    if (this.auth.currentUser != null) {
-      await verifyBeforeUpdateEmail(this.auth.currentUser, email)
-        .then(() => {
-          this.storageService.saveCurrentUser(this.auth.currentUser);
-          this.errorCode = 'no error';
-        })
-        .catch((err) => {
-          this.errorCode = err.code;
-        });
+  async sendPasswordResetMail(mail: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(this.auth, mail, this.actionCodeSettings);
+    } catch (err: any) {
+      console.error(err);
+      throw err;
     }
   }
 
-  async handleEmailUpdate(actionCode: string) {
-    let restoredMail = null;
-    await checkActionCode(this.auth, actionCode)
-      .then(info => {
-        restoredMail = info['data']['email'];
-        return applyActionCode(this.auth, actionCode)
-          .catch(err => console.error(err))
-      })
-  }
-
-  async verifyEmail(actionCode: string) {
-    await applyActionCode(this.auth, actionCode)
-      .then(() => {
-      }).catch(err => console.error(err));
-  }
-
-  async updateUserProfile(changes: {}) {
-    if (this.auth.currentUser != null) {
-      await updateProfile(this.auth.currentUser, changes)
-        .then(() => { this.storageService.saveCurrentUser(this.auth.currentUser) })
-        .catch((err) => console.error(err));
+  async resetPassword(code: string, password: string): Promise<void> {
+    try {
+      await confirmPasswordReset(this.auth, code, password);
+    } catch (err: any) {
+      console.error(err);
+      throw err;
     }
   }
 
-  async updateStorages(uc: UserCredential) {
-    this.storageService.saveCurrentUser(uc.user);
-    await this.firestoreService.addUser(uc.user.uid, this.setNewUserObject(uc.user.uid))
+  async updateEmail(email: string): Promise<void> {
+    try {
+      const currentUser = this.auth.currentUser;
+      if (currentUser) {
+        await verifyBeforeUpdateEmail(currentUser, email);
+        this.storageService.saveCurrentUser(currentUser);
+        this.errorCode = 'no error';
+      }
+    } catch (err: any) {
+      console.error(err);
+      this.errorCode = err.code;
+      throw err;
+    }
   }
 
-  async register() {
-    await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password)
-      .then(userCredential => {
-        if (userCredential.user != null) {
-          this.updateUserProfile({ photoURL: this.user.avatarPath, displayName: this.user.name, })
-            .then(() => { this.pipeRegisterData(userCredential) })
-        }
-      })
-      .catch((err) => {
-        this.errorCode = err.code;
-      });
+  async handleEmailUpdate(actionCode: string): Promise<void> {
+    try {
+      let restoredMail: string | null | undefined = null;
+      const info = await checkActionCode(this.auth, actionCode);
+      restoredMail = info.data.email;
+      await applyActionCode(this.auth, actionCode);
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
   }
 
-  pipeRegisterData(userCredential: UserCredential) {
-    this.updateStorages(userCredential)
-    sendEmailVerification(userCredential.user, this.actionCodeSettings);
-    this.signUpSuccessful = true;
-    setTimeout(() => {
-      this.router.navigateByUrl('board');
-    }, 1500);
+  async verifyEmail(actionCode: string): Promise<void> {
+    try {
+      await applyActionCode(this.auth, actionCode);
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async updateUserProfile(changes: {}): Promise<void> {
+    try {
+      if (this.auth.currentUser) {
+        await updateProfile(this.auth.currentUser, changes);
+        this.storageService.saveCurrentUser(this.auth.currentUser);
+      }
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async updateStorages(uc: UserCredential): Promise<void> {
+    try {
+      this.storageService.saveCurrentUser(uc.user);
+      await this.firestoreService.addUser(uc.user.uid, this.setNewUserObject(uc.user.uid));
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async register(): Promise<void> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password);
+      if (userCredential.user) {
+        await this.updateUserProfile({ photoURL: this.user.avatarPath, displayName: this.user.name });
+        await this.pipeRegisterData(userCredential);
+      }
+    } catch (err: any) {
+      console.error(err);
+      this.errorCode = err.code;
+      throw err;
+    }
+  }
+
+  pipeRegisterData(userCredential: UserCredential): void {
+    try {
+      this.updateStorages(userCredential);
+      sendEmailVerification(userCredential.user!, this.actionCodeSettings);
+      this.signUpSuccessful = true;
+      setTimeout(() => {
+        this.router.navigateByUrl('board');
+      }, 1500);
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
   }
 
   setNewUserObject(userId: string): CurrentUser {
     return {
       id: userId,
-      name: this.user.name,
-      email: this.user.email,
-      avatarPath: this.user.avatarPath,
-      loginState: "loggedOut",
+      name: this.user.name || '',
+      email: this.user.email || '',
+      avatarPath: this.user.avatarPath || '',
+      loginState: 'loggedOut',
       type: 'CurrentUser',
       notification: []
     };
   }
 
-  getCurrentUser() {
+  getCurrentUser(): any {
     return this.currentUser;
   }
 
-  async login(email: string, password: string) {
-    await signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        this.updateLoggedInUser(userCredential.user)
-        this.router.navigateByUrl('board');
-      })
-      .catch((err) => {
-        this.errorCode = err.code;
-      });
+  async login(email: string, password: string): Promise<void> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      this.updateLoggedInUser(userCredential.user);
+      this.router.navigateByUrl('board');
+    } catch (err: any) {
+      console.error(err);
+      this.errorCode = err.code;
+      throw err;
+    }
   }
 
-  findCurrentUser(user: any) {
-    let allUsers = this.firestoreService.userList;
-    let currentUser = allUsers.find(u => u.id == user.uid)
-    let currentUserAsUC = this.setCurrentUserObject(currentUser)
+  findCurrentUser(user: any): any {
+    const allUsers = this.firestoreService.userList;
+    const currentUser = allUsers.find((u: any) => u.id === user.uid);
+    const currentUserAsUC = this.setCurrentUserObject(currentUser);
     return currentUserAsUC;
   }
 
-  setCurrentUserObject(obj: any) {
+  setCurrentUserObject(obj: any): any {
     return {
       uid: obj.id,
       displayName: obj.name,
@@ -221,34 +252,35 @@ export class SignupService {
       loginState: obj.loginState,
       type: obj.type,
       notification: obj.notification
+    };
+  }
+
+  async guestLogin(): Promise<void> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678');
+      await this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' });
+      this.updateLoggedInUser(userCredential.user);
+      this.router.navigateByUrl('board');
+    } catch (err: any) {
+      console.error(err);
+      this.errorCode = err.code;
+      throw err;
     }
   }
 
-  async guestLogin() {
-    await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678')
-      .then((userCredential) => {
-        this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' })
-        .then(() => {
-          this.updateLoggedInUser(userCredential.user);
-          this.router.navigateByUrl('board');
-        })
-      })
-      .catch(err => {
-        this.errorCode = err.code;
-      })
+  updateLoggedInUser(user: any): void {
+    try {
+      const currentUser = this.findCurrentUser(user);
+      currentUser.loginState = 'loggedIn';
+      this.storageService.saveCurrentUser(currentUser);
+      this.firestoreService.updateUser(currentUser.uid, this.storageService.setCurrentUserObject(currentUser));
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
   }
 
-  updateLoggedInUser(user: any) {
-    let currentUser = this.findCurrentUser(user)
-          currentUser.loginState = 'loggedIn';
-          this.storageService.saveCurrentUser(currentUser);
-          this.firestoreService.updateUser(currentUser.uid, this.storageService.setCurrentUserObject(currentUser));
-  }
-
-
-
-
-  getLoggedInUser() {
+  getLoggedInUser(): void {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
         const uid = user.uid;
@@ -260,21 +292,14 @@ export class SignupService {
     });
   }
 
-  async logout() {
-    await signOut(this.auth)
-    .then(() => {
-      this.storageService.saveCurrentUser('')
+  async logout(): Promise<void> {
+    try {
+      await signOut(this.auth);
+      this.storageService.saveCurrentUser('');
       window.open('login', '_self');
-    });
-    // let currentUser = this.storageService.loadCurrentUser();
-    // currentUser.loginState = 'loggedOut';
-    // this.storageService.saveIntroPlayed(false)
-    // await this.firestoreService.updateUser(currentUser.id, currentUser)
-    //   .then(() => {
-    //     signOut(this.auth).then(() => {
-    //       this.storageService.saveCurrentUser('');
-    //       window.open('login', '_self');
-    //     })
-    //   })
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
   }
 }

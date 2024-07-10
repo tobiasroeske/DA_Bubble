@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 
@@ -20,11 +20,16 @@ export class SearchedUserPopUpComponent {
     this.boardServ.showUserPopUp = false;
   }
 
-  setChatWithSelectedUser(event: Event) {
+  async setChatWithSelectedUser(event: Event) {
     this.memberServ.currentMember = this.boardServ.userObjectPopUp;
-    this.memberServ.setChatRoom(event);
-    this.closeSearchedUserPopUp();
-    event.preventDefault();
+    try {
+      await this.memberServ.setChatRoom(event);
+      this.closeSearchedUserPopUp();
+      event.preventDefault();
+    } catch (error) {
+      console.error('Error setting chatroom', error)
+    }
+
   }
 
 }

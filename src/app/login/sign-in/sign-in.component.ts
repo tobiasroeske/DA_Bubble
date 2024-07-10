@@ -23,29 +23,46 @@ export class SignInComponent implements OnInit{
   errorMessage = false;
 
   ngOnInit(): void {
-    this.signupService.getRedirectIntel()
+    this.signupService.getRedirectIntel();
   }
 
-  async onSubmit(ngForm: NgForm) {
+  async onSubmit(ngForm: NgForm): Promise<void> {
     if (ngForm.submitted) {
-      let rawForm = ngForm.form.getRawValue()
-      await this.signupService.login(rawForm.email, rawForm.password)
+      const rawForm = ngForm.form.getRawValue();
+      try {
+        await this.signupService.login(rawForm.email, rawForm.password);
+        this.router.navigateByUrl('board');
+      } catch (err) {
+        console.error('Login error:', err);
+        this.errorMessage = true;
+      }
     }
   }
 
-  async guestLogin() {
-    await this.signupService.guestLogin();
-  }
-
-  async googleLogin() {
-    if (this.smallScreen) {
-      await this.signupService.googleLogin();
-    } else {
-      await this.signupService.googlePopupLogin();
+  async guestLogin(): Promise<void> {
+    try {
+      await this.signupService.guestLogin();
+      this.router.navigateByUrl('board');
+    } catch (err) {
+      console.error('Guest login error:', err);
     }
   }
 
-  forgotPassword() {
+  async googleLogin(): Promise<void> {
+    try {
+      if (this.smallScreen) {
+        await this.signupService.googleLogin();
+      } else {
+        await this.signupService.googlePopupLogin();
+      }
+      this.router.navigateByUrl('board');
+    } catch (err) {
+      console.error('Google login error:', err);
+    }
+  }
+
+  forgotPassword(): void {
     this.passwordForgotten.emit(true);
   }
+
 }

@@ -20,14 +20,18 @@ export class ForgotPasswordComponent {
   
   mail = '';
   
-  onSubmit(ngForm: NgForm) {
+  async onSubmit(ngForm: NgForm): Promise<void> {
     if (ngForm.form.valid && ngForm.submitted) {
-      this.authService.sendPasswordResetMail(this.mail)
-      .then(() => this.emailSent.emit(true))
+      try {
+        await this.authService.sendPasswordResetMail(this.mail);
+        this.emailSent.emit(true);
+      } catch (err) {
+        console.error('Error sending password reset email:', err);
+      }
     }
   }
 
-  gotBackToLogin() {
+  gotBackToLogin():void  {
     this.goBack.emit(false);
     this.emailSent.emit(false)
   }

@@ -23,18 +23,12 @@ export class RegisterComponent implements OnInit {
   smallScreen = false;
 
   @HostListener('window:resize', ['$event'])
-  handleResize(event:Event ) {
-    if (window.innerWidth <= 760) {
-      this.smallScreen = true;
-    } else {
-      this.smallScreen = false;
-    }
+  handleResize(event: Event) {
+    this.smallScreen = window.innerWidth <= 760;
   }
 
   ngOnInit(): void {
-    if (window.innerWidth <= 760) {
-      this.smallScreen = true;
-    }
+    this.smallScreen = window.innerWidth <= 760;
   }
 
   goToAvatarPicker($event: boolean) {
@@ -45,8 +39,12 @@ export class RegisterComponent implements OnInit {
     this.user = $event;
   }
 
-  async signup($event: boolean) {
-    await this.signupService.register()
-    .then(() => this.signupSuccessful = $event)
+  async signup($event: boolean): Promise<void> {
+    try {
+      await this.signupService.register();
+      this.signupSuccessful = $event;
+    } catch (error) {
+      console.error('Signup error:', error);
+    }
   }
 }

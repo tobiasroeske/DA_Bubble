@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren, ChangeDetectorRef } from '@angular/core';
-import { BoardService } from '../../board.service';
+import { BoardService } from '../../../shared/services/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { CommonModule } from '@angular/common';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
@@ -97,11 +97,11 @@ export class ChatMessageComponent implements OnInit {
     this.showFile = !this.showFile;
   }
 
-  editMessage(index: number) {
+  async editMessage(index: number) {
     this.chat.message = this.editedMessage!;
     this.currentChannel.chat!.splice(index, 1, this.chat);
-    this.firestore.updateChannel(this.currentChannel, this.channelId)
-      .then(() => this.editorOpen = false);
+    await this.firestore.updateChannel(this.currentChannel, this.channelId);
+    this.editorOpen = false
   }
 
   setCurrentMessage() {
@@ -113,8 +113,8 @@ export class ChatMessageComponent implements OnInit {
   async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
     let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
     this.currentChannel.chat!.splice(this.chatMessageIndex, 1, newChatMessage);
-    await this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!)
-      .then(() => this.getLastTwoReactions(emojiIdx, emojiArray));
+    await this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!);
+    this.getLastTwoReactions(emojiIdx, emojiArray);
   }
 
   checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {

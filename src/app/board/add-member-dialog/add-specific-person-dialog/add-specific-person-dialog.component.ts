@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, HostListener } from '@angular/core';
-import { BoardService } from '../../board.service';
+import { BoardService } from '../../../shared/services/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/models/channel.class';
@@ -78,10 +78,10 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     return this.selectedList.slice(0, 2);
   }
 
-  addNewMembersToChannel() {
+  async addNewMembersToChannel() {
     this.currentChannel.partecipantsIds = [];
-    this.selectedList.forEach((member: CurrentUser) => {
-      this.firestore.updateMembers(member, this.channelId);
+    this.selectedList.forEach(async (member: CurrentUser) => {
+      await this.firestore.updateMembers(member, this.channelId);
       if (member.id) {
         this.currentChannel.partecipantsIds.push(member.id);
       }
@@ -91,7 +91,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
         }
       })
     })
-    this.updateParticipants();
+    await this.updateParticipants();
     this.closeTheAddMembersDialogs();
   };
 
@@ -102,17 +102,17 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     })
   }
 
-  updateParticipants() {
+  async updateParticipants() {
     let updatedUsers = this.currentChannel.allUsers;
-    this.firestore.updateChannelUsers(updatedUsers, this.channelId);
+    await this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
-    this.addPartecipantsIds();
+    await this.addPartecipantsIds();
     this.memberServ.addSpecificPerson = false;
   }
 
-  addPartecipantsIds() {
-    this.currentChannel.partecipantsIds.forEach(id => {
-      this.firestore.updatePartecipantsIds(id, this.channelId)
+  async addPartecipantsIds() {
+    this.currentChannel.partecipantsIds.forEach(async (id) => {
+      await this.firestore.updatePartecipantsIds(id, this.channelId)
     })
   }
 

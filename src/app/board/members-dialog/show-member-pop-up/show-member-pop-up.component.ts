@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { BoardService } from '../../board.service';
+import { BoardService } from '../../../shared/services/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 

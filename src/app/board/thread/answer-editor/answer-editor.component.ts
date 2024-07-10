@@ -25,11 +25,15 @@ export class AnswerEditorComponent extends MessageEditorComponent implements OnI
     this.editedAnswer = this.answer.message;
   }
 
-  override editMessage(index: number):void {
+  override async editMessage(index: number): Promise<void> {
     this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
     this.answer.message = this.editedAnswer!;
-    this.firestore.updateChannel(this.currentChannel, this.currentChannel.id)
-    .then(() => this.closeEditor())
+    try {
+      await this.firestore.updateChannel(this.currentChannel, this.currentChannel.id);
+      this.closeEditor();
+    } catch (error) {
+      console.error('Error updating channel', error)
+    }
   }
   
 }

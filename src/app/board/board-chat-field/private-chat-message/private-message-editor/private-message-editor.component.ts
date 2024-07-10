@@ -18,9 +18,9 @@ export class PrivateMessageEditorComponent extends MessageEditorComponent {
     super();
   }
 
-  override editMessage(index:number) {
+  override async editMessage(index: number) {
     this.chat.message = this.editedMessage!;
     this.privateChat.chat.splice(index, 1, this.chat)
-    this.firestore.updateCompletePrivateMessage(this.privateChat.id!, this.privateChat)
+    await this.firestore.updateCompletePrivateMessage(this.privateChat.id!, this.privateChat)
   }
 }

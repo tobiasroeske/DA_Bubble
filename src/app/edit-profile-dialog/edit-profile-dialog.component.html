@@ -23,7 +23,7 @@
     </div>
     }
 
-    <form (ngSubmit)="onsubmit(editForm)" #editForm="ngForm">
+    <form (ngSubmit)="onSubmit(editForm)" #editForm="ngForm">
         <div class="input-container">
             <label for="name"><img src="assets/icons/name_edit_user.png">Vollständiger Name</label>
             <input type="text" id="name" name="name" [(ngModel)]="fullname" #name="ngModel">

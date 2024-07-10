@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
 import { SignupService } from '../../shared/services/signup/signup.service';
@@ -51,10 +51,15 @@ export class EditChannelDialogComponent {
       this.editName = "Speichern"
       this.inputDisabled = false;
     } else {
-      await this.onChannelUpdate(event);
-      this.editNameBtnClicked = false;
-      this.editName = "Bearbeiten";
-      this.inputDisabled = true;
+      try {
+        await this.onChannelUpdate(event);
+        this.editNameBtnClicked = false;
+        this.editName = "Bearbeiten";
+        this.inputDisabled = true;
+      } catch (error) {
+        console.error('Error updating Channel', error);
+      }
+
     }
   }
 
@@ -64,19 +69,30 @@ export class EditChannelDialogComponent {
       this.editDesc = "Speichern";
       this.textareaDisabled = false;
     } else {
-      await this.onChannelUpdate(event);
-      this.editDescriptionBtnClicked = false;
-      this.editDesc = "Bearbeiten";
-      this.textareaDisabled = true;
+      try {
+        await this.onChannelUpdate(event);
+        this.editDescriptionBtnClicked = false;
+        this.editDesc = "Bearbeiten";
+        this.textareaDisabled = true;
+      } catch (error) {
+        console.error('Error updating Channel', error);
+      }
+
+
     }
   }
 
   async onChannelUpdate(event: Event) {
-    if (this.leaveFromChannel) {
-      await this.updateChannelOnLeave(event);
-    } else {
-      await this.updateChannelWithNewData();
+    try {
+      if (this.leaveFromChannel) {
+        await this.updateChannelOnLeave(event);
+      } else {
+        await this.updateChannelWithNewData();
+      }
+    } catch (error) {
+      console.error('Error updating channel', error)
     }
+    
   }
 
   async updateChannelOnLeave(event: Event) {
@@ -89,11 +105,16 @@ export class EditChannelDialogComponent {
   }
 
   async updateChannelWithNewData() {
-    if (this.checkIfThisChannelAlreadyExist() === -1) {
-      await this.updateChannelWithNewTitleAndDescription();
-    } else {
-      this.channelAlreadyExist = true;
+    try {
+      if (this.checkIfThisChannelAlreadyExist() === -1) {
+        await this.updateChannelWithNewTitleAndDescription();
+      } else {
+        this.channelAlreadyExist = true;
+      }
+    } catch (error) {
+      console.error('Error updating channel with title and description', error)
     }
+    
   }
 
   async updateChannelWithNewTitleAndDescription() {

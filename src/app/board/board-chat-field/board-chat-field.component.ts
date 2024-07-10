@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
-import { BoardService } from '../board.service';
+import { BoardService } from '../../shared/services/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog.component';

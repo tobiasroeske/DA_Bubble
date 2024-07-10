@@ -3,15 +3,12 @@ import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { PrivateChat } from '../../models/privateChat.class';
 import { Channel } from '../../models/channel.class';
 import { FirestoreService } from '../firestore-service/firestore.service';
-import { BoardService } from '../../../board/board.service';
-import { User } from '../../models/user.class';
-import { ChatMessage } from '../../interfaces/chatMessage.interface';
-import { PrivateChatMessageComponent } from '../../../board/board-chat-field/private-chat-message/private-chat-message.component';
+import { BoardService } from '../board.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MemberDialogsService implements OnInit {
+export class MemberDialogsService {
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService)
 
@@ -21,18 +18,17 @@ export class MemberDialogsService implements OnInit {
   showMemberPopUpisOpen: boolean = false;
 
   privateChat = new PrivateChat();
-  currentChannel!: Channel;
-  name!: string;
-  avatarPath!: string;
-  email!: string;
-  currentMember!: CurrentUser;
-  guestId?: string;
-  creatorId?: string;
-  searchedUserPopUpId?: string;
+  currentChannel: Channel | undefined;
+  name = '';
+  avatarPath = '';
+  email = '';
+  currentMember: CurrentUser | undefined;
+  guestId: string | undefined;
+  creatorId: string | undefined;
+  searchedUserPopUpId: string | undefined;
 
 
-  ngOnInit() {
-  }
+ 
 
   toggleMembersDialog(event: Event) {
     this.membersDialogIsOpen = !this.membersDialogIsOpen;
@@ -71,10 +67,12 @@ export class MemberDialogsService implements OnInit {
 
   startNewChat(index: number) {
     this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    this.currentMember = this.currentChannel.members[index];
-    this.name = this.currentChannel.members[index].name;
-    this.avatarPath = this.currentChannel.members[index].avatarPath;
-    this.email = this.currentChannel.members[index].email;
+    if (this.currentChannel) {
+      this.currentMember = this.currentChannel.members[index];
+      this.name = this.currentChannel.members[index].name;
+      this.avatarPath = this.currentChannel.members[index].avatarPath;
+      this.email = this.currentChannel.members[index].email;
+    }
   }
 
   goToChat(index: number) {
@@ -84,14 +82,9 @@ export class MemberDialogsService implements OnInit {
     this.currentMember = this.firestore.directMessages[index].guest;
   }
 
-  checkMemberLoginState(member: CurrentUser) {
-    let allUsers = this.firestore.userList;
-    let user = allUsers.find(user => user.id == member.id);
-    if (user != undefined) {
-      return user.loginState
-    } else {
-      return null
-    }
+  checkMemberLoginState(member: CurrentUser): string | null {
+    const user = this.firestore.userList.find(user => user.id === member.id);
+    return user ? user.loginState : null;
   }
 
   async setChatRoom(event: Event) {
@@ -129,13 +122,14 @@ export class MemberDialogsService implements OnInit {
   }
 
   setThePrivateChatObject() {
-    this.privateChat.guest = this.currentMember;
-    this.privateChat.creator = this.boardServ.currentUser;
-    this.guestId = this.privateChat.guest.id;
-    this.creatorId = this.privateChat.creator.id;
-    if (this.guestId && this.creatorId) {
-      this.privateChat.partecipantsIds = [];
-      this.privateChat.partecipantsIds.push(this.guestId, this.creatorId)
+    if (this.currentMember && this.boardServ.currentUser) {
+      this.privateChat.guest = this.currentMember;
+      this.privateChat.creator = this.boardServ.currentUser;
+      this.guestId = this.privateChat.guest.id;
+      this.creatorId = this.privateChat.creator.id;
+      if (this.guestId && this.creatorId) {
+        this.privateChat.partecipantsIds = [this.guestId, this.creatorId];
+      }
     }
   }
 

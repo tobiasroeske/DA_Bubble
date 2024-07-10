@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { BoardService } from '../../board.service';
+import { BoardService } from '../../../shared/services/board.service';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { NotificationObj } from '../../../shared/models/notificationObj.class';

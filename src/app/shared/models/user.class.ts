@@ -1,6 +1,4 @@
 
-import { NotificationObj } from "./notificationObj.class";
-import { PrivateChat } from "./privateChat.class";
 
 export class User {
     id?: string;

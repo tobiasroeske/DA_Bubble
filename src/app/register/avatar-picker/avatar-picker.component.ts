@@ -29,7 +29,7 @@ export class AvatarPickerComponent implements OnInit {
     this.user = this.userData;
   }
 
-  async onFileChange(event: any) {
+  async onFileChange(event: any): Promise<void> {
     const file = event.target.files[0];
     if (file) {
       const path = `avatarImages/${file.name}`;
@@ -45,18 +45,18 @@ export class AvatarPickerComponent implements OnInit {
     }
   }
 
-  goBackToRegister() {
+  goBackToRegister(): void {
     this.goBack.emit(false)
     this.signupService.signUpSuccessful = false;
     this.signupService.errorCode = '';
   }
 
-  completeSignup() {
+  completeSignup(): void {
     this.signupService.user$.next(this.user);
     this.signUpSuccessful.emit(true);
   }
 
-  pickAvatar(i: number) {
+  pickAvatar(i: number): void {
     this.user.avatarPath = this.avatars[i];
     this.avatarImgPath = this.avatars[i];
     this.avatarPicked = true;

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { BoardService } from '../board/board.service';
+import { BoardService } from '../shared/services/board.service';
 
 @Component({
   selector: 'app-show-profile-dialog',

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Channel } from '../../../shared/models/channel.class';
-import { BoardService } from '../../board.service';
+import { BoardService } from '../../../shared/services/board.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../shared/models/user.class';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
@@ -48,10 +48,10 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
     this.boardServ.scrollToBottom(this.boardServ.threadRef);
   }
 
-  updateAllChannels(emojiIdx: number) {
+  async updateAllChannels(emojiIdx: number) {
     let newAnswer = this.checkIfReactionExists(emojiIdx);
     this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage)
-    this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
+    await this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
   }
 
   toggleMessageEditor() {
