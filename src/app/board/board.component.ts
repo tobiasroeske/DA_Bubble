@@ -11,10 +11,8 @@ import { MembersDialogComponent } from './members-dialog/members-dialog.componen
 import { SignupService } from '../shared/services/signup/signup.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../shared/services/board-service/board.service';
-import { Auth, User } from '@angular/fire/auth';
 import { IdleService } from '../shared/services/idle-service/idle.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
-import { interval, throttle } from 'rxjs';
 import { ShowChatParterPopUpComponent } from './show-chat-parter-pop-up/show-chat-parter-pop-up.component';
 import { SearchedUserPopUpComponent } from './searched-user-pop-up/searched-user-pop-up.component';
 
@@ -61,6 +59,7 @@ export class BoardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.boardServ.checkScreenSize();
     this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
     this.idleUserService.userInactive.subscribe(isIdle => {
       if (isIdle) {
