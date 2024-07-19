@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
