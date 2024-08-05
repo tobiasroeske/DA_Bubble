@@ -2,6 +2,12 @@
 
 // media queries
 
+@media (max-width: 1200px) {
+  .message-container > .message {
+    max-width: 400px;
+  }
+}
+
 @media (max-width: 1100px) {
   .message-box {
     padding: 10px 25px 10px 40px;
@@ -66,6 +72,12 @@
   }
 }
 
+@media (max-width: 930px) {
+  .message-container > .message {
+      max-width: 280px;
+  }
+}
+
 @media (max-width: 690px) {
   .file-popup .img-container {
     width: 75%;
@@ -80,6 +92,10 @@
     >.avatar-photo {
       width: 40px;
       height: 40px;
+    }
+
+    .message-container >.message {
+      max-width: 200px;
     }
   }
 

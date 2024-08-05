@@ -11,7 +11,7 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
 })
-export class SignInComponent implements OnInit{
+export class SignInComponent implements OnInit {
   @Input() smallScreen!: boolean;
   @Output() passwordForgotten = new EventEmitter<boolean>();
 
@@ -50,11 +50,7 @@ export class SignInComponent implements OnInit{
 
   async googleLogin(): Promise<void> {
     try {
-      if (this.smallScreen) {
-        await this.signupService.googleLogin();
-      } else {
-        await this.signupService.googlePopupLogin();
-      }
+      await this.signupService.googlePopupLogin();
       this.router.navigateByUrl('board');
     } catch (err) {
       console.error('Google login error:', err);

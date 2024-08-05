@@ -161,7 +161,7 @@ export class CreateMessageAreaComponent {
       // Handle error as needed
     }
   }
-  
+
 
   async deleteFile(): Promise<void> {
     try {
@@ -215,6 +215,7 @@ export class CreateMessageAreaComponent {
   }
 
   async sendMessage() {
+    debugger
     if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       try {
         let date = new Date().getTime();
@@ -229,11 +230,10 @@ export class CreateMessageAreaComponent {
               this.localStorageServ.saveCurrentUser(this.boardService.currentUser);
             }
             await this.firestoreService.updateUserNotification(this.member.id, this.notificationObject.toJSON());
-            this.resetTextArea();
-            this.boardService.scrollToBottom(this.boardService.chatFieldRef);
           }
         }
-        this.textMessage = "";
+        this.resetTextArea();
+        this.boardService.scrollToBottom(this.boardService.chatFieldRef);
       } catch (error) {
         console.error('Error sending message:', error);
       }

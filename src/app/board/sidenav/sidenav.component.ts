@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './sidenav.component.scss',
   imports: [CommonModule, SearchDialogComponent, FormsModule]
 })
+
 export class SidenavComponent {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);

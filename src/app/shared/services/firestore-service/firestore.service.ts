@@ -132,10 +132,13 @@ export class FirestoreService {
   }
 
   subChannelList(): Unsubscribe {
+    console.log('current user id firestore service is ', this.currentUserId)
     const q = query(this.getChannelsRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
     return onSnapshot(q, (list) => {
       this.allChannels = [];
       list.forEach((el) => {
+        console.log(el.data());
+        
         let channel = new Channel(el.data());
         channel.id = el.id;
         this.allChannels.push(channel.toJSON());

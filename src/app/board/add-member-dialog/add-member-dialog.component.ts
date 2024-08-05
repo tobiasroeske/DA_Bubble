@@ -52,14 +52,18 @@ export class AddMemberDialogComponent {
     this.currentChannel.partecipantsIds = [];
     this.allUsers.forEach(user => {
       this.currentChannel.members.push(user);
-    });
-    this.currentChannel.members.forEach(async (members) => {
-      await this.firestore.updateMembers(members, this.currentChannelId);
-      if (members.id) {
-        this.currentChannel.partecipantsIds.push(members.id)
+      if (user.id) {
+        this.currentChannel.partecipantsIds.push(user.id)
       }
     });
-    this.addIdsToPartecipantsIds();
+    await this.firestore.updateChannel(this.currentChannel, this.currentChannelId);
+    // this.currentChannel.members.forEach(async (members) => {
+    //   await this.firestore.updateMembers(members, this.currentChannelId);
+    //   if (members.id) {
+    //     this.currentChannel.partecipantsIds.push(members.id)
+    //   }
+    // });
+    // this.addIdsToPartecipantsIds();
   }
 
   addIdsToPartecipantsIds() {
