@@ -227,6 +227,7 @@ export class BoardService {
     this.storageService.saveCurrentChannelIndex(this.idx);
     this.privateChatIsStarted = false;
     this.newMessageInputOpen = false;
+    this.scrollToBottom(this.chatFieldRef);
     this.hideSideNav();
     event.preventDefault();
   }

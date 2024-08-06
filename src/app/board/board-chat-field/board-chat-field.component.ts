@@ -9,9 +9,7 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { ShowMemberPopUpComponent } from '../members-dialog/show-member-pop-up/show-member-pop-up.component';
 import { CreatePrivateMessageAreaComponent } from '../create-private-message-area/create-private-message-area.component';
 import { PrivateChatMessageComponent } from './private-chat-message/private-chat-message.component';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
-import { Subscription } from 'rxjs';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 import { PrivateChat } from '../../shared/models/privateChat.class';
 import { NewMessageComponent } from './new-message/new-message.component';
@@ -51,11 +49,8 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   }
 
   scrollToBotom() {
-    try {
       this.chatField.nativeElement.scrollTo(0, this.chatField.nativeElement.scrollHeight);
-    } catch (err) {
-      console.error(err);
-    }
+
   }
 
   onHover(htmlElement: string) {
