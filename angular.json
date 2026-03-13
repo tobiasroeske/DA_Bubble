@@ -30,8 +30,12 @@
               "src/assets",
               "src/.htaccess"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "styles": [
-              "src/styles.scss"
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -101,8 +105,12 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "styles": [
-              "src/styles.scss"
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+              "src/styles.css"
             ],
             "scripts": []
           }

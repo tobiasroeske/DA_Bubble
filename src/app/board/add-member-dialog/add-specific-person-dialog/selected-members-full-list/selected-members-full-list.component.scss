@@ -1,4 +1,4 @@
-@import '../../../../../styles.scss';
+@use 'variables' as *;
 
 .selected-members-full-list {
     @include d-flex($fd: column, $jc: flex-start, $ai: flex-start, $g: 20px);

@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use 'variables' as *;
 
 div {
   @include d-flex($jc: space-between);

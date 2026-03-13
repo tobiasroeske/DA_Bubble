@@ -1,4 +1,4 @@
-@import '../../../styles.scss';
+@use 'variables' as *;
 
 .chat-field-header {
     @include d-flex($jc: space-between, $g: 10px);
