@@ -7,11 +7,10 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
-  selector: 'app-message-editor',
-  standalone: true,
-  imports: [FormsModule, PickerComponent],
-  templateUrl: './message-editor.component.html',
-  styleUrl: './message-editor.component.scss'
+    selector: 'app-message-editor',
+    imports: [FormsModule, PickerComponent],
+    templateUrl: './message-editor.component.html',
+    styleUrl: './message-editor.component.scss'
 })
 export class MessageEditorComponent implements OnInit {
   @Input() chatMessageIndex!: number;

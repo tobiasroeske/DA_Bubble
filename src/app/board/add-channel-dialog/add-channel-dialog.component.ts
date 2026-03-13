@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { Channel } from '../../shared/models/channel.class';
@@ -9,11 +9,10 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-  selector: 'app-add-channel-dialog',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './add-channel-dialog.component.html',
-  styleUrl: './add-channel-dialog.component.scss'
+    selector: 'app-add-channel-dialog',
+    imports: [FormsModule],
+    templateUrl: './add-channel-dialog.component.html',
+    styleUrl: './add-channel-dialog.component.scss'
 })
 export class AddChannelDialogComponent {
   boardServ = inject(BoardService);

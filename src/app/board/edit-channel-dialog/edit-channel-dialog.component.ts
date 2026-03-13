@@ -11,11 +11,10 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { AddSpecificPersonDialogComponent } from '../add-member-dialog/add-specific-person-dialog/add-specific-person-dialog.component';
 import { AddSpecificPersonDialogMobileComponent } from '../add-member-dialog/add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
-  selector: 'app-edit-channel-dialog',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MembersDialogComponent, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
-  templateUrl: './edit-channel-dialog.component.html',
-  styleUrl: './edit-channel-dialog.component.scss'
+    selector: 'app-edit-channel-dialog',
+    imports: [CommonModule, FormsModule, MembersDialogComponent, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
+    templateUrl: './edit-channel-dialog.component.html',
+    styleUrl: './edit-channel-dialog.component.scss'
 })
 export class EditChannelDialogComponent {
   boardServ = inject(BoardService);

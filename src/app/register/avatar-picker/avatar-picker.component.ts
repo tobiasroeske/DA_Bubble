@@ -6,11 +6,10 @@ import { FirebaseStorageService } from '../../shared/services/firebase-storage-s
 
 
 @Component({
-  selector: 'app-avatar-picker',
-  standalone: true,
-  imports: [RouterLink],
-  templateUrl: './avatar-picker.component.html',
-  styleUrl: './avatar-picker.component.scss'
+    selector: 'app-avatar-picker',
+    imports: [RouterLink],
+    templateUrl: './avatar-picker.component.html',
+    styleUrl: './avatar-picker.component.scss'
 })
 export class AvatarPickerComponent implements OnInit {
   @Input() userData!: User;

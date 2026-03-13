@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { BoardService } from '../shared/services/board-service/board.service';
 import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
@@ -11,11 +11,10 @@ import { Channel } from '../shared/models/channel.class';
 import { PrivateChat } from '../shared/models/privateChat.class';
 
 @Component({
-  selector: 'app-edit-profile-dialog',
-  standalone: true,
-  imports: [FormsModule, CommonModule],
-  templateUrl: './edit-profile-dialog.component.html',
-  styleUrl: './edit-profile-dialog.component.scss'
+    selector: 'app-edit-profile-dialog',
+    imports: [FormsModule],
+    templateUrl: './edit-profile-dialog.component.html',
+    styleUrl: './edit-profile-dialog.component.scss'
 })
 export class EditProfileDialogComponent {
   @Output() editorOpen = new EventEmitter<boolean>();

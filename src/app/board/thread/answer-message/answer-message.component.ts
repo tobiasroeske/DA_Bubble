@@ -10,11 +10,10 @@ import { AnswerEditorComponent } from '../answer-editor/answer-editor.component'
 
 
 @Component({
-  selector: 'app-answer-message',
-  standalone: true,
-  imports: [CommonModule, AnswerEditorComponent],
-  templateUrl: './answer-message.component.html',
-  styleUrl: './answer-message.component.scss'
+    selector: 'app-answer-message',
+    imports: [CommonModule, AnswerEditorComponent],
+    templateUrl: './answer-message.component.html',
+    styleUrl: './answer-message.component.scss'
 })
 export class AnswerMessageComponent implements OnInit, AfterViewInit {
   firestoreService = inject(FirestoreService)

@@ -16,11 +16,10 @@ import { NewMessageComponent } from './new-message/new-message.component';
 
 
 @Component({
-  selector: 'app-board-chat-field',
-  standalone: true,
-  imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent, ChatMessageComponent, ShowMemberPopUpComponent, CreatePrivateMessageAreaComponent, PrivateChatMessageComponent, NewMessageComponent],
-  templateUrl: './board-chat-field.component.html',
-  styleUrls: ['./board-chat-field.component.scss', './board-chat-field-media-queries.compoenent.scss']
+    selector: 'app-board-chat-field',
+    imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent, ChatMessageComponent, ShowMemberPopUpComponent, CreatePrivateMessageAreaComponent, PrivateChatMessageComponent, NewMessageComponent],
+    templateUrl: './board-chat-field.component.html',
+    styleUrls: ['./board-chat-field.component.scss', './board-chat-field-media-queries.compoenent.scss']
 })
 export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   @ViewChild('chatMessageArea') chatField!: ElementRef;

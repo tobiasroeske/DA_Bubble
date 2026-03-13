@@ -6,11 +6,10 @@ import { SearchDialogComponent } from "../board-toolbar/search-dialog/search-dia
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-sidenav',
-  standalone: true,
-  templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.scss',
-  imports: [CommonModule, SearchDialogComponent, FormsModule]
+    selector: 'app-sidenav',
+    templateUrl: './sidenav.component.html',
+    styleUrl: './sidenav.component.scss',
+    imports: [CommonModule, SearchDialogComponent, FormsModule]
 })
 
 export class SidenavComponent {

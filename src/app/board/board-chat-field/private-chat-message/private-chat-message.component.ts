@@ -7,11 +7,10 @@ import { PrivateMessageEditorComponent } from './private-message-editor/private-
 import { LocalStorageService } from '../../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-  selector: 'app-private-chat-message',
-  standalone: true,
-  imports: [CommonModule, PrivateMessageEditorComponent],
-  templateUrl: './private-chat-message.component.html',
-  styleUrls: ['./private-chat-message.component.scss', './private-chat-media-queries.component.scss']
+    selector: 'app-private-chat-message',
+    imports: [CommonModule, PrivateMessageEditorComponent],
+    templateUrl: './private-chat-message.component.html',
+    styleUrls: ['./private-chat-message.component.scss', './private-chat-media-queries.component.scss']
 })
 export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewChecked, OnDestroy {
   @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;

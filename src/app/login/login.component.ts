@@ -6,11 +6,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, SignInComponent, ForgotPasswordComponent],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [CommonModule, FormsModule, SignInComponent, ForgotPasswordComponent],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
   localStorageService = inject(LocalStorageService)

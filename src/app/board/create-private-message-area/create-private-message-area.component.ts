@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
@@ -11,11 +11,10 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivateChat } from '../../shared/models/privateChat.class';
 
 @Component({
-  selector: 'app-create-private-message-area',
-  standalone: true,
-  imports: [CommonModule, FormsModule, PickerComponent],
-  templateUrl: './create-private-message-area.component.html',
-  styleUrl: './create-private-message-area.component.scss'
+    selector: 'app-create-private-message-area',
+    imports: [FormsModule, PickerComponent],
+    templateUrl: './create-private-message-area.component.html',
+    styleUrl: './create-private-message-area.component.scss'
 })
 
 export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponent implements OnInit {

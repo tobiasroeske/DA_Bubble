@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, inject, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
@@ -12,11 +12,10 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 type SearchItem = CurrentUser | PrivateChat | Channel | ChatMessage;
 
 @Component({
-  selector: 'app-search-dialog',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './search-dialog.component.html',
-  styleUrl: './search-dialog.component.scss'
+    selector: 'app-search-dialog',
+    imports: [],
+    templateUrl: './search-dialog.component.html',
+    styleUrl: './search-dialog.component.scss'
 })
 export class SearchDialogComponent implements OnChanges {
   @Input() searchValue!: string;

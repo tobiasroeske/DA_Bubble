@@ -1,15 +1,14 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
-  selector: 'app-searched-user-pop-up',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './searched-user-pop-up.component.html',
-  styleUrl: './searched-user-pop-up.component.scss'
+    selector: 'app-searched-user-pop-up',
+    imports: [],
+    templateUrl: './searched-user-pop-up.component.html',
+    styleUrl: './searched-user-pop-up.component.scss'
 })
 export class SearchedUserPopUpComponent {
   boardServ = inject(BoardService);

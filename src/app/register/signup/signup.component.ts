@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../shared/models/user.class';
@@ -6,11 +6,10 @@ import { RouterLink } from '@angular/router';
 import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
-  selector: 'app-signup',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+    selector: 'app-signup',
+    imports: [FormsModule, RouterLink],
+    templateUrl: './signup.component.html',
+    styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
   @Output() showNextPage = new EventEmitter<boolean>();
