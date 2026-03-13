@@ -11,11 +11,10 @@ import { Channel } from '../../../shared/models/channel.class';
 
 
 @Component({
-  selector: 'app-chat-message',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MessageEditorComponent],
-  templateUrl: './chat-message.component.html',
-  styleUrls: ['./chat-message.component.scss', './chat-message-media-queries.component.scss', 'chat-message-textarea-elements.component.scss']
+    selector: 'app-chat-message',
+    imports: [CommonModule, FormsModule, MessageEditorComponent],
+    templateUrl: './chat-message.component.html',
+    styleUrls: ['./chat-message.component.scss', './chat-message-media-queries.component.scss', 'chat-message-textarea-elements.component.scss']
 })
 
 export class ChatMessageComponent implements OnInit {

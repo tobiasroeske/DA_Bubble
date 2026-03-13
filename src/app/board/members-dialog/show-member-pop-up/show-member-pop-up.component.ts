@@ -5,11 +5,10 @@ import { FirestoreService } from '../../../shared/services/firestore-service/fir
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
-  selector: 'app-show-member-pop-up',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './show-member-pop-up.component.html',
-  styleUrl: './show-member-pop-up.component.scss'
+    selector: 'app-show-member-pop-up',
+    imports: [CommonModule],
+    templateUrl: './show-member-pop-up.component.html',
+    styleUrl: './show-member-pop-up.component.scss'
 })
 export class ShowMemberPopUpComponent {
   boardServ = inject(BoardService);

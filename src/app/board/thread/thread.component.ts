@@ -6,11 +6,10 @@ import { Channel } from '../../shared/models/channel.class';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { AnswerMessageComponent } from './answer-message/answer-message.component';
 @Component({
-  selector: 'app-thread',
-  standalone: true,
-  imports: [CommonModule, CreateMessageAreaThreadComponent, AnswerMessageComponent],
-  templateUrl: './thread.component.html',
-  styleUrl: './thread.component.scss'
+    selector: 'app-thread',
+    imports: [CommonModule, CreateMessageAreaThreadComponent, AnswerMessageComponent],
+    templateUrl: './thread.component.html',
+    styleUrl: './thread.component.scss'
 })
 export class ThreadComponent implements AfterViewInit{
   @Input() currentChannel?: Channel

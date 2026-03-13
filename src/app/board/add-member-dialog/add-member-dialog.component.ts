@@ -9,11 +9,10 @@ import { Channel } from '../../shared/models/channel.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { AddSpecificPersonDialogMobileComponent } from './add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
-  selector: 'app-add-member-dialog',
-  standalone: true,
-  imports: [CommonModule, FormsModule, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
-  templateUrl: './add-member-dialog.component.html',
-  styleUrl: './add-member-dialog.component.scss'
+    selector: 'app-add-member-dialog',
+    imports: [CommonModule, FormsModule, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
+    templateUrl: './add-member-dialog.component.html',
+    styleUrl: './add-member-dialog.component.scss'
 })
 export class AddMemberDialogComponent {
   @Input() currentChannel!: Channel;

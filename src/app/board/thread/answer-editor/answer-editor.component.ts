@@ -5,11 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
 @Component({
-  selector: 'app-answer-editor',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './answer-editor.component.html',
-  styleUrl: './answer-editor.component.scss'
+    selector: 'app-answer-editor',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './answer-editor.component.html',
+    styleUrl: './answer-editor.component.scss'
 })
 export class AnswerEditorComponent extends MessageEditorComponent implements OnInit{
   @Input() answer!: ChatMessage;

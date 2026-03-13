@@ -13,11 +13,10 @@ import { NotificationObj } from '../../shared/models/notificationObj.class';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-  selector: 'app-board-toolbar',
-  standalone: true,
-  templateUrl: './board-toolbar.component.html',
-  styleUrl: './board-toolbar.component.scss',
-  imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule, NotificationsComponent]
+    selector: 'app-board-toolbar',
+    templateUrl: './board-toolbar.component.html',
+    styleUrl: './board-toolbar.component.scss',
+    imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule, NotificationsComponent]
 })
 export class BoardToolbarComponent {
   authService = inject(SignupService);

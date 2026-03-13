@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
 import { PrivateChat } from '../../../../shared/models/privateChat.class';
 
 @Component({
-  selector: 'app-private-message-editor',
-  standalone: true,
-  imports: [FormsModule, CommonModule],
-  templateUrl: './private-message-editor.component.html',
-  styleUrl: './private-message-editor.component.scss'
+    selector: 'app-private-message-editor',
+    imports: [FormsModule, CommonModule],
+    templateUrl: './private-message-editor.component.html',
+    styleUrl: './private-message-editor.component.scss'
 })
 export class PrivateMessageEditorComponent extends MessageEditorComponent {
   @Input() privateChat!: PrivateChat;

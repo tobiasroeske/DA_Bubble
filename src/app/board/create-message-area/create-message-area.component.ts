@@ -14,11 +14,10 @@ import { LocalStorageService } from '../../shared/services/local-storage-service
 
 
 @Component({
-  selector: 'app-create-message-area',
-  standalone: true,
-  imports: [CommonModule, FormsModule, PickerComponent],
-  templateUrl: './create-message-area.component.html',
-  styleUrl: './create-message-area.component.scss'
+    selector: 'app-create-message-area',
+    imports: [CommonModule, FormsModule, PickerComponent],
+    templateUrl: './create-message-area.component.html',
+    styleUrl: './create-message-area.component.scss'
 })
 export class CreateMessageAreaComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;

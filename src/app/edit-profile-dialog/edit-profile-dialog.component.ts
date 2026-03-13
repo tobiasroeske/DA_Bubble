@@ -11,11 +11,10 @@ import { Channel } from '../shared/models/channel.class';
 import { PrivateChat } from '../shared/models/privateChat.class';
 
 @Component({
-  selector: 'app-edit-profile-dialog',
-  standalone: true,
-  imports: [FormsModule, CommonModule],
-  templateUrl: './edit-profile-dialog.component.html',
-  styleUrl: './edit-profile-dialog.component.scss'
+    selector: 'app-edit-profile-dialog',
+    imports: [FormsModule, CommonModule],
+    templateUrl: './edit-profile-dialog.component.html',
+    styleUrl: './edit-profile-dialog.component.scss'
 })
 export class EditProfileDialogComponent {
   @Output() editorOpen = new EventEmitter<boolean>();

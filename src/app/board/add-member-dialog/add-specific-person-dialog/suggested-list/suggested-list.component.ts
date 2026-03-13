@@ -7,11 +7,10 @@ interface SuggestedUser {
 }
 
 @Component({
-  selector: 'app-suggested-list',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './suggested-list.component.html',
-  styleUrl: './suggested-list.component.scss'
+    selector: 'app-suggested-list',
+    imports: [CommonModule],
+    templateUrl: './suggested-list.component.html',
+    styleUrl: './suggested-list.component.scss'
 })
 export class SuggestedListComponent {
   @Input() filteredUsersListFromParent?: SuggestedUser[];

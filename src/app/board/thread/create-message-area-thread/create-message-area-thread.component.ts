@@ -8,11 +8,10 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 
 @Component({
-  selector: 'app-create-message-area-thread',
-  standalone: true,
-  imports: [CommonModule, FormsModule, PickerComponent],
-  templateUrl: './create-message-area-thread.component.html',
-  styleUrl: './create-message-area-thread.component.scss'
+    selector: 'app-create-message-area-thread',
+    imports: [CommonModule, FormsModule, PickerComponent],
+    templateUrl: './create-message-area-thread.component.html',
+    styleUrl: './create-message-area-thread.component.scss'
 })
 export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent {
   @Input() currentChatMessage?: ChatMessage;

@@ -7,11 +7,10 @@ import { SelectedMembersFullListComponent } from '../add-specific-person-dialog/
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-add-specific-person-dialog-mobile',
-  standalone: true,
-  imports: [CommonModule, FirstTwoSelectedMembersComponent, SuggestedListComponent, SelectedMembersFullListComponent, FormsModule],
-  templateUrl: './add-specific-person-dialog-mobile.component.html',
-  styleUrls: ['./add-specific-person-dialog-mobile.component.scss', './add-specific-person-dialog-mobile.component.scss']
+    selector: 'app-add-specific-person-dialog-mobile',
+    imports: [CommonModule, FirstTwoSelectedMembersComponent, SuggestedListComponent, SelectedMembersFullListComponent, FormsModule],
+    templateUrl: './add-specific-person-dialog-mobile.component.html',
+    styleUrls: ['./add-specific-person-dialog-mobile.component.scss', './add-specific-person-dialog-mobile.component.scss']
 })
 export class AddSpecificPersonDialogMobileComponent extends AddSpecificPersonDialogComponent {
   constructor() {

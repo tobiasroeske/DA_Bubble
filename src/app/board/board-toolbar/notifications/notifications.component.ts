@@ -10,11 +10,10 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
 
 @Component({
-  selector: 'app-notifications',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.scss'
+    selector: 'app-notifications',
+    imports: [CommonModule],
+    templateUrl: './notifications.component.html',
+    styleUrl: './notifications.component.scss'
 })
 export class NotificationsComponent {
   @Output() notificationsOpen = new EventEmitter<boolean>();

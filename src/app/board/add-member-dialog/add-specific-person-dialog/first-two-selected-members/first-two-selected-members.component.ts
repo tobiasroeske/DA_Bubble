@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { CurrentUser } from '../../../../shared/interfaces/currentUser.interface';
 
 @Component({
-  selector: 'app-first-two-selected-members',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './first-two-selected-members.component.html',
-  styleUrl: './first-two-selected-members.component.scss'
+    selector: 'app-first-two-selected-members',
+    imports: [CommonModule],
+    templateUrl: './first-two-selected-members.component.html',
+    styleUrl: './first-two-selected-members.component.scss'
 })
 export class FirstTwoSelectedMembersComponent {
   @Input() selectedList?: CurrentUser[];

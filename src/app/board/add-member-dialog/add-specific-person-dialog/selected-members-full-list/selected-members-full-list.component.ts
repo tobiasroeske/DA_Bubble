@@ -6,11 +6,10 @@ interface SelectedMember {
   avatarPath: string;
 }
 @Component({
-  selector: 'app-selected-members-full-list',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './selected-members-full-list.component.html',
-  styleUrl: './selected-members-full-list.component.scss'
+    selector: 'app-selected-members-full-list',
+    imports: [CommonModule],
+    templateUrl: './selected-members-full-list.component.html',
+    styleUrl: './selected-members-full-list.component.scss'
 })
 export class SelectedMembersFullListComponent {
   @Input() selectedListFromParent?: SelectedMember[];

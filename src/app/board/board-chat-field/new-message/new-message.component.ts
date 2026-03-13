@@ -10,11 +10,10 @@ import { FirestoreService } from '../../../shared/services/firestore-service/fir
 
 
 @Component({
-  selector: 'app-new-message',
-  standalone: true,
-  imports: [FormsModule, CommonModule],
-  templateUrl: './new-message.component.html',
-  styleUrl: './new-message.component.scss'
+    selector: 'app-new-message',
+    imports: [FormsModule, CommonModule],
+    templateUrl: './new-message.component.html',
+    styleUrl: './new-message.component.scss'
 })
 export class NewMessageComponent implements AfterViewInit{
   @Input() users!: CurrentUser[];

@@ -10,11 +10,10 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
-  selector: 'app-members-dialog',
-  standalone: true,
-  imports: [CommonModule, ShowMemberPopUpComponent],
-  templateUrl: './members-dialog.component.html',
-  styleUrl: './members-dialog.component.scss'
+    selector: 'app-members-dialog',
+    imports: [CommonModule, ShowMemberPopUpComponent],
+    templateUrl: './members-dialog.component.html',
+    styleUrl: './members-dialog.component.scss'
 })
 export class MembersDialogComponent implements OnInit {
   @Input() dialog!: boolean;

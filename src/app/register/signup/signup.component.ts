@@ -6,11 +6,10 @@ import { RouterLink } from '@angular/router';
 import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
-  selector: 'app-signup',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+    selector: 'app-signup',
+    imports: [CommonModule, FormsModule, RouterLink],
+    templateUrl: './signup.component.html',
+    styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
   @Output() showNextPage = new EventEmitter<boolean>();

@@ -12,11 +12,10 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 type SearchItem = CurrentUser | PrivateChat | Channel | ChatMessage;
 
 @Component({
-  selector: 'app-search-dialog',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './search-dialog.component.html',
-  styleUrl: './search-dialog.component.scss'
+    selector: 'app-search-dialog',
+    imports: [CommonModule],
+    templateUrl: './search-dialog.component.html',
+    styleUrl: './search-dialog.component.scss'
 })
 export class SearchDialogComponent implements OnChanges {
   @Input() searchValue!: string;

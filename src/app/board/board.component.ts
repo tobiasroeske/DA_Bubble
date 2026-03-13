@@ -17,11 +17,10 @@ import { ShowChatParterPopUpComponent } from './show-chat-parter-pop-up/show-cha
 import { SearchedUserPopUpComponent } from './searched-user-pop-up/searched-user-pop-up.component';
 
 @Component({
-  selector: 'app-board',
-  standalone: true,
-  imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent, ShowChatParterPopUpComponent, SearchedUserPopUpComponent],
-  templateUrl: './board.component.html',
-  styleUrl: './board.component.scss'
+    selector: 'app-board',
+    imports: [CommonModule, BoardToolbarComponent, SidenavComponent, BoardChatFieldComponent, CreateMessageAreaComponent, ThreadComponent, AddChannelDialogComponent, EditChannelDialogComponent, MembersDialogComponent, ShowChatParterPopUpComponent, SearchedUserPopUpComponent],
+    templateUrl: './board.component.html',
+    styleUrl: './board.component.scss'
 })
 export class BoardComponent implements OnInit {
   firestore = inject(FirestoreService);

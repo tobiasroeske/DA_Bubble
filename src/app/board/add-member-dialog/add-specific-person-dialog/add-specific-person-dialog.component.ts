@@ -12,11 +12,10 @@ import { FirstTwoSelectedMembersComponent } from './first-two-selected-members/f
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
-  selector: 'app-add-specific-person-dialog',
-  standalone: true,
-  imports: [CommonModule, FormsModule, SelectedMembersFullListComponent, SuggestedListComponent, FirstTwoSelectedMembersComponent],
-  templateUrl: './add-specific-person-dialog.component.html',
-  styleUrl: './add-specific-person-dialog.component.scss'
+    selector: 'app-add-specific-person-dialog',
+    imports: [CommonModule, FormsModule, SelectedMembersFullListComponent, SuggestedListComponent, FirstTwoSelectedMembersComponent],
+    templateUrl: './add-specific-person-dialog.component.html',
+    styleUrl: './add-specific-person-dialog.component.scss'
 })
 
 

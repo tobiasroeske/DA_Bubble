@@ -7,11 +7,10 @@ import { SignupService } from '../shared/services/signup/signup.service';
 
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [SignupComponent, AvatarPickerComponent],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+    selector: 'app-register',
+    imports: [SignupComponent, AvatarPickerComponent],
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
   router = inject(Router)
