@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../shared/models/user.class';
@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-forgot-password',
-    imports: [CommonModule, FormsModule, RouterLink],
+    imports: [FormsModule, RouterLink],
     templateUrl: './forgot-password.component.html',
     styleUrl: './forgot-password.component.scss'
 })

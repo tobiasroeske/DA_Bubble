@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../../shared/services/board-service/board.service';
@@ -11,7 +11,7 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
     selector: 'app-members-dialog',
-    imports: [CommonModule, ShowMemberPopUpComponent],
+    imports: [ShowMemberPopUpComponent],
     templateUrl: './members-dialog.component.html',
     styleUrl: './members-dialog.component.scss'
 })

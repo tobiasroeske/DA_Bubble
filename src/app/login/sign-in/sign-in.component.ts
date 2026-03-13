@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-sign-in',
-    imports: [FormsModule, CommonModule, RouterLink],
+    imports: [FormsModule, RouterLink],
     templateUrl: './sign-in.component.html',
     styleUrl: './sign-in.component.scss'
 })

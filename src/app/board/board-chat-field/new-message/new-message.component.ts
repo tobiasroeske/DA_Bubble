@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { AfterViewInit, Component, HostListener, Input, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
@@ -11,7 +11,7 @@ import { FirestoreService } from '../../../shared/services/firestore-service/fir
 
 @Component({
     selector: 'app-new-message',
-    imports: [FormsModule, CommonModule],
+    imports: [FormsModule],
     templateUrl: './new-message.component.html',
     styleUrl: './new-message.component.scss'
 })
@@ -39,7 +39,7 @@ export class NewMessageComponent implements AfterViewInit{
     }
   }
 
-  @HostListener('keyup', ['$event'])
+  @HostListener('keyup')
   handleKeyup() {
     if (this.tagMember) {
       this.filterResults(this.users);

@@ -38,7 +38,7 @@ export class BoardComponent implements OnInit {
   }
 
 
-  @HostListener('window:click', ['$event'])
+  @HostListener('window:click')
   async handleClick() {
     if (this.boardServ.currentUser.loginState != 'loggedOut') {
       this.boardServ.currentUser = this.localStorageService.loadCurrentUser();

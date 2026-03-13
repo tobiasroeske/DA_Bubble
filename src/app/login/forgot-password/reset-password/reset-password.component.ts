@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignupService } from '../../../shared/services/signup/signup.service';
@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-reset-password',
-    imports: [FormsModule, CommonModule],
+    imports: [FormsModule],
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.scss'
 })

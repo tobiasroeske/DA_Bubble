@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ElementRef, EventEmitter, Host, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
@@ -15,7 +15,7 @@ import { LocalStorageService } from '../../shared/services/local-storage-service
 
 @Component({
     selector: 'app-create-message-area',
-    imports: [CommonModule, FormsModule, PickerComponent],
+    imports: [FormsModule, PickerComponent],
     templateUrl: './create-message-area.component.html',
     styleUrl: './create-message-area.component.scss'
 })

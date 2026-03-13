@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 
 @Component({
     selector: 'app-create-message-area-thread',
-    imports: [CommonModule, FormsModule, PickerComponent],
+    imports: [FormsModule, PickerComponent],
     templateUrl: './create-message-area-thread.component.html',
     styleUrl: './create-message-area-thread.component.scss'
 })

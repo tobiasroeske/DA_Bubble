@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { BoardService } from '../shared/services/board-service/board.service';
 import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
@@ -12,7 +12,7 @@ import { PrivateChat } from '../shared/models/privateChat.class';
 
 @Component({
     selector: 'app-edit-profile-dialog',
-    imports: [FormsModule, CommonModule],
+    imports: [FormsModule],
     templateUrl: './edit-profile-dialog.component.html',
     styleUrl: './edit-profile-dialog.component.scss'
 })

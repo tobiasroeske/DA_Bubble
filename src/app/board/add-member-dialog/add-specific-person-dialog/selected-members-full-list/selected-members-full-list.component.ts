@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 interface SelectedMember {
   name: string;
@@ -7,7 +7,7 @@ interface SelectedMember {
 }
 @Component({
     selector: 'app-selected-members-full-list',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './selected-members-full-list.component.html',
     styleUrl: './selected-members-full-list.component.scss'
 })

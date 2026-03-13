@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { ShowProfileDialogComponent } from "../../show-profile-dialog/show-profile-dialog.component";
@@ -16,7 +16,7 @@ import { LocalStorageService } from '../../shared/services/local-storage-service
     selector: 'app-board-toolbar',
     templateUrl: './board-toolbar.component.html',
     styleUrl: './board-toolbar.component.scss',
-    imports: [CommonModule, ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule, NotificationsComponent]
+    imports: [ShowProfileDialogComponent, EditProfileDialogComponent, SearchDialogComponent, FormsModule, NotificationsComponent]
 })
 export class BoardToolbarComponent {
   authService = inject(SignupService);

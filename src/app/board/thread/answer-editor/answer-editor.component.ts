@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MessageEditorComponent } from '../../board-chat-field/message-editor/message-editor.component';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
 @Component({
     selector: 'app-answer-editor',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './answer-editor.component.html',
     styleUrl: './answer-editor.component.scss'
 })

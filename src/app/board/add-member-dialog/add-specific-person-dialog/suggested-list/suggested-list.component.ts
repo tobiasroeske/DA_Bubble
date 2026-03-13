@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 interface SuggestedUser {
   name: string;
@@ -8,7 +8,7 @@ interface SuggestedUser {
 
 @Component({
     selector: 'app-suggested-list',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './suggested-list.component.html',
     styleUrl: './suggested-list.component.scss'
 })

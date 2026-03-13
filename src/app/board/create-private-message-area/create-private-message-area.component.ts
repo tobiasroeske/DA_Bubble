@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ import { PrivateChat } from '../../shared/models/privateChat.class';
 
 @Component({
     selector: 'app-create-private-message-area',
-    imports: [CommonModule, FormsModule, PickerComponent],
+    imports: [FormsModule, PickerComponent],
     templateUrl: './create-private-message-area.component.html',
     styleUrl: './create-private-message-area.component.scss'
 })

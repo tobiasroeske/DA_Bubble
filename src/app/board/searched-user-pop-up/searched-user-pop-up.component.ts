@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -6,7 +6,7 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 
 @Component({
     selector: 'app-searched-user-pop-up',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './searched-user-pop-up.component.html',
     styleUrl: './searched-user-pop-up.component.scss'
 })

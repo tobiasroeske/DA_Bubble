@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, inject, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
@@ -13,7 +13,7 @@ type SearchItem = CurrentUser | PrivateChat | Channel | ChatMessage;
 
 @Component({
     selector: 'app-search-dialog',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './search-dialog.component.html',
     styleUrl: './search-dialog.component.scss'
 })

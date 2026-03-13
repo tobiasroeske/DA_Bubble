@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
@@ -11,7 +11,7 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
 @Component({
     selector: 'app-notifications',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './notifications.component.html',
     styleUrl: './notifications.component.scss'
 })
