@@ -14,7 +14,7 @@
                     <input [(ngModel)]="mail" #email type="email" id="email" name="email"
                         placeholder="beispielname@email.com">
                 </div>
-                @if (signupService.errorCode == 'auth/missing-email' || signupService.errorCode == 'auth/invalid-email')
+                @if (signupService.errorCode() == 'auth/missing-email' || signupService.errorCode() == 'auth/invalid-email')
                 {
                 <span class="error-message">Bitte gültige E-Mail-Adresse eingeben</span>
                 }
@@ -30,9 +30,9 @@
                     <label for="password"></label>
                     <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="Passwort">
                 </div>
-                @if(signupService.errorCode == 'auth/invalid-credential') {
+                @if(signupService.errorCode() == 'auth/invalid-credential') {
                 <span class="error-message">E-Mail-Adresse oder Passwort falsch. Bitte noch einmal versuchen.</span>
-                } @else if(signupService.errorCode == 'auth/missing-password') {
+                } @else if(signupService.errorCode() == 'auth/missing-password') {
                 <span class="error-message">Bitte Passwort eingeben</span>
                 }
             </div>

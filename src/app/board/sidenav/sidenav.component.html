@@ -1,5 +1,5 @@
-<div class="sidenav" [ngStyle]="{'display': boardServ.sidenavTranslate ? 'flex' : 'none'}">
-    <div class="channel-btn" [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
+<div class="sidenav" [ngStyle]="{'display': boardServ.sidenavTranslate() ? 'flex' : 'none'}">
+    <div class="channel-btn" [ngStyle]="{'display': boardServ.textHidden() ? 'none' : ''}">
         <span class="channel-btn-logo-name">
             <img class="workspaceLogo" src="assets/img/workspaceLogo.png" alt="">
             <h3>Devspace</h3>
@@ -11,7 +11,7 @@
                 fill="black" />
         </svg>
     </div>
-    @if (!boardServ.dialogIsOpen) {
+    @if (!boardServ.dialogIsOpen()) {
     <div class="new-message-icon-mobile" (click)="toggleNewMessageInput($event)">
         <svg class="edit_square-icon" width="22" height="22" viewBox="0 0 22 21" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +33,7 @@
     <!-- Channels Container -->
     <div class="scrollable">
         <div class="channel-container"
-            [ngStyle]="{'display': boardServ.textHidden ? 'none' : '', 'gap.px': firestore.allChannels.length == 0 ? '12' : '25'}">
+            [ngStyle]="{'display': boardServ.textHidden() ? 'none' : '', 'gap.px': firestore.allChannels().length == 0 ? '12' : '25'}">
             <div class="channel-header">
                 <div (click)="onHeaderClick()" class="arrow-symbol-title-container">
                     <svg [ngStyle]="{'transform': channelHeaderIsClicked ? 'rotate(0deg)' : 'rotate(-90deg)'}"
@@ -64,7 +64,7 @@
             </div>
             <div class="channel-links-container"
                 [ngStyle]="{'display': channelHeaderIsClicked ? '' : 'none', 'transform': canTranslateYChannel ? 'translateY(0%)' : 'translateY(-200%)' }">
-                @for(channel of firestore.allChannels; track channel; let index = $index){
+                @for(channel of firestore.allChannels(); track channel; let index = $index){
                 <a id="{{index}}" class="channel" href="" (click)="boardServ.showChannelInChatField(index, $event)">
                     <svg class="hashtagIcon" width="17" height="17" viewBox="0 0 17 17" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +90,7 @@
 
         <!-- Direct Messages Container -->
         <div (click)="onDirectMessageClick()" class="direct-messages-container"
-            [ngStyle]="{'display': boardServ.textHidden ? 'none' : ''}">
+            [ngStyle]="{'display': boardServ.textHidden() ? 'none' : ''}">
             <div class="direct-message-header">
                 <svg [ngStyle]="{'transform': directMessHeaderisClicked ? 'rotate(0deg)' : 'rotate(-90deg)'}"
                     class="arrow-down-directmessages" width="10" height="7" viewBox="0 0 10 7" fill="none"
@@ -112,7 +112,7 @@
 
             <div [ngStyle]="{'display' : directMessHeaderisClicked ? '' : 'none', 'transform': canTranslateYUserList ? 'translateY(0%)' : 'translateY(-200%)'}"
                 class="colleagues-container">
-                @for(privateChat of this.firestore.directMessages; track privateChat; let index = $index){
+                @for(privateChat of this.firestore.directMessages(); track privateChat; let index = $index){
                 @if(firestore.currentUserId == privateChat.creator.id){
                 <div [ngClass]="{'collegue-on-focus': boardServ.blueColorsForTheChatPartersFocus[index]}" id="{{index}}"
                     class="collegue" (click)="boardServ.startPrivateChat(index, 'creator', $event)">

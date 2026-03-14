@@ -83,7 +83,7 @@ export class NewMessageComponent implements AfterViewInit{
 
   getIndexInChannels(channel: Channel) {
     let foundChannel = (c:Channel) => c.id == channel.id
-    let idx = this.firestoreServ.allChannels.findIndex(foundChannel);
+    let idx = this.firestoreServ.allChannels().findIndex(foundChannel);
     return idx
   }
 

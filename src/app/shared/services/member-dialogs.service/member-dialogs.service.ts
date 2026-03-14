@@ -36,7 +36,7 @@ export class MemberDialogsService {
   }
 
   openAddMembersDialog(event: Event) {
-    if (!this.boardServ.editDialogIsOpen) {
+    if (!this.boardServ.editDialogIsOpen()) {
       if (this.membersDialogIsOpen) {
         this.toggleMembersDialog(event);
       }
@@ -57,7 +57,7 @@ export class MemberDialogsService {
   }
 
   openShowMemberPopUp(index: number) {
-    if (!this.boardServ.privateChatIsStarted) {
+    if (!this.boardServ.privateChatIsStarted()) {
       this.startNewChat(index);
     } else {
       this.goToChat(index);
@@ -66,7 +66,7 @@ export class MemberDialogsService {
   }
 
   startNewChat(index: number) {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     if (this.currentChannel) {
       this.currentMember = this.currentChannel.members[index];
       this.name = this.currentChannel.members[index].name;
@@ -76,14 +76,14 @@ export class MemberDialogsService {
   }
 
   goToChat(index: number) {
-    this.name = this.firestore.directMessages[index].guest.name;
-    this.avatarPath = this.firestore.directMessages[index].guest.avatarPath;
-    this.email = this.firestore.directMessages[index].guest.email;
-    this.currentMember = this.firestore.directMessages[index].guest;
+    this.name = this.firestore.directMessages()[index].guest.name;
+    this.avatarPath = this.firestore.directMessages()[index].guest.avatarPath;
+    this.email = this.firestore.directMessages()[index].guest.email;
+    this.currentMember = this.firestore.directMessages()[index].guest;
   }
 
   checkMemberLoginState(member: CurrentUser): string | null {
-    const user = this.firestore.userList.find(user => user.id === member.id);
+    const user = this.firestore.userList().find(user => user.id === member.id);
     return user ? user.loginState : null;
   }
 
@@ -99,7 +99,7 @@ export class MemberDialogsService {
   }
 
   isGuestExist(): boolean {
-    return this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId) !== -1;
+    return this.firestore.directMessages().findIndex((dm: PrivateChat) => dm.guest.id == this.guestId) !== -1;
   }
 
   async addNewChatRoom(event: Event) {
@@ -117,7 +117,7 @@ export class MemberDialogsService {
   }
 
   startPrivateChat(event: Event) {
-    const idx = this.firestore.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
+    const idx = this.firestore.directMessages().findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
     this.boardServ.startPrivateChat(idx, 'creator', event);
   }
 

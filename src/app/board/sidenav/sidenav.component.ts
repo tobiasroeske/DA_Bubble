@@ -52,9 +52,9 @@ export class SidenavComponent {
 
   toggleNewMessageInput(event: Event) {
     this.boardServ.stopPropagation(event)
-    this.boardServ.newMessageInputOpen = !this.boardServ.newMessageInputOpen;
-    if (this.boardServ.mobileView) {
-      this.boardServ.sidenavTranslate = false;
+    this.boardServ.newMessageInputOpen.update(v => !v);
+    if (this.boardServ.mobileView()) {
+      this.boardServ.sidenavTranslate.set(false);
       this.boardServ.hideText();
     }
   }

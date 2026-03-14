@@ -58,12 +58,12 @@ export class AddChannelDialogComponent {
   }
 
   checkIfChannelTitleAleadyExist() {
-    let idx = this.firestore.allExistingChannels.findIndex((chan) => chan.title === this.channel.title);
+    let idx = this.firestore.allExistingChannels().findIndex((chan) => chan.title === this.channel.title);
     this.existingChannelIndex = idx;
   }
 
   getNewChannelIndex() {
-    let allChannels = this.firestore.allChannels;
+    let allChannels = this.firestore.allChannels();
     let isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId
     let index = allChannels.findIndex(isChannel);
     return index
@@ -88,7 +88,7 @@ export class AddChannelDialogComponent {
   }
 
   async populateAllUsers(): Promise<void> {
-    for (const user of this.firestore.userList) {
+    for (const user of this.firestore.userList()) {
       if (user.id === this.channel.creatorId) {
         user.selected = true;
         this.channel.members.push(user);

@@ -35,7 +35,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
 
 
   override ngOnInit(): void {
-    this.currentPrivatChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
+    this.currentPrivatChat = this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat;
     this.currentWindowWidth = window.innerWidth;
   }
 
@@ -104,7 +104,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
 
   getCurrentPrivateChatMessage(): ChatMessage {
-    return this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex];
+    return this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex];
   }
 
   override findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {

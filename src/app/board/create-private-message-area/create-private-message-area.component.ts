@@ -35,7 +35,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   }
 
   ngOnInit(): void {
-    this.privateChat = this.firestore.directMessages[this.boardServ.chatPartnerIdx].chat;
+    this.privateChat = this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat;
   }
 
   override toggleTagMemberDialog() {
@@ -75,9 +75,9 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   }
 
   showMessageInChat() {
-    let idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
+    let idx = this.firestoreService.directMessages().findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
     if (idx == -1) {
-      idx = this.firestoreService.directMessages.findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id)
+      idx = this.firestoreService.directMessages().findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id)
     }
     this.boardServ.startPrivateChat(idx, 'creator', event);
   }
@@ -93,14 +93,14 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
 
   checkIfPrivatChatIsEmpty() {
     if (this.privateChat.length > 0) {
-      this.boardServ.firstPrivateMessageWasSent = true;
+      this.boardServ.firstPrivateMessageWasSent.set(true);
       setTimeout(() => {
-        this.boardServ.hidePopUpChatPartner = true;
+        this.boardServ.hidePopUpChatPartner.set(true);
       }, 100);
     } else {
-      this.boardServ.hidePopUpChatPartner = false
+      this.boardServ.hidePopUpChatPartner.set(false);
       setTimeout(() => {
-        this.boardServ.firstPrivateMessageWasSent = false;
+        this.boardServ.firstPrivateMessageWasSent.set(false);
       }, 100);
     }
   }

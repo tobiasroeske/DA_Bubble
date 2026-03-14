@@ -47,7 +47,7 @@ export class ChatMessageComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.currentChannel = (this.firestore.allChannels[this.boardServ.idx]);
+    this.currentChannel = (this.firestore.allChannels()[this.boardServ.idx]);
     this.currentUserName = this.boardServ.currentUser.name;
     this.currentChatMessage = this.chat;
     this.editedMessage = this.chat.message;

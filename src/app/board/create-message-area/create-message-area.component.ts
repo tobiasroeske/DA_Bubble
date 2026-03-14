@@ -177,7 +177,7 @@ export class CreateMessageAreaComponent {
   }
 
   toggleTagMemberDialog() {
-    this.filteredMembers = this.firestoreService.allChannels[this.boardService.idx].members;
+    this.filteredMembers = this.firestoreService.allChannels()[this.boardService.idx].members;
     this.tagMembers = !this.tagMembers
   }
 
@@ -203,7 +203,7 @@ export class CreateMessageAreaComponent {
   }
 
   findIndexOfChannel(channel: Channel) {
-    let allChannels = this.firestoreService.allChannels;
+    let allChannels = this.firestoreService.allChannels();
     return allChannels.findIndex(c => c.id == channel.id);
   }
 
@@ -256,19 +256,19 @@ export class CreateMessageAreaComponent {
     this.textMessage = '';
     this.uploadedFile = '';
     this.filePath = '';
-    this.boardService.showEmojiPicker = false;
+    this.boardService.showEmojiPicker.set(false);
     this.member = null;
 
   }
 
   filterMember() {
-    let members: CurrentUser[] = this.firestoreService.allChannels[this.boardService.idx].members
+    let members: CurrentUser[] = this.firestoreService.allChannels()[this.boardService.idx].members
     let lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
     this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
   }
 
   filterChannels() {
-    let channels: Channel[] = this.firestoreService.allChannels;
+    let channels: Channel[] = this.firestoreService.allChannels();
     let lowerCaseTag = this.channelToTag.slice(1).toLowerCase();
     this.filteredChannels = channels.filter(channel => channel.title.toLowerCase().includes(lowerCaseTag));
   }

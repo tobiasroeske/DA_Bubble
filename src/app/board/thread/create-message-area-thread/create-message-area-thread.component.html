@@ -85,7 +85,7 @@
 <span class="uploaded-file red">Die Datei ist zu groß. Maximal 500kb</span>
 }
 
-@if (boardService.showEmojiPickerInThreads) {
+@if (boardService.showEmojiPickerInThreads()) {
 <div class="emoji-container">
     <emoji-mart [showPreview]="false" [style]="{'width': '75%', 'min-width.px': '200'}" title="Pick your emoji…"
         emoji="point_up" (emojiClick)="addEmoji($event)"></emoji-mart>

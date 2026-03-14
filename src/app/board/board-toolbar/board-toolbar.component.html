@@ -1,5 +1,5 @@
 <div>
-    @if (!boardServ.mobileView || boardServ.mobileView && boardServ.sidenavTranslate) {
+    @if (!boardServ.mobileView() || boardServ.mobileView() && boardServ.sidenavTranslate()) {
     <div class="logo-container">
         <img src="./assets/img/logo.png" alt="logo" class="logo">
         <img src="./assets/img/logoName.png" alt="" class="logo-headline">

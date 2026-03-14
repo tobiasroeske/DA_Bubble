@@ -39,18 +39,18 @@ export class SearchDialogComponent implements OnChanges {
     } else if (clickedElement.type == 'PrivateChat') {
       this.showTheClickedElementOfTypePrivatChat(clickedElement, event)
     }
-    this.boardServ.showSearchDialog = false;
+    this.boardServ.showSearchDialog.set(false);
   }
 
   showTheClickedElementOfTypeChannel(clickedElement: Channel, event: Event) {
-    let idx = this.firestore.allChannels.findIndex(chann => chann.id == clickedElement.id);
+    let idx = this.firestore.allChannels().findIndex(chann => chann.id == clickedElement.id);
     this.boardServ.showChannelInChatField(idx, event);
   }
 
   showTheClickedElementOfTypeCurrentUser(clickedElement: CurrentUser) {
-    let idx = this.firestore.userList.findIndex((user) => user.id == clickedElement.id);
+    let idx = this.firestore.userList().findIndex((user) => user.id == clickedElement.id);
     this.boardServ.openShowUserPopUp(idx);
-    this.boardServ.showUserPopUp = true;
+    this.boardServ.showUserPopUp.set(true);
   }
 
   async showTheClickedElementOfTypePrivatChat(clickedElement: PrivateChat, event: Event) {
@@ -60,11 +60,11 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   findGuestIndexInDirectMessages(clickedElement: PrivateChat): number {
-    return this.firestore.directMessages.findIndex(privChat => privChat.guest.id == clickedElement.guest.id);
+    return this.firestore.directMessages().findIndex(privChat => privChat.guest.id == clickedElement.guest.id);
   }
 
   selectChatRoomAndMember(): void {
-    this.boardServ.selectedChatRoom = this.firestore.directMessages[this.idxToFindPositionOfGuestInDirectMessArray];
+    this.boardServ.selectedChatRoom = this.firestore.directMessages()[this.idxToFindPositionOfGuestInDirectMessArray];
     this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
   }
 
@@ -95,7 +95,7 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   showSearchDialogAndFilterItems(): void {
-    this.boardServ.showSearchDialog = true;
+    this.boardServ.showSearchDialog.set(true);
     this.mainSearchList = this.filterSearchItems();
   }
 
@@ -114,7 +114,7 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   hideSearchDialog(): void {
-    this.boardServ.showSearchDialog = false;
+    this.boardServ.showSearchDialog.set(false);
   }
 
   isCurrentUser(item: SearchItem): item is CurrentUser {

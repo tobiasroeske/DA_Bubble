@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
   ActionCodeSettings,
@@ -40,8 +40,8 @@ export class SignupService {
   user: User = new User();
 
   currentUser!: any;
-  errorCode!: string;
-  signUpSuccessful = false;
+  readonly errorCode = signal<string>('');
+  readonly signUpSuccessful = signal<boolean>(false);
   actionCodeSettings: ActionCodeSettings = { url: 'https://dabubble.tobias-roeske.ch/resetpassword' };
 
   constructor() {
@@ -127,11 +127,11 @@ export class SignupService {
       if (currentUser) {
         await verifyBeforeUpdateEmail(currentUser, email);
         this.storageService.saveCurrentUser(currentUser);
-        this.errorCode = 'no error';
+        this.errorCode.set('no error');
       }
     } catch (err: any) {
       console.error(err);
-      this.errorCode = err.code;
+      this.errorCode.set(err.code);
       throw err;
     }
   }
@@ -188,7 +188,7 @@ export class SignupService {
       }
     } catch (err: any) {
       console.error(err);
-      this.errorCode = err.code;
+      this.errorCode.set(err.code);
       throw err;
     }
   }
@@ -197,7 +197,7 @@ export class SignupService {
     try {
       this.updateStorages(userCredential);
       sendEmailVerification(userCredential.user!, this.actionCodeSettings);
-      this.signUpSuccessful = true;
+      this.signUpSuccessful.set(true);
       setTimeout(() => {
         this.router.navigateByUrl('board');
       }, 1500);
@@ -230,13 +230,13 @@ export class SignupService {
       this.router.navigateByUrl('board');
     } catch (err: any) {
       console.error(err);
-      this.errorCode = err.code;
+      this.errorCode.set(err.code);
       throw err;
     }
   }
 
   findCurrentUser(user: any): any {
-    const allUsers = this.firestoreService.userList;
+    const allUsers = this.firestoreService.userList();
     const currentUser = allUsers.find((u: any) => u.id === user.uid);
     const currentUserAsUC = this.setCurrentUserObject(currentUser);
     return currentUserAsUC;
@@ -263,7 +263,7 @@ export class SignupService {
       this.router.navigateByUrl('board');
     } catch (err: any) {
       console.error(err);
-      this.errorCode = err.code;
+      this.errorCode.set(err.code);
       throw err;
     }
   }

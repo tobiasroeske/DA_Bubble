@@ -1,4 +1,4 @@
-@if(boardServ.showUserPopUp){
+@if(boardServ.showUserPopUp()){
 <div class="opacity" (click)="closeSearchedUserPopUp()">
     <div (click)="boardServ.stopPropagation($event)" class="show-member-pop-up">
         <div class="title-and-cross-icon">
