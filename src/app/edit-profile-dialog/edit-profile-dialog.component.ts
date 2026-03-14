@@ -70,7 +70,7 @@ export class EditProfileDialogComponent {
 
   async updateDirectMessages(): Promise<void> {
     try {
-      this.allDirectMessages = this.firestoreService.allDirectMessages;
+      this.allDirectMessages = this.firestoreService.allDirectMessages();
       for (const dm of this.allDirectMessages) {
         await this.updateDirectMessage(dm);
       }
@@ -135,7 +135,7 @@ export class EditProfileDialogComponent {
   }
 
   async updateMember(): Promise<void> {
-    this.allChannels = this.firestoreService.allExistingChannels;
+    this.allChannels = this.firestoreService.allExistingChannels();
     for (const chan of this.allChannels) {
       await this.updateChannelMembers(chan);
     }

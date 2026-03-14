@@ -44,8 +44,8 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   constructor() {
-    this.title = this.firestore.allChannels[this.boardServ.idx].title;
-    this.currentChannel = new Channel(this.firestore.allChannels[this.boardServ.idx]);
+    this.title = this.firestore.allChannels()[this.boardServ.idx].title;
+    this.currentChannel = new Channel(this.firestore.allChannels()[this.boardServ.idx]);
     this.channelId = this.currentChannel.id!
   }
 
@@ -64,7 +64,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
 
   async findNewAddedUsers() {
     let currentChannelUids = this.currentChannel.allUsers.map(user => user.id);
-    let userList = this.firestore.userList;
+    let userList = this.firestore.userList();
     userList.forEach(user => {
       if (!currentChannelUids.includes(user.id)) {
         this.currentChannel.allUsers.push(user)

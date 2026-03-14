@@ -85,7 +85,7 @@
             @if (!editorOpen && privateMessage.message.length > 0) {
                 <p class="message" [innerText]="message"></p>
             } @else if (editorOpen) {
-                <app-private-message-editor (editorOpen)="toggleMessageEditor()" [privateChat]="firestore.directMessages[boardServ.chatPartnerIdx]" [chatMessageIndex]="privateChatIndex" [chat]="privateMessage" style="width:100%"></app-private-message-editor>
+                <app-private-message-editor (editorOpen)="toggleMessageEditor()" [privateChat]="firestore.directMessages()[boardServ.chatPartnerIdx]" [chatMessageIndex]="privateChatIndex" [chat]="privateMessage" style="width:100%"></app-private-message-editor>
             }
             
             <div class="reaction-indicator-bar">

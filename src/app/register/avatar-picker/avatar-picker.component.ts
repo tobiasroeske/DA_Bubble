@@ -46,8 +46,8 @@ export class AvatarPickerComponent implements OnInit {
 
   goBackToRegister(): void {
     this.goBack.emit(false)
-    this.signupService.signUpSuccessful = false;
-    this.signupService.errorCode = '';
+    this.signupService.signUpSuccessful.set(false);
+    this.signupService.errorCode.set('');
   }
 
   completeSignup(): void {

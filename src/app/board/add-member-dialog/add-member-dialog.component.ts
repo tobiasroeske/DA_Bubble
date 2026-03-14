@@ -37,7 +37,7 @@ export class AddMemberDialogComponent {
   }
 
   async setAllUsersOnSelectedTrue(event: Event) {
-    this.allUsers = this.firestore.userList;
+    this.allUsers = this.firestore.userList();
     this.allUsers.forEach(u => {
       u.selected = true;
     })

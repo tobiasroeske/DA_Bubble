@@ -30,7 +30,7 @@ export class MessageEditorComponent implements OnInit {
   }
 
   async editMessage(index: number) {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.chat.message = this.editedMessage!;
     this.currentChannel.chat.splice(index, 1, this.chat);
     await this.firestore.updateChannel(this.currentChannel, this.currentChannel.id);

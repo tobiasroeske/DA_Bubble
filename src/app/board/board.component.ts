@@ -70,7 +70,7 @@ export class BoardComponent implements OnInit {
   }
 
   getUserNotifications() {
-    let allUsers = this.firestore.userList;
+    let allUsers = this.firestore.userList();
     let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id)
     return currentUser;
   }

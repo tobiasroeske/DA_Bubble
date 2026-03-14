@@ -15,13 +15,13 @@
             }
         </div>
         
-        @if (signupService.errorCode == 'auth/email-already-in-use') {
+        @if (signupService.errorCode() == 'auth/email-already-in-use') {
         <div class="error-message slide-in">
             E-Mail-Adresse wir bereits verwendet.
         </div>
 
         } @else {
-        <div [class.slide-in]="signupService.signUpSuccessful" class="confirmation-message">
+        <div [class.slide-in]="signupService.signUpSuccessful()" class="confirmation-message">
             Konto erfolgreich erstellt!
         </div>
         }

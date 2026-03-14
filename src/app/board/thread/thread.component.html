@@ -1,5 +1,5 @@
 <div class="thread">
-    <div class="thread-header" [ngStyle]="{'display': boardServ.threadTranslate ? 'flex' : 'none'}">
+    <div class="thread-header" [ngStyle]="{'display': boardServ.threadTranslate() ? 'flex' : 'none'}">
         <div class="title-and-channel-container">
             <h2>Thread</h2>
             <svg class="hashtag-icon-thread" width="17" height="17" viewBox="0 0 17 17" fill="none"

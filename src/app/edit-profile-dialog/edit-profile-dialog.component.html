@@ -37,9 +37,9 @@
         @if (email.touched && !email.valid) {
         <span class="error-message">Bitte geben sie eine gültige E-Mail-Adresse ein</span>
         }
-        @else if (authService.errorCode == 'auth/requires-recent-login') {
+        @else if (authService.errorCode() == 'auth/requires-recent-login') {
         <span class="error-message">Ihr letzter Login ist zu lange her<br> Bitte loggen sie nich erneut ein.</span>
-        } @else if (authService.errorCode == 'no error') {
+        } @else if (authService.errorCode() == 'no error') {
         <span class="error-message">Eine Email zum Bestätigen der Änderung <br> wurde an ihre E-Mail-Adresse
             gesendet</span>
         } @else if (changesSuccessful) {

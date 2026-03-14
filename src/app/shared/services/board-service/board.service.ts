@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, inject } from '@angular/core';
+import { ElementRef, Injectable, computed, inject, signal } from '@angular/core';
 
 import { SignupService } from '../signup/signup.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
@@ -33,22 +33,31 @@ export class BoardService {
   chatFieldRef!: ElementRef;
   threadRef!: ElementRef;
 
-  threadTranslate: boolean = false;
-  sidenavTranslate: boolean = true;
-  textHidden: boolean = false;
-  dialogIsOpen: boolean = false;
-  editDialogIsOpen: boolean = false;
+  readonly threadTranslate = signal<boolean>(false);
+  readonly sidenavTranslate = signal<boolean>(true);
+  readonly textHidden = signal<boolean>(false);
+  readonly dialogIsOpen = signal<boolean>(false);
+  readonly editDialogIsOpen = signal<boolean>(false);
+  readonly profileOptionsOpen = signal<boolean>(false);
+  readonly profileOpen = signal<boolean>(false);
+  readonly editMode = signal<boolean>(false);
+  readonly newMessageInputOpen = signal<boolean>(false);
+  readonly showEmojiPicker = signal<boolean>(false);
+  readonly showEmojiPickerInThreads = signal<boolean>(false);
+  readonly showUserPopUp = signal<boolean>(false);
+  readonly tabletView = signal<boolean>(false);
+  readonly mobileView = signal<boolean>(false);
+  readonly emojiPickerSmall = signal<boolean>(false);
+  readonly privateChatIsStarted = signal<boolean>(false);
+  readonly showSearchDialog = signal<boolean>(false);
+  readonly firstPrivateMessageWasSent = signal<boolean>(false);
+  readonly hidePopUpChatPartner = signal<boolean>(false);
+  readonly blueText = signal<boolean>(false);
 
-  profileOptionsOpen = false;
-  profileOpen = false;
-  editMode = false;
-  newMessageInputOpen = false;
-  showEmojiPicker = false;
-  showEmojiPickerInThreads = false;
-  showUserPopUp: boolean = false;
-  tabletView = false;
-  mobileView = false;
-  emojiPickerSmall = false;
+  readonly hideChatField = computed(() =>
+    (this.sidenavTranslate() && this.mobileView()) ||
+    (this.threadTranslate() && this.mobileView())
+  );
 
   status: string = 'öffen';
 
@@ -58,11 +67,7 @@ export class BoardService {
   privateAnswerMessage!: ChatMessage | null;
   privateAnswerIndex!: number;
 
-  firstPrivateMessageWasSent: boolean = false;
-  hidePopUpChatPartner: boolean = false;
-  privateChatIsStarted: boolean = false;
   blueColorsForTheChatPartersFocus: boolean[] = [];
-  blueText!: boolean;
 
   privateChatId?: string
 
@@ -71,7 +76,6 @@ export class BoardService {
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
 
-  showSearchDialog: boolean = false;
   searchText: string = "";
 
   ngOnInit(){
@@ -97,26 +101,26 @@ export class BoardService {
       this.showMobileView();
     }
     if (window.innerWidth <= 420) {
-      this.emojiPickerSmall = true;
+      this.emojiPickerSmall.set(true);
     }
   }
 
   showDesktopView() {
-    this.tabletView = true;
-    this.mobileView = false;
-    if (this.threadTranslate && this.sidenavTranslate) {
-      this.sidenavTranslate = false;
+    this.tabletView.set(true);
+    this.mobileView.set(false);
+    if (this.threadTranslate() && this.sidenavTranslate()) {
+      this.sidenavTranslate.set(false);
     }
   }
 
   showMobileView() {
-    this.mobileView = true;
-    this.tabletView = false;
-    this.emojiPickerSmall = false;
+    this.mobileView.set(true);
+    this.tabletView.set(false);
+    this.emojiPickerSmall.set(false);
   }
 
   getUserLoginState(participant: CurrentUser): string {
-    let allUsers: CurrentUser[] = this.firestore.userList;
+    let allUsers: CurrentUser[] = this.firestore.userList();
     let user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
     return user.loginState
   }
@@ -140,77 +144,72 @@ export class BoardService {
   }
 
   openThread() {
-    this.threadTranslate = true;
+    this.threadTranslate.set(true);
     if (window.innerWidth <= 1500) {
-      this.sidenavTranslate = false;
+      this.sidenavTranslate.set(false);
     }
   }
 
   toggleSidenav() {
-    this.sidenavTranslate = !this.sidenavTranslate;
+    this.sidenavTranslate.update(v => !v);
     this.hideText();
     if (window.innerWidth <= 1500) {
-      this.threadTranslate = false;
+      this.threadTranslate.set(false);
     }
-    if (this.mobileView) {
-      this.newMessageInputOpen = false;
+    if (this.mobileView()) {
+      this.newMessageInputOpen.set(false);
     }
   }
 
   close(element: string) {
     if (element == 'thread') {
-      this.threadTranslate = false;
+      this.threadTranslate.set(false);
     }
   }
 
-  hideChatField() {
-    return (this.sidenavTranslate && this.mobileView) ||
-      (this.threadTranslate && this.mobileView);
-  }
-
   hideText() {
-    this.status = this.sidenavTranslate ? 'schließen' : 'öffnen';
+    this.status = this.sidenavTranslate() ? 'schließen' : 'öffnen';
     setTimeout(() => {
-      this.textHidden = !this.sidenavTranslate;
-    }, this.sidenavTranslate ? 100 : 50);
+      this.textHidden.set(!this.sidenavTranslate());
+    }, this.sidenavTranslate() ? 100 : 50);
   }
 
   openDialogAddChannel() {
-    this.dialogIsOpen = true;
+    this.dialogIsOpen.set(true);
   }
 
   closeDialogAddChannel() {
-    this.dialogIsOpen = false;
+    this.dialogIsOpen.set(false);
   }
 
   toggleDialogEditChannel(i: number) {
     this.idx = i;
-    this.editDialogIsOpen = !this.editDialogIsOpen;
+    this.editDialogIsOpen.update(v => !v);
   }
 
   toggleProfileOptions() {
-    this.profileOptionsOpen = !this.profileOptionsOpen;
-    this.editMode = false;
-    this.authService.errorCode = '';
-    this.profileOpen = false;
+    this.profileOptionsOpen.update(v => !v);
+    this.editMode.set(false);
+    this.authService.errorCode.set('');
+    this.profileOpen.set(false);
   }
 
   toggleEmojiPicker(event: Event) {
-    this.showEmojiPicker = !this.showEmojiPicker;
+    this.showEmojiPicker.update(v => !v);
     event.stopPropagation()
   }
 
   toggleEmojiPickerThreads(event: Event) {
-    this.showEmojiPickerInThreads = !this.showEmojiPickerInThreads;
+    this.showEmojiPickerInThreads.update(v => !v);
     event.stopPropagation()
   }
 
   toggleProfileView() {
-    this.profileOpen = !this.profileOpen;
+    this.profileOpen.update(v => !v);
   }
 
   toggleProfileEditor() {
-    this.editMode = !this.editMode;
+    this.editMode.update(v => !v);
   }
 
   stopPropagation(event: Event) {
@@ -225,8 +224,8 @@ export class BoardService {
   showChannelInChatField(i: number, event: Event) {
     this.idx = i;
     this.storageService.saveCurrentChannelIndex(this.idx);
-    this.privateChatIsStarted = false;
-    this.newMessageInputOpen = false;
+    this.privateChatIsStarted.set(false);
+    this.newMessageInputOpen.set(false);
     this.scrollToBottom(this.chatFieldRef);
     this.hideSideNav();
     event.preventDefault();
@@ -243,23 +242,23 @@ export class BoardService {
 
   startChat(index: number, role: 'creator' | 'guest') {
     this.chatPartnerIdx = index;
-    this.privateChatId = this.firestore.directMessages[index].id || this.firestore.chatRoomId;
-    this.currentChatPartner = role === 'creator' ? this.firestore.directMessages[index].guest : this.firestore.directMessages[index].creator;
-    this.privateChat = this.firestore.directMessages[index].chat;
+    this.privateChatId = this.firestore.directMessages()[index].id || this.firestore.chatRoomId;
+    this.currentChatPartner = role === 'creator' ? this.firestore.directMessages()[index].guest : this.firestore.directMessages()[index].creator;
+    this.privateChat = this.firestore.directMessages()[index].chat;
     this.checkIfPrivateChatIsEmpty();
-    this.privateChatIsStarted = true;
+    this.privateChatIsStarted.set(true);
   }
 
   markCurrentChat(index: number) {
-    this.blueColorsForTheChatPartersFocus = this.firestore.directMessages.map(() => false);
-    this.newMessageInputOpen = false;
+    this.blueColorsForTheChatPartersFocus = this.firestore.directMessages().map(() => false);
+    this.newMessageInputOpen.set(false);
     this.setBlueColorToChatPartner(index);
     this.hideSideNav();
   }
 
   hideSideNav() {
-    if (this.mobileView) {
-      this.sidenavTranslate = false;
+    if (this.mobileView()) {
+      this.sidenavTranslate.set(false);
       this.hideText();
     }
   }
@@ -270,28 +269,28 @@ export class BoardService {
 
   checkIfPrivateChatIsEmpty() {
     if (this.privateChat.length == 0) {
-      this.hidePopUpChatPartner = false;
+      this.hidePopUpChatPartner.set(false);
       setTimeout(() => {
-        this.firstPrivateMessageWasSent = false;
+        this.firstPrivateMessageWasSent.set(false);
       }, 100);
     } else {
-      this.hidePopUpChatPartner = true;
-      this.firstPrivateMessageWasSent = true;
+      this.hidePopUpChatPartner.set(true);
+      this.firstPrivateMessageWasSent.set(true);
     }
   }
 
   loadAllData() {
     this.allData = [];
-    this.firestore.allChannels.forEach((channel: Channel) => { this.allData.push(channel) })
-    this.firestore.userList.forEach((user: CurrentUser) => { this.allData.push(user) })
-    this.firestore.directMessages.forEach((dm: PrivateChat) => { this.allData.push(dm) })
+    this.firestore.allChannels().forEach((channel: Channel) => { this.allData.push(channel) })
+    this.firestore.userList().forEach((user: CurrentUser) => { this.allData.push(user) })
+    this.firestore.directMessages().forEach((dm: PrivateChat) => { this.allData.push(dm) })
   }
 
   openShowUserPopUp(index: number) {
-    this.userObjectPopUp = this.firestore.userList[index];
-    this.userNamePopUp = this.firestore.userList[index].name;
-    this.userEmailPopUp = this.firestore.userList[index].email;
-    this.userAvatarPopUp = this.firestore.userList[index].avatarPath;
+    this.userObjectPopUp = this.firestore.userList()[index];
+    this.userNamePopUp = this.firestore.userList()[index].name;
+    this.userEmailPopUp = this.firestore.userList()[index].email;
+    this.userAvatarPopUp = this.firestore.userList()[index].avatarPath;
   }
 
   scrollToSearchedMessage(index: number) {
@@ -330,4 +329,3 @@ export class BoardService {
     }, 1500)
   }
 }
-

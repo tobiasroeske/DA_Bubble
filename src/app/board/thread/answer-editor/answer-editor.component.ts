@@ -25,7 +25,7 @@ export class AnswerEditorComponent extends MessageEditorComponent implements OnI
   }
 
   override async editMessage(index: number): Promise<void> {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.answer.message = this.editedAnswer!;
     try {
       await this.firestore.updateChannel(this.currentChannel, this.currentChannel.id);

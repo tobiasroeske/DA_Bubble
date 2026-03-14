@@ -16,7 +16,7 @@ export class SearchedUserPopUpComponent {
   memberServ = inject(MemberDialogsService);
 
   closeSearchedUserPopUp() {
-    this.boardServ.showUserPopUp = false;
+    this.boardServ.showUserPopUp.set(false);
   }
 
   async setChatWithSelectedUser(event: Event) {

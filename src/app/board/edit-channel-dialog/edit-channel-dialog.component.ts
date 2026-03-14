@@ -38,10 +38,10 @@ export class EditChannelDialogComponent {
   randomIndex!: number;
 
   constructor() {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    this.title = this.firestore.allChannels[this.boardServ.idx].title;
-    this.description = this.firestore.allChannels[this.boardServ.idx].description;
-    this.creatorName = this.firestore.allChannels[this.boardServ.idx].creatorName;
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
+    this.title = this.firestore.allChannels()[this.boardServ.idx].title;
+    this.description = this.firestore.allChannels()[this.boardServ.idx].description;
+    this.creatorName = this.firestore.allChannels()[this.boardServ.idx].creatorName;
   }
 
   async onEditButtonClick(event: Event) {
@@ -98,7 +98,7 @@ export class EditChannelDialogComponent {
     let channel: Channel = new Channel(this.currentChannel);
     await this.firestore.updateChannel(channel.toJSON(), this.currentChannel.id);
     this.leaveFromChannel = false;
-    this.randomIndex = Math.floor(Math.random() * this.firestore.allChannels.length);
+    this.randomIndex = Math.floor(Math.random() * this.firestore.allChannels().length);
     this.boardServ.showChannelInChatField(this.randomIndex, event);
     this.boardServ.toggleDialogEditChannel(this.boardServ.idx);
   }
@@ -127,7 +127,7 @@ export class EditChannelDialogComponent {
   }
 
   async leaveThisChannel(event: Event) {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     let idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(this.boardServ.currentUser.id);
     this.currentChannel.partecipantsIds.splice(idxOfCurrentPartecipant, 1);
     let indexOfCurrentMember = this.currentChannel.members.findIndex((m: CurrentUser) => m.id == this.boardServ.currentUser.id);
@@ -139,7 +139,7 @@ export class EditChannelDialogComponent {
   }
 
   checkIfThisChannelAlreadyExist(): number {
-    let idx = this.firestore.allChannels.findIndex((chan: Channel) => chan.title === this.title);
+    let idx = this.firestore.allChannels().findIndex((chan: Channel) => chan.title === this.title);
     return idx;
   }
 }

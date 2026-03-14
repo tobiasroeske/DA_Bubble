@@ -26,8 +26,8 @@ export class MembersDialogComponent implements OnInit {
   userList!: CurrentUser[];
 
   async ngOnInit(): Promise<void> {
-    this.currentChannel = this.firestore.allChannels[this.boardServ.idx];
-    this.userList = this.firestore.userList;
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
+    this.userList = this.firestore.userList();
     let updatedUsers = this.updateLoginState();
     try {
       await this.firestore.updateChannelUsers(updatedUsers, this.currentChannel.id!);

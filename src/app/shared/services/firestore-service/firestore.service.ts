@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc, query, where, orderBy, deleteDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
@@ -16,11 +16,11 @@ export class FirestoreService {
   private firestore: Firestore = inject(Firestore);
   private auth: Auth = inject(Auth);
 
-  userList: CurrentUser[] = [];
-  allChannels: any[] = [];
-  allExistingChannels: Channel[] = [];
-  directMessages: PrivateChat[] = [];
-  allDirectMessages: PrivateChat[] = [];
+  readonly userList = signal<CurrentUser[]>([]);
+  readonly allChannels = signal<any[]>([]);
+  readonly allExistingChannels = signal<Channel[]>([]);
+  readonly directMessages = signal<PrivateChat[]>([]);
+  readonly allDirectMessages = signal<PrivateChat[]>([]);
 
   private unsubscribeUsers: Unsubscribe | undefined;
   private unsubChannel: Unsubscribe | undefined;
@@ -98,11 +98,12 @@ export class FirestoreService {
 
   subUsersList(): Unsubscribe {
     return onSnapshot(this.getUsersRef(), list => {
-      this.userList = [];
+      const items: CurrentUser[] = [];
       list.forEach(user => {
         let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
-        this.userList.push(singleUser);
+        items.push(singleUser);
       });
+      this.userList.set(items);
     });
   }
 
@@ -134,24 +135,26 @@ export class FirestoreService {
   subChannelList(): Unsubscribe {
     const q = query(this.getChannelsRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
     return onSnapshot(q, (list) => {
-      this.allChannels = [];
+      const items: any[] = [];
       list.forEach((el) => {
         let channel = new Channel(el.data());
         channel.id = el.id;
-        this.allChannels.push(channel.toJSON());
-      })
+        items.push(channel.toJSON());
+      });
+      this.allChannels.set(items);
     })
   }
 
   subAllExistingChannelList(): Unsubscribe {
     return onSnapshot(this.getChannelsRef(), list => {
-      this.allExistingChannels = [];
+      const items: Channel[] = [];
       list.forEach(c => {
         let channel = new Channel(c.data());
         channel.id = c.id;
         this.checkIfChannelHasMembers(channel, channel.id)
-        this.allExistingChannels.push(channel);
-      })
+        items.push(channel);
+      });
+      this.allExistingChannels.set(items);
     })
   }
 
@@ -234,21 +237,23 @@ export class FirestoreService {
   subDirectMessages(): Unsubscribe {
     const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
     return onSnapshot(q, (list) => {
-      this.directMessages = [];
+      const items: PrivateChat[] = [];
       list.forEach(el => {
         let privateChat = new PrivateChat(el.data());
-        this.directMessages.push(privateChat);
+        items.push(privateChat);
       });
+      this.directMessages.set(items);
     });
   }
 
   subAllExistingChatRooms(): Unsubscribe {
     return onSnapshot(this.getDirectMessRef(), (list) => {
-      this.allDirectMessages = [];
+      const items: PrivateChat[] = [];
       list.forEach(el => {
         let privateChat = new PrivateChat(el.data());
-        this.allDirectMessages.push(privateChat);
+        items.push(privateChat);
       });
+      this.allDirectMessages.set(items);
     });
   }
 
@@ -280,7 +285,7 @@ export class FirestoreService {
     } catch (error) {
       console.error("Error updating complete private messages", error)
     }
-    
+
   }
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
@@ -290,7 +295,7 @@ export class FirestoreService {
     } catch (error) {
       console.error('Error updating complete private chats', error)
     }
-    
+
   }
 
   getChatsRef(channelId: string) {

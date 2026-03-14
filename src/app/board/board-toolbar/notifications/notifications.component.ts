@@ -26,7 +26,7 @@ export class NotificationsComponent {
 
   }
   findCurrentUser() {
-    let allUsers = this.firestoreService.userList;
+    let allUsers = this.firestoreService.userList();
     let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id);
   }
 
@@ -39,8 +39,8 @@ export class NotificationsComponent {
   checkPositionOfThisNotific(index: number, event: Event) {
     let notificChannel = this.boardServ.currentUser.notification[index].channelName;
     let notificMessage = this.boardServ.currentUser.notification[index].message;
-    let indexOfCurrentChannel = this.firestoreService.allChannels.findIndex((chan: Channel) => chan.title === notificChannel)
-    let currentChannel = this.firestoreService.allChannels[indexOfCurrentChannel];
+    let indexOfCurrentChannel = this.firestoreService.allChannels().findIndex((chan: Channel) => chan.title === notificChannel)
+    let currentChannel = this.firestoreService.allChannels()[indexOfCurrentChannel];
     let idxOfCurrentNotificMessage = currentChannel.chat.findIndex((chat: ChatMessage) => chat.message.trim() == notificMessage.trim());
     this.boardServ.showChannelInChatField(indexOfCurrentChannel, event);
     this.boardServ.scrollToChannelMessageAfterClickOnNotific(idxOfCurrentNotificMessage);

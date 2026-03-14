@@ -18,8 +18,8 @@
         </svg>
     </div>
     <div class="members-list">
-        @if (firestore.allChannels[boardServ.idx]?.members.length > 0) {
-            @for (user of firestore.allChannels[boardServ.idx].members; track user.id; let i = $index) {
+        @if (firestore.allChannels()[boardServ.idx]?.members.length > 0) {
+            @for (user of firestore.allChannels()[boardServ.idx].members; track user.id; let i = $index) {
                 @if (user.selected) {
                     <div id="{{i}}" class="member" (click)="memberServ.openShowMemberPopUp(i); memberServ.toggleMembersDialog($event)">
                         <img class="avatar-members" src="{{user.avatarPath}}" alt="">
