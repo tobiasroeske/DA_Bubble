@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, inject, input,
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  inject,
+  input,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';

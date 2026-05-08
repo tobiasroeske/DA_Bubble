@@ -1,5 +1,9 @@
-
-import { Component, EventEmitter, inject, Input, Output,
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
@@ -8,10 +12,10 @@ import { MemberDialogsService } from '../../../shared/services/member-dialogs.se
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-show-member-pop-up',
-    imports: [],
-    templateUrl: './show-member-pop-up.component.html',
-    styleUrl: './show-member-pop-up.component.scss'
+  selector: 'app-show-member-pop-up',
+  imports: [],
+  templateUrl: './show-member-pop-up.component.html',
+  styleUrl: './show-member-pop-up.component.scss',
 })
 export class ShowMemberPopUpComponent {
   boardServ = inject(BoardService);

@@ -1,6 +1,4 @@
-import { Component, OnInit, inject, input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';

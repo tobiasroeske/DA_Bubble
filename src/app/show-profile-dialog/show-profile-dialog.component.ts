@@ -1,14 +1,12 @@
-import { Component, EventEmitter, Output, inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, EventEmitter, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BoardService } from '../shared/services/board-service/board.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-show-profile-dialog',
-    imports: [],
-    templateUrl: './show-profile-dialog.component.html',
-    styleUrl: './show-profile-dialog.component.scss'
+  selector: 'app-show-profile-dialog',
+  imports: [],
+  templateUrl: './show-profile-dialog.component.html',
+  styleUrl: './show-profile-dialog.component.scss',
 })
 export class ShowProfileDialogComponent {
   @Output() profileOpen = new EventEmitter<boolean>();
@@ -21,7 +19,7 @@ export class ShowProfileDialogComponent {
     this.profileOpen.emit(false);
   }
 
-  openEditor(event:Event) {
+  openEditor(event: Event) {
     event.stopPropagation();
     this.editorOpen.emit(true);
   }

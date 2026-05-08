@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output, inject, input,
+import {
+  Component,
+  EventEmitter,
+  Output,
+  inject,
+  input,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgClass } from '@angular/common';

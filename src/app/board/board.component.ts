@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, HostListener, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  HostListener,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';

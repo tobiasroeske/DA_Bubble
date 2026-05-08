@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, inject, input,
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  inject,
+  input,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { User } from '../../shared/models/user.class';

@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, HostListener,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';

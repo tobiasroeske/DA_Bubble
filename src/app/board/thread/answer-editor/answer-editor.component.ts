@@ -1,6 +1,4 @@
-import { Component, OnInit, input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, input, ChangeDetectionStrategy } from '@angular/core';
 import { MessageEditorComponent } from '../../board-chat-field/message-editor/message-editor.component';
 
 import { FormsModule } from '@angular/forms';

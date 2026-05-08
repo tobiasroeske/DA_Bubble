@@ -1,6 +1,4 @@
-import { Component, input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { MessageEditorComponent } from '../../message-editor/message-editor.component';
 import { FormsModule } from '@angular/forms';
 

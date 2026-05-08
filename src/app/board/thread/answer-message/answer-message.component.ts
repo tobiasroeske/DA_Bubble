@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, Input, OnInit, inject, input,
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  inject,
+  input,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
@@ -60,7 +66,10 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   async updateAllChannels(emojiIdx: number) {
     const newAnswer = this.checkIfReactionExists(emojiIdx);
     this.currentChannel()?.chat?.splice(this.chatMessagaeIndex()!, 1, this.currentChatMessage());
-    await this.firestoreService.updateAllChats(this.currentChannel().id!, this.currentChannel().chat!);
+    await this.firestoreService.updateAllChats(
+      this.currentChannel().id!,
+      this.currentChannel().chat!
+    );
   }
 
   toggleMessageEditor() {

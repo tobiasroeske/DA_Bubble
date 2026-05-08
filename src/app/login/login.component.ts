@@ -1,6 +1,4 @@
-import { Component, HostListener, OnInit, inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, HostListener, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';

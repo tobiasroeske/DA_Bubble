@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';

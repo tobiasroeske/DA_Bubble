@@ -1,17 +1,14 @@
-
-import { Component, inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-searched-user-pop-up',
-    imports: [],
-    templateUrl: './searched-user-pop-up.component.html',
-    styleUrl: './searched-user-pop-up.component.scss'
+  selector: 'app-searched-user-pop-up',
+  imports: [],
+  templateUrl: './searched-user-pop-up.component.html',
+  styleUrl: './searched-user-pop-up.component.scss',
 })
 export class SearchedUserPopUpComponent {
   boardServ = inject(BoardService);
@@ -29,9 +26,7 @@ export class SearchedUserPopUpComponent {
       this.closeSearchedUserPopUp();
       event.preventDefault();
     } catch (error) {
-      console.error('Error setting chatroom', error)
+      console.error('Error setting chatroom', error);
     }
-
   }
-
 }

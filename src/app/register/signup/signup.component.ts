@@ -1,5 +1,9 @@
-
-import { Component, EventEmitter, Input, Output, inject,
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -9,10 +13,10 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-signup',
-    imports: [FormsModule, RouterLink],
-    templateUrl: './signup.component.html',
-    styleUrl: './signup.component.scss'
+  selector: 'app-signup',
+  imports: [FormsModule, RouterLink],
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss',
 })
 export class SignupComponent {
   @Output() showNextPage = new EventEmitter<boolean>();
@@ -21,7 +25,7 @@ export class SignupComponent {
   signupService = inject(SignupService);
   user = new User();
   checkboxChecked = false;
-  
+
   onSubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid) {
       this.showNextPage.emit(true);

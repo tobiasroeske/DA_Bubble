@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Output, input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, EventEmitter, Output, input, ChangeDetectionStrategy } from '@angular/core';
 
 interface SelectedMember {
   name: string;

@@ -1,4 +1,9 @@
-import { Component, ElementRef, HostListener, input, viewChild,
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  input,
+  viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';

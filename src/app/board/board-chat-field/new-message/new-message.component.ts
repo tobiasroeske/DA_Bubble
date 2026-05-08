@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, HostListener, OnInit, inject, input,
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnInit,
+  inject,
+  input,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';

@@ -1,6 +1,4 @@
-import { Component, DestroyRef, OnInit, inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TIMINGS } from '../../../shared/constants/timings';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';

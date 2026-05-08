@@ -1,25 +1,22 @@
-import { Component, HostListener, OnInit, inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, HostListener, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SignupComponent } from './signup/signup.component';
 import { User } from '../shared/models/user.class';
 import { Router } from '@angular/router';
 import { AvatarPickerComponent } from './avatar-picker/avatar-picker.component';
 import { SignupService } from '../shared/services/signup/signup.service';
 
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'app-register',
-    imports: [SignupComponent, AvatarPickerComponent],
-    templateUrl: './register.component.html',
-    styleUrl: './register.component.scss'
+  selector: 'app-register',
+  imports: [SignupComponent, AvatarPickerComponent],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
 })
 export class RegisterComponent implements OnInit {
-  router = inject(Router)
-  signupService = inject(SignupService)
+  router = inject(Router);
+  signupService = inject(SignupService);
   user = new User();
- 
+
   next = false;
   signupSuccessful = false;
   smallScreen = false;

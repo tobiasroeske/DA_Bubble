@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Output, input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, EventEmitter, Output, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { CurrentUser } from '../../../../shared/interfaces/currentUser.interface';
 
