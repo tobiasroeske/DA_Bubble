@@ -58,8 +58,28 @@ describe('ChannelRepository', () => {
   });
 
   it('clears signals when auth state changes to null (logout)', () => {
-    repo.allChannels.set([new Channel({ title: 'test', members: [], creatorId: '', creatorName: '', allUsers: [], partecipantsIds: [], type: 'Channel' })]);
-    repo.allExistingChannels.set([new Channel({ title: 'test', members: [], creatorId: '', creatorName: '', allUsers: [], partecipantsIds: [], type: 'Channel' })]);
+    repo.allChannels.set([
+      new Channel({
+        title: 'test',
+        members: [],
+        creatorId: '',
+        creatorName: '',
+        allUsers: [],
+        partecipantsIds: [],
+        type: 'Channel',
+      }),
+    ]);
+    repo.allExistingChannels.set([
+      new Channel({
+        title: 'test',
+        members: [],
+        creatorId: '',
+        creatorName: '',
+        allUsers: [],
+        partecipantsIds: [],
+        type: 'Channel',
+      }),
+    ]);
 
     authStateCb?.(null);
 
@@ -95,7 +115,15 @@ describe('ChannelRepository', () => {
     const { updateDoc, arrayUnion } = await import('@angular/fire/firestore');
     vi.mocked(updateDoc).mockClear();
 
-    const message = { text: 'hello', creatorId: 'u1', creatorName: 'User 1', time: '10:00', date: '2024-01-01', reactions: [], thread: [] };
+    const message = {
+      text: 'hello',
+      creatorId: 'u1',
+      creatorName: 'User 1',
+      time: '10:00',
+      date: '2024-01-01',
+      reactions: [],
+      thread: [],
+    };
     await repo.updateChats('channel-abc', message as never);
 
     expect(arrayUnion).toHaveBeenCalledWith(message);

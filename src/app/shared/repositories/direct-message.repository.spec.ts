@@ -59,7 +59,15 @@ describe('DirectMessageRepository', () => {
   });
 
   it('clears signals when auth state changes to null (logout)', () => {
-    const fakeChat = new PrivateChat({ partecipantsIds: ['u1', 'u2'], initiatedAt: '', lastUpdateAt: 0, creator: {}, guest: {}, chat: [], type: 'PrivateChat' });
+    const fakeChat = new PrivateChat({
+      partecipantsIds: ['u1', 'u2'],
+      initiatedAt: '',
+      lastUpdateAt: 0,
+      creator: {},
+      guest: {},
+      chat: [],
+      type: 'PrivateChat',
+    });
     repo.directMessages.set([fakeChat]);
     repo.allDirectMessages.set([fakeChat]);
 
@@ -89,7 +97,15 @@ describe('DirectMessageRepository', () => {
     const { updateDoc } = await import('@angular/fire/firestore');
     vi.mocked(updateDoc).mockClear();
 
-    const message = { text: 'hello', creatorId: 'u1', creatorName: 'User 1', time: '10:00', date: '2024-01-01', reactions: [], thread: [] };
+    const message = {
+      text: 'hello',
+      creatorId: 'u1',
+      creatorName: 'User 1',
+      time: '10:00',
+      date: '2024-01-01',
+      reactions: [],
+      thread: [],
+    };
     await repo.updatePrivateChat('room-1', message as never);
 
     expect(updateDoc).toHaveBeenCalledTimes(2);
@@ -130,6 +146,8 @@ describe('DirectMessageRepository', () => {
     vi.mocked(updateDoc).mockRejectedValueOnce(new Error('Write failed'));
 
     const privateChat = new PrivateChat({});
-    await expect(repo.updateCompletePrivateMessage('room-fail', privateChat)).resolves.toBeUndefined();
+    await expect(
+      repo.updateCompletePrivateMessage('room-fail', privateChat)
+    ).resolves.toBeUndefined();
   });
 });

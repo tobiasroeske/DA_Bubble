@@ -17,18 +17,19 @@ vi.mock('@angular/fire/firestore', async importOriginal => {
   };
 });
 
-const buildUser = (overrides: Partial<CurrentUser> = {}): CurrentUser => ({
-  id: 'user-1',
-  name: 'Test User',
-  email: 'test@example.com',
-  avatarPath: '/avatar.png',
-  selected: false,
-  loginState: 'loggedOut',
-  type: 'CurrentUser',
-  notification: [],
-  directMessages: [],
-  ...overrides,
-} as CurrentUser);
+const buildUser = (overrides: Partial<CurrentUser> = {}): CurrentUser =>
+  ({
+    id: 'user-1',
+    name: 'Test User',
+    email: 'test@example.com',
+    avatarPath: '/avatar.png',
+    selected: false,
+    loginState: 'loggedOut',
+    type: 'CurrentUser',
+    notification: [],
+    directMessages: [],
+    ...overrides,
+  }) as CurrentUser;
 
 describe('UserRepository', () => {
   let repo: UserRepository;
@@ -123,7 +124,14 @@ describe('UserRepository', () => {
 
     const clean = repo.getCleanUserJson(raw);
 
-    expect(Object.keys(clean)).toEqual(['id', 'name', 'email', 'avatarPath', 'selected', 'directMessages']);
+    expect(Object.keys(clean)).toEqual([
+      'id',
+      'name',
+      'email',
+      'avatarPath',
+      'selected',
+      'directMessages',
+    ]);
     expect(clean).not.toHaveProperty('loginState');
     expect(clean).not.toHaveProperty('notification');
   });
