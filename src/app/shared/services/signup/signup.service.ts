@@ -1,6 +1,11 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Auth, UserCredential, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
+import {
+  Auth,
+  UserCredential,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../../models/user.class';
