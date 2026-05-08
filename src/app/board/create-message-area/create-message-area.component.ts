@@ -1,5 +1,14 @@
-
-import { Component, ElementRef, EventEmitter, Host, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Host,
+  HostListener,
+  Input,
+  Output,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
 import { BoardService } from '../../shared/services/board-service/board.service';
@@ -12,12 +21,11 @@ import { NotificationObj } from '../../shared/models/notificationObj.class';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
-
 @Component({
-    selector: 'app-create-message-area',
-    imports: [FormsModule, PickerComponent],
-    templateUrl: './create-message-area.component.html',
-    styleUrl: './create-message-area.component.scss'
+  selector: 'app-create-message-area',
+  imports: [FormsModule, PickerComponent],
+  templateUrl: './create-message-area.component.html',
+  styleUrl: './create-message-area.component.scss',
 })
 export class CreateMessageAreaComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -43,7 +51,7 @@ export class CreateMessageAreaComponent {
   tagMembers = false;
   tagChannels = false;
   fileSizeToGreat = false;
-  filteredMembers: CurrentUser[] = []
+  filteredMembers: CurrentUser[] = [];
   filteredChannels: Channel[] = [];
   uploadedFile: string = '';
   filePath: string = '';
@@ -161,7 +169,6 @@ export class CreateMessageAreaComponent {
     }
   }
 
-
   async deleteFile(): Promise<void> {
     try {
       await this.fbStorageService.deleteFile(this.filePath);
@@ -197,7 +204,7 @@ export class CreateMessageAreaComponent {
     }
     const channel = this.filteredChannels[i];
     const channelIndex = this.findIndexOfChannel(channel);
-    this.boardService.showChannelInChatField(channelIndex, event)
+    this.boardService.showChannelInChatField(channelIndex, event);
     this.tagChannels = false;
     this.channelToTag = '';
   }
@@ -226,7 +233,10 @@ export class CreateMessageAreaComponent {
               this.boardService.currentUser.notification.push(this.notificationObject.toJSON());
               this.localStorageServ.saveCurrentUser(this.boardService.currentUser);
             }
-            await this.firestoreService.updateUserNotification(this.member.id, this.notificationObject.toJSON());
+            await this.firestoreService.updateUserNotification(
+              this.member.id,
+              this.notificationObject.toJSON()
+            );
           }
         }
         this.resetTextArea();
@@ -246,7 +256,7 @@ export class CreateMessageAreaComponent {
     this.notificationObject.date = new Date().getTime();
     this.notificationObject.senderImage = this.boardService.currentUser.avatarPath;
     this.notificationObject.senderName = this.boardService.currentUser.name;
-    this.notificationObject.senderId = this.boardService.currentUser.id;
+    this.notificationObject.senderId = this.boardService.currentUser.id ?? '';
     this.notificationObject.message = this.textMessage;
   }
 
@@ -256,19 +266,23 @@ export class CreateMessageAreaComponent {
     this.filePath = '';
     this.boardService.showEmojiPicker.set(false);
     this.member = null;
-
   }
 
   filterMember() {
-    const members: CurrentUser[] = this.firestoreService.allChannels()[this.boardService.idx].members
+    const members: CurrentUser[] =
+      this.firestoreService.allChannels()[this.boardService.idx].members;
     const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
-    this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
+    this.filteredMembers = members.filter(member =>
+      member.name.toLowerCase().includes(lowerCaseTag)
+    );
   }
 
   filterChannels() {
     const channels: Channel[] = this.firestoreService.allChannels();
     const lowerCaseTag = this.channelToTag.slice(1).toLowerCase();
-    this.filteredChannels = channels.filter(channel => channel.title.toLowerCase().includes(lowerCaseTag));
+    this.filteredChannels = channels.filter(channel =>
+      channel.title.toLowerCase().includes(lowerCaseTag)
+    );
   }
 
   checkShiftEnter() {
@@ -287,7 +301,7 @@ export class CreateMessageAreaComponent {
       answers: [],
       reactions: [],
       fileUpload: this.uploadedFile,
-      type: 'ChatMessage'
-    }
+      type: 'ChatMessage',
+    };
   }
 }

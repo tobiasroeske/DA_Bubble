@@ -181,7 +181,7 @@ export class SignupService {
 
   async register(): Promise<void> {
     try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password);
+      const userCredential = await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password ?? '');
       if (userCredential.user) {
         await this.updateUserProfile({ photoURL: this.user.avatarPath, displayName: this.user.name });
         await this.pipeRegisterData(userCredential);

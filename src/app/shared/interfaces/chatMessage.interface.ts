@@ -1,9 +1,9 @@
-import { User } from "../models/user.class";
+import { CurrentUser } from "./currentUser.interface";
 import { Reaction } from "./reaction.interface";
 
 export interface ChatMessage {
     date: number;
-    user: User;
+    user: CurrentUser;
     message: string;
     answers: ChatMessage[];
     reactions: Reaction[];

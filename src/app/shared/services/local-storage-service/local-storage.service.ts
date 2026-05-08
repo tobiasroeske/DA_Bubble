@@ -14,9 +14,9 @@ export class LocalStorageService {
   }
 
   loadCurrentUser() {
-    let userExists = localStorage.getItem('currentUser');
+    const userExists = localStorage.getItem('currentUser');
     if (userExists != null) {
-      let userAsText = JSON.parse(localStorage.getItem('currentUser')!);
+      const userAsText = JSON.parse(localStorage.getItem('currentUser')!);
       if (userAsText.uid) {
         this.currentUser = this.setCurrentUserObject(userAsText);
         return this.currentUser
@@ -41,9 +41,9 @@ export class LocalStorageService {
   }
 
   loadLastReactions() {
-    let reactionsExist = localStorage.getItem('lastReactions');
+    const reactionsExist = localStorage.getItem('lastReactions');
     if (reactionsExist != null) {
-      let reactionsAsJson = JSON.parse(localStorage.getItem('lastReactions')!);
+      const reactionsAsJson = JSON.parse(localStorage.getItem('lastReactions')!);
       return reactionsAsJson;
     } else {
       return ['thumbs_up', 'laughing']
@@ -51,17 +51,17 @@ export class LocalStorageService {
   }
 
   loadCurrentChannelIndex() {
-    let currentIndex = localStorage.getItem('currentChannelIndex');
+    const currentIndex = localStorage.getItem('currentChannelIndex');
     if (currentIndex != null) {
-      let currentIndexAsJson = JSON.parse(localStorage.getItem('currentChannelIndex')!);
+      const currentIndexAsJson = JSON.parse(localStorage.getItem('currentChannelIndex')!);
       return currentIndexAsJson;
     }
   }
 
   loadIntroPlayed() {
-    let introPlayed = localStorage.getItem('introPlayed');
+    const introPlayed = localStorage.getItem('introPlayed');
     if (introPlayed != null) {
-      let introPlayedAsJson = JSON.parse(localStorage.getItem('introPlayed')!);
+      const introPlayedAsJson = JSON.parse(localStorage.getItem('introPlayed')!);
       this.introPlayed = introPlayedAsJson;
     }
   }

@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, OnDestroy } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc, query, where, orderBy, deleteDoc } from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
@@ -12,7 +12,7 @@ import { Subscribable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class FirestoreService {
+export class FirestoreService implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private auth: Auth = inject(Auth);
 
@@ -100,7 +100,7 @@ export class FirestoreService {
     return onSnapshot(this.getUsersRef(), list => {
       const items: CurrentUser[] = [];
       list.forEach(user => {
-        let singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
+        const singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
         items.push(singleUser);
       });
       this.userList.set(items);
@@ -137,7 +137,7 @@ export class FirestoreService {
     return onSnapshot(q, (list) => {
       const items: any[] = [];
       list.forEach((el) => {
-        let channel = new Channel(el.data());
+        const channel = new Channel(el.data());
         channel.id = el.id;
         items.push(channel.toJSON());
       });
@@ -149,7 +149,7 @@ export class FirestoreService {
     return onSnapshot(this.getChannelsRef(), list => {
       const items: Channel[] = [];
       list.forEach(c => {
-        let channel = new Channel(c.data());
+        const channel = new Channel(c.data());
         channel.id = c.id;
         this.checkIfChannelHasMembers(channel, channel.id)
         items.push(channel);
@@ -239,7 +239,7 @@ export class FirestoreService {
     return onSnapshot(q, (list) => {
       const items: PrivateChat[] = [];
       list.forEach(el => {
-        let privateChat = new PrivateChat(el.data());
+        const privateChat = new PrivateChat(el.data());
         items.push(privateChat);
       });
       this.directMessages.set(items);
@@ -250,7 +250,7 @@ export class FirestoreService {
     return onSnapshot(this.getDirectMessRef(), (list) => {
       const items: PrivateChat[] = [];
       list.forEach(el => {
-        let privateChat = new PrivateChat(el.data());
+        const privateChat = new PrivateChat(el.data());
         items.push(privateChat);
       });
       this.allDirectMessages.set(items);
@@ -270,7 +270,7 @@ export class FirestoreService {
   }
 
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
-    let chatRef = this.getDirectMessSingleDoc(docId);
+    const chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
       updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(() => {
 
@@ -280,7 +280,7 @@ export class FirestoreService {
 
   async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat) {
     try {
-      let pmRef = this.getDirectMessSingleDoc(docId);
+      const pmRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.error(err))
     } catch (error) {
       console.error("Error updating complete private messages", error)
@@ -290,7 +290,7 @@ export class FirestoreService {
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
     try {
-      let chatRef = this.getDirectMessSingleDoc(docId);
+      const chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: messageObject })
     } catch (error) {
       console.error('Error updating complete private chats', error)

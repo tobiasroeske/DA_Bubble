@@ -7,18 +7,19 @@ import { ChatMessage } from '../../interfaces/chatMessage.interface';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { PrivateChat } from '../../models/privateChat.class';
 import { Channel } from '../../models/channel.class';
-
+import { BREAKPOINTS } from '../../constants/breakpoints';
+import { TIMINGS } from '../../constants/timings';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BoardService {
   authService = inject(SignupService);
   storageService = inject(LocalStorageService);
   firestore = inject(FirestoreService);
 
-  currentUser: any;
-  currentChatMessage!: any;
+  currentUser!: CurrentUser;
+  currentChatMessage!: ChatMessage;
   currentChatPartner!: CurrentUser;
   privateChat!: ChatMessage[];
   currentChannelTitle: string = '';
@@ -54,9 +55,10 @@ export class BoardService {
   readonly hidePopUpChatPartner = signal<boolean>(false);
   readonly blueText = signal<boolean>(false);
 
-  readonly hideChatField = computed(() =>
-    (this.sidenavTranslate() && this.mobileView()) ||
-    (this.threadTranslate() && this.mobileView())
+  readonly hideChatField = computed(
+    () =>
+      (this.sidenavTranslate() && this.mobileView()) ||
+      (this.threadTranslate() && this.mobileView())
   );
 
   status: string = 'öffen';
@@ -69,16 +71,16 @@ export class BoardService {
 
   blueColorsForTheChatPartersFocus: boolean[] = [];
 
-  privateChatId?: string
+  privateChatId?: string;
 
   userObjectPopUp!: CurrentUser;
   userNamePopUp!: string;
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
 
-  searchText: string = "";
+  searchText: string = '';
 
-  loadCurrentUser(){
+  loadCurrentUser() {
     this.checkScreenSize();
     this.currentUser = this.storageService.loadCurrentUser()!;
     if (this.currentUser.id != '') {
@@ -90,13 +92,13 @@ export class BoardService {
   }
 
   checkScreenSize() {
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= BREAKPOINTS.DESKTOP) {
       this.showDesktopView();
     }
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= BREAKPOINTS.TABLET) {
       this.showMobileView();
     }
-    if (window.innerWidth <= 420) {
+    if (window.innerWidth <= BREAKPOINTS.MOBILE) {
       this.emojiPickerSmall.set(true);
     }
   }
@@ -118,7 +120,7 @@ export class BoardService {
   getUserLoginState(participant: CurrentUser): string {
     const allUsers: CurrentUser[] = this.firestore.userList();
     const user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
-    return user.loginState
+    return user.loginState;
   }
 
   scrollToBottom(elementRef: ElementRef) {
@@ -141,7 +143,7 @@ export class BoardService {
 
   openThread() {
     this.threadTranslate.set(true);
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= BREAKPOINTS.DESKTOP) {
       this.sidenavTranslate.set(false);
     }
   }
@@ -149,7 +151,7 @@ export class BoardService {
   toggleSidenav() {
     this.sidenavTranslate.update(v => !v);
     this.hideText();
-    if (window.innerWidth <= 1500) {
+    if (window.innerWidth <= BREAKPOINTS.DESKTOP) {
       this.threadTranslate.set(false);
     }
     if (this.mobileView()) {
@@ -165,9 +167,12 @@ export class BoardService {
 
   hideText() {
     this.status = this.sidenavTranslate() ? 'schließen' : 'öffnen';
-    setTimeout(() => {
-      this.textHidden.set(!this.sidenavTranslate());
-    }, this.sidenavTranslate() ? 100 : 50);
+    setTimeout(
+      () => {
+        this.textHidden.set(!this.sidenavTranslate());
+      },
+      this.sidenavTranslate() ? TIMINGS.SIDENAV_OPEN_DELAY : TIMINGS.SIDENAV_CLOSE_DELAY
+    );
   }
 
   openDialogAddChannel() {
@@ -192,12 +197,12 @@ export class BoardService {
 
   toggleEmojiPicker(event: Event) {
     this.showEmojiPicker.update(v => !v);
-    event.stopPropagation()
+    event.stopPropagation();
   }
 
   toggleEmojiPickerThreads(event: Event) {
     this.showEmojiPickerInThreads.update(v => !v);
-    event.stopPropagation()
+    event.stopPropagation();
   }
 
   toggleProfileView() {
@@ -239,7 +244,10 @@ export class BoardService {
   startChat(index: number, role: 'creator' | 'guest') {
     this.chatPartnerIdx = index;
     this.privateChatId = this.firestore.directMessages()[index].id || this.firestore.chatRoomId;
-    this.currentChatPartner = role === 'creator' ? this.firestore.directMessages()[index].guest : this.firestore.directMessages()[index].creator;
+    this.currentChatPartner =
+      role === 'creator'
+        ? this.firestore.directMessages()[index].guest
+        : this.firestore.directMessages()[index].creator;
     this.privateChat = this.firestore.directMessages()[index].chat;
     this.checkIfPrivateChatIsEmpty();
     this.privateChatIsStarted.set(true);
@@ -260,7 +268,7 @@ export class BoardService {
   }
 
   setBlueColorToChatPartner(index: number) {
-    this.blueColorsForTheChatPartersFocus[index] = true
+    this.blueColorsForTheChatPartersFocus[index] = true;
   }
 
   checkIfPrivateChatIsEmpty() {
@@ -268,7 +276,7 @@ export class BoardService {
       this.hidePopUpChatPartner.set(false);
       setTimeout(() => {
         this.firstPrivateMessageWasSent.set(false);
-      }, 100);
+      }, TIMINGS.SIDENAV_OPEN_DELAY);
     } else {
       this.hidePopUpChatPartner.set(true);
       this.firstPrivateMessageWasSent.set(true);
@@ -277,9 +285,15 @@ export class BoardService {
 
   loadAllData() {
     this.allData = [];
-    this.firestore.allChannels().forEach((channel: Channel) => { this.allData.push(channel) })
-    this.firestore.userList().forEach((user: CurrentUser) => { this.allData.push(user) })
-    this.firestore.directMessages().forEach((dm: PrivateChat) => { this.allData.push(dm) })
+    this.firestore.allChannels().forEach((channel: Channel) => {
+      this.allData.push(channel);
+    });
+    this.firestore.userList().forEach((user: CurrentUser) => {
+      this.allData.push(user);
+    });
+    this.firestore.directMessages().forEach((dm: PrivateChat) => {
+      this.allData.push(dm);
+    });
   }
 
   openShowUserPopUp(index: number) {
@@ -298,14 +312,14 @@ export class BoardService {
       } else {
         console.warn('Element not found:', 'message-' + index);
       }
-    }, 100);
+    }, TIMINGS.SIDENAV_OPEN_DELAY);
     this.leaveTheHighlightFromSearchedMessage(index);
   }
 
   leaveTheHighlightFromSearchedMessage(index: number) {
     setTimeout(() => {
       this.highlightArrayForTheChildElementSearched[index] = false;
-    }, 1500)
+    }, TIMINGS.HIGHLIGHT_DURATION);
   }
 
   scrollToChannelMessageAfterClickOnNotific(index: number) {
@@ -316,12 +330,12 @@ export class BoardService {
         this.highlightArrayForTheChannelElementSearched[index] = true;
       }
       this.leaveTheHighlightFromSearchedChannelMessage(index);
-    }, 100);
+    }, TIMINGS.SIDENAV_OPEN_DELAY);
   }
 
   leaveTheHighlightFromSearchedChannelMessage(index: number) {
     setTimeout(() => {
       this.highlightArrayForTheChannelElementSearched[index] = false;
-    }, 1500)
+    }, TIMINGS.HIGHLIGHT_DURATION);
   }
 }

@@ -1,19 +1,37 @@
 import { Routes } from '@angular/router';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { BoardComponent } from './board/board.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { ResetPasswordComponent } from './login/forgot-password/reset-password/reset-password.component';
-import { ImpressumComponent } from './impressum/impressum.component';
-import { DatenschutzComponent } from './datenschutz/datenschutz.component';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
-    { path: '', component: LoginComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'board', component: BoardComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'resetpassword', component: ResetPasswordComponent },
-    { path: 'impressum', component: ImpressumComponent },
-    { path: 'datenschutz', component: DatenschutzComponent }
-
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'board',
+    loadComponent: () => import('./board/board.component').then(m => m.BoardComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent),
+  },
+  {
+    path: 'resetpassword',
+    loadComponent: () =>
+      import('./login/forgot-password/reset-password/reset-password.component').then(
+        m => m.ResetPasswordComponent
+      ),
+  },
+  {
+    path: 'impressum',
+    loadComponent: () =>
+      import('./impressum/impressum.component').then(m => m.ImpressumComponent),
+  },
+  {
+    path: 'datenschutz',
+    loadComponent: () =>
+      import('./datenschutz/datenschutz.component').then(m => m.DatenschutzComponent),
+  },
+  { path: '**', redirectTo: 'login' },
 ];

@@ -1,4 +1,5 @@
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, HostListener, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -29,6 +30,8 @@ export class BoardComponent implements OnInit {
   idleUserService = inject(IdleService);
   localStorageService = inject(LocalStorageService)
   
+  private readonly destroyRef = inject(DestroyRef);
+
   isUserIdle = false;
   profileOptionContainerOpen = false;
 
@@ -43,7 +46,7 @@ export class BoardComponent implements OnInit {
     if (this.boardServ.currentUser.loginState != 'loggedOut') {
       this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
       this.boardServ.currentUser.loginState = 'loggedIn'
-      await this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+      await this.firestore.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
     }
     
   }
@@ -52,26 +55,27 @@ export class BoardComponent implements OnInit {
   async unloadHandler(event: Event) {
     event.preventDefault();
     this.localStorageService.saveIntroPlayed(false);
-    let currentUser = this.localStorageService.loadCurrentUser();
+    const currentUser = this.localStorageService.loadCurrentUser();
     currentUser.loginState = 'loggedOut';
-    await this.firestore.updateUser(currentUser.id, currentUser);
+    await this.firestore.updateUser(currentUser.id!, currentUser);
   }
 
   ngOnInit() {
     this.boardServ.checkScreenSize();
     this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
-    this.idleUserService.userInactive.subscribe(isIdle => {
-      if (isIdle) {
-        
-        this.boardServ.currentUser.loginState = 'idle';
-        this.firestore.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
-      }
-    })
+    this.idleUserService.userInactive
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(isIdle => {
+        if (isIdle) {
+          this.boardServ.currentUser.loginState = 'idle';
+          this.firestore.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
+        }
+      });
   }
 
   getUserNotifications() {
-    let allUsers = this.firestore.userList();
-    let currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id)
+    const allUsers = this.firestore.userList();
+    const currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id)
     return currentUser;
   }
 

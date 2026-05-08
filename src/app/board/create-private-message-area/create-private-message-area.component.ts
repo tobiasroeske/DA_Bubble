@@ -44,14 +44,14 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   }
 
   override filterMember() {
-    let members: CurrentUser[] = this.allUsers;
-    let lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
+    const members: CurrentUser[] = this.allUsers;
+    const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
     this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
   }
 
   override async sendMessage(event?: Event) {
     if (this.boardServ.privateChatId) {
-      let date = new Date().getTime();
+      const date = new Date().getTime();
       this.message = this.setMessageObject(date);
       this.setAnswerMessage();
       if (this.message.message.trim() !== '' || this.uploadedFile.length > 0) {

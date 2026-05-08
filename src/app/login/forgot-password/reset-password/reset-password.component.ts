@@ -1,5 +1,7 @@
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { TIMINGS } from '../../../shared/constants/timings';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignupService } from '../../../shared/services/signup/signup.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,7 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ResetPasswordComponent implements OnInit {
   authService = inject(SignupService);
   activatedRoute = inject(ActivatedRoute);
-  router = inject(Router)
+  router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   newPassword: string = '';
   passwordConfirmation: string = '';
@@ -23,16 +26,18 @@ export class ResetPasswordComponent implements OnInit {
   passwordChanged: boolean = false;
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      this.resetCode = params['oobCode'] || '';
-      this.actionMode = params['mode'] || '';
-      if (this.actionMode === 'verifyAndChangeEmail') {
-        this.changeEmail();
-      }
-      if (this.actionMode === 'verifyEmail') {
-        this.verifyEmail();
-      }
-    });
+    this.activatedRoute.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.resetCode = params['oobCode'] || '';
+        this.actionMode = params['mode'] || '';
+        if (this.actionMode === 'verifyAndChangeEmail') {
+          this.changeEmail();
+        }
+        if (this.actionMode === 'verifyEmail') {
+          this.verifyEmail();
+        }
+      });
   }
 
   async verifyEmail(): Promise<void> {
@@ -65,7 +70,7 @@ export class ResetPasswordComponent implements OnInit {
       try {
         await this.authService.resetPassword(this.resetCode, this.newPassword);
         this.passwordChanged = true;
-        setTimeout(() => this.backToLogin(), 1500);
+        setTimeout(() => this.backToLogin(), TIMINGS.REDIRECT_DELAY);
       } catch (err) {
         console.error('Error resetting password:', err);
       }

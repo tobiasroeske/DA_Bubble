@@ -4,6 +4,7 @@ import { BoardService } from '../../shared/services/board-service/board.service'
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { SearchDialogComponent } from "../board-toolbar/search-dialog/search-dialog.component";
 import { FormsModule } from '@angular/forms';
+import { TIMINGS } from '../../shared/constants/timings';
 
 @Component({
     selector: 'app-sidenav',
@@ -27,12 +28,12 @@ export class SidenavComponent {
       this.channelHeaderIsClicked = true;
       setTimeout(() => {
         this.canTranslateYChannel = true;
-      }, 30)
+      }, TIMINGS.SECTION_EXPAND_DELAY);
     } else if (this.channelHeaderIsClicked) {
       this.canTranslateYChannel = false;
       setTimeout(() => {
         this.channelHeaderIsClicked = false;
-      }, 50)
+      }, TIMINGS.SECTION_COLLAPSE_DELAY);
     }
   }
 
@@ -41,12 +42,12 @@ export class SidenavComponent {
       this.directMessHeaderisClicked = true;
       setTimeout(() => {
         this.canTranslateYUserList = true;
-      }, 30)
+      }, TIMINGS.SECTION_EXPAND_DELAY);
     } else {
       this.canTranslateYUserList = false;
       setTimeout(() => {
         this.directMessHeaderisClicked = false;
-      }, 50)
+      }, TIMINGS.SECTION_COLLAPSE_DELAY);
     }
   }
 

@@ -63,8 +63,8 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   async findNewAddedUsers() {
-    let currentChannelUids = this.currentChannel.allUsers.map(user => user.id);
-    let userList = this.firestore.userList();
+    const currentChannelUids = this.currentChannel.allUsers.map(user => user.id);
+    const userList = this.firestore.userList();
     userList.forEach(user => {
       if (!currentChannelUids.includes(user.id)) {
         this.currentChannel.allUsers.push(user)
@@ -102,7 +102,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   async updateParticipants() {
-    let updatedUsers = this.currentChannel.allUsers;
+    const updatedUsers = this.currentChannel.allUsers;
     await this.firestore.updateChannelUsers(updatedUsers, this.channelId);
     this.selectedList = [];
     await this.addPartecipantsIds();

@@ -26,7 +26,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   @Input() chatMessagaeIndex?: number;
   @Input() answerIndex?: number
 
-  currentUserName!: User;
+  currentUserName!: string;
   showReactionPopup = false;
   showEmojiBar = false;
   reactionDialogIndicatorbarOpen = false;
@@ -48,7 +48,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   }
 
   async updateAllChannels(emojiIdx: number) {
-    let newAnswer = this.checkIfReactionExists(emojiIdx);
+    const newAnswer = this.checkIfReactionExists(emojiIdx);
     this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage)
     await this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
   }
@@ -58,8 +58,8 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   }
 
   checkIfReactionExists(emojiIdx: number) {
-    let emojiPath = this.reactionEmojis[emojiIdx];
-    let existingReaction = this.findExistingReaction(emojiPath);
+    const emojiPath = this.reactionEmojis[emojiIdx];
+    const existingReaction = this.findExistingReaction(emojiPath);
     if (existingReaction) {
       this.updateExistingReaction(existingReaction);
     } else {
