@@ -1,11 +1,14 @@
 
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../shared/models/user.class';
 import { RouterLink } from '@angular/router';
 import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-signup',
     imports: [FormsModule, RouterLink],
     templateUrl: './signup.component.html',

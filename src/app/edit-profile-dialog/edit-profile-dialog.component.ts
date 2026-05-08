@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { BoardService } from '../shared/services/board-service/board.service';
 import { FormsModule, NgForm } from '@angular/forms';
 
@@ -11,10 +13,11 @@ import { Channel } from '../shared/models/channel.class';
 import { PrivateChat } from '../shared/models/privateChat.class';
 
 @Component({
-    selector: 'app-edit-profile-dialog',
-    imports: [FormsModule],
-    templateUrl: './edit-profile-dialog.component.html',
-    styleUrl: './edit-profile-dialog.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-edit-profile-dialog',
+  imports: [FormsModule],
+  templateUrl: './edit-profile-dialog.component.html',
+  styleUrl: './edit-profile-dialog.component.scss',
 })
 export class EditProfileDialogComponent {
   @Output() editorOpen = new EventEmitter<boolean>();
@@ -26,7 +29,14 @@ export class EditProfileDialogComponent {
   fullname: string;
   mail: string;
   avatarPath: string;
-  avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png'];
+  avatars: string[] = [
+    'assets/img/avatar0.png',
+    'assets/img/avatar1.png',
+    'assets/img/avatar2.png',
+    'assets/img/avatar3.png',
+    'assets/img/avatar4.png',
+    'assets/img/avatar5.png',
+  ];
   changeAvatar = false;
   changesSuccessful = false;
   allChannels: Channel[] = [];
@@ -34,14 +44,11 @@ export class EditProfileDialogComponent {
 
   allMembers: CurrentUser[] = [];
 
-
-
   constructor() {
     this.fullname = this.boardServ.currentUser.name;
     this.mail = this.boardServ.currentUser.email;
     this.avatarPath = this.boardServ.currentUser.avatarPath;
   }
-
 
   async onSubmit(ngForm: NgForm): Promise<void> {
     if (ngForm.submitted && ngForm.form.valid) {
@@ -105,7 +112,7 @@ export class EditProfileDialogComponent {
   private async updateUserProfile(): Promise<void> {
     await this.authService.updateUserProfile({
       displayName: this.fullname,
-      photoURL: this.avatarPath
+      photoURL: this.avatarPath,
     });
   }
 
@@ -125,7 +132,7 @@ export class EditProfileDialogComponent {
       this.updateUsers(),
       this.updateMember(),
       this.updateChatMessage(),
-      this.updateDirectMessages()
+      this.updateDirectMessages(),
     ]);
   }
 
@@ -180,5 +187,4 @@ export class EditProfileDialogComponent {
     this.avatarPath = await this.firebaseStorageService.getDownloadUrl(path);
     this.changeAvatar = false;
   }
-
 }

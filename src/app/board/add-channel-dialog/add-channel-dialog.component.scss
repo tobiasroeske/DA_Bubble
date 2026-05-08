@@ -1,15 +1,15 @@
 @use 'variables' as *;
 
 textarea::placeholder {
-    color: rgba(104, 104, 104, 1);
-    font-size: 18px;
-    font-weight: 400;
+  color: rgba(104, 104, 104, 1);
+  font-size: 18px;
+  font-weight: 400;
 }
 
 textarea::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 textarea {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }

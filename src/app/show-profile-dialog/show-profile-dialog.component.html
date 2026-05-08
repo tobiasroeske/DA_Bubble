@@ -1,46 +1,63 @@
-<div class="flex flex-col gap-9 w-full font-nunito sm:w-full max-sm:w-full" style="max-width: 400px;">
-    <ng-container>
-        <div class="flex justify-between items-center w-full">
-            <h3 class="text-2xl font-bold">Profil</h3>
-            <img src="assets/icons/close.svg" alt="" (click)="closeDialog()" class="cursor-pointer rounded-2xl p-2 transition-all duration-[125ms] hover:bg-[#ECEEFD]">
-        </div>
-        <img src="{{ boardServ.currentUser.avatarPath }}" alt="" class="w-52 h-52 rounded-full object-cover object-center">
-        <div class="flex flex-col gap-5 w-full">
-            <div class="flex justify-between items-center w-full">
-                <h2 class="text-3xl font-bold">{{ boardServ.currentUser.name }}</h2>
-                @if (boardServ.currentUser.id != GUESTID) {
-                @if (boardServ.mobileView()) {
-                <img (click)="openEditor($event)" src="assets/icons/edit_square.svg" alt="" class="cursor-pointer transition-all duration-[125ms] hover:scale-105">
-                } @else {
-                <span (click)="openEditor($event)" class="cursor-pointer text-lg font-semibold text-[#535AF1] transition-all duration-[125ms] hover:text-[#444DF2] hover:font-bold">Bearbeiten</span>
-                }
-                }
-            </div>
-            @if (boardServ.currentUser.loginState === 'loggedIn') {
-            <span class="flex w-full items-center gap-4 text-[#92C83E] text-xl font-normal">
-                <img src="assets/img/status_online.png" alt="" class="w-6 h-6"> Online
-            </span>
-            } @else if (boardServ.currentUser.loginState === 'idle') {
-            <span class="flex w-full items-center gap-4 text-[#92C83E] text-xl font-normal">
-                <img src="assets/icons/user_idle.png" alt="" class="w-6 h-6"> Abwesend
-            </span>
-            } @else if (boardServ.currentUser.loginState === 'loggedOut') {
-            <span class="flex w-full items-center gap-4 text-[#92C83E] text-xl font-normal">
-                <img src="assets/icons/user_offline.png" alt="" class="w-6 h-6"> Offline
-            </span>
-            }
+<div
+  class="flex flex-col gap-9 w-full font-nunito sm:w-full max-sm:w-full"
+  style="max-width: 400px"
+>
+  <ng-container>
+    <div class="flex justify-between items-center w-full">
+      <h3 class="text-2xl font-bold">Profil</h3>
+      <img
+        src="assets/icons/close.svg"
+        alt=""
+        (click)="closeDialog()"
+        class="cursor-pointer rounded-2xl p-2 transition-all duration-[125ms] hover:bg-[#ECEEFD]"
+      />
+    </div>
+    <img
+      src="{{ boardServ.currentUser.avatarPath }}"
+      alt=""
+      class="w-52 h-52 rounded-full object-cover object-center"
+    />
+    <div class="flex flex-col gap-5 w-full">
+      <div class="flex justify-between items-center w-full">
+        <h2 class="text-3xl font-bold">{{ boardServ.currentUser.name }}</h2>
+        @if (boardServ.currentUser.id != GUESTID) {
+          @if (boardServ.mobileView()) {
+            <img
+              (click)="openEditor($event)"
+              src="assets/icons/edit_square.svg"
+              alt=""
+              class="cursor-pointer transition-all duration-[125ms] hover:scale-105"
+            />
+          } @else {
+            <span
+              (click)="openEditor($event)"
+              class="cursor-pointer text-lg font-semibold text-[#535AF1] transition-all duration-[125ms] hover:text-[#444DF2] hover:font-bold"
+              >Bearbeiten</span
+            >
+          }
+        }
+      </div>
+      @if (boardServ.currentUser.loginState === 'loggedIn') {
+        <span class="flex w-full items-center gap-4 text-[#92C83E] text-xl font-normal">
+          <img src="assets/img/status_online.png" alt="" class="w-6 h-6" /> Online
+        </span>
+      } @else if (boardServ.currentUser.loginState === 'idle') {
+        <span class="flex w-full items-center gap-4 text-[#92C83E] text-xl font-normal">
+          <img src="assets/icons/user_idle.png" alt="" class="w-6 h-6" /> Abwesend
+        </span>
+      } @else if (boardServ.currentUser.loginState === 'loggedOut') {
+        <span class="flex w-full items-center gap-4 text-[#92C83E] text-xl font-normal">
+          <img src="assets/icons/user_offline.png" alt="" class="w-6 h-6" /> Offline
+        </span>
+      }
+    </div>
 
-        </div>
-
-        <div class="flex items-start gap-4 w-full">
-            <img src="assets/img/mail_black.png" alt="">
-            <div class="flex flex-col items-start">
-                <span class="text-xl font-bold">Email Adresse</span>
-                <span class="text-lg font-medium text-[#1381FF]">{{ boardServ.currentUser.email }}</span>
-            </div>
-        </div>
-    </ng-container>
-
-
-
+    <div class="flex items-start gap-4 w-full">
+      <img src="assets/img/mail_black.png" alt="" />
+      <div class="flex flex-col items-start">
+        <span class="text-xl font-bold">Email Adresse</span>
+        <span class="text-lg font-medium text-[#1381FF]">{{ boardServ.currentUser.email }}</span>
+      </div>
+    </div>
+  </ng-container>
 </div>

@@ -1,20 +1,20 @@
 @use 'variables' as *;
 
 .reaction-dialog-reverse {
-    right: -100px;
-    border-radius: 0 30px 30px 30px;
+  right: -100px;
+  border-radius: 0 30px 30px 30px;
 }
 
 .reaction-dialog-indicatorbar-reverse {
-    right: 24px !important;
-    left: auto !important;
-    border-radius: 30px 30px 0 30px !important;
+  right: 24px !important;
+  left: auto !important;
+  border-radius: 30px 30px 0 30px !important;
 }
 
 // Hover popup reaction
 .reaction-indicator:hover .pop-up-reaction {
-    display: flex !important;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 16px;
+  display: flex !important;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 16px;
 }

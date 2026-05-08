@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -9,10 +9,11 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-    selector: 'app-add-channel-dialog',
-    imports: [FormsModule],
-    templateUrl: './add-channel-dialog.component.html',
-    styleUrl: './add-channel-dialog.component.scss'
+  selector: 'app-add-channel-dialog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [FormsModule],
+  templateUrl: './add-channel-dialog.component.html',
+  styleUrl: './add-channel-dialog.component.scss',
 })
 export class AddChannelDialogComponent {
   boardServ = inject(BoardService);
@@ -40,12 +41,12 @@ export class AddChannelDialogComponent {
 
   async sendFormDataToDatabase(ngForm: NgForm) {
     try {
-      await this.firestore.addChannel(this.channel.toJSON())
-      this.boardServ.idx = this.getNewChannelIndex()
+      await this.firestore.addChannel(this.channel.toJSON());
+      this.boardServ.idx = this.getNewChannelIndex();
       this.localStorageService.saveCurrentChannelIndex(this.getNewChannelIndex());
       ngForm.resetForm();
     } catch (error) {
-      console.error('Error adding channel', error)
+      console.error('Error adding channel', error);
     }
   }
 
@@ -58,15 +59,17 @@ export class AddChannelDialogComponent {
   }
 
   checkIfChannelTitleAleadyExist() {
-    const idx = this.firestore.allExistingChannels().findIndex((chan) => chan.title === this.channel.title);
+    const idx = this.firestore
+      .allExistingChannels()
+      .findIndex(chan => chan.title === this.channel.title);
     this.existingChannelIndex = idx;
   }
 
   getNewChannelIndex() {
     const allChannels = this.firestore.allChannels();
-    const isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId
+    const isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId;
     const index = allChannels.findIndex(isChannel);
-    return index
+    return index;
   }
 
   async shapeChannel() {
@@ -77,7 +80,7 @@ export class AddChannelDialogComponent {
 
   setCreatorInfo(): void {
     const currentUser = this.localStorageService.loadCurrentUser();
-    this.channel.creatorId = currentUser.id
+    this.channel.creatorId = currentUser.id;
     this.channel.creatorName = currentUser.name;
   }
 
@@ -97,4 +100,3 @@ export class AddChannelDialogComponent {
     }
   }
 }
-

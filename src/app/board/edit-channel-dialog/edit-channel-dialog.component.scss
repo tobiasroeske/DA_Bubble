@@ -1,371 +1,371 @@
 @use 'variables' as *;
 
 textarea::placeholder {
-    color: rgba(104, 104, 104, 1);
-    font-size: 18px;
-    font-weight: 400;
+  color: rgba(104, 104, 104, 1);
+  font-size: 18px;
+  font-weight: 400;
 }
 
 textarea::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 textarea::-webkit-scrollbar-thumb {
-    border-radius: 100px;
-    background: rgba(173, 176, 217, 1);
+  border-radius: 100px;
+  background: rgba(173, 176, 217, 1);
 }
 
 .icon-edit-name-or-desc-mobile:hover {
-    transform: scale(1.05);
-    border-radius: 40px;
-    padding: 3px;
+  transform: scale(1.05);
+  border-radius: 40px;
+  padding: 3px;
 }
 
 .icon-edit-name-or-desc-mobile:hover path {
-    fill: $specialBlue;
+  fill: $specialBlue;
 }
 
 /* Old styles preserved for fallback */
 .edit-dialog-container {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.15);
-    z-index: 99;
-    @include d-flex();
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 99;
+  @include d-flex();
 
-    >.edit-dialog-wrapper {
-        background: #fff;
-        min-height: 616px;
-        padding: 40px;
-        width: 50%;
-        border-radius: 0px 30px 30px 30px;
-        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+  > .edit-dialog-wrapper {
+    background: #fff;
+    min-height: 616px;
+    padding: 40px;
+    width: 50%;
+    border-radius: 0px 30px 30px 30px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 
-        >.edit-dialog {
-            font-family: "Nunito";
-            @include d-flex(column, space-between, flex-start, 20px);
-        }
+    > .edit-dialog {
+      font-family: 'Nunito';
+      @include d-flex(column, space-between, flex-start, 20px);
     }
+  }
 }
 
 .edit-channel-header {
-    @include d-flex($jc: space-between);
-    width: 100%;
+  @include d-flex($jc: space-between);
+  width: 100%;
 
-    .channel {
-        @include d-flex($jc: space-between, $g: 15px);
-        padding: 2px 1px;
-        border-radius: 30px;
-        cursor: pointer;
+  .channel {
+    @include d-flex($jc: space-between, $g: 15px);
+    padding: 2px 1px;
+    border-radius: 30px;
+    cursor: pointer;
 
-        >h3 {
-            font-size: 24px;
-            font-weight: 700;
-        }
+    > h3 {
+      font-size: 24px;
+      font-weight: 700;
     }
+  }
 }
 
 .edit-channel-name-container {
-    border-radius: 20px;
-    border: 1px solid rgba(173, 176, 217, 1);
-    padding: 20px;
-    @include d-flex(column, space-between, flex-start, 20px);
-    transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+  border-radius: 20px;
+  border: 1px solid rgba(173, 176, 217, 1);
+  padding: 20px;
+  @include d-flex(column, space-between, flex-start, 20px);
+  transition: all 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
+  width: 100%;
+
+  > .edit-channel-name-header {
+    @include d-flex($jc: space-between);
+    width: 100%;
+    transition: all 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+    > .desktop-desc-btn {
+      color: $specialBlue;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+
+  > .edit-channel-name {
+    @include d-flex($jc: flex-start, $g: 10px);
     width: 100%;
 
-    >.edit-channel-name-header {
-        @include d-flex($jc: space-between);
-        width: 100%;
-        transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
-
-        >.desktop-desc-btn {
-            color: $specialBlue;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+    > input {
+      font-size: 18px;
+      font-weight: 400;
+      border: unset;
+      outline: none;
+      width: 100%;
     }
-
-    >.edit-channel-name {
-        @include d-flex($jc: flex-start, $g: 10px);
-        width: 100%;
-
-        >input {
-            font-size: 18px;
-            font-weight: 400;
-            border: unset;
-            outline: none;
-            width: 100%;
-        }
-    }
+  }
 }
 
 .edit-channel-description-container {
-    border-radius: 20px;
-    border: 1px solid rgba(173, 176, 217, 1);
-    padding: 20px;
-    @include d-flex(column, space-between, flex-start, 30px);
-    transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+  border-radius: 20px;
+  border: 1px solid rgba(173, 176, 217, 1);
+  padding: 20px;
+  @include d-flex(column, space-between, flex-start, 30px);
+  transition: all 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
+  width: 100%;
+
+  > .edit-channel-description-header {
+    @include d-flex($jc: space-between);
     width: 100%;
+    transition: all 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
 
-    >.edit-channel-description-header {
-        @include d-flex($jc: space-between);
-        width: 100%;
-        transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+    > .desktop-desc-btn {
+      color: $specialBlue;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
 
-        >.desktop-desc-btn {
-            color: $specialBlue;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+  > textarea {
+    font-size: 18px;
+    font-weight: 400;
+    width: 100%;
+    border: unset;
+    resize: none;
+    outline: none;
+    font-family: 'Nunito';
+
+    &::-webkit-scrollbar {
+      width: 6px;
     }
 
-    >textarea {
-        font-size: 18px;
-        font-weight: 400;
-        width: 100%;
-        border: unset;
-        resize: none;
-        outline: none;
-        font-family: "Nunito";
-
-        &::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            border-radius: 100px;
-            background: rgba(173, 176, 217, 1);
-        }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 100px;
+      background: rgba(173, 176, 217, 1);
     }
+  }
 
-    >.line {
-        display: block;
-        background: rgba(173, 176, 217, 1);
-        height: 1px;
-        width: 100%;
-    }
+  > .line {
+    display: block;
+    background: rgba(173, 176, 217, 1);
+    height: 1px;
+    width: 100%;
+  }
 }
 
 .edit-description {
-    outline: none;
+  outline: none;
 }
 
 .creator-container {
-    @include d-flex(column, space-between, flex-start, 20px);
+  @include d-flex(column, space-between, flex-start, 20px);
 
-    >h3 {
-        font-size: 18px;
-        font-weight: 700;
-    }
+  > h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
 
-    >span {
-        font-size: 24px;
-        font-weight: 400;
-        color: $specialBlue;
-    }
+  > span {
+    font-size: 24px;
+    font-weight: 400;
+    color: $specialBlue;
+  }
 }
 
 .hashtag-icon {
-    height: 24px;
-    width: 24px;
-    object-fit: contain;
+  height: 24px;
+  width: 24px;
+  object-fit: contain;
 }
 
 .hashtag-icon-smaller {
-    height: 16px;
-    width: 16px;
-    object-fit: contain;
+  height: 16px;
+  width: 16px;
+  object-fit: contain;
 }
 
 .name-container-editModus {
-    padding: 0;
-    border: none;
+  padding: 0;
+  border: none;
 }
 
 .editChannel-name-editModus {
-    padding: 0;
-    padding: 18px 20px;
-    border: 1px solid rgba(173, 176, 217, 1);
-    border-radius: 40px;
+  padding: 0;
+  padding: 18px 20px;
+  border: 1px solid rgba(173, 176, 217, 1);
+  border-radius: 40px;
 }
 
 .desc-container-editModus {
-    padding: 0;
-    border: none;
+  padding: 0;
+  border: none;
 }
 
 .editChannel-desc-editModus {
-    padding: 0;
-    padding: 18px 20px;
-    border: 1px solid rgba(173, 176, 217, 1);
+  padding: 0;
+  padding: 18px 20px;
+  border: 1px solid rgba(173, 176, 217, 1);
 }
 
 .editChannel-name-editModus {
-    padding: 20px
+  padding: 20px;
 }
 
 .btn-container {
-    @include d-flex($jc: flex-end);
-    width: 100%;
+  @include d-flex($jc: flex-end);
+  width: 100%;
 
-    >button {
-        border-radius: 25px;
-        padding: 12px 25px;
-        background: rgba(68, 77, 242, 1);
-        color: #fff;
-        font-size: 18px;
-        font-weight: 700;
-        transition: all 0.15s cubic-bezier(.215, .61, .355, 1);
+  > button {
+    border-radius: 25px;
+    padding: 12px 25px;
+    background: rgba(68, 77, 242, 1);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    transition: all 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
 
-        &:hover {
-            background: rgba(173, 176, 217, 1);
-        }
+    &:hover {
+      background: rgba(173, 176, 217, 1);
     }
+  }
 }
 
 @media (min-width: 960px) {
-    .mobile-desc-btn {
-        display: none;
-    }
+  .mobile-desc-btn {
+    display: none;
+  }
 
-    app-members-dialog,
-    app-add-specific-person-dialog {
-        display: none;
-    }
+  app-members-dialog,
+  app-add-specific-person-dialog {
+    display: none;
+  }
 }
 
 @media (max-width: 960px) {
-    .desktop-desc-btn {
-        display: none;
+  .desktop-desc-btn {
+    display: none;
+  }
+
+  .mobile-desc-btn {
+    @include d-flex();
+
+    > .icon-edit-name-or-desc-mobile {
+      border-radius: 40px;
+      padding: 3px;
+      object-fit: contain;
+      cursor: pointer;
+      background: rgba(236, 238, 254, 1);
+
+      &:hover path {
+        fill: $specialBlue;
+      }
     }
+  }
 
-    .mobile-desc-btn {
-        @include d-flex();
+  .edit-dialog-container {
+    width: auto;
+    max-height: 100vh;
 
-        >.icon-edit-name-or-desc-mobile {
-            border-radius: 40px;
-            padding: 3px;
-            object-fit: contain;
-            cursor: pointer;
-            background: rgba(236, 238, 254, 1);
+    > .edit-dialog-wrapper {
+      position: relative;
+      background: #fff;
+      border-radius: 30px;
+      padding: 40px 40px 40px 40px;
+      height: 100vh;
+      width: 90%;
+      overflow: hidden;
+      font-family: 'Nunito';
 
-            &:hover path {
-                fill: $specialBlue;
-            }
+      > .edit-dialog {
+        height: 100vh;
+        overflow-y: auto;
+        padding-bottom: 60px;
+        @include d-flex(column, space-between, flex-start, 20px);
+
+        &::-webkit-scrollbar {
+          display: none;
         }
+      }
     }
+  }
 
-    .edit-dialog-container {
-        width: auto;
-        max-height: 100vh;
-
-        >.edit-dialog-wrapper {
-            position: relative;
-            background: #fff;
-            border-radius: 30px;
-            padding: 40px 40px 40px 40px;
-            height: 100vh;
-            width: 90%;
-            overflow: hidden;
-            font-family: 'Nunito';
-
-            >.edit-dialog {
-                height: 100vh;
-                overflow-y: auto;
-                padding-bottom: 60px;
-                @include d-flex(column, space-between, flex-start, 20px);
-
-                &::-webkit-scrollbar {
-                    display: none;
-                }
-            }
-        }
-    }
-
-    .mobile-d-none {
-        display: none;
-    }
+  .mobile-d-none {
+    display: none;
+  }
 }
 
 .cross-icon-edit-channel {
-    height: 40px;
-    width: 40px;
-    object-fit: contain;
-    border-radius: 100%;
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  border-radius: 100%;
 
-    &:hover {
-        cursor: pointer;
-        background: rgba(236, 238, 254, 1);
-    }
+  &:hover {
+    cursor: pointer;
+    background: rgba(236, 238, 254, 1);
+  }
 
-    &:hover path {
-        fill: $specialBlue;
-    }
+  &:hover path {
+    fill: $specialBlue;
+  }
 }
 
 @media (max-width: 480px) {
-    .edit-dialog-container {
-        >.edit-dialog-wrapper {
-            padding: 20px;
-            width: 100%;
-        }
+  .edit-dialog-container {
+    > .edit-dialog-wrapper {
+      padding: 20px;
+      width: 100%;
+    }
+  }
+
+  .edit-channel-name-header {
+    > h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  .edit-channel-description-header {
+    > h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  .edit-channel-header {
+    > .channel {
+      > h3 {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .hashtag-icon {
+    height: 16px;
+    width: 16px;
+    object-fit: contain;
+  }
+
+  .creator-container {
+    > h3 {
+      font-size: 16px;
     }
 
-    .edit-channel-name-header {
-        >h3 {
-            font-size: 16px;
-            font-weight: 700
-        }
+    > span {
+      font-size: 18px;
     }
+  }
 
-    .edit-channel-description-header {
-        >h3 {
-            font-size: 16px;
-            font-weight: 700
-        }
+  .btn-container {
+    > button {
+      font-size: 16px;
     }
+  }
 
-    .edit-channel-header {
-        >.channel {
-            >h3 {
-                font-size: 18px;
-            }
-        }
-    }
-
-    .hashtag-icon {
-        height: 16px;
-        width: 16px;
-        object-fit: contain;
-    }
-
-    .creator-container {
-        >h3 {
-            font-size: 16px;
-        }
-
-        >span {
-            font-size: 18px;
-        }
-    }
-
-    .btn-container {
-        >button {
-            font-size: 16px;
-        }
-    }
-
-    .cross-icon-edit-channel {
-        height: 32px;
-        width: 32px;
-    }
+  .cross-icon-edit-channel {
+    height: 32px;
+    width: 32px;
+  }
 }
 
 .desktop-d-none {
-    display: none;
+  display: none;
 }

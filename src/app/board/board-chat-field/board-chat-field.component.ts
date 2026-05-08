@@ -1,5 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -14,21 +26,34 @@ import { LocalStorageService } from '../../shared/services/local-storage-service
 import { PrivateChat } from '../../shared/models/privateChat.class';
 import { NewMessageComponent } from './new-message/new-message.component';
 
-
 @Component({
-    selector: 'app-board-chat-field',
-    imports: [CommonModule, CreateMessageAreaComponent, MembersDialogComponent, AddMemberDialogComponent, ChatMessageComponent, ShowMemberPopUpComponent, CreatePrivateMessageAreaComponent, PrivateChatMessageComponent, NewMessageComponent],
-    templateUrl: './board-chat-field.component.html',
-    styleUrls: ['./board-chat-field.component.scss', './board-chat-field-media-queries.compoenent.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-board-chat-field',
+  imports: [
+    CommonModule,
+    CreateMessageAreaComponent,
+    MembersDialogComponent,
+    AddMemberDialogComponent,
+    ChatMessageComponent,
+    ShowMemberPopUpComponent,
+    CreatePrivateMessageAreaComponent,
+    PrivateChatMessageComponent,
+    NewMessageComponent,
+  ],
+  templateUrl: './board-chat-field.component.html',
+  styleUrls: [
+    './board-chat-field.component.scss',
+    './board-chat-field-media-queries.compoenent.scss',
+  ],
 })
 export class BoardChatFieldComponent implements OnInit, AfterViewInit {
-  @ViewChild('chatMessageArea') chatField!: ElementRef;
+  readonly chatField = viewChild.required<ElementRef>('chatMessageArea');
 
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
   memberServ = inject(MemberDialogsService);
-  storageService = inject(LocalStorageService)
-  
+  storageService = inject(LocalStorageService);
+
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
@@ -39,17 +64,16 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   memberDialogIsOpen: boolean = false;
 
   ngOnInit(): void {
-    this.boardServ.idx = this.storageService.loadCurrentChannelIndex()
-    this.boardServ.chatFieldRef = this.chatField;
+    this.boardServ.idx = this.storageService.loadCurrentChannelIndex();
+    this.boardServ.chatFieldRef = this.chatField();
   }
 
   ngAfterViewInit(): void {
-    this.boardServ.chatFieldRef = this.chatField;
+    this.boardServ.chatFieldRef = this.chatField();
   }
 
   scrollToBotom() {
-      this.chatField.nativeElement.scrollTo(0, this.chatField.nativeElement.scrollHeight);
-
+    this.chatField().nativeElement.scrollTo(0, this.chatField().nativeElement.scrollHeight);
   }
 
   onHover(htmlElement: string) {
@@ -72,4 +96,3 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
     this.memberDialogIsOpen = true;
   }
 }
-

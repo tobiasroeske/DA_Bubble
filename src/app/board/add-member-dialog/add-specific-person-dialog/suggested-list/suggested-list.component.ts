@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-
+import { Component, EventEmitter, Output, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 interface SuggestedUser {
   name: string;
@@ -7,16 +8,17 @@ interface SuggestedUser {
 }
 
 @Component({
-    selector: 'app-suggested-list',
-    imports: [],
-    templateUrl: './suggested-list.component.html',
-    styleUrl: './suggested-list.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-suggested-list',
+  imports: [],
+  templateUrl: './suggested-list.component.html',
+  styleUrl: './suggested-list.component.scss',
 })
 export class SuggestedListComponent {
-  @Input() filteredUsersListFromParent?: SuggestedUser[];
+  readonly filteredUsersListFromParent = input<SuggestedUser[]>();
   @Output() sendIndexToParent: EventEmitter<number> = new EventEmitter<number>();
 
   addThisMember(index: number) {
-    this.sendIndexToParent.emit(index)
+    this.sendIndexToParent.emit(index);
   }
 }

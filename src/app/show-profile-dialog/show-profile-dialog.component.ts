@@ -1,7 +1,10 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { BoardService } from '../shared/services/board-service/board.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-show-profile-dialog',
     imports: [],
     templateUrl: './show-profile-dialog.component.html',

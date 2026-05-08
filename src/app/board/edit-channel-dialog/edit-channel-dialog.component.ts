@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -11,10 +11,17 @@ import { MemberDialogsService } from '../../shared/services/member-dialogs.servi
 import { AddSpecificPersonDialogComponent } from '../add-member-dialog/add-specific-person-dialog/add-specific-person-dialog.component';
 import { AddSpecificPersonDialogMobileComponent } from '../add-member-dialog/add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
-    selector: 'app-edit-channel-dialog',
-    imports: [CommonModule, FormsModule, MembersDialogComponent, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
-    templateUrl: './edit-channel-dialog.component.html',
-    styleUrl: './edit-channel-dialog.component.scss'
+  selector: 'app-edit-channel-dialog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MembersDialogComponent,
+    AddSpecificPersonDialogComponent,
+    AddSpecificPersonDialogMobileComponent,
+  ],
+  templateUrl: './edit-channel-dialog.component.html',
+  styleUrl: './edit-channel-dialog.component.scss',
 })
 export class EditChannelDialogComponent {
   boardServ = inject(BoardService);
@@ -22,8 +29,8 @@ export class EditChannelDialogComponent {
   memberServ = inject(MemberDialogsService);
   signUpServ = inject(SignupService);
 
-  editName: string = "Bearbeiten";
-  editDesc: string = "Bearbeiten"
+  editName: string = 'Bearbeiten';
+  editDesc: string = 'Bearbeiten';
   inputDisabled: boolean = true;
   textareaDisabled: boolean = true;
   editNameBtnClicked: boolean = false;
@@ -47,37 +54,34 @@ export class EditChannelDialogComponent {
   async onEditButtonClick(event: Event) {
     if (!this.editNameBtnClicked) {
       this.editNameBtnClicked = true;
-      this.editName = "Speichern"
+      this.editName = 'Speichern';
       this.inputDisabled = false;
     } else {
       try {
         await this.onChannelUpdate(event);
         this.editNameBtnClicked = false;
-        this.editName = "Bearbeiten";
+        this.editName = 'Bearbeiten';
         this.inputDisabled = true;
       } catch (error) {
         console.error('Error updating Channel', error);
       }
-
     }
   }
 
   async onDescriptionButtonClick(event: Event) {
     if (!this.editDescriptionBtnClicked) {
       this.editDescriptionBtnClicked = true;
-      this.editDesc = "Speichern";
+      this.editDesc = 'Speichern';
       this.textareaDisabled = false;
     } else {
       try {
         await this.onChannelUpdate(event);
         this.editDescriptionBtnClicked = false;
-        this.editDesc = "Bearbeiten";
+        this.editDesc = 'Bearbeiten';
         this.textareaDisabled = true;
       } catch (error) {
         console.error('Error updating Channel', error);
       }
-
-
     }
   }
 
@@ -89,9 +93,8 @@ export class EditChannelDialogComponent {
         await this.updateChannelWithNewData();
       }
     } catch (error) {
-      console.error('Error updating channel', error)
+      console.error('Error updating channel', error);
     }
-    
   }
 
   async updateChannelOnLeave(event: Event) {
@@ -111,9 +114,8 @@ export class EditChannelDialogComponent {
         this.channelAlreadyExist = true;
       }
     } catch (error) {
-      console.error('Error updating channel with title and description', error)
+      console.error('Error updating channel with title and description', error);
     }
-    
   }
 
   async updateChannelWithNewTitleAndDescription() {
@@ -128,19 +130,26 @@ export class EditChannelDialogComponent {
 
   async leaveThisChannel(event: Event) {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    const idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(this.boardServ.currentUser.id);
+    const idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(
+      this.boardServ.currentUser.id
+    );
     this.currentChannel.partecipantsIds.splice(idxOfCurrentPartecipant, 1);
-    const indexOfCurrentMember = this.currentChannel.members.findIndex((m: CurrentUser) => m.id == this.boardServ.currentUser.id);
+    const indexOfCurrentMember = this.currentChannel.members.findIndex(
+      (m: CurrentUser) => m.id == this.boardServ.currentUser.id
+    );
     this.currentChannel.members.splice(indexOfCurrentMember, 1);
-    const indexInAllUsers = this.currentChannel.allUsers.findIndex((u: CurrentUser) => u.id == this.boardServ.currentUser.id);
+    const indexInAllUsers = this.currentChannel.allUsers.findIndex(
+      (u: CurrentUser) => u.id == this.boardServ.currentUser.id
+    );
     this.currentChannel.allUsers[indexInAllUsers].selected = false;
     this.leaveFromChannel = true;
     await this.onChannelUpdate(event);
   }
 
   checkIfThisChannelAlreadyExist(): number {
-    const idx = this.firestore.allChannels().findIndex((chan: Channel) => chan.title === this.title);
+    const idx = this.firestore
+      .allChannels()
+      .findIndex((chan: Channel) => chan.title === this.title);
     return idx;
   }
 }
-

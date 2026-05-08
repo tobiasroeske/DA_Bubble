@@ -1,5 +1,13 @@
-
-import { Component, EventEmitter, inject, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Output,
+  OnChanges,
+  SimpleChanges,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
@@ -12,13 +20,14 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 type SearchItem = CurrentUser | PrivateChat | Channel | ChatMessage;
 
 @Component({
-    selector: 'app-search-dialog',
-    imports: [],
-    templateUrl: './search-dialog.component.html',
-    styleUrl: './search-dialog.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-search-dialog',
+  imports: [],
+  templateUrl: './search-dialog.component.html',
+  styleUrl: './search-dialog.component.scss',
 })
 export class SearchDialogComponent implements OnChanges {
-  @Input() searchValue!: string;
+  readonly searchValue = input.required<string>();
   @Output() sendEmptyString: EventEmitter<string> = new EventEmitter<string>();
 
   boardServ = inject(BoardService);
@@ -37,7 +46,7 @@ export class SearchDialogComponent implements OnChanges {
     } else if (clickedElement.type == 'CurrentUser') {
       this.showTheClickedElementOfTypeCurrentUser(clickedElement);
     } else if (clickedElement.type == 'PrivateChat') {
-      this.showTheClickedElementOfTypePrivatChat(clickedElement, event)
+      this.showTheClickedElementOfTypePrivatChat(clickedElement, event);
     }
     this.boardServ.showSearchDialog.set(false);
   }
@@ -48,36 +57,45 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   showTheClickedElementOfTypeCurrentUser(clickedElement: CurrentUser) {
-    const idx = this.firestore.userList().findIndex((user) => user.id == clickedElement.id);
+    const idx = this.firestore.userList().findIndex(user => user.id == clickedElement.id);
     this.boardServ.openShowUserPopUp(idx);
     this.boardServ.showUserPopUp.set(true);
   }
 
   async showTheClickedElementOfTypePrivatChat(clickedElement: PrivateChat, event: Event) {
-    this.idxToFindPositionOfGuestInDirectMessArray = this.findGuestIndexInDirectMessages(clickedElement);
+    this.idxToFindPositionOfGuestInDirectMessArray =
+      this.findGuestIndexInDirectMessages(clickedElement);
     this.selectChatRoomAndMember();
     await this.setChatRoomAndScrollToMessage(event);
   }
 
   findGuestIndexInDirectMessages(clickedElement: PrivateChat): number {
-    return this.firestore.directMessages().findIndex(privChat => privChat.guest.id == clickedElement.guest.id);
+    return this.firestore
+      .directMessages()
+      .findIndex(privChat => privChat.guest.id == clickedElement.guest.id);
   }
 
   selectChatRoomAndMember(): void {
-    this.boardServ.selectedChatRoom = this.firestore.directMessages()[this.idxToFindPositionOfGuestInDirectMessArray];
+    this.boardServ.selectedChatRoom =
+      this.firestore.directMessages()[this.idxToFindPositionOfGuestInDirectMessArray];
     this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
   }
 
   async setChatRoomAndScrollToMessage(event: Event): Promise<void> {
     await this.memberServ.setChatRoom(event);
-    this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat = this.findMessageIndexInSelectedChatRoom();
+    this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat =
+      this.findMessageIndexInSelectedChatRoom();
     if (this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat !== -1) {
-      this.boardServ.scrollToSearchedMessage(this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat);
+      this.boardServ.scrollToSearchedMessage(
+        this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat
+      );
     }
   }
 
   findMessageIndexInSelectedChatRoom(): number {
-    return this.boardServ.selectedChatRoom.chat.findIndex(chat => chat.message && chat.message.includes(this.searchValue));
+    return this.boardServ.selectedChatRoom.chat.findIndex(
+      chat => chat.message && chat.message.includes(this.searchValue())
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -87,7 +105,7 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   handleSearchChanges(changes: SimpleChanges): void {
-    if (changes['searchValue'] && this.searchValue.length > 0) {
+    if (changes['searchValue'] && this.searchValue().length > 0) {
       this.showSearchDialogAndFilterItems();
     } else {
       this.hideSearchDialog();
@@ -102,13 +120,15 @@ export class SearchDialogComponent implements OnChanges {
   filterSearchItems(): SearchItem[] {
     return this.boardServ.allData.filter((ad: SearchItem) => {
       if (this.isCurrentUser(ad)) {
-        return ad.name.toLowerCase().includes(this.searchValue.toLowerCase());
+        return ad.name.toLowerCase().includes(this.searchValue().toLowerCase());
       } else if (this.isChannel(ad)) {
-        return ad.title.toLowerCase().includes(this.searchValue.toLowerCase());
+        return ad.title.toLowerCase().includes(this.searchValue().toLowerCase());
       } else if (this.isPrivateChat(ad)) {
-        return ad.chat.some((chat) => chat.message.toLowerCase().includes(this.searchValue.toLowerCase()))
+        return ad.chat.some(chat =>
+          chat.message.toLowerCase().includes(this.searchValue().toLowerCase())
+        );
       } else {
-        return false
+        return false;
       }
     });
   }
@@ -130,7 +150,6 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   isChatMessage(item: SearchItem): item is ChatMessage {
-    return item.type == 'ChatMessage'
+    return item.type == 'ChatMessage';
   }
 }
-

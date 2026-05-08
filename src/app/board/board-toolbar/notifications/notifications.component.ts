@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
@@ -9,6 +11,7 @@ import { Channel } from '../../../shared/models/channel.class';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-notifications',
   imports: [NgClass],
   templateUrl: './notifications.component.html',
@@ -16,7 +19,7 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 })
 export class NotificationsComponent {
   @Output() notificationsOpen = new EventEmitter<boolean>();
-  @Input() allUsers!: CurrentUser[];
+  readonly allUsers = input<CurrentUser[]>([]);
   firestoreService = inject(FirestoreService);
   boardServ = inject(BoardService);
   channelChats!: Channel[];

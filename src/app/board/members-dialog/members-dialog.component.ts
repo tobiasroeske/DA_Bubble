@@ -1,5 +1,6 @@
-
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
@@ -10,13 +11,14 @@ import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { SignupService } from '../../shared/services/signup/signup.service';
 
 @Component({
-    selector: 'app-members-dialog',
-    imports: [ShowMemberPopUpComponent],
-    templateUrl: './members-dialog.component.html',
-    styleUrl: './members-dialog.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-members-dialog',
+  imports: [ShowMemberPopUpComponent],
+  templateUrl: './members-dialog.component.html',
+  styleUrl: './members-dialog.component.scss',
 })
 export class MembersDialogComponent implements OnInit {
-  @Input() dialog!: boolean;
+  readonly dialog = input<boolean>(false);
 
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
@@ -32,7 +34,7 @@ export class MembersDialogComponent implements OnInit {
     try {
       await this.firestore.updateChannelUsers(updatedUsers, this.currentChannel.id!);
     } catch (error) {
-      console.error('Error updating channels', error)
+      console.error('Error updating channels', error);
     }
   }
 
@@ -43,7 +45,7 @@ export class MembersDialogComponent implements OnInit {
       if (index != -1 && allUsers[index].loginState != user.loginState) {
         allUsers[index].loginState = user.loginState;
       }
-    })
-    return allUsers
+    });
+    return allUsers;
   }
 }

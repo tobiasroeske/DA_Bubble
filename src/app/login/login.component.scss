@@ -1,133 +1,133 @@
 @use 'variables' as *;
 
 @keyframes logo-animation {
-    from {
-        transform: translateX(154px);
-    }
-    to {
-        transform: translateX(0);
-    }
+  from {
+    transform: translateX(154px);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes headline-animation {
-    from {
-        transform: translateX(-320px);
-    }
-    to {
-        transform: translateX(0);
-    }
+  from {
+    transform: translateX(-320px);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes intro-animation {
-    from {
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
-    to {
-        left: 75px;
-        top: 32px;
-        transform: translate(0, 0);
-    }
+  from {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    left: 75px;
+    top: 32px;
+    transform: translate(0, 0);
+  }
 }
 
 @keyframes intro-headline-animation {
-    0% {
-        font-size: 64px;
-        color: white;
-        transform: translate(0, 0);
-    }
-    75% {
-        color: black;
-    }
-    100% {
-        font-size: 32px;
-        color: black;
-    }
+  0% {
+    font-size: 64px;
+    color: white;
+    transform: translate(0, 0);
+  }
+  75% {
+    color: black;
+  }
+  100% {
+    font-size: 32px;
+    color: black;
+  }
 }
 
 @keyframes intro-logo-animation {
-    from {
-        width: 186px;
-        height: 184px;
-    }
-    to {
-        width: 70px;
-        height: 70px;
-    }
+  from {
+    width: 186px;
+    height: 184px;
+  }
+  to {
+    width: 70px;
+    height: 70px;
+  }
 }
 
 @keyframes background-vanish {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-        z-index: -1;
-    }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    z-index: -1;
+  }
 }
 
 @keyframes mobile-intro-headline {
-    0% {
-        font-size: 32px;
-        color: white;
-        transform: translate(0, 0);
-    }
-    75% {
-        color: black;
-    }
-    100% {
-        font-size: 32px;
-        color: black;
-    }
+  0% {
+    font-size: 32px;
+    color: white;
+    transform: translate(0, 0);
+  }
+  75% {
+    color: black;
+  }
+  100% {
+    font-size: 32px;
+    color: black;
+  }
 }
 
 @keyframes mobile-intro-logo {
-    from {
-        width: 70px;
-        height: 70px;
-    }
-    to {
-        width: 56px;
-        height: 56px;
-    }
+  from {
+    width: 70px;
+    height: 70px;
+  }
+  to {
+    width: 56px;
+    height: 56px;
+  }
 }
 
 @keyframes mobile-animation {
-    0% {
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
-    100% {
-        left: 50%;
-        top: 0;
-        transform: translate(-50%, 0);
-    }
+  0% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+  }
 }
 
 @keyframes small-intro-headline {
-    0% {
-        font-size: 24px;
-        color: white;
-        transform: translate(0, 0);
-    }
-    75% {
-        color: black;
-    }
-    100% {
-        font-size: 24px;
-        color: black;
-    }
+  0% {
+    font-size: 24px;
+    color: white;
+    transform: translate(0, 0);
+  }
+  75% {
+    color: black;
+  }
+  100% {
+    font-size: 24px;
+    color: black;
+  }
 }
 
 @keyframes small-intro-logo {
-    from {
-        width: 56px;
-        height: 56px;
-    }
-    to {
-        width: 40px;
-        height: 40px;
-    }
+  from {
+    width: 56px;
+    height: 56px;
+  }
+  to {
+    width: 40px;
+    height: 40px;
+  }
 }

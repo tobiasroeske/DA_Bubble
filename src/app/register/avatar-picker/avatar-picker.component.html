@@ -1,23 +1,69 @@
 <div class="flex flex-col gap-4 max-md:gap-5 max-h-[880px]:gap-3 max-h-[750px]:gap-2">
-    <div class="relative flex items-center justify-center w-full px-10">
-        <img (click)="goBackToRegister()" src="assets/img/arrow_back.png" alt="" class="absolute left-[-16px] px-[15px] py-[15px] rounded-full cursor-pointer transition-all duration-125 hover:bg-[#ECEEFE] max-md:px-2 max-[500px]:px-2 max-[340px]:px-1 max-[340px]:left-[-12px]">
-        <h2 class="text-[#444DF2] text-[46px] font-bold text-center max-md:text-[32px] max-h-[880px]:text-[40px] max-h-[750px]:text-[24px]">Wähle deinen Avatar</h2>
+  <div class="relative flex items-center justify-center w-full px-10">
+    <img
+      (click)="goBackToRegister()"
+      src="assets/img/arrow_back.png"
+      alt=""
+      class="absolute left-[-16px] px-[15px] py-[15px] rounded-full cursor-pointer transition-all duration-125 hover:bg-[#ECEEFE] max-md:px-2 max-[500px]:px-2 max-[340px]:px-1 max-[340px]:left-[-12px]"
+    />
+    <h2
+      class="text-[#444DF2] text-[46px] font-bold text-center max-md:text-[32px] max-h-[880px]:text-[40px] max-h-[750px]:text-[24px]"
+    >
+      Wähle deinen Avatar
+    </h2>
+  </div>
+  <img
+    src="{{ avatarImgPath }}"
+    alt=""
+    class="w-[141px] h-[141px] object-cover border-[5px] border-transparent rounded-full transition-all duration-125 hover:border-[#E6E6E6] mx-auto max-md:w-[120px] max-md:h-[120px]"
+  />
+  <h3
+    class="font-nunito text-[32px] text-center max-md:text-[32px] max-h-[880px]:text-[24px] max-h-[750px]:text-[20px]"
+  >
+    {{ user.name }}
+  </h3>
+  <div
+    class="w-full flex flex-col items-start gap-4 max-md:gap-[10px] max-h-[880px]:gap-3 max-h-[750px]:gap-2"
+  >
+    <span class="text-[20px] max-md:text-[17px] max-h-[880px]:text-[15px]"
+      >Aus der Liste wählen</span
+    >
+    <div
+      class="flex gap-2 max-md:gap-[10px] max-[430px]:gap-[10px] max-[390px]:gap-1 max-[360px]:gap-0"
+    >
+      @for (avatar of avatars; track avatar; let i = $index) {
+        <img
+          (click)="pickAvatar(i)"
+          src="{{ avatar }}"
+          alt=""
+          class="cursor-pointer w-[67px] h-[67px] object-cover border-[3px] border-transparent rounded-full transition-all duration-125 hover:border-[#E6E6E6] hover:scale-105 max-md:w-14 max-md:h-14 max-[430px]:w-12 max-[430px]:h-12 max-[340px]:w-11 max-[340px]:h-11"
+        />
+      }
     </div>
-    <img src="{{ avatarImgPath }}" alt="" class="w-[141px] h-[141px] object-cover border-[5px] border-transparent rounded-full transition-all duration-125 hover:border-[#E6E6E6] mx-auto max-md:w-[120px] max-md:h-[120px]">
-    <h3 class="font-nunito text-[32px] text-center max-md:text-[32px] max-h-[880px]:text-[24px] max-h-[750px]:text-[20px]">{{ user.name }}</h3>
-    <div class="w-full flex flex-col items-start gap-4 max-md:gap-[10px] max-h-[880px]:gap-3 max-h-[750px]:gap-2">
-        <span class="text-[20px] max-md:text-[17px] max-h-[880px]:text-[15px]">Aus der Liste wählen</span>
-        <div class="flex gap-2 max-md:gap-[10px] max-[430px]:gap-[10px] max-[390px]:gap-1 max-[360px]:gap-0">
-            @for (avatar of avatars; track avatar; let i = $index) {
-            <img (click)="pickAvatar(i)" src="{{ avatar }}" alt="" class="cursor-pointer w-[67px] h-[67px] object-cover border-[3px] border-transparent rounded-full transition-all duration-125 hover:border-[#E6E6E6] hover:scale-105 max-md:w-14 max-md:h-14 max-[430px]:w-12 max-[430px]:h-12 max-[340px]:w-11 max-[340px]:h-11">
-            }
-        </div>
-        <div class="flex flex-col gap-6 mt-6 max-md:mt-4 max-[500px]:mt-4">
-            <span class="text-[20px] max-md:text-[17px] max-h-[880px]:text-[15px]">eigenes Bild verwenden</span>
-            <label for="fileUpload" class="btn-no-style flex items-center justify-center w-fit text-[#797EF3] transition-all duration-125 text-center hover:bg-[#5359F1] hover:text-white cursor-pointer px-4 py-2 rounded-full font-medium max-md:px-3 max-md:py-2 max-[500px]:px-3 max-[500px]:py-2">Datei hochladen</label>
-            <input type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)" class="hidden">
-        </div>
+    <div class="flex flex-col gap-6 mt-6 max-md:mt-4 max-[500px]:mt-4">
+      <span class="text-[20px] max-md:text-[17px] max-h-[880px]:text-[15px]"
+        >eigenes Bild verwenden</span
+      >
+      <label
+        for="fileUpload"
+        class="btn-no-style flex items-center justify-center w-fit text-[#797EF3] transition-all duration-125 text-center hover:bg-[#5359F1] hover:text-white cursor-pointer px-4 py-2 rounded-full font-medium max-md:px-3 max-md:py-2 max-[500px]:px-3 max-[500px]:py-2"
+        >Datei hochladen</label
+      >
+      <input
+        type="file"
+        name="fileUpload"
+        id="fileUpload"
+        (change)="onFileChange($event)"
+        class="hidden"
+      />
     </div>
-    <button (click)="completeSignup()" [disabled]="!avatarPicked" [class.disabled-btn]="!avatarPicked"
-        class="btn-no-style w-fit bg-[#444DF2] text-white transition-all duration-125 hover:bg-[#787EF2] hover:border-[#787EF2] cursor-pointer px-4 py-2 rounded-full font-medium self-end max-md:px-3 max-md:py-2">Weiter</button>
+  </div>
+  <button
+    (click)="completeSignup()"
+    [disabled]="!avatarPicked"
+    [class.disabled-btn]="!avatarPicked"
+    class="btn-no-style w-fit bg-[#444DF2] text-white transition-all duration-125 hover:bg-[#787EF2] hover:border-[#787EF2] cursor-pointer px-4 py-2 rounded-full font-medium self-end max-md:px-3 max-md:py-2"
+  >
+    Weiter
+  </button>
 </div>

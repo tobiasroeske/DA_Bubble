@@ -4,10 +4,11 @@ import {
   EventEmitter,
   Host,
   HostListener,
-  Input,
   Output,
-  ViewChild,
   inject,
+  input,
+  viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
@@ -22,18 +23,19 @@ import { SignupService } from '../../shared/services/signup/signup.service';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-create-message-area',
   imports: [FormsModule, PickerComponent],
   templateUrl: './create-message-area.component.html',
   styleUrl: './create-message-area.component.scss',
 })
 export class CreateMessageAreaComponent {
-  @ViewChild('fileInput') fileInput!: ElementRef;
-  @Input() index!: number;
-  @Input() channelId!: string;
-  @Input() channelTitle!: string;
-  @Input() channels!: Channel[];
-  @Input() showEmojiPicker = false;
+  readonly fileInput = viewChild.required<ElementRef>('fileInput');
+  readonly index = input<number>(0);
+  readonly channelId = input<string>('');
+  readonly channelTitle = input<string>('');
+  readonly channels = input<Channel[]>([]);
+  readonly showEmojiPicker = input(false);
 
   boardService = inject(BoardService);
   signUpServ = inject(SignupService);
@@ -101,7 +103,7 @@ export class CreateMessageAreaComponent {
 
   constructor() {
     // this.currentUser = this.boardService.currentUser;
-    this.filteredChannels = this.channels;
+    this.filteredChannels = this.channels();
   }
 
   toggleTagMembers(): void {
@@ -149,7 +151,7 @@ export class CreateMessageAreaComponent {
       this.filePath = `fileUploads/${file.name}`;
       try {
         await this.uploadFile(this.filePath, file);
-        this.fileInput.nativeElement.value = '';
+        this.fileInput().nativeElement.value = '';
       } catch (error) {
         console.error('Error uploading file:', error);
       }
@@ -223,7 +225,7 @@ export class CreateMessageAreaComponent {
     if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       try {
         const date = new Date().getTime();
-        await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date));
+        await this.firestoreService.updateChats(this.channelId(), this.setMessageObject(date));
         if (this.member != null) {
           this.notificationObject = new NotificationObj();
           this.setNotificationObject();
@@ -248,8 +250,8 @@ export class CreateMessageAreaComponent {
   }
 
   setNotificationObject() {
-    this.notificationObject.channelName = this.channelTitle;
-    this.notificationObject.channelId = this.channelId;
+    this.notificationObject.channelName = this.channelTitle();
+    this.notificationObject.channelId = this.channelId();
     this.notificationObject.receiverImage = this.member!.avatarPath;
     this.notificationObject.receiverName = this.member!.name;
     this.notificationObject.receiverId = this.member!.id;

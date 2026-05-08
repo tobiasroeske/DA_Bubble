@@ -1,4 +1,6 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TIMINGS } from '../../../shared/constants/timings';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -6,6 +8,7 @@ import { SignupService } from '../../../shared/services/signup/signup.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-reset-password',
   imports: [FormsModule],
   templateUrl: './reset-password.component.html',

@@ -1,108 +1,213 @@
 <div class="flex justify-between p-4 pt-0 relative max-lg:px-4 max-lg:py-2 max-[560px]:px-4">
-    @if (!boardServ.mobileView() || boardServ.mobileView() && boardServ.sidenavTranslate()) {
+  @if (!boardServ.mobileView() || (boardServ.mobileView() && boardServ.sidenavTranslate())) {
     <div class="flex gap-4">
-        <img src="./assets/img/logo.png" alt="logo" class="max-lg:w-12 max-lg:h-12">
-        <img src="./assets/img/logoName.png" alt="" class="max-lg:h-5">
+      <img src="./assets/img/logo.png" alt="logo" class="max-lg:w-12 max-lg:h-12" />
+      <img src="./assets/img/logoName.png" alt="" class="max-lg:h-5" />
     </div>
-    } @else {
+  } @else {
     <div class="flex gap-2 font-nunito text-xl">
-        <img src="assets/icons/toolbar_back_arrow.png" alt="" class="cursor-pointer" (click)="boardServ.open('sidenav')">
-        <img src="assets/img/workspaceLogo.png" alt="" class="max-[560px]:w-[45px] max-[560px]:h-[45px]">
-        <h3 class="max-[560px]:text-xl">Devspace</h3>
+      <img
+        src="assets/icons/toolbar_back_arrow.png"
+        alt=""
+        class="cursor-pointer"
+        (click)="boardServ.open('sidenav')"
+      />
+      <img
+        src="assets/img/workspaceLogo.png"
+        alt=""
+        class="max-[560px]:w-[45px] max-[560px]:h-[45px]"
+      />
+      <h3 class="max-[560px]:text-xl">Devspace</h3>
     </div>
+  }
+  <div
+    class="relative w-[40%] bg-white rounded-full px-[55px] py-[17.5px] flex justify-between gap-4 max-lg:hidden"
+  >
+    <input
+      (focus)="boardServ.loadAllData()"
+      #filter
+      (input)="showValue(filter.value)"
+      name="searchText"
+      type="text"
+      class="h-[30px] w-full border-0 outline-none font-nunito text-2xl font-normal placeholder:text-black/50"
+      placeholder="Coding learning durchsuchen"
+    />
+    <img
+      src="assets/img/search.png"
+      alt=""
+      class="absolute right-4 h-[35px] w-[35px] rounded-full p-1 hover:bg-black/10 hover:cursor-pointer"
+    />
+    <app-search-dialog [searchValue]="searchText"></app-search-dialog>
+  </div>
+  <div
+    class="relative flex justify-between gap-5 cursor-pointer hover:[&_span]:text-[#535AF1] hover:[&_svg_path]:fill-[#535AF1] max-lg:gap-4 max-[1100px]:gap-4 max-[560px]:gap-0"
+    (click)="toggleProfileOptions($event)"
+  >
+    <span class="text-4xl font-bold font-nunito max-lg:text-2xl max-[560px]:hidden">{{
+      boardServ.currentUser.name
+    }}</span>
+    <img
+      class="h-[70px] w-[70px] object-cover object-center rounded-full cursor-pointer max-lg:w-12 max-lg:h-12"
+      src="{{ boardServ.currentUser.avatarPath }}"
+      alt="account-photo"
+    />
+    @if (boardServ.currentUser.notification.length > 0) {
+      <div
+        class="absolute top-[26px] right-[106px] w-4 h-4 bg-[#c50707] rounded-full m-0 p-0 max-lg:w-[14px] max-lg:h-[14px] max-lg:top-[11px] max-lg:right-[88px]"
+      ></div>
     }
-    <div class="relative w-[40%] bg-white rounded-full px-[55px] py-[17.5px] flex justify-between gap-4 max-lg:hidden">
-        <input (focus)="boardServ.loadAllData()" #filter (input)="showValue(filter.value)" name="searchText" type="text"
-            class="h-[30px] w-full border-0 outline-none font-nunito text-2xl font-normal placeholder:text-black/50"
-            placeholder="Coding learning durchsuchen">
-        <img src="assets/img/search.png" alt="" class="absolute right-4 h-[35px] w-[35px] rounded-full p-1 hover:bg-black/10 hover:cursor-pointer">
-        <app-search-dialog [searchValue]="searchText"></app-search-dialog>
-    </div>
-    <div class="relative flex justify-between gap-5 cursor-pointer hover:[&_span]:text-[#535AF1] hover:[&_svg_path]:fill-[#535AF1] max-lg:gap-4 max-[1100px]:gap-4 max-[560px]:gap-0" (click)="toggleProfileOptions($event)">
-        <span class="text-4xl font-bold font-nunito max-lg:text-2xl max-[560px]:hidden">{{ boardServ.currentUser.name }}</span>
-        <img class="h-[70px] w-[70px] object-cover object-center rounded-full cursor-pointer max-lg:w-12 max-lg:h-12" src="{{ boardServ.currentUser.avatarPath }}" alt="account-photo">
-        @if (boardServ.currentUser.notification.length > 0) {
-        <div class="absolute top-[26px] right-[106px] w-4 h-4 bg-[#c50707] rounded-full m-0 p-0 max-lg:w-[14px] max-lg:h-[14px] max-lg:top-[11px] max-lg:right-[88px]"></div>
-        }
 
-        @if (boardServ.currentUser.loginState === 'idle') {
-        <img src="assets/icons/user_idle.png" alt="" class="absolute right-[46px] bottom-2 w-4 h-4 max-lg:bottom-0 max-lg:right-12 max-[560px]:right-3">
-        } @else {
-        <img src="assets/icons/user_online.png" alt="" class="absolute right-[46px] bottom-2 w-4 h-4 max-lg:bottom-0 max-lg:right-12 max-[560px]:right-3">
-        }
-        <svg class="w-[13px] h-2 object-cover max-[560px]:hidden" width="10" height="7" viewBox="0 0 10 7" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M4.12483 5.875L0.874832 2.625C0.478999 2.22917 0.390665 1.77625 0.609832 1.26625C0.828165 0.755417 1.21858 0.5 1.78108 0.5H8.21858C8.78108 0.5 9.1715 0.755417 9.38983 1.26625C9.609 1.77625 9.52067 2.22917 9.12483 2.625L5.87483 5.875C5.74983 6 5.61442 6.09375 5.46858 6.15625C5.32275 6.21875 5.1665 6.25 4.99983 6.25C4.83317 6.25 4.67692 6.21875 4.53108 6.15625C4.38525 6.09375 4.24983 6 4.12483 5.875Z"
-                fill="black" />
-        </svg>
-    </div>
-    @if (showOverlay) {
-    <div class="fixed top-0 left-0 right-0 bottom-0 bg-black/15 z-[51] flex items-center justify-center" (click)="closeProfileDialog(true)">
-        @if (showProfileOptions) {
-        <div class="profile-options-mobile fixed bottom-0 left-0 right-0 flex flex-col bg-white z-[54] shadow-[0_-3px_10px_rgba(0,0,0,0.2)] rounded-t-[30px] px-[26px] py-[30px]"
-            [class.slide-in]="showProfileOptions"
-            (click)="boardServ.stopPropagation($event)">
-
-            <img src="assets/icons/profile_slide_icon.png" alt="">
-            <div class="flex flex-col gap-[15px] items-start">
-                <button class="relative flex gap-[15px] w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]" (click)="showNotificationDialog($event)">
-                    <img src="assets/icons/notification_icon.svg" alt="">
-                    @if (boardServ.currentUser.notification.length > 0) {
-                    <div class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-[#c50707] rounded-full p-0"></div>
-                    }
-                    Benachrichtigungen
-                </button>
-                <button class="relative flex gap-[15px] w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]" (click)="showProfileDialog($event)"><img
-                        src="assets/icons/profile_icon.png" alt="">Profil</button>
-                <button class="relative flex gap-[15px] w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]" (click)="authService.logout()"><img
-                        src="assets/icons/logout_icon.png" alt="">Logout</button>
-            </div>
-
+    @if (boardServ.currentUser.loginState === 'idle') {
+      <img
+        src="assets/icons/user_idle.png"
+        alt=""
+        class="absolute right-[46px] bottom-2 w-4 h-4 max-lg:bottom-0 max-lg:right-12 max-[560px]:right-3"
+      />
+    } @else {
+      <img
+        src="assets/icons/user_online.png"
+        alt=""
+        class="absolute right-[46px] bottom-2 w-4 h-4 max-lg:bottom-0 max-lg:right-12 max-[560px]:right-3"
+      />
+    }
+    <svg
+      class="w-[13px] h-2 object-cover max-[560px]:hidden"
+      width="10"
+      height="7"
+      viewBox="0 0 10 7"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4.12483 5.875L0.874832 2.625C0.478999 2.22917 0.390665 1.77625 0.609832 1.26625C0.828165 0.755417 1.21858 0.5 1.78108 0.5H8.21858C8.78108 0.5 9.1715 0.755417 9.38983 1.26625C9.609 1.77625 9.52067 2.22917 9.12483 2.625L5.87483 5.875C5.74983 6 5.61442 6.09375 5.46858 6.15625C5.32275 6.21875 5.1665 6.25 4.99983 6.25C4.83317 6.25 4.67692 6.21875 4.53108 6.15625C4.38525 6.09375 4.24983 6 4.12483 5.875Z"
+        fill="black"
+      />
+    </svg>
+  </div>
+  @if (showOverlay) {
+    <div
+      class="fixed top-0 left-0 right-0 bottom-0 bg-black/15 z-[51] flex items-center justify-center"
+      (click)="closeProfileDialog(true)"
+    >
+      @if (showProfileOptions) {
+        <div
+          class="profile-options-mobile fixed bottom-0 left-0 right-0 flex flex-col bg-white z-[54] shadow-[0_-3px_10px_rgba(0,0,0,0.2)] rounded-t-[30px] px-[26px] py-[30px]"
+          [class.slide-in]="showProfileOptions"
+          (click)="boardServ.stopPropagation($event)"
+        >
+          <img src="assets/icons/profile_slide_icon.png" alt="" />
+          <div class="flex flex-col gap-[15px] items-start">
+            <button
+              class="relative flex gap-[15px] w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
+              (click)="showNotificationDialog($event)"
+            >
+              <img src="assets/icons/notification_icon.svg" alt="" />
+              @if (boardServ.currentUser.notification.length > 0) {
+                <div
+                  class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-[#c50707] rounded-full p-0"
+                ></div>
+              }
+              Benachrichtigungen
+            </button>
+            <button
+              class="relative flex gap-[15px] w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
+              (click)="showProfileDialog($event)"
+            >
+              <img src="assets/icons/profile_icon.png" alt="" />Profil
+            </button>
+            <button
+              class="relative flex gap-[15px] w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
+              (click)="authService.logout()"
+            >
+              <img src="assets/icons/logout_icon.png" alt="" />Logout
+            </button>
+          </div>
         </div>
-        }@else if (showProfile) {
-        <div class="profile-dialog-mobile flex flex-col gap-[38px] bg-white px-10 py-[45px] rounded-3xl shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:rounded-3xl" (click)="boardServ.stopPropagation($event)">
-            <app-show-profile-dialog (editorOpen)="openEditor($event)"
-                (profileOpen)="closeProfileDialog($event)"></app-show-profile-dialog>
+      } @else if (showProfile) {
+        <div
+          class="profile-dialog-mobile flex flex-col gap-[38px] bg-white px-10 py-[45px] rounded-3xl shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:rounded-3xl"
+          (click)="boardServ.stopPropagation($event)"
+        >
+          <app-show-profile-dialog
+            (editorOpen)="openEditor($event)"
+            (profileOpen)="closeProfileDialog($event)"
+          ></app-show-profile-dialog>
         </div>
-        } @else if (editorOpen) {
-        <div class="profile-dialog-mobile flex flex-col gap-[38px] bg-white px-10 py-[45px] rounded-3xl shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52]" (click)="boardServ.stopPropagation($event)">
-            <app-edit-profile-dialog (editorOpen)="closeProfileDialog($event)"></app-edit-profile-dialog>
+      } @else if (editorOpen) {
+        <div
+          class="profile-dialog-mobile flex flex-col gap-[38px] bg-white px-10 py-[45px] rounded-3xl shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52]"
+          (click)="boardServ.stopPropagation($event)"
+        >
+          <app-edit-profile-dialog
+            (editorOpen)="closeProfileDialog($event)"
+          ></app-edit-profile-dialog>
         </div>
-        } @else if (notificationsOpen) {
-        <div class="profile-dialog-mobile flex flex-col gap-[38px] bg-white px-10 py-[45px] rounded-3xl shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52]"
-            [class.pr-0]="notificationsOpen"
-            (click)="boardServ.stopPropagation($event)">
-            <app-notifications (notificationsOpen)="closeNotificationsDialog($event)"></app-notifications>
+      } @else if (notificationsOpen) {
+        <div
+          class="profile-dialog-mobile flex flex-col gap-[38px] bg-white px-10 py-[45px] rounded-3xl shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52]"
+          [class.pr-0]="notificationsOpen"
+          (click)="boardServ.stopPropagation($event)"
+        >
+          <app-notifications
+            (notificationsOpen)="closeNotificationsDialog($event)"
+          ></app-notifications>
         </div>
-        }
+      }
     </div>
     @if (showProfileOptions) {
-    <div class="profile-options cursor-default absolute flex flex-col bg-white px-[30px] py-[30px] gap-[15px] right-[18px] top-[126px] z-[52] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] max-lg:top-[70px]">
-        <button class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]" (click)="showNotificationDialog($event)">
-            @if (boardServ.currentUser.notification.length > 0) {
-            <div class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-[#c50707] rounded-full p-0"></div>
-            }
-            Benachrichtigungen
+      <div
+        class="profile-options cursor-default absolute flex flex-col bg-white px-[30px] py-[30px] gap-[15px] right-[18px] top-[126px] z-[52] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] max-lg:top-[70px]"
+      >
+        <button
+          class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
+          (click)="showNotificationDialog($event)"
+        >
+          @if (boardServ.currentUser.notification.length > 0) {
+            <div
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-[#c50707] rounded-full p-0"
+            ></div>
+          }
+          Benachrichtigungen
         </button>
-        <button class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]" (click)="showProfileDialog($event)">Profil</button>
-        <button class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]" (click)="logout()">Log out</button>
-    </div>
+        <button
+          class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
+          (click)="showProfileDialog($event)"
+        >
+          Profil
+        </button>
+        <button
+          class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
+          (click)="logout()"
+        >
+          Log out
+        </button>
+      </div>
     } @else if (showProfile) {
-    <div class="profile-dialog absolute flex flex-col gap-[38px] top-[126px] right-[18px] bg-white px-10 py-[45px] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:top-[70px] max-md:hidden">
-        <app-show-profile-dialog (editorOpen)="openEditor($event)"
-            (profileOpen)="closeProfileDialog($event)"></app-show-profile-dialog>
-    </div>
+      <div
+        class="profile-dialog absolute flex flex-col gap-[38px] top-[126px] right-[18px] bg-white px-10 py-[45px] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:top-[70px] max-md:hidden"
+      >
+        <app-show-profile-dialog
+          (editorOpen)="openEditor($event)"
+          (profileOpen)="closeProfileDialog($event)"
+        ></app-show-profile-dialog>
+      </div>
     } @else if (editorOpen) {
-    <div class="profile-dialog absolute flex flex-col gap-[38px] top-[126px] right-[18px] bg-white px-10 py-[45px] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:top-[70px] max-md:hidden">
-        <app-edit-profile-dialog (editorOpen)="closeProfileDialog($event)"></app-edit-profile-dialog>
-    </div>
+      <div
+        class="profile-dialog absolute flex flex-col gap-[38px] top-[126px] right-[18px] bg-white px-10 py-[45px] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:top-[70px] max-md:hidden"
+      >
+        <app-edit-profile-dialog
+          (editorOpen)="closeProfileDialog($event)"
+        ></app-edit-profile-dialog>
+      </div>
     } @else if (notificationsOpen) {
-    <div class="profile-dialog absolute flex flex-col gap-[38px] top-[126px] right-[18px] bg-white px-10 py-[45px] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:top-[70px]" [class.pr-0]="notificationsOpen">
-        <app-notifications (notificationsOpen)="closeNotificationsDialog($event)"></app-notifications>
-    </div>
+      <div
+        class="profile-dialog absolute flex flex-col gap-[38px] top-[126px] right-[18px] bg-white px-10 py-[45px] rounded-[30px_0_30px_30px] shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-[52] max-lg:top-[70px]"
+        [class.pr-0]="notificationsOpen"
+      >
+        <app-notifications
+          (notificationsOpen)="closeNotificationsDialog($event)"
+        ></app-notifications>
+      </div>
     }
-    }
-
-
+  }
 </div>

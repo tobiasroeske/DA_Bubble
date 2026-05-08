@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
@@ -7,14 +9,15 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
-    selector: 'app-message-editor',
-    imports: [FormsModule, PickerComponent],
-    templateUrl: './message-editor.component.html',
-    styleUrl: './message-editor.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-message-editor',
+  imports: [FormsModule, PickerComponent],
+  templateUrl: './message-editor.component.html',
+  styleUrl: './message-editor.component.scss',
 })
 export class MessageEditorComponent implements OnInit {
-  @Input() chatMessageIndex!: number;
-  @Input() chat!: ChatMessage;
+  readonly chatMessageIndex = input<number>(0);
+  readonly chat = input<ChatMessage | undefined>(undefined);
   @Output() editorOpen = new EventEmitter<boolean>();
   @Output() emojiPickerOpen = new EventEmitter<boolean>();
 
@@ -26,13 +29,15 @@ export class MessageEditorComponent implements OnInit {
   showEmojiPicker = false;
 
   ngOnInit(): void {
-    this.editedMessage = this.chat.message;
+    this.editedMessage = this.chat()?.message;
   }
 
   async editMessage(index: number) {
+    const chatMsg = this.chat();
+    if (!chatMsg) return;
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    this.chat.message = this.editedMessage!;
-    this.currentChannel.chat.splice(index, 1, this.chat);
+    chatMsg.message = this.editedMessage!;
+    this.currentChannel.chat.splice(index, 1, chatMsg);
     await this.firestore.updateChannel(this.currentChannel, this.currentChannel.id);
     this.closeEditor();
   }

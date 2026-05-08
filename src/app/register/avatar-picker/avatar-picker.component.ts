@@ -1,18 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { User } from '../../shared/models/user.class';
 import { RouterLink } from '@angular/router';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { FirebaseStorageService } from '../../shared/services/firebase-storage-service/firebase-storage.service';
 
-
 @Component({
-    selector: 'app-avatar-picker',
-    imports: [RouterLink],
-    templateUrl: './avatar-picker.component.html',
-    styleUrl: './avatar-picker.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-avatar-picker',
+  imports: [RouterLink],
+  templateUrl: './avatar-picker.component.html',
+  styleUrl: './avatar-picker.component.scss',
 })
 export class AvatarPickerComponent implements OnInit {
-  @Input() userData!: User;
+  readonly userData = input.required<User>();
   @Output() goBack = new EventEmitter<boolean>();
   @Output() signUpSuccessful = new EventEmitter<boolean>();
 
@@ -20,12 +22,19 @@ export class AvatarPickerComponent implements OnInit {
   firebaseStorageService = inject(FirebaseStorageService);
 
   user!: User;
-  avatars: string[] = ['assets/img/avatar0.png', 'assets/img/avatar1.png', 'assets/img/avatar2.png', 'assets/img/avatar3.png', 'assets/img/avatar4.png', 'assets/img/avatar5.png']
+  avatars: string[] = [
+    'assets/img/avatar0.png',
+    'assets/img/avatar1.png',
+    'assets/img/avatar2.png',
+    'assets/img/avatar3.png',
+    'assets/img/avatar4.png',
+    'assets/img/avatar5.png',
+  ];
   avatarImgPath = 'assets/img/profile_big.png';
   avatarPicked = false;
 
   ngOnInit(): void {
-    this.user = this.userData;
+    this.user = this.userData();
   }
 
   async onFileChange(event: any): Promise<void> {
@@ -45,7 +54,7 @@ export class AvatarPickerComponent implements OnInit {
   }
 
   goBackToRegister(): void {
-    this.goBack.emit(false)
+    this.goBack.emit(false);
     this.signupService.signUpSuccessful.set(false);
     this.signupService.errorCode.set('');
   }

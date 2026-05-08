@@ -3,9 +3,10 @@ import {
   EventEmitter,
   HostListener,
   inject,
-  Input,
   OnInit,
   Output,
+  input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +19,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivateChat } from '../../shared/models/privateChat.class';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-create-private-message-area',
   imports: [FormsModule, PickerComponent],
   templateUrl: './create-private-message-area.component.html',
@@ -27,7 +29,7 @@ export class CreatePrivateMessageAreaComponent
   extends CreateMessageAreaComponent
   implements OnInit
 {
-  @Input() allUsers!: CurrentUser[];
+  readonly allUsers = input.required<CurrentUser[]>();
   @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   firestore = inject(FirestoreService);
@@ -48,12 +50,12 @@ export class CreatePrivateMessageAreaComponent
   }
 
   override toggleTagMemberDialog() {
-    this.filteredMembers = this.allUsers;
+    this.filteredMembers = this.allUsers();
     this.tagMembers = !this.tagMembers;
   }
 
   override filterMember() {
-    const members: CurrentUser[] = this.allUsers;
+    const members: CurrentUser[] = this.allUsers();
     const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
     this.filteredMembers = members.filter(member =>
       member.name.toLowerCase().includes(lowerCaseTag)

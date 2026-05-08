@@ -1,4 +1,6 @@
-import { AfterViewInit, Component, Input, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Channel } from '../../../shared/models/channel.class';
 import { BoardService } from '../../../shared/services/board-service/board.service';
@@ -9,6 +11,7 @@ import { FirestoreService } from '../../../shared/services/firestore-service/fir
 import { AnswerEditorComponent } from '../answer-editor/answer-editor.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-answer-message',
   imports: [CommonModule, AnswerEditorComponent],
   templateUrl: './answer-message.component.html',
@@ -18,12 +21,12 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   firestoreService = inject(FirestoreService);
   boardServ = inject(BoardService);
 
-  @Input() currentChannel!: Channel;
-  @Input() currentChatMessage?: ChatMessage;
+  readonly currentChannel = input.required<Channel>();
+  readonly currentChatMessage = input<ChatMessage>();
   @Input() answer!: ChatMessage;
-  @Input() lastIndex!: boolean;
-  @Input() chatMessagaeIndex?: number;
-  @Input() answerIndex?: number;
+  readonly lastIndex = input.required<boolean>();
+  readonly chatMessagaeIndex = input<number>();
+  readonly answerIndex = input<number>();
 
   currentUserName!: string;
   showReactionPopup = false;
@@ -56,8 +59,8 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
 
   async updateAllChannels(emojiIdx: number) {
     const newAnswer = this.checkIfReactionExists(emojiIdx);
-    this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage);
-    await this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!);
+    this.currentChannel()?.chat?.splice(this.chatMessagaeIndex()!, 1, this.currentChatMessage());
+    await this.firestoreService.updateAllChats(this.currentChannel().id!, this.currentChannel().chat!);
   }
 
   toggleMessageEditor() {

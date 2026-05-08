@@ -1,18 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-    selector: 'app-login',
-    imports: [CommonModule, FormsModule, SignInComponent, ForgotPasswordComponent],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-login',
+  imports: [FormsModule, SignInComponent, ForgotPasswordComponent],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
-  localStorageService = inject(LocalStorageService)
+  localStorageService = inject(LocalStorageService);
 
   forgotPassword = false;
   smallScreen = false;
@@ -36,7 +38,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.localStorageService.loadIntroPlayed();
     setTimeout(() => this.localStorageService.saveIntroPlayed(true), 3000);
-    if (window.innerWidth <= 760) { this.smallScreen = true }
+    if (window.innerWidth <= 760) {
+      this.smallScreen = true;
+    }
   }
 
   openPasswordDialog($event: boolean) {

@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { Component, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';
@@ -9,14 +11,20 @@ import { Channel } from '../../shared/models/channel.class';
 import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { AddSpecificPersonDialogMobileComponent } from './add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
-    selector: 'app-add-member-dialog',
-    imports: [CommonModule, FormsModule, AddSpecificPersonDialogComponent, AddSpecificPersonDialogMobileComponent],
-    templateUrl: './add-member-dialog.component.html',
-    styleUrl: './add-member-dialog.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-add-member-dialog',
+  imports: [
+    CommonModule,
+    FormsModule,
+    AddSpecificPersonDialogComponent,
+    AddSpecificPersonDialogMobileComponent,
+  ],
+  templateUrl: './add-member-dialog.component.html',
+  styleUrl: './add-member-dialog.component.scss',
 })
 export class AddMemberDialogComponent {
-  @Input() currentChannel!: Channel;
-  @Input() currentChannelId!: string;
+  readonly currentChannel = input.required<Channel>();
+  readonly currentChannelId = input.required<string>();
 
   memberServ = inject(MemberDialogsService);
   boardServ = inject(BoardService);
@@ -24,10 +32,10 @@ export class AddMemberDialogComponent {
 
   specificMember: boolean = false;
   allMembers: boolean = false;
-  allUsers: CurrentUser[] = []
+  allUsers: CurrentUser[] = [];
 
   onCheck(condition: string) {
-    if (condition == "allMembers") {
+    if (condition == 'allMembers') {
       this.allMembers = !this.allMembers;
       this.specificMember = false;
     } else {
@@ -40,22 +48,23 @@ export class AddMemberDialogComponent {
     this.allUsers = this.firestore.userList();
     this.allUsers.forEach(u => {
       u.selected = true;
-    })
-    await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId)
+    });
+    await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId());
     this.addUserToMemberArray();
-    this.closeAddMemberDialog(event)
+    this.closeAddMemberDialog(event);
   }
 
   async addUserToMemberArray() {
-    this.currentChannel.members = [];
-    this.currentChannel.partecipantsIds = [];
+    const currentChannel = this.currentChannel();
+    currentChannel.members = [];
+    currentChannel.partecipantsIds = [];
     this.allUsers.forEach(user => {
-      this.currentChannel.members.push(user);
+      this.currentChannel().members.push(user);
       if (user.id) {
-        this.currentChannel.partecipantsIds.push(user.id)
+        this.currentChannel().partecipantsIds.push(user.id);
       }
     });
-    await this.firestore.updateChannel(this.currentChannel, this.currentChannelId);
+    await this.firestore.updateChannel(currentChannel, this.currentChannelId());
     // this.currentChannel.members.forEach(async (members) => {
     //   await this.firestore.updateMembers(members, this.currentChannelId);
     //   if (members.id) {
@@ -66,11 +75,11 @@ export class AddMemberDialogComponent {
   }
 
   addIdsToPartecipantsIds() {
-    this.currentChannel.partecipantsIds.forEach(id => {
-      if (this.currentChannel.id) {
-        this.firestore.updatePartecipantsIds(id, this.currentChannelId)
+    this.currentChannel().partecipantsIds.forEach(id => {
+      if (this.currentChannel().id) {
+        this.firestore.updatePartecipantsIds(id, this.currentChannelId());
       }
-    })
+    });
   }
 
   closeAddMemberDialog(event: Event) {

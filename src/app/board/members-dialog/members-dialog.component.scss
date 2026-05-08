@@ -1,18 +1,18 @@
 @use 'variables' as *;
 
 .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(173, 176, 217, 1);
-    border-radius: 100px;
+  background: rgba(173, 176, 217, 1);
+  border-radius: 100px;
 }
 
 .status-bullet {
-    position: absolute;
-    bottom: 1px;
-    left: 56px;
-    width: 16px;
-    height: 16px;
+  position: absolute;
+  bottom: 1px;
+  left: 56px;
+  width: 16px;
+  height: 16px;
 }

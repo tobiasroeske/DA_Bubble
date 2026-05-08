@@ -1,17 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject, input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-sign-in',
-    imports: [FormsModule, RouterLink],
-    templateUrl: './sign-in.component.html',
-    styleUrl: './sign-in.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-sign-in',
+  imports: [FormsModule, RouterLink],
+  templateUrl: './sign-in.component.html',
+  styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent implements OnInit {
-  @Input() smallScreen!: boolean;
+  readonly smallScreen = input.required<boolean>();
   @Output() passwordForgotten = new EventEmitter<boolean>();
 
   signupService = inject(SignupService);
@@ -59,5 +62,4 @@ export class SignInComponent implements OnInit {
   forgotPassword(): void {
     this.passwordForgotten.emit(true);
   }
-
 }

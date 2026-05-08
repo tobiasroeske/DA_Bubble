@@ -1,4 +1,16 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  inject,
+  ChangeDetectorRef,
+  AfterViewChecked,
+  input,
+  viewChildren,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { CommonModule } from '@angular/common';
@@ -9,20 +21,23 @@ import { MessageEditorComponent } from '../message-editor/message-editor.compone
 import { FirebaseStorageService } from '../../../shared/services/firebase-storage-service/firebase-storage.service';
 import { Channel } from '../../../shared/models/channel.class';
 
-
 @Component({
-    selector: 'app-chat-message',
-    imports: [CommonModule, FormsModule, MessageEditorComponent],
-    templateUrl: './chat-message.component.html',
-    styleUrls: ['./chat-message.component.scss', './chat-message-media-queries.component.scss', 'chat-message-textarea-elements.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-chat-message',
+  imports: [CommonModule, FormsModule, MessageEditorComponent],
+  templateUrl: './chat-message.component.html',
+  styleUrls: [
+    './chat-message.component.scss',
+    './chat-message-media-queries.component.scss',
+    'chat-message-textarea-elements.component.scss',
+  ],
 })
-
 export class ChatMessageComponent implements OnInit, AfterViewChecked {
-  @ViewChildren('channelMessages') channelMessages!: QueryList<ElementRef>;
+  readonly channelMessages = viewChildren<ElementRef>('channelMessages');
   @Input() chat!: ChatMessage;
-  @Input() lastIndex!: boolean;
-  @Input() channelId!: string;
-  @Input() chatMessageIndex!: number;
+  readonly lastIndex = input.required<boolean>();
+  readonly channelId = input<string>('');
+  readonly chatMessageIndex = input<number>(0);
   @Input() currentChannel!: Channel;
 
   boardServ = inject(BoardService);
@@ -37,28 +52,37 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   reactionDialogOpen = false;
   reactionDialogIndicatorbarOpen = false;
   membersList: any[] = [];
-  currentUserName!: any
+  currentUserName!: any;
   lastReactions: string[] = ['thumbs_up', 'laughing'];
-  currentChatMessage!: ChatMessage
+  currentChatMessage!: ChatMessage;
   editorOpen = false;
-  reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
+  reactionEmojis: string[] = [
+    'angry',
+    'cool',
+    'flushed',
+    'hearts',
+    'high_five',
+    'laughing',
+    'thumbs_up',
+  ];
   elementsInitialized: boolean = false;
 
   cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.currentChannel = (this.firestore.allChannels()[this.boardServ.idx]);
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.currentUserName = this.boardServ.currentUser.name;
     this.currentChatMessage = this.chat;
     this.editedMessage = this.chat.message;
   }
 
   ngAfterViewChecked() {
-    if (this.channelMessages && this.channelMessages.length > 0 && !this.elementsInitialized) {
-      this.channelMessages.toArray().forEach(chanMe => {
+    const channelMessages = this.channelMessages();
+    if (channelMessages && channelMessages.length > 0 && !this.elementsInitialized) {
+      channelMessages.forEach(chanMe => {
         this.boardServ.channelMessageElementsToArray.push(chanMe);
-        this.boardServ.highlightArrayForTheChannelElementSearched.push(false)
-      })
+        this.boardServ.highlightArrayForTheChannelElementSearched.push(false);
+      });
       this.elementsInitialized = true;
       this.cdr.detectChanges();
     }
@@ -88,7 +112,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   }
 
   toggleMessageEditor() {
-    this.editorOpen = !this.editorOpen
+    this.editorOpen = !this.editorOpen;
     this.mouseIsOverMessage = false;
   }
 
@@ -99,20 +123,20 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   async editMessage(index: number) {
     this.chat.message = this.editedMessage!;
     this.currentChannel.chat!.splice(index, 1, this.chat);
-    await this.firestore.updateChannel(this.currentChannel, this.channelId);
-    this.editorOpen = false
+    await this.firestore.updateChannel(this.currentChannel, this.channelId());
+    this.editorOpen = false;
   }
 
   setCurrentMessage() {
     this.boardServ.currentChatMessage = this.chat;
-    this.boardServ.chatMessageIndex = this.chatMessageIndex;
+    this.boardServ.chatMessageIndex = this.chatMessageIndex();
     this.boardServ.currentChannelTitle = this.currentChannel.title;
   }
 
   async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
     const newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
-    this.currentChannel.chat!.splice(this.chatMessageIndex, 1, newChatMessage);
-    await this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!);
+    this.currentChannel.chat!.splice(this.chatMessageIndex(), 1, newChatMessage);
+    await this.firestore.updateAllChats(this.channelId(), this.currentChannel.chat!);
     this.getLastTwoReactions(emojiIdx, emojiArray);
   }
 
@@ -129,7 +153,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   }
 
   getCurrentChatMessage(): ChatMessage {
-    return this.currentChannel.chat![this.chatMessageIndex];
+    return this.currentChannel.chat![this.chatMessageIndex()];
   }
 
   findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
@@ -162,7 +186,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
       emojiPath: emojiArray[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
-    }
+    };
   }
 
   onHover(htmlElement: string) {

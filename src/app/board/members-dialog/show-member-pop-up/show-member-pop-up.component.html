@@ -1,56 +1,84 @@
-<div class="fixed inset-0 flex items-center justify-center z-[99] bg-black/20 font-['Nunito'] text-black" (click)="memberServ.closeShowMemberPopUp($event)">
-    <div (click)="boardServ.stopPropagation($event)" class="bg-white rounded-[30px] p-10 z-10 flex flex-col justify-between items-start gap-[45px] w-[500px]">
-        <div class="flex justify-between w-full">
-            <span class="text-2xl font-bold">Profil</span>
-            <svg class="h-10 w-10 cursor-pointer hover:bg-[#ECEEFE] hover:rounded-full" (click)="memberServ.closeShowMemberPopUp($event)" width="40" height="40"
-                viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
-                    height="24">
-                    <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
-                </mask>
-                <g mask="url(#mask0_460_3960)">
-                    <path
-                        d="M20 21.4L15.1 26.3C14.9167 26.4833 14.6834 26.575 14.4 26.575C14.1167 26.575 13.8834 26.4833 13.7 26.3C13.5167 26.1167 13.425 25.8833 13.425 25.6C13.425 25.3167 13.5167 25.0833 13.7 24.9L18.6 20L13.7 15.1C13.5167 14.9167 13.425 14.6833 13.425 14.4C13.425 14.1167 13.5167 13.8833 13.7 13.7C13.8834 13.5167 14.1167 13.425 14.4 13.425C14.6834 13.425 14.9167 13.5167 15.1 13.7L20 18.6L24.9 13.7C25.0834 13.5167 25.3167 13.425 25.6 13.425C25.8834 13.425 26.1167 13.5167 26.3 13.7C26.4834 13.8833 26.575 14.1167 26.575 14.4C26.575 14.6833 26.4834 14.9167 26.3 15.1L21.4 20L26.3 24.9C26.4834 25.0833 26.575 25.3167 26.575 25.6C26.575 25.8833 26.4834 26.1167 26.3 26.3C26.1167 26.4833 25.8834 26.575 25.6 26.575C25.3167 26.575 25.0834 26.4833 24.9 26.3L20 21.4Z"
-                        fill="black" />
-                </g>
-            </svg>
-        </div>
-        <div class="w-full flex items-center justify-center">
-            <img class="w-[200px] h-[200px] rounded-full object-cover" src="{{memberServ.avatarPath}}" alt="">
-        </div>
-        <div class="flex flex-col gap-[15px] w-full">
-            <h3 class="text-3xl text-black font-bold">{{memberServ.name}}</h3>
-            <div class="flex gap-[15px]">
-                @if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'loggedIn') {
-                <div class="flex gap-6">
-                    <img src="assets/icons/user_online.png" alt="" class="w-6 h-6">
-                    <span class="text-xl font-normal">Online</span>
-                </div>
-                } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'loggedOut') {
-                <div class="flex gap-6">
-                    <img src="assets/icons/user_offline.png" alt="" class="w-6 h-6">
-                    <span class="text-xl font-normal">Offline</span>
-                </div>
-                } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'idle') {
-                <div class="flex gap-6">
-                    <img src="assets/icons/user_idle.png" alt="" class="w-6 h-6">
-                    <span class="text-xl font-normal text-[#F19E39]">Abwesend</span>
-                </div>
-                }
-            </div>
-        </div>
-        <div class="flex gap-[15px] w-full items-start">
-            <img src="assets/icons/mail.png" alt="" class="h-5 w-[25px] object-contain">
-            <div class="flex flex-col gap-5">
-                <h3 class="text-lg font-bold">E-Mail Addresse</h3>
-                <span class="text-lg font-normal">{{memberServ.email}}</span>
-            </div>
-        </div>
-        <div (click)="memberServ.setChatRoom($event)" class="w-full flex items-center justify-center">
-            <a href="" class="bg-[#444df2] rounded-full px-6 py-3 flex gap-2.5 text-white text-lg font-bold hover:bg-blue-600 transition-colors">
-                <img src="assets/icons/mode_comment.png" alt="">
-                Nachricht
-            </a>
-        </div>
+<div
+  class="fixed inset-0 flex items-center justify-center z-[99] bg-black/20 font-['Nunito'] text-black"
+  (click)="memberServ.closeShowMemberPopUp($event)"
+>
+  <div
+    (click)="boardServ.stopPropagation($event)"
+    class="bg-white rounded-[30px] p-10 z-10 flex flex-col justify-between items-start gap-[45px] w-[500px]"
+  >
+    <div class="flex justify-between w-full">
+      <span class="text-2xl font-bold">Profil</span>
+      <svg
+        class="h-10 w-10 cursor-pointer hover:bg-[#ECEEFE] hover:rounded-full"
+        (click)="memberServ.closeShowMemberPopUp($event)"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <mask
+          id="mask0_460_3960"
+          style="mask-type: alpha"
+          maskUnits="userSpaceOnUse"
+          x="8"
+          y="8"
+          width="24"
+          height="24"
+        >
+          <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask0_460_3960)">
+          <path
+            d="M20 21.4L15.1 26.3C14.9167 26.4833 14.6834 26.575 14.4 26.575C14.1167 26.575 13.8834 26.4833 13.7 26.3C13.5167 26.1167 13.425 25.8833 13.425 25.6C13.425 25.3167 13.5167 25.0833 13.7 24.9L18.6 20L13.7 15.1C13.5167 14.9167 13.425 14.6833 13.425 14.4C13.425 14.1167 13.5167 13.8833 13.7 13.7C13.8834 13.5167 14.1167 13.425 14.4 13.425C14.6834 13.425 14.9167 13.5167 15.1 13.7L20 18.6L24.9 13.7C25.0834 13.5167 25.3167 13.425 25.6 13.425C25.8834 13.425 26.1167 13.5167 26.3 13.7C26.4834 13.8833 26.575 14.1167 26.575 14.4C26.575 14.6833 26.4834 14.9167 26.3 15.1L21.4 20L26.3 24.9C26.4834 25.0833 26.575 25.3167 26.575 25.6C26.575 25.8833 26.4834 26.1167 26.3 26.3C26.1167 26.4833 25.8834 26.575 25.6 26.575C25.3167 26.575 25.0834 26.4833 24.9 26.3L20 21.4Z"
+            fill="black"
+          />
+        </g>
+      </svg>
     </div>
+    <div class="w-full flex items-center justify-center">
+      <img
+        class="w-[200px] h-[200px] rounded-full object-cover"
+        src="{{ memberServ.avatarPath }}"
+        alt=""
+      />
+    </div>
+    <div class="flex flex-col gap-[15px] w-full">
+      <h3 class="text-3xl text-black font-bold">{{ memberServ.name }}</h3>
+      <div class="flex gap-[15px]">
+        @if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'loggedIn') {
+          <div class="flex gap-6">
+            <img src="assets/icons/user_online.png" alt="" class="w-6 h-6" />
+            <span class="text-xl font-normal">Online</span>
+          </div>
+        } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'loggedOut') {
+          <div class="flex gap-6">
+            <img src="assets/icons/user_offline.png" alt="" class="w-6 h-6" />
+            <span class="text-xl font-normal">Offline</span>
+          </div>
+        } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'idle') {
+          <div class="flex gap-6">
+            <img src="assets/icons/user_idle.png" alt="" class="w-6 h-6" />
+            <span class="text-xl font-normal text-[#F19E39]">Abwesend</span>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="flex gap-[15px] w-full items-start">
+      <img src="assets/icons/mail.png" alt="" class="h-5 w-[25px] object-contain" />
+      <div class="flex flex-col gap-5">
+        <h3 class="text-lg font-bold">E-Mail Addresse</h3>
+        <span class="text-lg font-normal">{{ memberServ.email }}</span>
+      </div>
+    </div>
+    <div (click)="memberServ.setChatRoom($event)" class="w-full flex items-center justify-center">
+      <a
+        href=""
+        class="bg-[#444df2] rounded-full px-6 py-3 flex gap-2.5 text-white text-lg font-bold hover:bg-blue-600 transition-colors"
+      >
+        <img src="assets/icons/mode_comment.png" alt="" />
+        Nachricht
+      </a>
+    </div>
+  </div>
 </div>

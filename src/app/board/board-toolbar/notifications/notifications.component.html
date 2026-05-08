@@ -1,24 +1,47 @@
 <div class="flex flex-col gap-[45px] w-[400px] font-nunito">
-    <div class="w-full flex justify-between text-2xl font-bold pr-10">
-        <h3>Benachrichtigungen</h3>
-        <img src="assets/icons/close.svg" alt="" class="rounded-[20px] p-2 transition-all duration-200 hover:bg-[#eceefd] hover:cursor-pointer" (click)="closeDialog(); boardServ.stopPropagation($event)">
-    </div>
-    <div class="notifications-container flex flex-col items-start justify-start gap-2 max-h-[300px] overflow-auto pr-10">
-        @if (boardServ.currentUser.notification.length == 0) {
-        <div class="flex justify-start gap-2 px-3 py-1 rounded-[30px] transition-all duration-200 cursor-pointer hover:bg-[#eceefd]">Keine neuen Benachrichtigungen</div>
-        }
-        @for (notification of boardServ.currentUser.notification; track notification; let i = $index) {
-        @if (notification.receiverId == boardServ.currentUser.id) {
-        <div (click)="checkPositionOfThisNotific(i, $event)" class="flex justify-start gap-2 px-3 py-1 rounded-[30px] transition-all duration-200 cursor-pointer"
-            [ngClass]="{'bg-[#eceefd] hover:bg-[#797ef3]': !notification.notificationRed, 'hover:bg-[#eceefd]': notification.notificationRed}" (click)="markAsRed(i)">
-            <div class="flex justify-start gap-2">
-                <img src="{{ notification.senderImage }}" alt="" class="w-8 h-8 object-cover rounded-full">
-                <span class="text-lg font-bold">{{ notification.senderName }}</span>
-            </div>
-            <span>hat dich in <b># {{ notification.channelName }}</b> markiert</span>
+  <div class="w-full flex justify-between text-2xl font-bold pr-10">
+    <h3>Benachrichtigungen</h3>
+    <img
+      src="assets/icons/close.svg"
+      alt=""
+      class="rounded-[20px] p-2 transition-all duration-200 hover:bg-[#eceefd] hover:cursor-pointer"
+      (click)="closeDialog(); boardServ.stopPropagation($event)"
+    />
+  </div>
+  <div
+    class="notifications-container flex flex-col items-start justify-start gap-2 max-h-[300px] overflow-auto pr-10"
+  >
+    @if (boardServ.currentUser.notification.length == 0) {
+      <div
+        class="flex justify-start gap-2 px-3 py-1 rounded-[30px] transition-all duration-200 cursor-pointer hover:bg-[#eceefd]"
+      >
+        Keine neuen Benachrichtigungen
+      </div>
+    }
+    @for (notification of boardServ.currentUser.notification; track notification; let i = $index) {
+      @if (notification.receiverId == boardServ.currentUser.id) {
+        <div
+          (click)="checkPositionOfThisNotific(i, $event)"
+          class="flex justify-start gap-2 px-3 py-1 rounded-[30px] transition-all duration-200 cursor-pointer"
+          [ngClass]="{
+            'bg-[#eceefd] hover:bg-[#797ef3]': !notification.notificationRed,
+            'hover:bg-[#eceefd]': notification.notificationRed,
+          }"
+          (click)="markAsRed(i)"
+        >
+          <div class="flex justify-start gap-2">
+            <img
+              src="{{ notification.senderImage }}"
+              alt=""
+              class="w-8 h-8 object-cover rounded-full"
+            />
+            <span class="text-lg font-bold">{{ notification.senderName }}</span>
+          </div>
+          <span
+            >hat dich in <b># {{ notification.channelName }}</b> markiert</span
+          >
         </div>
-        }
-        }
-
-    </div>
+      }
+    }
+  </div>
 </div>

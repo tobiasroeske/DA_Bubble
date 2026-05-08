@@ -1,54 +1,96 @@
-@if(memberServ.addMemberDialogIsOpen){
-<div (click)="closeAddMemberDialog($event)" class="fixed inset-0 bg-black/20 z-12"></div>
-<div [ngStyle]="{'gap': memberServ.addSpecificPerson ? '0' : '20px'}" (click)="memberServ.stopPropagation($event)"
-    class="absolute top-[55px] right-0 z-48 bg-white rounded-[30px] p-10 w-[710px] flex flex-col justify-between items-start max-md:w-[455px] max-md:p-6 max-md:right-[-5px] max-sm:w-[300px] max-sm:p-4">
+@if (memberServ.addMemberDialogIsOpen) {
+  <div (click)="closeAddMemberDialog($event)" class="fixed inset-0 bg-black/20 z-12"></div>
+  <div
+    [ngStyle]="{ gap: memberServ.addSpecificPerson ? '0' : '20px' }"
+    (click)="memberServ.stopPropagation($event)"
+    class="absolute top-[55px] right-0 z-48 bg-white rounded-[30px] p-10 w-[710px] flex flex-col justify-between items-start max-md:w-[455px] max-md:p-6 max-md:right-[-5px] max-sm:w-[300px] max-sm:p-4"
+  >
     <div class="w-full flex justify-between">
-        <span class="text-2xl font-normal max-sm:text-lg">Leute hinzufügen</span>
-        <svg (click)="closeAddMemberDialog($event)" class="h-10 w-10 object-contain rounded-full cursor-pointer hover:bg-[#ECEEFE]" width="40" height="40"
-            viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
-                height="24">
-                <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
-            </mask>
-            <g mask="url(#mask0_460_3960)">
-                <path
-                    d="M20 21.4L15.1 26.3C14.9167 26.4833 14.6834 26.575 14.4 26.575C14.1167 26.575 13.8834 26.4833 13.7 26.3C13.5167 26.1167 13.425 25.8833 13.425 25.6C13.425 25.3167 13.5167 25.0833 13.7 24.9L18.6 20L13.7 15.1C13.5167 14.9167 13.425 14.6833 13.425 14.4C13.425 14.1167 13.5167 13.8833 13.7 13.7C13.8834 13.5167 14.1167 13.425 14.4 13.425C14.6834 13.425 14.9167 13.5167 15.1 13.7L20 18.6L24.9 13.7C25.0834 13.5167 25.3167 13.425 25.6 13.425C25.8834 13.425 26.1167 13.5167 26.3 13.7C26.4834 13.8833 26.575 14.1167 26.575 14.4C26.575 14.6833 26.4834 14.9167 26.3 15.1L21.4 20L26.3 24.9C26.4834 25.0833 26.575 25.3167 26.575 25.6C26.575 25.8833 26.4834 26.1167 26.3 26.3C26.1167 26.4833 25.8834 26.575 25.6 26.575C25.3167 26.575 25.0834 26.4833 24.9 26.3L20 21.4Z"
-                    fill="black" />
-            </g>
-        </svg>
+      <span class="text-2xl font-normal max-sm:text-lg">Leute hinzufügen</span>
+      <svg
+        (click)="closeAddMemberDialog($event)"
+        class="h-10 w-10 object-contain rounded-full cursor-pointer hover:bg-[#ECEEFE]"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <mask
+          id="mask0_460_3960"
+          style="mask-type: alpha"
+          maskUnits="userSpaceOnUse"
+          x="8"
+          y="8"
+          width="24"
+          height="24"
+        >
+          <rect x="8" y="8" width="24" height="24" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask0_460_3960)">
+          <path
+            d="M20 21.4L15.1 26.3C14.9167 26.4833 14.6834 26.575 14.4 26.575C14.1167 26.575 13.8834 26.4833 13.7 26.3C13.5167 26.1167 13.425 25.8833 13.425 25.6C13.425 25.3167 13.5167 25.0833 13.7 24.9L18.6 20L13.7 15.1C13.5167 14.9167 13.425 14.6833 13.425 14.4C13.425 14.1167 13.5167 13.8833 13.7 13.7C13.8834 13.5167 14.1167 13.425 14.4 13.425C14.6834 13.425 14.9167 13.5167 15.1 13.7L20 18.6L24.9 13.7C25.0834 13.5167 25.3167 13.425 25.6 13.425C25.8834 13.425 26.1167 13.5167 26.3 13.7C26.4834 13.8833 26.575 14.1167 26.575 14.4C26.575 14.6833 26.4834 14.9167 26.3 15.1L21.4 20L26.3 24.9C26.4834 25.0833 26.575 25.3167 26.575 25.6C26.575 25.8833 26.4834 26.1167 26.3 26.3C26.1167 26.4833 25.8834 26.575 25.6 26.575C25.3167 26.575 25.0834 26.4833 24.9 26.3L20 21.4Z"
+            fill="black"
+          />
+        </g>
+      </svg>
     </div>
 
-    <div [class.hidden]="memberServ.addSpecificPerson" class="flex flex-col justify-between gap-5 w-full">
-        <div class="w-full flex gap-5 cursor-pointer" (click)="onCheck('allMembers')">
-            <div class="h-5 w-5 rounded-full border border-[#ADB0D9] flex items-center justify-center flex-shrink-0">
-                @if(allMembers){
-                <img class="w-3 h-3 object-cover" src="assets/icons/ellipse.png" alt="">
-                }
-            </div>
-            <span class="text-base font-normal max-sm:text-xs">Alle Mitglieder von <b class="text-[#5988FF]">OfficeTeam</b> hinzufügen</span>
+    <div
+      [class.hidden]="memberServ.addSpecificPerson"
+      class="flex flex-col justify-between gap-5 w-full"
+    >
+      <div class="w-full flex gap-5 cursor-pointer" (click)="onCheck('allMembers')">
+        <div
+          class="h-5 w-5 rounded-full border border-[#ADB0D9] flex items-center justify-center flex-shrink-0"
+        >
+          @if (allMembers) {
+            <img class="w-3 h-3 object-cover" src="assets/icons/ellipse.png" alt="" />
+          }
         </div>
+        <span class="text-base font-normal max-sm:text-xs"
+          >Alle Mitglieder von <b class="text-[#5988FF]">OfficeTeam</b> hinzufügen</span
+        >
+      </div>
 
-        <div class="w-full flex gap-5 cursor-pointer" (click)="onCheck('specificMember')">
-            <div class="h-5 w-5 rounded-full border border-[#ADB0D9] flex items-center justify-center flex-shrink-0">
-                @if(specificMember){
-                <img class="w-3 h-3 object-cover" src="assets/icons/ellipse.png" alt="">
-                }
-            </div>
-            <span class="text-base font-normal max-sm:text-xs">Bestimmte Leute hinzufügen</span>
+      <div class="w-full flex gap-5 cursor-pointer" (click)="onCheck('specificMember')">
+        <div
+          class="h-5 w-5 rounded-full border border-[#ADB0D9] flex items-center justify-center flex-shrink-0"
+        >
+          @if (specificMember) {
+            <img class="w-3 h-3 object-cover" src="assets/icons/ellipse.png" alt="" />
+          }
         </div>
+        <span class="text-base font-normal max-sm:text-xs">Bestimmte Leute hinzufügen</span>
+      </div>
 
-        <div class="w-full flex justify-end">
-            @if(allMembers){
-            <button (click)="setAllUsersOnSelectedTrue($event)" class="rounded-full px-6 py-3 bg-[#444df2] text-white text-base font-normal cursor-pointer hover:bg-blue-600 transition-colors max-sm:text-xs max-sm:px-4 max-sm:py-2">Erstellen</button>
-            } @else if(specificMember) {
-            <button (click)="memberServ.goToAddSpecificPerson($event)" class="rounded-full px-6 py-3 bg-[#444df2] text-white text-base font-normal cursor-pointer hover:bg-blue-600 transition-colors max-sm:text-xs max-sm:px-4 max-sm:py-2">Erstellen</button>
-            } @else {
-            <button class="rounded-full px-6 py-3 bg-gray-400 text-white text-base font-normal cursor-not-allowed max-sm:text-xs max-sm:px-4 max-sm:py-2" [disabled]="true">Erstellen</button>
-            }
-        </div>
+      <div class="w-full flex justify-end">
+        @if (allMembers) {
+          <button
+            (click)="setAllUsersOnSelectedTrue($event)"
+            class="rounded-full px-6 py-3 bg-[#444df2] text-white text-base font-normal cursor-pointer hover:bg-blue-600 transition-colors max-sm:text-xs max-sm:px-4 max-sm:py-2"
+          >
+            Erstellen
+          </button>
+        } @else if (specificMember) {
+          <button
+            (click)="memberServ.goToAddSpecificPerson($event)"
+            class="rounded-full px-6 py-3 bg-[#444df2] text-white text-base font-normal cursor-pointer hover:bg-blue-600 transition-colors max-sm:text-xs max-sm:px-4 max-sm:py-2"
+          >
+            Erstellen
+          </button>
+        } @else {
+          <button
+            class="rounded-full px-6 py-3 bg-gray-400 text-white text-base font-normal cursor-not-allowed max-sm:text-xs max-sm:px-4 max-sm:py-2"
+            [disabled]="true"
+          >
+            Erstellen
+          </button>
+        }
+      </div>
     </div>
-    @if(memberServ.addSpecificPerson){
-    <app-add-specific-person-dialog style="width: 100%;"></app-add-specific-person-dialog>
+    @if (memberServ.addSpecificPerson) {
+      <app-add-specific-person-dialog style="width: 100%"></app-add-specific-person-dialog>
     }
-</div>
+  </div>
 }

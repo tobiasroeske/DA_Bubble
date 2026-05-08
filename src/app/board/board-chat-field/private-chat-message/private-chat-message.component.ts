@@ -1,5 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChildren, QueryList, ElementRef, HostListener, AfterViewInit, OnDestroy, inject, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  Input,
+  ElementRef,
+  HostListener,
+  AfterViewInit,
+  OnDestroy,
+  inject,
+  AfterViewChecked,
+  input,
+  viewChildren,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
@@ -7,18 +19,25 @@ import { PrivateMessageEditorComponent } from './private-message-editor/private-
 import { LocalStorageService } from '../../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
-    selector: 'app-private-chat-message',
-    imports: [CommonModule, PrivateMessageEditorComponent],
-    templateUrl: './private-chat-message.component.html',
-    styleUrls: ['./private-chat-message.component.scss', './private-chat-media-queries.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-private-chat-message',
+  imports: [CommonModule, PrivateMessageEditorComponent],
+  templateUrl: './private-chat-message.component.html',
+  styleUrls: [
+    './private-chat-message.component.scss',
+    './private-chat-media-queries.component.scss',
+  ],
 })
-export class PrivateChatMessageComponent extends ChatMessageComponent implements AfterViewChecked, OnDestroy {
-  @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;
-  @Input() privateChatId?: string;
+export class PrivateChatMessageComponent
+  extends ChatMessageComponent
+  implements AfterViewChecked, OnDestroy
+{
+  readonly messageElements = viewChildren<ElementRef>('messageElements');
+  readonly privateChatId = input<string>();
   @Input() privateMessage!: ChatMessage;
-  @Input() privateChatIndex!: number;
-  @Input() lasIndex!: boolean;
-  @Input() message!: string;
+  readonly privateChatIndex = input<number>(0);
+  readonly lasIndex = input<boolean>(false);
+  readonly message = input<string>('');
   override mouseIsOverMessage: boolean = false;
 
   localStorageServ = inject(LocalStorageService);
@@ -32,7 +51,6 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   constructor() {
     super();
   }
-
 
   override ngOnInit(): void {
     this.currentPrivatChat = this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat;
@@ -59,15 +77,16 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
   setCurrentPrivateChatMessage() {
     this.boardServ.privateAnswerMessage = this.privateMessage;
-    this.boardServ.privateAnswerIndex = this.privateChatIndex;
+    this.boardServ.privateAnswerIndex = this.privateChatIndex();
   }
 
   shouldInitializeElements(): boolean {
-    return this.messageElements && this.messageElements.length > 0 && !this.elementsInitialized;
+    const messageElements = this.messageElements();
+    return messageElements && messageElements.length > 0 && !this.elementsInitialized;
   }
 
   initializeElements(): void {
-    this.messageElements.toArray().forEach((me) => {
+    this.messageElements().forEach((me: ElementRef) => {
       this.boardServ.privateMessagesElementsToArray.push(me);
       this.boardServ.highlightArrayForTheChildElementSearched.push(false);
     });
@@ -79,14 +98,15 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
 
   override async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
-    if (this.privateChatId) {
+    const privateChatId = this.privateChatId();
+    if (privateChatId) {
       const newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
-      this.currentPrivatChat.splice(this.privateChatIndex, 1, newPrivateMessage);
+      this.currentPrivatChat.splice(this.privateChatIndex(), 1, newPrivateMessage);
       try {
-        await this.firestore.updateCompletlyPrivateChat(this.privateChatId, this.currentPrivatChat);
-        this.getLastTwoReactions(emojiIdx, emojiArray)
+        await this.firestore.updateCompletlyPrivateChat(privateChatId, this.currentPrivatChat);
+        this.getLastTwoReactions(emojiIdx, emojiArray);
       } catch (error) {
-        console.error('Error updating complete private chats', error)
+        console.error('Error updating complete private chats', error);
       }
     }
   }
@@ -104,7 +124,9 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
 
   getCurrentPrivateChatMessage(): ChatMessage {
-    return this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat[this.privateChatIndex];
+    return this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat[
+      this.privateChatIndex()
+    ];
   }
 
   override findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
@@ -138,7 +160,6 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
       emojiPath: emojiArray[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
-    }
+    };
   }
-
 }

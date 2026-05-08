@@ -1,5 +1,6 @@
-
-import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, input, viewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/models/channel.class';
@@ -8,15 +9,16 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
 
 @Component({
-    selector: 'app-create-message-area-thread',
-    imports: [FormsModule, PickerComponent],
-    templateUrl: './create-message-area-thread.component.html',
-    styleUrl: './create-message-area-thread.component.scss'
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-create-message-area-thread',
+  imports: [FormsModule, PickerComponent],
+  templateUrl: './create-message-area-thread.component.html',
+  styleUrl: './create-message-area-thread.component.scss',
 })
 export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent {
-  @Input() currentChatMessage?: ChatMessage;
-  @Input() currentChannel?: Channel
-  @ViewChild('fileInput') override fileInput!: ElementRef<any>;
+  readonly currentChatMessage = input<ChatMessage>();
+  readonly currentChannel = input<Channel>();
+  override readonly fileInput = viewChild.required<ElementRef<any>>('fileInput');
 
   override memberToTag: string = '';
   override channelToTag: string = '';
@@ -36,13 +38,13 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
     if (this.canSendMessage()) {
       const date = new Date().getTime();
       const newAnswer = this.setMessageObject(date);
-      this.currentChatMessage?.answers.push(newAnswer);
-      if (this.currentChannel) {
+      this.currentChatMessage()?.answers.push(newAnswer);
+      if (this.currentChannel()) {
         try {
-          await this.updateChat()
+          await this.updateChat();
           this.postUpdateActions();
         } catch (error) {
-          console.error('Error updating chat', error)
+          console.error('Error updating chat', error);
         }
       }
     }
@@ -53,13 +55,19 @@ export class CreateMessageAreaThreadComponent extends CreateMessageAreaComponent
   }
 
   updateChat(): Promise<void> {
-    this.currentChannel!.chat!.splice(this.boardService.chatMessageIndex, 1, this.currentChatMessage);
-    return this.firestoreService.updateAllChats(this.currentChannel!.id!, this.currentChannel!.chat!);
+    this.currentChannel()!.chat!.splice(
+      this.boardService.chatMessageIndex,
+      1,
+      this.currentChatMessage()
+    );
+    return this.firestoreService.updateAllChats(
+      this.currentChannel()!.id!,
+      this.currentChannel()!.chat!
+    );
   }
 
   postUpdateActions(): void {
     this.resetTextArea();
     this.boardService.scrollToBottom(this.boardService.threadRef);
   }
-
 }
