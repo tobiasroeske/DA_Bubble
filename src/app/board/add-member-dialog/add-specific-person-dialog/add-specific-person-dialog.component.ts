@@ -12,17 +12,21 @@ import { FirstTwoSelectedMembersComponent } from './first-two-selected-members/f
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 
 @Component({
-    selector: 'app-add-specific-person-dialog',
-    imports: [CommonModule, FormsModule, SelectedMembersFullListComponent, SuggestedListComponent, FirstTwoSelectedMembersComponent],
-    templateUrl: './add-specific-person-dialog.component.html',
-    styleUrl: './add-specific-person-dialog.component.scss'
+  selector: 'app-add-specific-person-dialog',
+  imports: [
+    CommonModule,
+    FormsModule,
+    SelectedMembersFullListComponent,
+    SuggestedListComponent,
+    FirstTwoSelectedMembersComponent,
+  ],
+  templateUrl: './add-specific-person-dialog.component.html',
+  styleUrl: './add-specific-person-dialog.component.scss',
 })
-
-
 export class AddSpecificPersonDialogComponent implements OnInit {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
-  memberServ = inject(MemberDialogsService)
+  memberServ = inject(MemberDialogsService);
 
   title!: string;
   currentChannel!: Channel;
@@ -31,7 +35,7 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   showSuggestedList: boolean = false;
   searchValue!: string;
   showAllSelectedMembers: boolean = false;
-  placeholder: string = "Name eingeben";
+  placeholder: string = 'Name eingeben';
   userList: CurrentUser[] = [];
   filteredUsersList: any[] = [];
   selectedList: any = [];
@@ -46,20 +50,20 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   constructor() {
     this.title = this.firestore.allChannels()[this.boardServ.idx].title;
     this.currentChannel = new Channel(this.firestore.allChannels()[this.boardServ.idx]);
-    this.channelId = this.currentChannel.id!
+    this.channelId = this.currentChannel.id!;
   }
 
   ngOnInit(): void {
     this.loadUsers();
-  };
+  }
 
   async loadUsers() {
     await this.findNewAddedUsers();
-    this.currentChannel.allUsers.forEach((user) => {
+    this.currentChannel.allUsers.forEach(user => {
       if (user.selected == false) {
-        this.userList.push(user)
+        this.userList.push(user);
       }
-    })
+    });
   }
 
   async findNewAddedUsers() {
@@ -67,9 +71,9 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     const userList = this.firestore.userList();
     userList.forEach(user => {
       if (!currentChannelUids.includes(user.id)) {
-        this.currentChannel.allUsers.push(user)
+        this.currentChannel.allUsers.push(user);
       }
-    })
+    });
     await this.firestore.updateChannelUsers(this.currentChannel.allUsers, this.channelId);
   }
 
@@ -84,21 +88,21 @@ export class AddSpecificPersonDialogComponent implements OnInit {
       if (member.id) {
         this.currentChannel.partecipantsIds.push(member.id);
       }
-      this.currentChannel.allUsers.forEach((user) => {
+      this.currentChannel.allUsers.forEach(user => {
         if (user.name == member.name) {
           user.selected = true;
         }
-      })
-    })
+      });
+    });
     await this.updateParticipants();
     this.closeTheAddMembersDialogs();
-  };
+  }
 
   closeTheAddMembersDialogs() {
     this.memberServ.addSpecificPerson = false;
     setTimeout(() => {
       this.memberServ.addMemberDialogIsOpen = false;
-    })
+    });
   }
 
   async updateParticipants() {
@@ -110,50 +114,51 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   async addPartecipantsIds() {
-    this.currentChannel.partecipantsIds.forEach(async (id) => {
-      await this.firestore.updatePartecipantsIds(id, this.channelId)
-    })
+    this.currentChannel.partecipantsIds.forEach(async id => {
+      await this.firestore.updatePartecipantsIds(id, this.channelId);
+    });
   }
 
   filterMembers(text: string) {
     if (!text) {
       this.showSuggestedList = false;
     } else {
-      this.filteredUsersList = this.userList.filter(ul => ul.name.toLowerCase().includes(text.toLowerCase()) && ul.selected == false);
+      this.filteredUsersList = this.userList.filter(
+        ul => ul.name.toLowerCase().includes(text.toLowerCase()) && ul.selected == false
+      );
       if (this.filteredUsersList.length > 0) {
         this.showSuggestedList = true;
       } else {
         this.showSuggestedList = false;
       }
     }
-  };
+  }
 
   addMemberToSelectedList(index: number) {
     this.selectedMember = this.filteredUsersList[index];
     this.selectedMember.selected = true;
     this.selectedList.push(this.selectedMember);
-    this.searchValue = "";
+    this.searchValue = '';
   }
-
 
   removeMemberFromSelectedList(index: number) {
     this.selectedList[index].selected = false;
-    this.selectedList.splice(index, 1)
+    this.selectedList.splice(index, 1);
   }
 
   showSelectedMembersFullList() {
-    this.showAllSelectedMembers = true
+    this.showAllSelectedMembers = true;
   }
 
   hideSelectedMembersFullList() {
-    this.showAllSelectedMembers = false
+    this.showAllSelectedMembers = false;
   }
 
   hidePlaceholder() {
-    this.placeholder = "";
+    this.placeholder = '';
   }
 
   showPlaceholder() {
-    this.placeholder = "Name eingeben"
+    this.placeholder = 'Name eingeben';
   }
 }

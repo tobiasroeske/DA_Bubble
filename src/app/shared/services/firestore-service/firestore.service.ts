@@ -1,6 +1,19 @@
 import { Injectable, inject, signal, OnDestroy } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { Firestore, addDoc, arrayUnion, collection, doc, onSnapshot, setDoc, updateDoc, query, where, orderBy, deleteDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+} from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
 import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
@@ -8,9 +21,8 @@ import { Auth, Unsubscribe } from '@angular/fire/auth';
 import { User } from '../../models/user.class';
 import { Subscribable } from 'rxjs';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FirestoreService implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
@@ -114,8 +126,8 @@ export class FirestoreService implements OnDestroy {
       email: obj.email,
       avatarPath: obj.avatarPath,
       selected: obj.selected ? obj.selected : false,
-      directMessages: obj.directMessages ? obj.directMessages : []
-    }
+      directMessages: obj.directMessages ? obj.directMessages : [],
+    };
   }
 
   setUserObject(obj: any, id: string) {
@@ -129,20 +141,23 @@ export class FirestoreService implements OnDestroy {
       loginState: obj.loginState || 'loggedOut',
       type: obj.type || 'CurrentUser',
       notification: obj.notification || [],
-    }
+    };
   }
 
   subChannelList(): Unsubscribe {
-    const q = query(this.getChannelsRef(), where('partecipantsIds', 'array-contains', this.currentUserId))
-    return onSnapshot(q, (list) => {
+    const q = query(
+      this.getChannelsRef(),
+      where('partecipantsIds', 'array-contains', this.currentUserId)
+    );
+    return onSnapshot(q, list => {
       const items: any[] = [];
-      list.forEach((el) => {
+      list.forEach(el => {
         const channel = new Channel(el.data());
         channel.id = el.id;
         items.push(channel.toJSON());
       });
       this.allChannels.set(items);
-    })
+    });
   }
 
   subAllExistingChannelList(): Unsubscribe {
@@ -151,11 +166,11 @@ export class FirestoreService implements OnDestroy {
       list.forEach(c => {
         const channel = new Channel(c.data());
         channel.id = c.id;
-        this.checkIfChannelHasMembers(channel, channel.id)
+        this.checkIfChannelHasMembers(channel, channel.id);
         items.push(channel);
       });
       this.allExistingChannels.set(items);
-    })
+    });
   }
 
   private async checkIfChannelHasMembers(channel: Channel, channelId: string): Promise<void> {
@@ -173,7 +188,9 @@ export class FirestoreService implements OnDestroy {
       const docRef = await addDoc(this.getChannelsRef(), obj);
       if (docRef?.id) {
         this.newChannelId = docRef.id;
-        await updateDoc(this.getSingleChannelRef('channels', this.newChannelId), { id: this.newChannelId });
+        await updateDoc(this.getSingleChannelRef('channels', this.newChannelId), {
+          id: this.newChannelId,
+        });
       }
     } catch (error) {
       console.error('Error adding channel:', error);
@@ -235,8 +252,12 @@ export class FirestoreService implements OnDestroy {
   }
 
   subDirectMessages(): Unsubscribe {
-    const q = query(this.getDirectMessRef(), where('partecipantsIds', 'array-contains', this.currentUserId), orderBy('lastUpdateAt', 'desc'));
-    return onSnapshot(q, (list) => {
+    const q = query(
+      this.getDirectMessRef(),
+      where('partecipantsIds', 'array-contains', this.currentUserId),
+      orderBy('lastUpdateAt', 'desc')
+    );
+    return onSnapshot(q, list => {
       const items: PrivateChat[] = [];
       list.forEach(el => {
         const privateChat = new PrivateChat(el.data());
@@ -247,7 +268,7 @@ export class FirestoreService implements OnDestroy {
   }
 
   subAllExistingChatRooms(): Unsubscribe {
-    return onSnapshot(this.getDirectMessRef(), (list) => {
+    return onSnapshot(this.getDirectMessRef(), list => {
       const items: PrivateChat[] = [];
       list.forEach(el => {
         const privateChat = new PrivateChat(el.data());
@@ -272,30 +293,26 @@ export class FirestoreService implements OnDestroy {
   async updatePrivateChat(docId: string, messageObject: ChatMessage) {
     const chatRef = this.getDirectMessSingleDoc(docId);
     await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
-      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(() => {
-
-      })
+      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(() => {});
     });
   }
 
   async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat) {
     try {
       const pmRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.error(err))
+      await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.error(err));
     } catch (error) {
-      console.error("Error updating complete private messages", error)
+      console.error('Error updating complete private messages', error);
     }
-
   }
 
   async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
     try {
       const chatRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(chatRef, { chat: messageObject })
+      await updateDoc(chatRef, { chat: messageObject });
     } catch (error) {
-      console.error('Error updating complete private chats', error)
+      console.error('Error updating complete private chats', error);
     }
-
   }
 
   getChatsRef(channelId: string) {
@@ -315,8 +332,6 @@ export class FirestoreService implements OnDestroy {
   }
 
   getDirectMessSingleDoc(colId: string) {
-    return doc(this.getDirectMessRef(), colId)
+    return doc(this.getDirectMessRef(), colId);
   }
-
 }
-

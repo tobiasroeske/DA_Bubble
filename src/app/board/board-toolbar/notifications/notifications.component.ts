@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { BoardService } from '../../../shared/services/board-service/board.service';
@@ -9,12 +8,11 @@ import { LocalStorageService } from '../../../shared/services/local-storage-serv
 import { Channel } from '../../../shared/models/channel.class';
 import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 
-
 @Component({
-    selector: 'app-notifications',
-    imports: [NgClass],
-    templateUrl: './notifications.component.html',
-    styleUrl: './notifications.component.scss'
+  selector: 'app-notifications',
+  imports: [NgClass],
+  templateUrl: './notifications.component.html',
+  styleUrl: './notifications.component.scss',
 })
 export class NotificationsComponent {
   @Output() notificationsOpen = new EventEmitter<boolean>();
@@ -23,15 +21,13 @@ export class NotificationsComponent {
   boardServ = inject(BoardService);
   channelChats!: Channel[];
 
-  constructor() {
-
-  }
+  constructor() {}
   findCurrentUser() {
     const allUsers = this.firestoreService.userList();
     const currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id);
   }
 
-  localStorageServ = inject(LocalStorageService)
+  localStorageServ = inject(LocalStorageService);
 
   closeDialog() {
     this.notificationsOpen.emit(false);
@@ -40,9 +36,13 @@ export class NotificationsComponent {
   checkPositionOfThisNotific(index: number, event: Event) {
     const notificChannel = this.boardServ.currentUser.notification[index].channelName;
     const notificMessage = this.boardServ.currentUser.notification[index].message;
-    const indexOfCurrentChannel = this.firestoreService.allChannels().findIndex((chan: Channel) => chan.title === notificChannel)
+    const indexOfCurrentChannel = this.firestoreService
+      .allChannels()
+      .findIndex((chan: Channel) => chan.title === notificChannel);
     const currentChannel = this.firestoreService.allChannels()[indexOfCurrentChannel];
-    const idxOfCurrentNotificMessage = currentChannel.chat.findIndex((chat: ChatMessage) => chat.message.trim() == notificMessage.trim());
+    const idxOfCurrentNotificMessage = currentChannel.chat.findIndex(
+      (chat: ChatMessage) => chat.message.trim() == notificMessage.trim()
+    );
     this.boardServ.showChannelInChatField(indexOfCurrentChannel, event);
     this.boardServ.scrollToChannelMessageAfterClickOnNotific(idxOfCurrentNotificMessage);
   }
@@ -50,11 +50,14 @@ export class NotificationsComponent {
   async markAsRed(index: number) {
     this.boardServ.currentUser.notification.splice(index, 1);
     this.localStorageServ.saveCurrentUser(this.boardServ.currentUser);
-    await this.firestoreService.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
+    await this.firestoreService.updateUser(
+      this.boardServ.currentUser.id!,
+      this.boardServ.currentUser
+    );
   }
 
   findNotificationIndex(notification: NotificationObj, currentUser: CurrentUser) {
-    const idx = currentUser.notification.findIndex(n => n.date === notification.date)
+    const idx = currentUser.notification.findIndex(n => n.date === notification.date);
     return idx;
   }
 }

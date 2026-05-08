@@ -1,72 +1,71 @@
-<div class="content">
-
-    <div class="headline">
-        <img routerLink="../login" src="assets/img/arrow_back.png" alt="" class="back-arrow">
-        <h2>Konto erstellen</h2>
+<div class="flex flex-col gap-4 max-md:gap-5 max-h-[870px]:gap-2 max-h-[770px]:gap-2">
+    <div class="relative flex items-center justify-center w-full px-10">
+        <img routerLink="../login" src="assets/img/arrow_back.png" alt="" class="absolute left-[-16px] px-[15px] py-[15px] rounded-full cursor-pointer transition-all duration-125 hover:bg-[#ECEEFE] max-md:px-2 max-[500px]:px-2 max-[340px]:px-1 max-[340px]:left-[-12px]">
+        <h2 class="text-[#444DF2] text-[46px] font-bold text-center max-md:text-[32px] max-h-[880px]:text-[40px] max-h-[750px]:text-[24px]">Konto erstellen</h2>
     </div>
 
-    <span>Mit deinem Namen und deiner E-Mail-Adresse hast <br> du dein neues DABubble-Konto.</span>
-    <form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
-        <div class="input-fields">
-            <div class="input-container">
-                <div class="input-box">
-                    @if (user.name== '') {
-                    <img src="assets/img/person.png" alt="">
+    <span class="text-[20px] text-center max-md:text-[17px] max-h-[870px]:text-[15px]">Mit deinem Namen und deiner E-Mail-Adresse hast <br> du dein neues DABubble-Konto.</span>
+    <form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm" class="flex flex-col gap-8 max-md:gap-5 max-h-[870px]:gap-2 max-h-[770px]:gap-2">
+        <div class="flex flex-col gap-[15.5px]">
+            <div class="h-[77px] max-h-[770px]:h-[67px]">
+                <div class="relative flex items-center w-[500px] rounded-full bg-[#ECEEFE] max-md:w-full">
+                    @if (user.name=== '') {
+                    <img src="assets/img/person.png" alt="" class="absolute ml-8">
                     } @else {
-                    <img src="assets/img/person_black.png" alt="">
+                    <img src="assets/img/person_black.png" alt="" class="absolute ml-8">
                     }
                     <label for="name"></label>
                     <input [(ngModel)]="user.name" #name="ngModel" type="text" id="name" name="name"
-                        placeholder="Name und Nachname" required>
+                        placeholder="Name und Nachname" required
+                        class="border border-transparent rounded-full outline-none bg-transparent w-full px-8 py-[18px] pl-[88px] h-full text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px] placeholder-[#686868] transition-all duration-125 hover:border-black focus:border-[#444DF2] max-[380px]:pl-[70px]">
                 </div>
                 @if (name.touched && !name.valid) {
-                <span class="error-message">Bitte schreiben sie einen Namen</span>
+                <span class="text-[14px] text-[#ED1E79] text-center max-h-[770px]:text-[13px]">Bitte schreiben sie einen Namen</span>
                 }
             </div>
 
-            <div class="input-container">
-                <div class="input-box">
-                    @if (user.email== '') {
-                    <img src="assets/img/mail.png" alt="">
+            <div class="h-[77px] max-h-[770px]:h-[67px]">
+                <div class="relative flex items-center w-[500px] rounded-full bg-[#ECEEFE] max-md:w-full">
+                    @if (user.email=== '') {
+                    <img src="assets/img/mail.png" alt="" class="absolute ml-8">
                     } @else {
-                    <img src="assets/img/mail_black.png" alt="">
+                    <img src="assets/img/mail_black.png" alt="" class="absolute ml-8">
                     }
                     <label for="email"></label>
                     <input [(ngModel)]="user.email" #email="ngModel" type="email" id="email" name="email"
                         placeholder="beispielname@email.com" required
-                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        class="border border-transparent rounded-full outline-none bg-transparent w-full px-8 py-[18px] pl-[88px] h-full text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px] placeholder-[#686868] transition-all duration-125 hover:border-black focus:border-[#444DF2] max-[380px]:pl-[70px]">
                 </div>
                 @if (email.touched && !email.valid) {
-                <span class="error-message">Diese E-Mail-Adresse ist leider ungültig</span>
+                <span class="text-[14px] text-[#ED1E79] text-center max-h-[770px]:text-[13px]">Diese E-Mail-Adresse ist leider ungültig</span>
                 }
-
             </div>
 
-            <div class="input-container password-input">
-                <div class="input-box">
-                    @if (user.password == '') {
-                    <img src="assets/img/lock.png" alt="">
+            <div class="h-[88px] max-h-[770px]:h-[80px]">
+                <div class="relative flex items-center w-[500px] rounded-full bg-[#ECEEFE] max-md:w-full">
+                    @if (user.password === '') {
+                    <img src="assets/img/lock.png" alt="" class="absolute ml-8">
                     } @else {
-                    <img src="assets/img/lock_black.png" alt="">
+                    <img src="assets/img/lock_black.png" alt="" class="absolute ml-8">
                     }
                     <label for="password"></label>
                     <input [(ngModel)]="user.password" #password="ngModel" type="password" id="password" name="password"
-                        placeholder="Passwort" required minlength="8">
+                        placeholder="Passwort" required minlength="8"
+                        class="border border-transparent rounded-full outline-none bg-transparent w-full px-8 py-[18px] pl-[88px] h-full text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px] placeholder-[#686868] transition-all duration-125 hover:border-black focus:border-[#444DF2] max-[380px]:pl-[70px]">
                 </div>
                 @if(password.touched && !password.valid) {
-                <span class="error-message">Bitte gültiges Passwort eingeben. <br>Das Passwort muss mindestens 8 Zeichen
-                    lang sein</span>
+                <span class="text-[14px] text-[#ED1E79] text-center max-h-[770px]:text-[13px]">Bitte gültiges Passwort eingeben. <br>Das Passwort muss mindestens 8 Zeichen lang sein</span>
                 }
             </div>
-            <div class="checkbox-container">
+            <div class="flex w-full justify-start items-center">
                 <input type="checkbox" id="privacyPolicy" required [(ngModel)]="checkboxChecked" #checkbox="ngModel"
-                    name="checkbox">
-                <label for="privacyPolicy">Ich stimme der <a href="datenschutz" target="_blank">Datenschutzerklärung</a>
-                    zu.</label>
+                    name="checkbox" class="w-fit mr-8">
+                <label for="privacyPolicy" class="text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px] transition-all duration-125 hover:bg-[#ECEEFE] px-1 py-1 rounded cursor-pointer">Ich stimme der <a href="datenschutz" target="_blank" class="text-[#797EF3]">Datenschutzerklärung</a> zu.</label>
             </div>
 
             <input [disabled]="!signupForm.valid" [class.disabled-btn]="!signupForm.valid"
-                class="btn-no-style login-btn" type="submit" value="Weiter">
+                class="btn-no-style w-fit bg-[#444DF2] text-white transition-all duration-125 hover:bg-[#787EF2] hover:border-[#787EF2] cursor-pointer px-4 py-2 rounded-full font-medium self-end max-md:px-[18px] max-md:py-3 max-[380px]:px-[15px] max-[380px]:py-[10px]" type="submit" value="Weiter">
         </div>
     </form>
 </div>

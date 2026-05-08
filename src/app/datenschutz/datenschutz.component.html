@@ -1,32 +1,32 @@
-<div id="datenschutz" class="fullheight">
-    <header>
-        <div class="logo-box">
+<div id="datenschutz" class="w-full flex flex-col justify-start gap-8 h-screen font-nunito">
+    <header class="flex justify-start px-[75px] pt-8 w-full max-[720px]:justify-center">
+        <div class="flex items-center gap-4">
             <img src="assets/img/logo.png" alt="">
-            <h1>DABubble</h1>
+            <h1 class="text-3xl font-nunito">DABubble</h1>
         </div>
     </header>
-    <div class="content">
-        <div class="container">
-            <a href="register"><img src="assets/icons/arrow_back.png" alt="" class="back-icon" (click)="closeWindow()"></a>
-            <h1>Datenschutzerklärung</h1>
+    <div class="flex flex-1 items-center justify-center overflow-hidden">
+        <div class="p-12 bg-white rounded-[30px] w-3/4 overflow-auto relative flex flex-col items-start justify-start gap-4 max-[720px]:w-[95%] max-[535px]:p-10 max-[370px]:px-6 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-thumb]:bg-[#ADB0D9] [&::-webkit-scrollbar-thumb]:rounded-full [&_h2]:text-[32px] [&_h2]:font-bold [&_h2]:max-[600px]:text-[28px] [&_h2]:max-[535px]:text-[20px] [&_h3]:text-[20px] [&_h3]:text-[#444df2] [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_p]:text-[17px] [&_li]:text-[17px] [&_a]:text-[#444df2]">
+            <a href="register"><img src="assets/icons/arrow_back.png" alt="" class="cursor-pointer absolute top-12 left-14 p-[15px] rounded-full transition-all duration-125 hover:bg-[#ECEEFE] max-[950px]:p-2 max-[950px]:left-8 max-[950px]:top-4 max-[535px]:p-1.5 max-[470px]:p-1 max-[470px]:left-[18px] max-[470px]:top-4" (click)="closeWindow()"></a>
+            <h1 class="self-center text-[46px] max-[600px]:text-[32px] max-[470px]:text-[24px] font-bold text-[#444df2]">Datenschutzerklärung</h1>
             <p>Stand: 12. Juni 2024</p>
             <h2>Inhaltsübersicht</h2>
-            <ul class="index">
-                <li><a class="index-link" href="#m3">Verantwortlicher</a></li>
-                <li><a class="index-link" href="#mOverview">Übersicht der Verarbeitungen</a></li>
-                <li><a class="index-link" href="#m2427">Maßgebliche Rechtsgrundlagen</a></li>
-                <li><a class="index-link" href="#m27">Sicherheitsmaßnahmen</a></li>
-                <li><a class="index-link" href="#m24">Internationale Datentransfers</a></li>
-                <li><a class="index-link" href="#m12">Allgemeine Informationen zur Datenspeicherung und Löschung</a>
+            <ul>
+                <li><a class="text-[#444df2] hover:underline" href="#m3">Verantwortlicher</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#mOverview">Übersicht der Verarbeitungen</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m2427">Maßgebliche Rechtsgrundlagen</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m27">Sicherheitsmaßnahmen</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m24">Internationale Datentransfers</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m12">Allgemeine Informationen zur Datenspeicherung und Löschung</a>
                 </li>
-                <li><a class="index-link" href="#m225">Bereitstellung des Onlineangebots und Webhosting</a></li>
-                <li><a class="index-link" href="#m134">Einsatz von Cookies</a></li>
-                <li><a class="index-link" href="#m182">Kontakt- und Anfrageverwaltung</a></li>
-                <li><a class="index-link" href="#m638">Werbliche Kommunikation via E-Mail, Post, Fax oder Telefon</a>
+                <li><a class="text-[#444df2] hover:underline" href="#m225">Bereitstellung des Onlineangebots und Webhosting</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m134">Einsatz von Cookies</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m182">Kontakt- und Anfrageverwaltung</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m638">Werbliche Kommunikation via E-Mail, Post, Fax oder Telefon</a>
                 </li>
-                <li><a class="index-link" href="#m263">Webanalyse, Monitoring und Optimierung</a></li>
-                <li><a class="index-link" href="#m328">Plug-ins und eingebettete Funktionen sowie Inhalte</a></li>
-                <li><a class="index-link" href="#m1360">Verarbeitung von Daten im Rahmen von
+                <li><a class="text-[#444df2] hover:underline" href="#m263">Webanalyse, Monitoring und Optimierung</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m328">Plug-ins und eingebettete Funktionen sowie Inhalte</a></li>
+                <li><a class="text-[#444df2] hover:underline" href="#m1360">Verarbeitung von Daten im Rahmen von
                         Beschäftigungsverhältnissen</a></li>
             </ul>
             <h2 id="m3">Verantwortlicher</h2>

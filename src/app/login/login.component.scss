@@ -1,150 +1,9 @@
 @use 'variables' as *;
 
-* {
-    font-family: 'Nunito', sans-serif;
-}
-
-header {
-    @include d-flex($jc: space-between);
-    padding: 32px 75px 0px;
-    height: 110px;
-
-    .logo-box {
-        @include d-flex($g: 16px);
-
-        h1 {
-            font-size: 32px;
-        }
-    }
-
-    .register-box {
-        @include d-flex($fd: column, $g: 16px);
-    }
-}
-
-.content {
-    @include d-flex($fd: column, $g: 40px);
-    height: calc(100vh - 110px);
-}
-
-.top {
-    flex: 1;
-    width: 90%;
-    max-width: 628px;
-}
-
-.login-container {
-    @include d-flex($fd: column, $g: 32px);
-    background-color: white;
-    box-shadow: 0px 2px 10px 0px #00000014;
-    border-radius: 30px;
-    padding: 32px 64px;
-    margin-top: 16px;
-
-    h2 {
-        color: #444DF2;
-        font-size: 46px;
-        font-weight: 700;
-        text-align: center;
-    }
-
-    >span {
-        font-size: 20px;
-        text-align: center;
-    }
-}
-
-footer {
-    @include d-flex($g: 16px, $ai: flex-end);
-    margin-bottom: 24px;
-}
-
-.intro {
-    position: fixed;
-    z-index: 100;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    @include d-flex($g: 24px);
-    background-image: linear-gradient(#797ef3, #313ae5);
-    opacity: 1;
-    animation: background-vanish .225s ease-in-out forwards 2.7s;
-
-    .max-width-container {
-        @include d-flex();
-        position: relative;
-        width: 100%;
-        height: 100vh;
-        max-width: 1920px;
-    }
-}
-
-.confirmation-message {
-    @include d-flex($g: 28px);
-    padding: 50px;
-    border-radius: 30px 30px 0 30px;
-    background-color: #444DF2;
-    box-shadow: 0px 6px 10px 0px #00000033;
-    color: white;
-    font-size: 36px;
-    font-weight: 700;
-    align-self: flex-end;
-    margin-right: 16px;
-    transform: translateX(600px);
-    transition: transform .125s ease-in-out;
-}
-
-.slide-in {
-    transform: translateX(0);
-}
-
-.flex-center {
-    @include d-flex($fd: column);
-    height: 100vh;
-}
-
-.intro-logo-container {
-    @include d-flex($g: 24px);
-    position: absolute;
-    animation: intro-animation .5s ease-in forwards 2.2s;
-
-    >img {
-        object-fit: cover;
-
-        transform: translateX(154px);
-
-        animation-name: logo-animation, intro-logo-animation;
-        animation-duration: .7s, .5s;
-        animation-delay: .5s, 2.2s;
-        animation-timing-function: ease-in-out, ease-in-out;
-        animation-fill-mode: forwards, forwards;
-    }
-
-    .headline {
-        position: relative;
-        overflow: hidden;
-
-        >h1 {
-            font-size: 64px;
-            font-weight: 700;
-            color: white;
-            transform: translateX(-320px);
-
-            animation-name: headline-animation, intro-headline-animation;
-            animation-duration: .5s, .5s;
-            animation-delay: 1s, 2.2s;
-            animation-timing-function: ease-in-out, ease-in-out;
-            animation-fill-mode: forwards, forwards;
-        }
-    }
-}
-
 @keyframes logo-animation {
     from {
         transform: translateX(154px);
     }
-
     to {
         transform: translateX(0);
     }
@@ -152,12 +11,9 @@ footer {
 
 @keyframes headline-animation {
     from {
-
         transform: translateX(-320px);
     }
-
     to {
-
         transform: translateX(0);
     }
 }
@@ -168,7 +24,6 @@ footer {
         top: 50%;
         transform: translate(-50%, -50%);
     }
-
     to {
         left: 75px;
         top: 32px;
@@ -182,11 +37,9 @@ footer {
         color: white;
         transform: translate(0, 0);
     }
-
     75% {
         color: black;
     }
-
     100% {
         font-size: 32px;
         color: black;
@@ -198,7 +51,6 @@ footer {
         width: 186px;
         height: 184px;
     }
-
     to {
         width: 70px;
         height: 70px;
@@ -209,14 +61,11 @@ footer {
     from {
         opacity: 1;
     }
-
     to {
         opacity: 0;
         z-index: -1;
     }
 }
-
-// Mobile Animations
 
 @keyframes mobile-intro-headline {
     0% {
@@ -224,11 +73,9 @@ footer {
         color: white;
         transform: translate(0, 0);
     }
-
     75% {
         color: black;
     }
-
     100% {
         font-size: 32px;
         color: black;
@@ -240,7 +87,6 @@ footer {
         width: 70px;
         height: 70px;
     }
-
     to {
         width: 56px;
         height: 56px;
@@ -260,19 +106,15 @@ footer {
     }
 }
 
-// Small Screen Height Keyframes
-
 @keyframes small-intro-headline {
     0% {
         font-size: 24px;
         color: white;
         transform: translate(0, 0);
     }
-
     75% {
         color: black;
     }
-
     100% {
         font-size: 24px;
         color: black;
@@ -284,202 +126,8 @@ footer {
         width: 56px;
         height: 56px;
     }
-
     to {
         width: 40px;
         height: 40px;
-    }
-}
-
-//Media Queries
-
-@media (max-width: 760px) {
-    .intro {
-        .max-width-container {
-            height: 732px;
-        }
-    }
-
-    .intro-logo-container {
-        animation: mobile-animation .5s ease-in forwards 2.2s;
-        gap: 16px;
-        >img {
-            width: 70px;
-            height: 70px;
-            animation-name: logo-animation, mobile-intro-logo;
-        }
-
-        .headline {
-            h1 {
-                font-size: 32px;
-                animation-name: headline-animation, mobile-intro-headline;
-            }
-        }
-    }
-
-    header {
-        justify-content: center !important;
-        height: auto;
-
-        .logo-box {
-
-            >img {
-                width: 56px;
-                height: 56px;
-            }
-        }
-    }
-
-    .content {
-        height: auto;
-        gap: 20px;
-        width: 100%;
-    }
-
-    .top {
-        flex: unset;
-    }
-
-    .register-box {
-        @include d-flex($fd: column, $g: 20px);
-        font-size: 18px;
-
-        >a {
-            border: 1px solid #797EF3;
-            color: #444DF2;
-            font-weight: 700;
-
-            &:active {
-                color: white;
-                background-color: #444DF2;
-            }
-        }
-    }
-
-    .confirmation-message {
-        padding: 25px;
-        font-size: 24px;
-        >img {
-            width: 24px;
-            height: 24px;
-        }
-    }
-}
-
-@media (max-height: 770px) and (max-width: 760px) {
-    .intro {
-        .max-width-container {
-            height: 604px;
-        }
-    }
-
-    .intro-logo-container {
-        animation: mobile-animation .5s ease-in forwards 2.2s;
-        >img {
-            width: 56px;
-            height: 56px;
-            animation-name: logo-animation, small-intro-logo;
-        }
-
-        .headline {
-            h1 {
-                font-size: 24px;
-                animation-name: headline-animation, small-intro-headline;
-            }
-        }
-    }
-}
-
-@media (max-width: 590px) {
-    .login-container {
-        padding: 35px 20px;
-    }
-}
-
-@media (max-width: 500px) {
-    header {
-        padding: 0;
-    }
-
-    .top {
-        width: 95%;
-    }
-}
-
-@media (max-width: 432px) {
-    .intro .max-width-container {
-        height: 800px;
-    }
-}
-
-@media (max-width: 415px) {
-    .intro .max-width-container {
-        height: 800px;
-    }
-}
-
-@media (max-width: 410px) {
-    .confirmation-message {
-        font-size: 20px;
-        padding: 15px;
-    }
-}
-
-@media (max-width: 392px) {
-    .intro .max-width-container {
-        height: 814px;
-    }
-}
-
-@media (max-width: 377px) {
-    .intro .max-width-container {
-        height: 624px;
-    }
-}
-
-@media (max-width: 360px) {
-    .intro .max-width-container {
-        height: 624px;
-    }
-}
-
-// Small screen height queries
-
-@media (max-height: 860px) {
-    .content {
-        gap: 24px;
-    }
-}
-
-@media (max-height: 770px) {
-   
-    .flex-center {
-        height: 100vh;
-    }
-
-    header {
-        height: auto;
-        padding: 12px;
-
-        .logo-box {
-            h1 {
-                font-size: 24px;
-            }
-
-            >img {
-                width: 40px;
-                height: 40px;
-            }
-        }
-    }
-
-    .login-container {
-        padding: 20px;
-        margin-top: 0;
-    }
-
-    .register-box {
-        gap: 8px;
-        font-size: 15px;
     }
 }

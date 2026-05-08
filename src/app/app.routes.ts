@@ -25,8 +25,7 @@ export const routes: Routes = [
   },
   {
     path: 'impressum',
-    loadComponent: () =>
-      import('./impressum/impressum.component').then(m => m.ImpressumComponent),
+    loadComponent: () => import('./impressum/impressum.component').then(m => m.ImpressumComponent),
   },
   {
     path: 'datenschutz',

@@ -59,7 +59,7 @@ export class NewMessageComponent implements AfterViewInit{
   }
 
   filterResults(target:CurrentUser [] | Channel []) {
-    let lowerCaseTag = this.searchInput.slice(1).toLowerCase();
+    const lowerCaseTag = this.searchInput.slice(1).toLowerCase();
     if (target == this.users) {
       this.filteredUsers = target.filter(res => res.name.toLowerCase().includes(lowerCaseTag));
     } 
@@ -69,21 +69,21 @@ export class NewMessageComponent implements AfterViewInit{
   }
 
   async openMessage(index: number, event: Event) {
-    let user = this.filteredUsers[index];
+    const user = this.filteredUsers[index];
     this.memberServ.currentMember = user;
     await this.memberServ.setChatRoom(event);
   }
 
   openChannel(index: number, event: Event) {
-    let channel = this.filteredChannels[index];
-    let channelIdx = this.getIndexInChannels(channel);
+    const channel = this.filteredChannels[index];
+    const channelIdx = this.getIndexInChannels(channel);
     this.boardServ.showChannelInChatField(channelIdx, event)
   }
 
 
   getIndexInChannels(channel: Channel) {
-    let foundChannel = (c:Channel) => c.id == channel.id
-    let idx = this.firestoreServ.allChannels().findIndex(foundChannel);
+    const foundChannel = (c:Channel) => c.id == channel.id
+    const idx = this.firestoreServ.allChannels().findIndex(foundChannel);
     return idx
   }
 

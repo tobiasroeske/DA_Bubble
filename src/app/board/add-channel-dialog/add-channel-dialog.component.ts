@@ -58,14 +58,14 @@ export class AddChannelDialogComponent {
   }
 
   checkIfChannelTitleAleadyExist() {
-    let idx = this.firestore.allExistingChannels().findIndex((chan) => chan.title === this.channel.title);
+    const idx = this.firestore.allExistingChannels().findIndex((chan) => chan.title === this.channel.title);
     this.existingChannelIndex = idx;
   }
 
   getNewChannelIndex() {
-    let allChannels = this.firestore.allChannels();
-    let isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId
-    let index = allChannels.findIndex(isChannel);
+    const allChannels = this.firestore.allChannels();
+    const isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId
+    const index = allChannels.findIndex(isChannel);
     return index
   }
 
@@ -76,7 +76,7 @@ export class AddChannelDialogComponent {
   }
 
   setCreatorInfo(): void {
-    let currentUser = this.localStorageService.loadCurrentUser();
+    const currentUser = this.localStorageService.loadCurrentUser();
     this.channel.creatorId = currentUser.id
     this.channel.creatorName = currentUser.name;
   }

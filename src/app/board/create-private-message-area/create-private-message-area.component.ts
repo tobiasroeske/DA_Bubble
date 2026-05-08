@@ -1,5 +1,12 @@
-
-import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { CreateMessageAreaComponent } from '../create-message-area/create-message-area.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
@@ -11,15 +18,17 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivateChat } from '../../shared/models/privateChat.class';
 
 @Component({
-    selector: 'app-create-private-message-area',
-    imports: [FormsModule, PickerComponent],
-    templateUrl: './create-private-message-area.component.html',
-    styleUrl: './create-private-message-area.component.scss'
+  selector: 'app-create-private-message-area',
+  imports: [FormsModule, PickerComponent],
+  templateUrl: './create-private-message-area.component.html',
+  styleUrl: './create-private-message-area.component.scss',
 })
-
-export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponent implements OnInit {
-  @Input() allUsers!: CurrentUser[]
-  @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>()
+export class CreatePrivateMessageAreaComponent
+  extends CreateMessageAreaComponent
+  implements OnInit
+{
+  @Input() allUsers!: CurrentUser[];
+  @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
@@ -40,13 +49,15 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
 
   override toggleTagMemberDialog() {
     this.filteredMembers = this.allUsers;
-    this.tagMembers = !this.tagMembers
+    this.tagMembers = !this.tagMembers;
   }
 
   override filterMember() {
     const members: CurrentUser[] = this.allUsers;
     const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
-    this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
+    this.filteredMembers = members.filter(member =>
+      member.name.toLowerCase().includes(lowerCaseTag)
+    );
   }
 
   override async sendMessage(event?: Event) {
@@ -60,7 +71,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
           this.resetTextArea();
           setTimeout(() => {
             this.showMessageInChat();
-          }, 1)
+          }, 1);
         } catch (error) {
           console.error('Error updating private chat:', error);
         }
@@ -75,9 +86,13 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
   }
 
   showMessageInChat() {
-    let idx = this.firestoreService.directMessages().findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id)
+    let idx = this.firestoreService
+      .directMessages()
+      .findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id);
     if (idx == -1) {
-      idx = this.firestoreService.directMessages().findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id)
+      idx = this.firestoreService
+        .directMessages()
+        .findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id);
     }
     this.boardServ.startPrivateChat(idx, 'creator', event);
   }
@@ -113,7 +128,7 @@ export class CreatePrivateMessageAreaComponent extends CreateMessageAreaComponen
       answers: [],
       reactions: [],
       fileUpload: this.uploadedFile,
-      type: 'ChatMessage'
-    }
+      type: 'ChatMessage',
+    };
   }
 }

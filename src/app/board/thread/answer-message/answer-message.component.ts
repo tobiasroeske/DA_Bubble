@@ -8,23 +8,22 @@ import { Reaction } from '../../../shared/interfaces/reaction.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { AnswerEditorComponent } from '../answer-editor/answer-editor.component';
 
-
 @Component({
-    selector: 'app-answer-message',
-    imports: [CommonModule, AnswerEditorComponent],
-    templateUrl: './answer-message.component.html',
-    styleUrl: './answer-message.component.scss'
+  selector: 'app-answer-message',
+  imports: [CommonModule, AnswerEditorComponent],
+  templateUrl: './answer-message.component.html',
+  styleUrl: './answer-message.component.scss',
 })
 export class AnswerMessageComponent implements OnInit, AfterViewInit {
-  firestoreService = inject(FirestoreService)
-  boardServ = inject(BoardService)
+  firestoreService = inject(FirestoreService);
+  boardServ = inject(BoardService);
 
-  @Input() currentChannel!: Channel
+  @Input() currentChannel!: Channel;
   @Input() currentChatMessage?: ChatMessage;
   @Input() answer!: ChatMessage;
   @Input() lastIndex!: boolean;
   @Input() chatMessagaeIndex?: number;
-  @Input() answerIndex?: number
+  @Input() answerIndex?: number;
 
   currentUserName!: string;
   showReactionPopup = false;
@@ -32,7 +31,15 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   reactionDialogIndicatorbarOpen = false;
   editorOpen = false;
   showFile = false;
-  reactionEmojis: string[] = ['angry', 'cool', 'flushed', 'hearts', 'high_five', 'laughing', 'thumbs_up'];
+  reactionEmojis: string[] = [
+    'angry',
+    'cool',
+    'flushed',
+    'hearts',
+    'high_five',
+    'laughing',
+    'thumbs_up',
+  ];
 
   ngOnInit(): void {
     this.currentUserName = this.boardServ.currentUser.name;
@@ -49,12 +56,12 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
 
   async updateAllChannels(emojiIdx: number) {
     const newAnswer = this.checkIfReactionExists(emojiIdx);
-    this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage)
-    await this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!)
+    this.currentChannel?.chat?.splice(this.chatMessagaeIndex!, 1, this.currentChatMessage);
+    await this.firestoreService.updateAllChats(this.currentChannel.id!, this.currentChannel.chat!);
   }
 
   toggleMessageEditor() {
-    this.editorOpen = !this.editorOpen
+    this.editorOpen = !this.editorOpen;
   }
 
   checkIfReactionExists(emojiIdx: number) {
@@ -88,7 +95,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
       emojiPath: this.reactionEmojis[i],
       creator: [this.boardServ.currentUser.name],
       count: 1,
-    }
+    };
   }
 
   toggleReactionPopup(event: Event) {
@@ -106,7 +113,7 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
       this.reactionDialogIndicatorbarOpen = !this.reactionDialogIndicatorbarOpen;
     }
     if (boolean == false) {
-      this.showEmojiBar = !this.showEmojiBar
+      this.showEmojiBar = !this.showEmojiBar;
     }
   }
 }

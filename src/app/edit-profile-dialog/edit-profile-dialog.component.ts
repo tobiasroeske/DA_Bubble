@@ -114,7 +114,7 @@ export class EditProfileDialogComponent {
     if (emailChanged) {
       await this.authService.updateEmail(this.mail);
       await this.firestoreService.updateUser(
-        this.boardServ.currentUser.id,
+        this.boardServ.currentUser.id!,
         this.boardServ.currentUser
       );
     }

@@ -1,18 +1,18 @@
-<div class="fullheight">
-    <header>
-        <div class="logo-box">
+<div class="w-full flex flex-col justify-start gap-8 h-screen">
+    <header class="flex justify-start px-24 pt-8 w-full max-md:justify-center">
+        <div class="flex items-center gap-4">
             <img src="assets/img/logo.png" alt="">
-            <h1>DABubble</h1>
+            <h1 class="text-3xl font-nunito">DABubble</h1>
         </div>
     </header>
-    <div class="content">
-        <div class="container">
-            
-            <img src="assets/icons/arrow_back.png" alt="" class="back-icon" (click)="closeWindow()">
-            
-            <h2>Impressum</h2>
+    <div class="flex flex-1 items-center justify-center">
+        <div class="p-12 bg-white rounded-3xl w-3/4 overflow-auto relative flex flex-col justify-start items-start gap-4 max-md:w-95">
 
-            <div>
+            <img src="assets/icons/arrow_back.png" alt="" class="cursor-pointer absolute top-12 left-14 p-4 rounded-full transition-all duration-125 hover:bg-[#ECEEFE]" (click)="closeWindow()">
+
+            <h2 class="text-4xl font-bold text-[#444DF2] max-md:text-2xl">Impressum</h2>
+
+            <div class="flex flex-col gap-4 text-base">
                 Angaben gemäß § 5 TMG
 
                 Tobias Roeske
@@ -20,18 +20,18 @@
                 80809 München
             </div>
 
-            <span>
+            <span class="text-base">
                 <b>Vertreten durch:</b>
                 Tobias Roeske
             </span>
 
-            <span>
+            <span class="text-base">
                 <b>Kontakt:</b>
                 Telefon: 0049-01638528425
                 E-Mail: info&#64;tobias-roeske.com
             </span>
 
-            <h3>Haftungsausschluss:</h3>
+            <h3 class="text-lg text-[#444DF2]">Haftungsausschluss:</h3>
 
             <div>
                 <h3>Haftung für Inhalte</h3>

@@ -1,32 +1,32 @@
 @if(this.boardServ.showSearchDialog()){
-<div class="wrapper">
-    <div class="search-dialog">
+<div class="absolute top-[70px] left-0 min-w-[400px] h-auto py-6 pl-6 bg-white shadow-[0_6px_10px_rgba(0,0,0,0.2)] z-20 rounded-[30px] font-nunito max-[768px]:left-[-18px] max-[480px]:min-w-0 max-[480px]:w-[290px]">
+    <div class="flex flex-col items-start justify-start gap-[15px] min-w-[400px] h-auto overflow-y-auto max-h-[500px] max-[480px]:min-w-0 max-[480px]:w-full scrollbar">
         @if(mainSearchList.length > 0){
         @for(result of mainSearchList; track result; let index = $index){
         @if(result.title){
-        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-channel">
+        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="flex gap-2 text-base px-3 py-1 rounded-[100px] hover:text-[#535AF1] hover:bg-[#ECEEFE] hover:cursor-pointer max-[480px]:flex-col max-[480px]:items-start max-[480px]:rounded-[20px] max-[480px]:px-6 max-[480px]:py-3 max-[480px]:gap-2">
             <span>Dein Kanal :</span>
-            <span class="filtered-channel-name">#{{result.title}}</span>
-            <span class="separator-bar"></span>
+            <span class="text-lg font-bold">#{{result.title}}</span>
+            <span class="hidden max-[480px]:block h-0.5 w-full rounded-full bg-[#ADB0D9] max-[480px]:mt-2"></span>
         </div>
         } @else if(result.name && result.avatarPath){
-        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-user-container">
-            <span>Benutzer :</span>
-            <div class="filtered-user">
-                <img src="{{result.avatarPath}}" alt="">
-                <span>{{result.name}}</span>
+        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="flex gap-2 px-3 py-1 rounded-[100px] hover:text-[#535AF1] hover:bg-[#ECEEFE] hover:cursor-pointer max-[480px]:flex-col max-[480px]:items-start max-[480px]:rounded-[20px] max-[480px]:px-6 max-[480px]:py-3">
+            <span class="text-lg font-normal">Benutzer :</span>
+            <div class="flex gap-4">
+                <img src="{{result.avatarPath}}" alt="" class="w-8 h-8 object-cover rounded-full">
+                <span class="text-lg font-bold">{{result.name}}</span>
             </div>
-            <span class="separator-bar"></span>
+            <span class="hidden max-[480px]:block h-0.5 w-full rounded-full bg-[#ADB0D9] max-[480px]:mt-2"></span>
         </div>
         }
         @else if(result.guest){
-        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="filtered-chat-container">
-            <span>Direktnachricht :</span>
-            <div class="filtered-partner">
-                <img src="{{result.guest.avatarPath}}" alt="">
-                <span> {{result.guest.name}}</span>
+        <div (click)="showSearchElementClicked(index, $event)" id="{{index}}" class="flex gap-2 px-3 py-1 rounded-[100px] hover:text-[#535AF1] hover:bg-[#ECEEFE] hover:cursor-pointer max-[480px]:flex-col max-[480px]:items-start max-[480px]:rounded-[20px] max-[480px]:px-6 max-[480px]:py-3">
+            <span class="text-base font-normal">Direktnachricht :</span>
+            <div class="flex gap-4">
+                <img src="{{result.guest.avatarPath}}" alt="" class="w-8 h-8 object-cover rounded-full">
+                <span class="text-lg font-bold"> {{result.guest.name}}</span>
             </div>
-            <span class="separator-bar"></span>
+            <span class="hidden max-[480px]:block h-0.5 w-full rounded-full bg-[#ADB0D9] max-[480px]:mt-2"></span>
         </div>
         }
         }

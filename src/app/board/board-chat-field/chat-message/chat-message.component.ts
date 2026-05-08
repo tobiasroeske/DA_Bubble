@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject, QueryList, ViewChildren, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ import { Channel } from '../../../shared/models/channel.class';
     styleUrls: ['./chat-message.component.scss', './chat-message-media-queries.component.scss', 'chat-message-textarea-elements.component.scss']
 })
 
-export class ChatMessageComponent implements OnInit {
+export class ChatMessageComponent implements OnInit, AfterViewChecked {
   @ViewChildren('channelMessages') channelMessages!: QueryList<ElementRef>;
   @Input() chat!: ChatMessage;
   @Input() lastIndex!: boolean;
@@ -69,9 +69,9 @@ export class ChatMessageComponent implements OnInit {
   }
 
   checkIfDateIsToday(date: number) {
-    let todayAsString = new Date().toDateString();
-    let dateToCheckAsString = new Date(date).toDateString();
-    let sameDate = todayAsString == dateToCheckAsString;
+    const todayAsString = new Date().toDateString();
+    const dateToCheckAsString = new Date(date).toDateString();
+    const sameDate = todayAsString == dateToCheckAsString;
     if (sameDate) {
       return true;
     } else {
@@ -110,16 +110,16 @@ export class ChatMessageComponent implements OnInit {
   }
 
   async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
-    let newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
+    const newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
     this.currentChannel.chat!.splice(this.chatMessageIndex, 1, newChatMessage);
     await this.firestore.updateAllChats(this.channelId, this.currentChannel.chat!);
     this.getLastTwoReactions(emojiIdx, emojiArray);
   }
 
   checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    let chatMessage = this.getCurrentChatMessage();
-    let emojiPath = emojiArray[emojiIdx];
-    let existingReaction = this.findExistingReaction(chatMessage, emojiPath);
+    const chatMessage = this.getCurrentChatMessage();
+    const emojiPath = emojiArray[emojiIdx];
+    const existingReaction = this.findExistingReaction(chatMessage, emojiPath);
     if (existingReaction) {
       this.updateExistingReaction(existingReaction);
     } else {
@@ -148,7 +148,7 @@ export class ChatMessageComponent implements OnInit {
   }
 
   getLastTwoReactions(index: number, emojiArray: string[]) {
-    let newReaction = emojiArray[index];
+    const newReaction = emojiArray[index];
     if (this.lastReactions[this.lastReactions.length - 1] !== newReaction) {
       if (this.lastReactions.length >= 2) {
         this.lastReactions.splice(0, 1);

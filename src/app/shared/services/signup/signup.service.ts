@@ -42,10 +42,12 @@ export class SignupService {
   currentUser!: any;
   readonly errorCode = signal<string>('');
   readonly signUpSuccessful = signal<boolean>(false);
-  actionCodeSettings: ActionCodeSettings = { url: 'https://dabubble.tobias-roeske.ch/resetpassword' };
+  actionCodeSettings: ActionCodeSettings = {
+    url: 'https://dabubble.tobias-roeske.ch/resetpassword',
+  };
 
   constructor() {
-    this.user$.subscribe((val) => {
+    this.user$.subscribe(val => {
       if (val) {
         this.user = val;
       }
@@ -181,9 +183,16 @@ export class SignupService {
 
   async register(): Promise<void> {
     try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, this.user.email, this.user.password ?? '');
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        this.user.email,
+        this.user.password ?? ''
+      );
       if (userCredential.user) {
-        await this.updateUserProfile({ photoURL: this.user.avatarPath, displayName: this.user.name });
+        await this.updateUserProfile({
+          photoURL: this.user.avatarPath,
+          displayName: this.user.name,
+        });
         await this.pipeRegisterData(userCredential);
       }
     } catch (err: any) {
@@ -215,7 +224,7 @@ export class SignupService {
       avatarPath: this.user.avatarPath || '',
       loginState: 'loggedOut',
       type: 'CurrentUser',
-      notification: []
+      notification: [],
     };
   }
 
@@ -251,13 +260,17 @@ export class SignupService {
       seleted: obj.seleted || false,
       loginState: obj.loginState,
       type: obj.type,
-      notification: obj.notification
+      notification: obj.notification,
     };
   }
 
   async guestLogin(): Promise<void> {
     try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, 'guest@guest.de', '12345678');
+      const userCredential = await signInWithEmailAndPassword(
+        this.auth,
+        'guest@guest.de',
+        '12345678'
+      );
       await this.updateUserProfile({ photoURL: 'assets/img/profile_big.png' });
       this.updateLoggedInUser(userCredential.user);
       this.router.navigateByUrl('board');
@@ -273,7 +286,10 @@ export class SignupService {
       const currentUser = this.findCurrentUser(user);
       currentUser.loginState = 'loggedIn';
       this.storageService.saveCurrentUser(currentUser);
-      this.firestoreService.updateUser(currentUser.uid, this.storageService.setCurrentUserObject(currentUser));
+      this.firestoreService.updateUser(
+        currentUser.uid,
+        this.storageService.setCurrentUserObject(currentUser)
+      );
     } catch (err: any) {
       console.error(err);
       throw err;
@@ -281,7 +297,7 @@ export class SignupService {
   }
 
   getLoggedInUser(): void {
-    onAuthStateChanged(this.auth, (user) => {
+    onAuthStateChanged(this.auth, user => {
       if (user) {
         const uid = user.uid;
         this.currentUser = user;

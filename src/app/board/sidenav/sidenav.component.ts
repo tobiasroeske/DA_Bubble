@@ -2,17 +2,16 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { SearchDialogComponent } from "../board-toolbar/search-dialog/search-dialog.component";
+import { SearchDialogComponent } from '../board-toolbar/search-dialog/search-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { TIMINGS } from '../../shared/constants/timings';
 
 @Component({
-    selector: 'app-sidenav',
-    templateUrl: './sidenav.component.html',
-    styleUrl: './sidenav.component.scss',
-    imports: [CommonModule, SearchDialogComponent, FormsModule]
+  selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrl: './sidenav.component.scss',
+  imports: [CommonModule, SearchDialogComponent, FormsModule],
 })
-
 export class SidenavComponent {
   boardServ = inject(BoardService);
   firestore = inject(FirestoreService);
@@ -21,7 +20,7 @@ export class SidenavComponent {
   directMessHeaderisClicked: boolean = true;
   canTranslateYChannel: boolean = true;
   canTranslateYUserList: boolean = true;
-  searchText: string = "";
+  searchText: string = '';
 
   onHeaderClick() {
     if (!this.channelHeaderIsClicked) {
@@ -52,12 +51,11 @@ export class SidenavComponent {
   }
 
   toggleNewMessageInput(event: Event) {
-    this.boardServ.stopPropagation(event)
+    this.boardServ.stopPropagation(event);
     this.boardServ.newMessageInputOpen.update(v => !v);
     if (this.boardServ.mobileView()) {
       this.boardServ.sidenavTranslate.set(false);
       this.boardServ.hideText();
     }
   }
-
 }

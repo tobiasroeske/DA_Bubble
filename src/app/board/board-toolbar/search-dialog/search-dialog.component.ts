@@ -31,7 +31,7 @@ export class SearchDialogComponent implements OnChanges {
   idxToFindPositionOfClickedMessageInTheChoisedPrivChat!: number;
 
   showSearchElementClicked(index: number, event: Event) {
-    let clickedElement = this.mainSearchList[index];
+    const clickedElement = this.mainSearchList[index];
     if (clickedElement.type == 'Channel') {
       this.showTheClickedElementOfTypeChannel(clickedElement, event);
     } else if (clickedElement.type == 'CurrentUser') {
@@ -43,12 +43,12 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   showTheClickedElementOfTypeChannel(clickedElement: Channel, event: Event) {
-    let idx = this.firestore.allChannels().findIndex(chann => chann.id == clickedElement.id);
+    const idx = this.firestore.allChannels().findIndex(chann => chann.id == clickedElement.id);
     this.boardServ.showChannelInChatField(idx, event);
   }
 
   showTheClickedElementOfTypeCurrentUser(clickedElement: CurrentUser) {
-    let idx = this.firestore.userList().findIndex((user) => user.id == clickedElement.id);
+    const idx = this.firestore.userList().findIndex((user) => user.id == clickedElement.id);
     this.boardServ.openShowUserPopUp(idx);
     this.boardServ.showUserPopUp.set(true);
   }

@@ -95,7 +95,7 @@ export class EditChannelDialogComponent {
   }
 
   async updateChannelOnLeave(event: Event) {
-    let channel: Channel = new Channel(this.currentChannel);
+    const channel: Channel = new Channel(this.currentChannel);
     await this.firestore.updateChannel(channel.toJSON(), this.currentChannel.id);
     this.leaveFromChannel = false;
     this.randomIndex = Math.floor(Math.random() * this.firestore.allChannels().length);
@@ -119,7 +119,7 @@ export class EditChannelDialogComponent {
   async updateChannelWithNewTitleAndDescription() {
     this.currentChannel.title = this.title;
     this.currentChannel.description = this.description;
-    let channel: Channel = new Channel(this.currentChannel);
+    const channel: Channel = new Channel(this.currentChannel);
     await this.firestore.updateChannel(channel.toJSON(), this.currentChannel.id);
     if (this.channelAlreadyExist) {
       this.channelAlreadyExist = false;
@@ -128,18 +128,18 @@ export class EditChannelDialogComponent {
 
   async leaveThisChannel(event: Event) {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    let idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(this.boardServ.currentUser.id);
+    const idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(this.boardServ.currentUser.id);
     this.currentChannel.partecipantsIds.splice(idxOfCurrentPartecipant, 1);
-    let indexOfCurrentMember = this.currentChannel.members.findIndex((m: CurrentUser) => m.id == this.boardServ.currentUser.id);
+    const indexOfCurrentMember = this.currentChannel.members.findIndex((m: CurrentUser) => m.id == this.boardServ.currentUser.id);
     this.currentChannel.members.splice(indexOfCurrentMember, 1);
-    let indexInAllUsers = this.currentChannel.allUsers.findIndex((u: CurrentUser) => u.id == this.boardServ.currentUser.id);
+    const indexInAllUsers = this.currentChannel.allUsers.findIndex((u: CurrentUser) => u.id == this.boardServ.currentUser.id);
     this.currentChannel.allUsers[indexInAllUsers].selected = false;
     this.leaveFromChannel = true;
     await this.onChannelUpdate(event);
   }
 
   checkIfThisChannelAlreadyExist(): number {
-    let idx = this.firestore.allChannels().findIndex((chan: Channel) => chan.title === this.title);
+    const idx = this.firestore.allChannels().findIndex((chan: Channel) => chan.title === this.title);
     return idx;
   }
 }

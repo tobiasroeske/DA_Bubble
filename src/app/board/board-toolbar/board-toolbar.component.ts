@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { SignupService } from '../../shared/services/signup/signup.service';
@@ -49,9 +49,9 @@ export class BoardToolbarComponent {
 
   allNotificationsRed() {
     this.unredNotifications = [];
-    let notifications = this.boardServ.currentUser.notification;
+    const notifications = this.boardServ.currentUser.notification;
     notifications.forEach((n:NotificationObj) => {
-      if (n.notificationRed = false) {
+      if (n.notificationRed === false) {
         this.unredNotifications.push(n);
       }
     })
@@ -103,7 +103,7 @@ export class BoardToolbarComponent {
     this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
     this.boardServ.currentUser.loginState = 'loggedOut';
     this.localStorageService.saveCurrentUser(this.boardServ.currentUser);
-    await this.firestoreService.updateUser(this.boardServ.currentUser.id, this.boardServ.currentUser);
+    await this.firestoreService.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
     await this.authService.logout()
     
 

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocalStorageService {
   currentUser!: CurrentUser;
   introPlayed = false;
-  constructor() { }
+  constructor() {}
 
   saveCurrentUser(user: any) {
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -19,7 +19,7 @@ export class LocalStorageService {
       const userAsText = JSON.parse(localStorage.getItem('currentUser')!);
       if (userAsText.uid) {
         this.currentUser = this.setCurrentUserObject(userAsText);
-        return this.currentUser
+        return this.currentUser;
       } else {
         return userAsText;
       }
@@ -46,7 +46,7 @@ export class LocalStorageService {
       const reactionsAsJson = JSON.parse(localStorage.getItem('lastReactions')!);
       return reactionsAsJson;
     } else {
-      return ['thumbs_up', 'laughing']
+      return ['thumbs_up', 'laughing'];
     }
   }
 
@@ -75,8 +75,7 @@ export class LocalStorageService {
       seleted: obj.selected || false,
       loginState: obj.loginState || 'loggedOut',
       type: obj.type || 'CurrentUser',
-      notification: obj.notification || []
-    }
+      notification: obj.notification || [],
+    };
   }
-
 }

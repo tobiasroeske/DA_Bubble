@@ -1,58 +1,57 @@
-<div class="content">
-    <h2>Anmeldung</h2>
-    <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die <br> du bei der Arbeit verwendest.</span>
-    <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
-        <div class="input-fields">
-            <div class="input-container">
-                <div class="input-box">
-                    @if (mail== '') {
-                    <img src="assets/img/mail.png" alt="">
+<div class="flex flex-col gap-8 max-md:gap-5 max-h-[860px]:gap-6 max-h-[770px]:gap-4">
+    <h2 class="text-[#444DF2] text-[46px] font-bold text-center max-md:text-[32px] max-h-[860px]:text-[40px] max-h-[770px]:text-[24px]">Anmeldung</h2>
+    <span class="text-[20px] text-center max-md:text-[17px] max-h-[860px]:text-[15px] max-h-[770px]:text-[15px]">Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die <br> du bei der Arbeit verwendest.</span>
+    <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" class="flex flex-col gap-8 max-md:gap-5 max-md:w-full max-h-[860px]:gap-4 max-h-[770px]:gap-3">
+        <div class="flex flex-col gap-[15.5px] max-md:gap-[15.5px] max-h-[770px]:gap-[15.5px]">
+            <div class="h-[77px] max-h-[770px]:h-[67px]">
+                <div class="relative flex items-center w-[500px] rounded-full bg-[#ECEEFE] max-md:w-full">
+                    @if (mail=== '') {
+                    <img src="assets/img/mail.png" alt="" class="absolute ml-8">
                     } @else {
-                    <img src="assets/img/mail_black.png" alt="">
+                    <img src="assets/img/mail_black.png" alt="" class="absolute ml-8">
                     }
                     <label for="email"></label>
                     <input [(ngModel)]="mail" #email type="email" id="email" name="email"
-                        placeholder="beispielname@email.com">
+                        placeholder="beispielname@email.com"
+                        class="border border-transparent rounded-full outline-none bg-transparent w-full px-8 py-[18px] pl-[88px] h-full text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px] placeholder-[#686868] transition-all duration-125 hover:border-black focus:border-[#444DF2]">
                 </div>
-                @if (signupService.errorCode() == 'auth/missing-email' || signupService.errorCode() == 'auth/invalid-email')
+                @if (signupService.errorCode() === 'auth/missing-email' || signupService.errorCode() === 'auth/invalid-email')
                 {
-                <span class="error-message">Bitte gültige E-Mail-Adresse eingeben</span>
+                <span class="text-[14px] text-[#ED1E79] text-center max-h-[770px]:text-[13px]">Bitte gültige E-Mail-Adresse eingeben</span>
                 }
             </div>
 
-            <div class="input-container">
-                <div class="input-box">
-                    @if (password == '') {
-                    <img src="assets/img/lock.png" alt="">
+            <div class="h-[77px] max-h-[770px]:h-[67px]">
+                <div class="relative flex items-center w-[500px] rounded-full bg-[#ECEEFE] max-md:w-full">
+                    @if (password === '') {
+                    <img src="assets/img/lock.png" alt="" class="absolute ml-8">
                     } @else {
-                    <img src="assets/img/lock_black.png" alt="">
+                    <img src="assets/img/lock_black.png" alt="" class="absolute ml-8">
                     }
                     <label for="password"></label>
-                    <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="Passwort">
+                    <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="Passwort"
+                        class="border border-transparent rounded-full outline-none bg-transparent w-full px-8 py-[18px] pl-[88px] h-full text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px] placeholder-[#686868] transition-all duration-125 hover:border-black focus:border-[#444DF2]">
                 </div>
-                @if(signupService.errorCode() == 'auth/invalid-credential') {
-                <span class="error-message">E-Mail-Adresse oder Passwort falsch. Bitte noch einmal versuchen.</span>
-                } @else if(signupService.errorCode() == 'auth/missing-password') {
-                <span class="error-message">Bitte Passwort eingeben</span>
+                @if(signupService.errorCode() === 'auth/invalid-credential') {
+                <span class="text-[14px] text-[#ED1E79] text-center max-h-[770px]:text-[13px]">E-Mail-Adresse oder Passwort falsch. Bitte noch einmal versuchen.</span>
+                } @else if(signupService.errorCode() === 'auth/missing-password') {
+                <span class="text-[14px] text-[#ED1E79] text-center max-h-[770px]:text-[13px]">Bitte Passwort eingeben</span>
                 }
             </div>
         </div>
 
+        <span (click)="forgotPassword()" class="cursor-pointer font-figtree text-[18px] text-[#797EF3] px-[15px] py-[5px] rounded-[25px] border border-transparent transition-all duration-125 hover:bg-[#ECEEFE] max-md:text-[17px] max-h-[770px]:text-[15px]">Password vergessen?</span>
 
-        <span (click)="forgotPassword()" class="forgot-password">Password vergessen?</span>
-
-        <div class="seperator">
-            <span>ODER</span>
+        <div class="flex w-full border-t border-[#ADB0D9] text-center items-center justify-center relative max-h-[770px]:my-1">
+            <span class="absolute z-5 bg-white px-[15px] text-[18px] max-md:text-[17px] max-h-[770px]:text-[15px]">ODER</span>
         </div>
 
-        <div class="google-container">
-            <div class="btn-no-style google-btn" (click)="googleLogin()"><img src="assets/img/google_logo.png"
-                    alt="">Anmelden mit
-                Google</div>
+        <div class="relative w-full overflow-hidden text-[#797EF3] rounded-full bg-[#ECEEFE]">
+            <div class="btn-no-style w-full flex items-center justify-center gap-5 font-nunito text-[18px] text-[#444DF2] rounded-full bg-[#ECEEFE] border-0 transition-all duration-125 hover:scale-105 font-normal px-0 py-0 cursor-pointer max-md:text-[17px] max-md:px-[25px] max-md:py-[10px] max-h-[770px]:text-[15px] max-h-[770px]:px-3 max-h-[770px]:py-2" (click)="googleLogin()"><img src="assets/img/google_logo.png" alt="" class="w-auto h-auto max-h-[770px]:w-8 max-h-[770px]:h-8">Anmelden mit Google</div>
         </div>
-        <div class="submit-container">
-            <input type="submit" class="btn-no-style login-btn" value="Anmelden">
-            <div class="btn-no-style guest-login-btn" (click)="guestLogin()">Gäste-Login</div>
+        <div class="w-full flex gap-[30px] max-md:gap-2">
+            <input type="submit" class="btn-no-style w-fit bg-[#444DF2] text-white transition-all duration-125 hover:bg-[#787EF2] hover:border-[#787EF2] cursor-pointer px-4 py-2 rounded-full font-medium" value="Anmelden">
+            <div class="btn-no-style w-fit transition-all duration-125 text-[#444DF2] hover:bg-[#5359F1] hover:border-[#5359F1] hover:text-white cursor-pointer px-4 py-2 rounded-full font-medium" (click)="guestLogin()">Gäste-Login</div>
         </div>
     </form>
 </div>

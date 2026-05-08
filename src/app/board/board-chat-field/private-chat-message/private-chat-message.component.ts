@@ -80,7 +80,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
 
   override async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
     if (this.privateChatId) {
-      let newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
+      const newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
       this.currentPrivatChat.splice(this.privateChatIndex, 1, newPrivateMessage);
       try {
         await this.firestore.updateCompletlyPrivateChat(this.privateChatId, this.currentPrivatChat);
@@ -92,9 +92,9 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
 
   override checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    let privateChatMessage = this.getCurrentPrivateChatMessage();
-    let emojiPath = emojiArray[emojiIdx];
-    let existingReaction = this.findExistingReaction(privateChatMessage, emojiPath);
+    const privateChatMessage = this.getCurrentPrivateChatMessage();
+    const emojiPath = emojiArray[emojiIdx];
+    const existingReaction = this.findExistingReaction(privateChatMessage, emojiPath);
     if (existingReaction) {
       this.updateExistingReaction(existingReaction);
     } else {
@@ -123,7 +123,7 @@ export class PrivateChatMessageComponent extends ChatMessageComponent implements
   }
 
   override getLastTwoReactions(index: number, emojiArray: string[]) {
-    let newReaction = emojiArray[index];
+    const newReaction = emojiArray[index];
     if (this.lastReactionEmojis[this.lastReactionEmojis.length - 1] !== newReaction) {
       if (this.lastReactionEmojis.length >= 2) {
         this.lastReactionEmojis.splice(0, 1);

@@ -1,12 +1,12 @@
-<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="edit-dialog-container">
-    <div class="edit-dialog-wrapper" (click)="memberServ.stopPropagation($event)">
-        <div (click)=" boardServ.stopPropagation($event)" class="edit-dialog">
-            <div class="edit-channel-header">
-                <span class="channel">
-                    <img class="hashtag-icon" src="assets/icons/hashtag.svg" alt="">
-                    <h3>{{title}}</h3>
+<div (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="fixed inset-0 bg-black/15 z-[99] flex items-center justify-center max-md:absolute max-md:w-auto max-md:max-h-screen">
+    <div class="bg-white min-h-[616px] p-10 w-1/2 rounded-r-[30px] shadow-lg max-md:w-[90%] max-md:rounded-[30px] max-md:relative max-md:h-screen max-md:overflow-hidden max-md:p-10 max-sm:w-full max-sm:p-5" (click)="memberServ.stopPropagation($event)">
+        <div (click)=" boardServ.stopPropagation($event)" class="font-['Nunito'] flex flex-col justify-between items-start gap-5 max-md:h-screen max-md:overflow-y-auto max-md:pb-[60px]">
+            <div class="flex justify-between w-full">
+                <span class="flex justify-between gap-[15px] p-[2px_1px] rounded-[30px] cursor-pointer">
+                    <img class="h-6 w-6 object-contain" src="assets/icons/hashtag.svg" alt="">
+                    <h3 class="text-2xl font-bold max-sm:text-lg">{{title}}</h3>
                 </span>
-                <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="cross-icon-edit-channel" width="40"
+                <svg (click)="boardServ.toggleDialogEditChannel(boardServ.idx)" class="h-10 w-10 object-contain rounded-full cursor-pointer hover:bg-[#ECEEFE] hover:path-fill-[#535AF1]" width="40"
                     height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                         height="24">
@@ -20,14 +20,13 @@
                 </svg>
             </div>
 
-            <div [ngClass]="{'name-container-editModus': editNameBtnClicked}" class="edit-channel-name-container">
-                <div class="edit-channel-name-header">
-                    <h3>Channel-Name</h3>
-                    <span class="desktop-desc-btn" (click)="onEditButtonClick($event)">{{editName}}</span>
-                    <div class="mobile-desc-btn" (click)="onEditButtonClick($event)">
-                        <!-- edit icon mobile -->
+            <div [class.border-none]="editNameBtnClicked" [class.border]="!editNameBtnClicked" [class.border-[#ADB0D9]]="!editNameBtnClicked" class="rounded-[20px] p-5 flex flex-col justify-between gap-5 transition-all duration-250 w-full">
+                <div class="flex justify-between w-full transition-all duration-250">
+                    <h3 class="text-lg font-bold">Channel-Name</h3>
+                    <span class="desktop-desc-btn hidden md:inline text-[#535AF1] text-lg font-semibold cursor-pointer" (click)="onEditButtonClick($event)">{{editName}}</span>
+                    <div (click)="onEditButtonClick($event)" class="mobile-desc-btn md:hidden">
                         <svg class="icon-edit-name-or-desc-mobile"
-                            [ngStyle]="{'display': editName == 'Speichern' ? 'none' : ''}" width="30" height="30"
+                            [ngStyle]="{'display': editName === 'Speichern' ? 'none' : ''}" width="30" height="30"
                             viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="30" height="30" rx="15" fill="#ECEEFE" />
                             <mask id="mask0_55592_2008" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3"
@@ -40,9 +39,8 @@
                                     fill="#1C1B1F" />
                             </g>
                         </svg>
-                        <!-- check mark edit confirmed -->
                         <svg class="icon-edit-name-or-desc-mobile"
-                            [ngStyle]="{'display': editName == 'Bearbeiten' ? 'none' : ''}" width="30" height="30"
+                            [ngStyle]="{'display': editName === 'Bearbeiten' ? 'none' : ''}" width="30" height="30"
                             viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="30" height="30" rx="15" fill="#ECEEFE" />
                             <mask id="mask0_55592_3087" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3"
@@ -55,26 +53,23 @@
                                     fill="black" />
                             </g>
                         </svg>
-
                     </div>
                 </div>
-                <div [ngClass]="{'editChannel-name-editModus': editNameBtnClicked}" class="edit-channel-name">
-                    <img class="hashtag-icon-smaller" src="assets/icons/hashtag.svg" alt="">
-                    <input [disabled]="inputDisabled" [(ngModel)]="title" minlength="3" type="text">
+                <div [class.p-0]="editNameBtnClicked" [class.p-[18px_20px]]="editNameBtnClicked" [class.border]="editNameBtnClicked" [class.border-[#ADB0D9]]="editNameBtnClicked" [class.rounded-full]="editNameBtnClicked" class="flex gap-2.5">
+                    <img class="h-4 w-4 object-contain flex-shrink-0" src="assets/icons/hashtag.svg" alt="">
+                    <input [disabled]="inputDisabled" [(ngModel)]="title" minlength="3" type="text" class="text-lg font-normal border-none outline-none w-full">
                 </div>
             </div>
             @if(channelAlreadyExist){
-            <span style="color:red">Dieser Kanal existiert bereit</span>
+            <span class="text-red-600">Dieser Kanal existiert bereit</span>
             }
-            <div [ngClass]="{'desc-container-editModus': editDescriptionBtnClicked}"
-                class="edit-channel-description-container">
-                <div class="edit-channel-description-header">
-                    <h3>Beschreibung</h3>
-                    <span class="desktop-desc-btn" (click)="onDescriptionButtonClick($event)">{{editDesc}}</span>
-                    <div (click)="onDescriptionButtonClick($event)" class="mobile-desc-btn">
-                        <!-- edit icon mobile -->
+            <div [class.border-none]="editDescriptionBtnClicked" [class.border]="!editDescriptionBtnClicked" [class.border-[#ADB0D9]]="!editDescriptionBtnClicked" class="rounded-[20px] p-5 flex flex-col justify-between gap-8 transition-all duration-250 w-full">
+                <div class="flex justify-between w-full transition-all duration-250">
+                    <h3 class="text-lg font-bold">Beschreibung</h3>
+                    <span class="desktop-desc-btn hidden md:inline text-[#535AF1] text-lg font-semibold cursor-pointer" (click)="onDescriptionButtonClick($event)">{{editDesc}}</span>
+                    <div (click)="onDescriptionButtonClick($event)" class="mobile-desc-btn md:hidden">
                         <svg class="icon-edit-name-or-desc-mobile"
-                            [ngStyle]="{'display': editDesc == 'Speichern' ? 'none' : ''}" width="30" height="30"
+                            [ngStyle]="{'display': editDesc === 'Speichern' ? 'none' : ''}" width="30" height="30"
                             viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="30" height="30" rx="15" fill="#ECEEFE" />
                             <mask id="mask0_55592_2008" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3"
@@ -87,9 +82,8 @@
                                     fill="#1C1B1F" />
                             </g>
                         </svg>
-                        <!-- check mark edit confirmed -->
                         <svg class="icon-edit-name-or-desc-mobile"
-                            [ngStyle]="{'display': editDesc == 'Bearbeiten' ? 'none' : ''}" width="30" height="30"
+                            [ngStyle]="{'display': editDesc === 'Bearbeiten' ? 'none' : ''}" width="30" height="30"
                             viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="30" height="30" rx="15" fill="#ECEEFE" />
                             <mask id="mask0_55592_3087" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3"
@@ -102,21 +96,21 @@
                                     fill="black" />
                             </g>
                         </svg>
-
                     </div>
                 </div>
                 <textarea [disabled]="textareaDisabled"
-                    [ngClass]="{'editChannel-desc-editModus': editDescriptionBtnClicked}" class="edit-description"
+                    [class.p-0]="editDescriptionBtnClicked" [class.p-[18px_20px]]="editDescriptionBtnClicked" [class.border]="editDescriptionBtnClicked" [class.border-[#ADB0D9]]="editDescriptionBtnClicked"
+                    class="text-lg font-normal w-full border-none resize-none outline-none font-['Nunito'] transition-all duration-250"
                     [(ngModel)]="description"></textarea>
-                <span class="line"></span>
-                <div class="creator-container">
-                    <h3>Erstellt von</h3>
-                    <span>{{creatorName}}</span>
+                <span class="block bg-[#ADB0D9] h-px w-full"></span>
+                <div class="flex flex-col gap-5">
+                    <h3 class="text-lg font-bold">Erstellt von</h3>
+                    <span class="text-2xl font-normal text-[#535AF1]">{{creatorName}}</span>
                 </div>
             </div>
             <app-members-dialog style="width: 100%;"></app-members-dialog>
-            <div class="btn-container">
-                <button (click)="leaveThisChannel($event)">Channel verlassen</button>
+            <div class="w-full flex justify-end">
+                <button (click)="leaveThisChannel($event)" class="rounded-full px-6 py-3 bg-[#444df2] text-white text-lg font-bold hover:bg-[#ADB0D9] transition-colors">Channel verlassen</button>
             </div>
         </div>
         <app-add-specific-person-dialog-mobile (click)="memberServ.stopPropagation($event)"></app-add-specific-person-dialog-mobile>

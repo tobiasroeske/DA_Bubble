@@ -1,5 +1,31 @@
 @use 'variables' as *;
 
+textarea::placeholder {
+    color: rgba(104, 104, 104, 1);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    background: rgba(173, 176, 217, 1);
+}
+
+.icon-edit-name-or-desc-mobile:hover {
+    transform: scale(1.05);
+    border-radius: 40px;
+    padding: 3px;
+}
+
+.icon-edit-name-or-desc-mobile:hover path {
+    fill: $specialBlue;
+}
+
+/* Old styles preserved for fallback */
 .edit-dialog-container {
     position: fixed;
     top: 0;

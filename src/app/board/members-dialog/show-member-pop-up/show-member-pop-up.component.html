@@ -1,8 +1,8 @@
-<div class="opacity" (click)="memberServ.closeShowMemberPopUp($event)">
-    <div (click)="boardServ.stopPropagation($event)" class="show-member-pop-up">
-        <div class="title-and-cross-icon">
-            <span>Profil</span>
-            <svg class="cross-icon-show-member" (click)="memberServ.closeShowMemberPopUp($event)" width="40" height="40"
+<div class="fixed inset-0 flex items-center justify-center z-[99] bg-black/20 font-['Nunito'] text-black" (click)="memberServ.closeShowMemberPopUp($event)">
+    <div (click)="boardServ.stopPropagation($event)" class="bg-white rounded-[30px] p-10 z-10 flex flex-col justify-between items-start gap-[45px] w-[500px]">
+        <div class="flex justify-between w-full">
+            <span class="text-2xl font-bold">Profil</span>
+            <svg class="h-10 w-10 cursor-pointer hover:bg-[#ECEEFE] hover:rounded-full" (click)="memberServ.closeShowMemberPopUp($event)" width="40" height="40"
                 viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_460_3960" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
@@ -15,39 +15,42 @@
                 </g>
             </svg>
         </div>
-        <div class="profil-photo-container">
-            <img class="profil-photo" src="{{memberServ.avatarPath}}" alt="">
+        <div class="w-full flex items-center justify-center">
+            <img class="w-[200px] h-[200px] rounded-full object-cover" src="{{memberServ.avatarPath}}" alt="">
         </div>
-        <div class="name-and-state-container">
-            <h3>{{memberServ.name}}</h3>
-            <div class="state-container">
-                @if (memberServ.checkMemberLoginState(memberServ.currentMember!) == 'loggedIn') {
-                <div class="point-container">
-                    <img src="assets/icons/user_online.png" alt="" class="state-icon">
-                    <span>Online</span>
+        <div class="flex flex-col gap-[15px] w-full">
+            <h3 class="text-3xl text-black font-bold">{{memberServ.name}}</h3>
+            <div class="flex gap-[15px]">
+                @if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'loggedIn') {
+                <div class="flex gap-6">
+                    <img src="assets/icons/user_online.png" alt="" class="w-6 h-6">
+                    <span class="text-xl font-normal">Online</span>
                 </div>
-                } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) == 'loggedOut') {
-                <div class="point-container">
-                    <img src="assets/icons/user_offline.png" alt="" class="state-icon">
-                    <span>Offline</span>
+                } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'loggedOut') {
+                <div class="flex gap-6">
+                    <img src="assets/icons/user_offline.png" alt="" class="w-6 h-6">
+                    <span class="text-xl font-normal">Offline</span>
                 </div>
-                } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) == 'idle') {
-                <div class="point-container">
-                    <img src="assets/icons/user_idle.png" alt="" class="state-icon">
-                    <span style="color: #F19E39">Abwesend</span>
+                } @else if (memberServ.checkMemberLoginState(memberServ.currentMember!) === 'idle') {
+                <div class="flex gap-6">
+                    <img src="assets/icons/user_idle.png" alt="" class="w-6 h-6">
+                    <span class="text-xl font-normal text-[#F19E39]">Abwesend</span>
                 </div>
                 }
             </div>
         </div>
-        <div class="email-container">
-            <img src="assets/icons/mail.png" alt="">
-            <div class="email">
-                <h3>E-Mail Addresse</h3>
-                <span>{{memberServ.email}}</span>
+        <div class="flex gap-[15px] w-full items-start">
+            <img src="assets/icons/mail.png" alt="" class="h-5 w-[25px] object-contain">
+            <div class="flex flex-col gap-5">
+                <h3 class="text-lg font-bold">E-Mail Addresse</h3>
+                <span class="text-lg font-normal">{{memberServ.email}}</span>
             </div>
         </div>
-        <div (click)="memberServ.setChatRoom( $event)" class="btn-container">
-            <a href=""> <img src="assets/icons/mode_comment.png" alt=""> Nachricht</a>
+        <div (click)="memberServ.setChatRoom($event)" class="w-full flex items-center justify-center">
+            <a href="" class="bg-[#444df2] rounded-full px-6 py-3 flex gap-2.5 text-white text-lg font-bold hover:bg-blue-600 transition-colors">
+                <img src="assets/icons/mode_comment.png" alt="">
+                Nachricht
+            </a>
         </div>
     </div>
 </div>

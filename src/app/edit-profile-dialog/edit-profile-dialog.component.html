@@ -1,56 +1,127 @@
-<div class="flex flex-col gap-11 w-full font-nunito sm:w-full max-sm:w-full" style="max-width: 400px;">
-    <div class="flex justify-between items-center w-full text-2xl font-bold">
-        <h3>Dein Profil bearbeiten</h3>
-        <img src="assets/icons/close.svg" alt="" class="cursor-pointer rounded-2xl p-2 transition-all duration-[125ms] hover:bg-[#ECEEFD]" (click)="closeDialog(); boardServ.stopPropagation($event)">
-    </div>
-    <img src="{{ avatarPath }}" alt="" class="w-52 h-52 rounded-full object-cover object-center cursor-pointer" (click)="changeAvatar = !changeAvatar">
-    @if (changeAvatar) {
-    <div class="fixed inset-0 flex items-center justify-center z-[5] bg-black/15 rounded-3xl" (click)="changeAvatar = !changeAvatar">
-        <div class="flex flex-col items-start gap-4 bg-white rounded-3xl p-[15px] px-[25px]" (click)=" boardServ.stopPropagation($event)">
-            <span class="text-xl">Aus der Liste wählen</span>
-            <div class="flex gap-2">
-                @for (avatar of avatars; track avatar; let i = $index) {
-                <img src="{{ avatar }}" alt="" (click)="pickAvatar(i); boardServ.stopPropagation($event)" class="w-14 h-14 rounded-full object-cover border-3 border-transparent transition-all duration-[125ms] hover:border-[#E6E6E6] hover:scale-105 cursor-pointer">
-                }
-            </div>
-            <div class="flex gap-6 mt-6">
-                <span>eigenes Bild verwenden</span>
-                <label for="fileUpload" class="text-[#797EF3] transition-all duration-[125ms] hover:bg-[#5359F1] hover:text-white cursor-pointer">Datei hochladen</label>
-                <input type="file" name="fileUpload" id="fileUpload" (change)="onFileChange($event)" class="hidden">
-            </div>
+<div
+  class="flex flex-col gap-11 w-full font-nunito sm:w-full max-sm:w-full"
+  style="max-width: 400px"
+>
+  <div class="flex justify-between items-center w-full text-2xl font-bold">
+    <h3>Dein Profil bearbeiten</h3>
+    <img
+      src="assets/icons/close.svg"
+      alt=""
+      class="cursor-pointer rounded-2xl p-2 transition-all duration-[125ms] hover:bg-[#ECEEFD]"
+      (click)="closeDialog(); boardServ.stopPropagation($event)"
+    />
+  </div>
+  <img
+    src="{{ avatarPath }}"
+    alt=""
+    class="w-52 h-52 rounded-full object-cover object-center cursor-pointer"
+    (click)="changeAvatar = !changeAvatar"
+  />
+  @if (changeAvatar) {
+    <div
+      class="fixed inset-0 flex items-center justify-center z-[5] bg-black/15 rounded-3xl"
+      (click)="changeAvatar = !changeAvatar"
+    >
+      <div
+        class="flex flex-col items-start gap-4 bg-white rounded-3xl p-[15px] px-[25px]"
+        (click)="boardServ.stopPropagation($event)"
+      >
+        <span class="text-xl">Aus der Liste wählen</span>
+        <div class="flex gap-2">
+          @for (avatar of avatars; track avatar; let i = $index) {
+            <img
+              src="{{ avatar }}"
+              alt=""
+              (click)="pickAvatar(i); boardServ.stopPropagation($event)"
+              class="w-14 h-14 rounded-full object-cover border-3 border-transparent transition-all duration-[125ms] hover:border-[#E6E6E6] hover:scale-105 cursor-pointer"
+            />
+          }
         </div>
-
+        <div class="flex gap-6 mt-6">
+          <span>eigenes Bild verwenden</span>
+          <label
+            for="fileUpload"
+            class="text-[#797EF3] transition-all duration-[125ms] hover:bg-[#5359F1] hover:text-white cursor-pointer"
+            >Datei hochladen</label
+          >
+          <input
+            type="file"
+            name="fileUpload"
+            id="fileUpload"
+            (change)="onFileChange($event)"
+            class="hidden"
+          />
+        </div>
+      </div>
     </div>
+  }
+
+  <form
+    (ngSubmit)="onSubmit(editForm)"
+    #editForm="ngForm"
+    class="flex flex-col items-start gap-5 w-full"
+  >
+    <div class="flex flex-col items-start gap-[7px] w-full">
+      <label for="name" class="flex gap-4 text-xl font-bold"
+        ><img src="assets/icons/name_edit_user.png" alt="" />Vollständiger Name</label
+      >
+      <input
+        type="text"
+        id="name"
+        name="name"
+        [(ngModel)]="fullname"
+        #name="ngModel"
+        class="w-full rounded-full border border-[#ADB0D9] px-5 py-[15px] text-lg font-medium text-[#686868] transition-all duration-[125ms] hover:border-black focus:border-[#444DF2] focus:outline-none"
+      />
+    </div>
+
+    <div class="flex flex-col items-start gap-[7px] w-full">
+      <label for="email" class="flex gap-4 text-xl font-bold"
+        ><img src="assets/icons/mail_edit_user.png" alt="" />E-Mail-Adresse</label
+      >
+      <input
+        type="email"
+        id="email"
+        name="email"
+        #email="ngModel"
+        [(ngModel)]="mail"
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        class="w-full rounded-full border border-[#ADB0D9] px-5 py-[15px] text-lg font-medium text-[#686868] transition-all duration-[125ms] hover:border-black focus:border-[#444DF2] focus:outline-none"
+      />
+    </div>
+    @if (email.touched && !email.valid) {
+      <span class="text-sm text-[#ED1E79] text-center"
+        >Bitte geben sie eine gültige E-Mail-Adresse ein</span
+      >
+    } @else if (authService.errorCode() === 'auth/requires-recent-login') {
+      <span class="text-sm text-[#ED1E79] text-center"
+        >Ihr letzter Login ist zu lange her<br />
+        Bitte loggen sie nich erneut ein.</span
+      >
+    } @else if (authService.errorCode() === 'no error') {
+      <span class="text-sm text-[#ED1E79] text-center"
+        >Eine Email zum Bestätigen der Änderung <br />
+        wurde an ihre E-Mail-Adresse gesendet</span
+      >
+    } @else if (changesSuccessful) {
+      <span class="text-sm text-[#444DF2] text-center"
+        >Ihre Änderungen wurden erfolgreich gespeichert</span
+      >
     }
 
-    <form (ngSubmit)="onSubmit(editForm)" #editForm="ngForm" class="flex flex-col items-start gap-5 w-full">
-        <div class="flex flex-col items-start gap-[7px] w-full">
-            <label for="name" class="flex gap-4 text-xl font-bold"><img src="assets/icons/name_edit_user.png" alt="">Vollständiger Name</label>
-            <input type="text" id="name" name="name" [(ngModel)]="fullname" #name="ngModel" class="w-full rounded-full border border-[#ADB0D9] px-5 py-[15px] text-lg font-medium text-[#686868] transition-all duration-[125ms] hover:border-black focus:border-[#444DF2] focus:outline-none">
-        </div>
-
-        <div class="flex flex-col items-start gap-[7px] w-full">
-            <label for="email" class="flex gap-4 text-xl font-bold"><img src="assets/icons/mail_edit_user.png" alt="">E-Mail-Adresse</label>
-            <input type="email" id="email" name="email" #email="ngModel" [(ngModel)]="mail" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" class="w-full rounded-full border border-[#ADB0D9] px-5 py-[15px] text-lg font-medium text-[#686868] transition-all duration-[125ms] hover:border-black focus:border-[#444DF2] focus:outline-none">
-        </div>
-        @if (email.touched && !email.valid) {
-        <span class="text-sm text-[#ED1E79] text-center">Bitte geben sie eine gültige E-Mail-Adresse ein</span>
-        }
-        @else if (authService.errorCode() === 'auth/requires-recent-login') {
-        <span class="text-sm text-[#ED1E79] text-center">Ihr letzter Login ist zu lange her<br> Bitte loggen sie nich erneut ein.</span>
-        } @else if (authService.errorCode() === 'no error') {
-        <span class="text-sm text-[#ED1E79] text-center">Eine Email zum Bestätigen der Änderung <br> wurde an ihre E-Mail-Adresse gesendet</span>
-        } @else if (changesSuccessful) {
-        <span class="text-sm text-[#444DF2] text-center">Ihre Änderungen wurden erfolgreich gespeichert</span>
-        }
-
-        <div class="flex gap-8 w-full">
-            <div class="rounded-full border border-[#797EF3] px-[25px] py-3 text-[#444DF2] transition-all duration-[125ms] hover:bg-[#5359F1] hover:text-white cursor-pointer" (click)="closeDialog(); boardServ.stopPropagation($event)">Abbrechen
-            </div>
-            <input type="submit" value="Speichern" class="rounded-full border border-transparent px-[25px] py-3 bg-[#444DF2] text-white transition-all duration-[125ms] hover:bg-[#787EF2] cursor-pointer" (click)="boardServ.stopPropagation($event)">
-        </div>
-
-
-
-    </form>
+    <div class="flex gap-8 w-full">
+      <div
+        class="rounded-full border border-[#797EF3] px-[25px] py-3 text-[#444DF2] transition-all duration-[125ms] hover:bg-[#5359F1] hover:text-white cursor-pointer"
+        (click)="closeDialog(); boardServ.stopPropagation($event)"
+      >
+        Abbrechen
+      </div>
+      <input
+        type="submit"
+        value="Speichern"
+        class="rounded-full border border-transparent px-[25px] py-3 bg-[#444DF2] text-white transition-all duration-[125ms] hover:bg-[#787EF2] cursor-pointer"
+        (click)="boardServ.stopPropagation($event)"
+      />
+    </div>
+  </form>
 </div>

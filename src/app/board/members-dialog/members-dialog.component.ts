@@ -28,7 +28,7 @@ export class MembersDialogComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.userList = this.firestore.userList();
-    let updatedUsers = this.updateLoginState();
+    const updatedUsers = this.updateLoginState();
     try {
       await this.firestore.updateChannelUsers(updatedUsers, this.currentChannel.id!);
     } catch (error) {
@@ -37,9 +37,9 @@ export class MembersDialogComponent implements OnInit {
   }
 
   updateLoginState(): CurrentUser[] {
-    let allUsers = this.currentChannel.allUsers;
+    const allUsers = this.currentChannel.allUsers;
     this.userList.forEach(user => {
-      let index = allUsers.findIndex(u => u.id == user.id);
+      const index = allUsers.findIndex(u => u.id == user.id);
       if (index != -1 && allUsers[index].loginState != user.loginState) {
         allUsers[index].loginState = user.loginState;
       }

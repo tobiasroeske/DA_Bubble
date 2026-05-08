@@ -1,20 +1,19 @@
-<div [class.flex-center]="smallScreen">
-    <header [ngStyle]="{'justify-content': forgotPassword ? 'flex-start' : 'space-between'}">
-        <div class="logo-box">
+<div [class]="smallScreen ? 'flex flex-col h-screen' : ''">
+    <header [class]="'flex ' + (forgotPassword ? 'justify-start' : 'justify-between') + ' px-[75px] pt-8 h-[110px] max-md:justify-center max-md:px-0'">
+        <div class="flex gap-4 items-center">
             <img src="assets/img/logo.png" alt="">
-            <h1>DABubble</h1>
-
+            <h1 class="text-[32px] max-md:text-[24px] max-h-[770px]:text-[24px]">DABubble</h1>
         </div>
         @if (!forgotPassword && !smallScreen) {
-        <div class="register-box">
-            <span>Neu bei DABubble?</span>
-            <a href="register">Konto erstellen</a>
+        <div class="flex flex-col gap-4 items-center">
+            <span class="text-center">Neu bei DABubble?</span>
+            <a href="register" class="border border-[#797EF3] text-[#444DF2] font-bold rounded-[25px] px-4 py-2 transition-all duration-125 hover:bg-[#ECEEFE] active:bg-[#444DF2] active:text-white max-md:text-[18px] max-md:gap-5">Konto erstellen</a>
         </div>
         }
     </header>
-    <div class="content" [ngStyle]="{'overflow-x': forgotPassword ? 'hidden' : 'unset'}">
-        <div class="top" [ngStyle]="{'flex': forgotPassword ? 'unset' : '1'}">
-            <div class="login-container">
+    <div [class]="'flex flex-col gap-10 ' + (forgotPassword ? 'overflow-hidden' : '') + ' ' + (smallScreen ? 'h-auto' : 'h-[calc(100vh-110px)]') + ' max-md:gap-5 max-h-[860px]:gap-6 max-h-[770px]:gap-4'">
+        <div [class]="'flex-1 w-[90%] max-w-[628px] ' + (forgotPassword ? '' : '')">
+            <div class="flex flex-col gap-8 bg-white shadow-[0px_2px_10px_0px_rgba(0,0,0,0.078)] rounded-[30px] px-16 py-8 mt-4 max-md:px-5 max-[590px]:px-5 max-md:gap-5 max-h-[770px]:px-5 max-h-[770px]:py-5">
                 @if (!forgotPassword) {
                 <app-sign-in (passwordForgotten)="openPasswordDialog($event)" [smallScreen]="smallScreen"></app-sign-in>
                 } @else {
@@ -25,35 +24,34 @@
         </div>
 
         @if (smallScreen && !forgotPassword) {
-        <div class="register-box">
-            <span>Neu bei DABubble?</span>
-            <a href="register">Konto erstellen</a>
+        <div class="flex flex-col gap-5 max-md:gap-[20px]">
+            <span class="text-[18px]">Neu bei DABubble?</span>
+            <a href="register" class="border border-[#797EF3] text-[#444DF2] font-bold rounded-[25px] px-4 py-2 transition-all duration-125 hover:bg-[#ECEEFE] active:bg-[#444DF2] active:text-white">Konto erstellen</a>
         </div>
         }
         @if (!smallScreen && !forgotPassword) {
-        <footer>
-            <a href="impressum" target="_blank">Impressum</a>
-            <a href="datenschutz" target="_blank">Datenschutz</a>
+        <footer class="flex gap-4 items-end justify-start mb-6">
+            <a href="impressum" target="_blank" class="text-[#797EF3] hover:text-[#444DF2] transition-all duration-125">Impressum</a>
+            <a href="datenschutz" target="_blank" class="text-[#797EF3] hover:text-[#444DF2] transition-all duration-125">Datenschutz</a>
         </footer>
         }
         @if (forgotPassword) {
-        <div [class.slide-in]="confirmationMessage" class="confirmation-message">
+        <div [class]="'flex gap-7 p-[50px] rounded-[30px_30px_0_30px] bg-[#444DF2] shadow-[0px_6px_10px_0px_rgba(0,0,0,0.2)] text-white text-[36px] font-bold self-end mr-4 transform transition-transform duration-125 ' + (confirmationMessage ? 'translate-x-0' : 'translate-x-[600px]') + ' max-md:p-[25px] max-md:text-[24px] max-md:gap-4 max-[410px]:text-[20px] max-[410px]:p-[15px]'">
             <img src="assets/icons/email_send.png" alt="">
             E-Mail gesendet
         </div>
         }
     </div>
     @if (!localStorageService.introPlayed) {
-    <div class="intro">
-        <div class="max-width-container">
-            <div class="intro-logo-container">
-                <img src="assets/img/logo_big.png" alt="">
-                <div class="headline">
-                    <h1>DABubble</h1>
+    <div class="fixed z-100 inset-0 flex items-center justify-center gap-6 bg-gradient-to-b from-[#797ef3] to-[#313ae5] opacity-100 animation-[background-vanish_0.225s_ease-in-out_forwards_2.7s]">
+        <div class="flex items-center justify-center relative w-full h-screen max-w-[1920px]">
+            <div class="flex gap-6 absolute animation-[intro-animation_0.5s_ease-in_forwards_2.2s]">
+                <img src="assets/img/logo_big.png" alt="" class="object-cover transform translate-x-[154px] animation-[logo-animation_0.7s_ease-in-out_forwards_0.5s, intro-logo-animation_0.5s_ease-in-out_forwards_2.2s]">
+                <div class="relative overflow-hidden">
+                    <h1 class="text-[64px] font-bold text-white transform -translate-x-80 animation-[headline-animation_0.5s_ease-in-out_forwards_1s, intro-headline-animation_0.5s_ease-in-out_forwards_2.2s]">DABubble</h1>
                 </div>
             </div>
         </div>
-
     </div>
     }
 </div>

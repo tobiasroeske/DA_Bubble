@@ -1,4 +1,3 @@
-
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { TIMINGS } from '../../../shared/constants/timings';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -7,10 +6,10 @@ import { SignupService } from '../../../shared/services/signup/signup.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-    selector: 'app-reset-password',
-    imports: [FormsModule],
-    templateUrl: './reset-password.component.html',
-    styleUrl: './reset-password.component.scss'
+  selector: 'app-reset-password',
+  imports: [FormsModule],
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.scss',
 })
 export class ResetPasswordComponent implements OnInit {
   authService = inject(SignupService);
@@ -26,18 +25,16 @@ export class ResetPasswordComponent implements OnInit {
   passwordChanged: boolean = false;
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        this.resetCode = params['oobCode'] || '';
-        this.actionMode = params['mode'] || '';
-        if (this.actionMode === 'verifyAndChangeEmail') {
-          this.changeEmail();
-        }
-        if (this.actionMode === 'verifyEmail') {
-          this.verifyEmail();
-        }
-      });
+    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.resetCode = params['oobCode'] || '';
+      this.actionMode = params['mode'] || '';
+      if (this.actionMode === 'verifyAndChangeEmail') {
+        this.changeEmail();
+      }
+      if (this.actionMode === 'verifyEmail') {
+        this.verifyEmail();
+      }
+    });
   }
 
   async verifyEmail(): Promise<void> {

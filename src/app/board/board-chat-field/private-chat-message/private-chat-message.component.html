@@ -1,18 +1,20 @@
-<div #messageElements class="chat-box" [ngStyle]="{'margin-bottom': lastIndex ? '150px' : '0'}">
-    <div class="time-separator-container">
-        <span class="line"></span>
-        <div class="date-container">
-            <span class="date">{{ checkIfDateIsToday(privateMessage.date) ? 'Heute' : privateMessage.date | date: 'EEEE, MMMM d'}} </span>
+<div #messageElements class="relative" [ngStyle]="{'margin-bottom': lastIndex ? '150px' : '0'}">
+    <div class="relative w-full h-[35px] flex items-center justify-start">
+        <span class="block bg-[rgba(173,176,217,1)] h-px w-full"></span>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <span class="bg-white rounded-[30px] py-[5px] px-[15px] border border-[rgba(173,176,217,1)] font-['Nunito']">{{ checkIfDateIsToday(privateMessage.date) ? 'Heute' : privateMessage.date | date: 'EEEE, MMMM d'}} </span>
         </div>
     </div>
     <span (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
-        [class.slide-in]="mouseIsOverMessage" class="reaction-bar"
-        [class.reaction-bar-reverse]="privateMessage.user.id == boardServ.currentUser.id">
-            <img [ngClass]="{'hideTool': !openTheIndicatorBarTools}" src="assets/emoji/emoji_{{ localStorageServ.loadLastReactions()[0] }}.png" alt="" class="emoji-icon"
+        [class.opacity-100!]="mouseIsOverMessage"
+        [class.right-auto!]="privateMessage.user.id == boardServ.currentUser.id"
+        [class.left-4!]="privateMessage.user.id == boardServ.currentUser.id"
+        class="absolute top-[34px] right-4 z-10 bg-white border border-[rgba(173,176,217,1)] rounded-[25px_25px_0px_25px] py-[3px] px-[15px] pl-5 flex items-center justify-between gap-[5px] opacity-0 transition-all duration-[125ms] ease-in-out">
+            <img [ngClass]="{'hidden': !openTheIndicatorBarTools}" src="assets/emoji/emoji_{{ localStorageServ.loadLastReactions()[0] }}.png" alt="" class="cursor-pointer rounded-full m-1 w-6 h-6 object-cover transition-all duration-[125ms] hover:bg-[#ECEEFE]"
                 (click)="updateCompleteChannel(0, localStorageServ.loadLastReactions())">
-            <img [ngClass]="{'hideTool': !openTheIndicatorBarTools}" src="assets/emoji/emoji_{{ localStorageServ.loadLastReactions()[1] }}.png" alt="" class="emoji-icon"
+            <img [ngClass]="{'hidden': !openTheIndicatorBarTools}" src="assets/emoji/emoji_{{ localStorageServ.loadLastReactions()[1] }}.png" alt="" class="cursor-pointer rounded-full m-1 w-6 h-6 object-cover transition-all duration-[125ms] hover:bg-[#ECEEFE]"
                 (click)="updateCompleteChannel(1, localStorageServ.loadLastReactions())">
-            <svg [ngClass]="{'hideTool': !openTheIndicatorBarTools}" (click)="toggleReactionDialog('superiorBar')" class="addReaction-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
+            <svg [ngClass]="{'hidden': !openTheIndicatorBarTools}" (click)="toggleReactionDialog('superiorBar')" class="cursor-pointer rounded-full hover:bg-[#ECEEFE] hover:[&_path]:fill-[#535AF1]" width="40" height="40" viewBox="0 0 40 40" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_1817_19446" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                     height="24">
@@ -25,7 +27,7 @@
                 </g>
             </svg>
         @if (boardServ.currentUser.id == privateMessage.user.id) {
-                <svg [ngClass]="{'hideTool': !openTheIndicatorBarTools}" class="answer-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                <svg [ngClass]="{'hidden': !openTheIndicatorBarTools}" class="cursor-pointer rounded-full hover:bg-[#ECEEFE] hover:[&_path]:fill-[#535AF1]" width="40" height="40" viewBox="0 0 40 40" fill="none"
                     xmlns="http://www.w3.org/2000/svg" (click)="toggleMessageEditor()">
                     <mask id="mask0_1823_21712" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                         height="24">
@@ -38,7 +40,7 @@
                     </g>
                 </svg>
                 @if(currentWindowWidth <= 560){
-                    <svg [ngClass]="{'hideTool': openTheIndicatorBarTools}" (click)="openTheTools()" class="answer-icon" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                    <svg [ngClass]="{'hidden': openTheIndicatorBarTools}" (click)="openTheTools()" class="cursor-pointer rounded-full hover:bg-[#ECEEFE] hover:[&_path]:fill-[#535AF1]" width="40" height="40" viewBox="0 0 40 40" fill="none"
                    xmlns="http://www.w3.org/2000/svg">
                    <mask id="mask0_1823_21712" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                        height="24">
@@ -51,52 +53,61 @@
                    </g>
                    </svg>
                 }
-            
+
           }
         @if (reactionDialogOpen) {
-        <div class="reaction-dialog" [class.reaction-dialog-reverse]="privateMessage.user.id == boardServ.currentUser.id">
+        <div class="absolute top-10 right-10 flex items-center justify-center flex-wrap gap-3 p-[15px_12px] bg-white w-[180px] rounded-[30px_0_30px_30px] shadow-[0px_2px_10px_0px_#00000014]"
+            [class.reaction-dialog-reverse]="privateMessage.user.id == boardServ.currentUser.id">
             @for (emoji of reactionEmojis; track emoji; let i = $index) {
-            <img src="assets/emoji/emoji_{{ emoji }}.png" alt="{{ emoji }}" class="emoji-icon"
+            <img src="assets/emoji/emoji_{{ emoji }}.png" alt="{{ emoji }}" class="cursor-pointer w-6 h-6 object-cover rounded-full transition-all duration-[125ms] hover:bg-transparent! hover:scale-[1.2]"
                 (click)="updateCompleteChannel(i, reactionEmojis)">
             }
         </div>
         }
     </span>
-    <div [ngStyle]="{'background-color': boardServ.highlightArrayForTheChildElementSearched[privateChatIndex] ? '#BDBFE1' : ''}" (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
-        [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}" class="message-box"
-        [class.message-box-reverse]="privateMessage.user.id == boardServ.currentUser.id">
-        <img class="avatar-photo" src="{{privateMessage.user.avatarPath}}" alt="">
-        <div class="message-container">
-            <div class="name-and-time-container">
-                <span class="avatar-name-message">{{privateMessage.user.name}}</span> <span class="time">{{ privateMessage.date | date: 'shortTime' }}</span>
+    <div (mouseover)="onHover('message-box')" (mouseleave)="onLeave('message-box')"
+        [ngStyle]="{'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff'}"
+        class="flex flex-row items-start justify-start gap-[30px] py-[10px] pr-[25px] pl-[70px] mt-6 transition-all duration-500 max-[1100px]:pl-[40px] max-[960px]:px-4"
+        [class.flex-row-reverse!]="privateMessage.user.id == boardServ.currentUser.id"
+        [class.pr-[70px]!]="privateMessage.user.id == boardServ.currentUser.id"
+        [class.pl-0!]="privateMessage.user.id == boardServ.currentUser.id">
+        <img class="h-[70px] w-[70px] object-cover rounded-full max-[1100px]:w-12 max-[1100px]:h-12 max-[560px]:w-10 max-[560px]:h-10" src="{{privateMessage.user.avatarPath}}" alt="">
+        <div class="w-[80%] flex flex-col items-start justify-start gap-2 font-['Nunito']"
+            [class.items-end!]="privateMessage.user.id == boardServ.currentUser.id">
+            <div class="flex items-center gap-5">
+                <span class="text-lg font-bold">{{privateMessage.user.name}}</span>
+                <span class="text-sm font-normal text-[rgba(104,104,104,1)]">{{ privateMessage.date | date: 'shortTime' }}</span>
             </div>
             @if (privateMessage.fileUpload.length > 0) {
-                <div class="uploaded-file-container">
-                    <img src="{{ privateMessage.fileUpload }}" alt="" class="uploaded-img" (click)="toggleFilePreview()">
+                <div class="cursor-pointer flex items-center justify-center p-2 border-4 border-[#e6e6e6] rounded-xl ml-2 relative w-[200px] h-[200px] overflow-hidden bg-white transition-all duration-[125ms] [&:hover_.uploaded-img]:scale-[1.02] [&:hover_.close-icon]:opacity-100">
+                    <img src="{{ privateMessage.fileUpload }}" alt="" class="uploaded-img absolute w-[200px] h-[200px] object-contain transition-all duration-[125ms]" (click)="toggleFilePreview()">
                 </div>
             }
             @if (privateMessage.answers.length > 0) {
-                <div class="answer">
+                <div class="flex items-center justify-start gap-2 py-2 px-3 rounded-[30px] transition-all duration-[125ms] hover:bg-white">
                     <img src="assets/icons/answer_arrow.svg" alt="">
                     <span>Antwort auf: {{ privateMessage.answers[0].message }}</span>
                 </div>
             }
-                
+
             @if (!editorOpen && privateMessage.message.length > 0) {
-                <p class="message" [innerText]="message"></p>
+                <p class="p-4 text-lg rounded-[0px_30px_30px_30px] bg-[rgba(236,238,254,1)] max-w-[600px] break-words"
+                    [class.rounded-[30px_0_30px_30px]!]="privateMessage.user.id == boardServ.currentUser.id"
+                    [innerText]="message"></p>
             } @else if (editorOpen) {
                 <app-private-message-editor (editorOpen)="toggleMessageEditor()" [privateChat]="firestore.directMessages()[boardServ.chatPartnerIdx]" [chatMessageIndex]="privateChatIndex" [chat]="privateMessage" style="width:100%"></app-private-message-editor>
             }
-            
-            <div class="reaction-indicator-bar">
+
+            <div class="flex items-center justify-start gap-2 relative flex-wrap"
+                [class.flex-row-reverse!]="privateMessage.user.id == boardServ.currentUser.id">
                 @for (reaction of privateMessage.reactions; track reaction; let i = $index) {
-                <span class="reaction-indicator">
-                    <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
+                <span class="reaction-indicator relative py-[5px] px-[10px] border border-[rgba(173,176,217,1)] rounded-[20px] flex items-center justify-between gap-[10px]">
+                    <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="cursor-pointer w-6 h-6 object-cover rounded-full transition-all duration-[125ms] hover:scale-[1.1]">
                     <p>{{ reaction.count }}</p>
 
-                    <div class="pop-up-reaction">
-                        <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="emoji-icon">
-                        <div class="pop-up-reacter">
+                    <div class="pop-up-reaction absolute bottom-6 left-[26px] rounded-[30px_30px_30px_0px] bg-blue-600 px-5 py-2 text-sm text-white hidden transition-all duration-300 z-10 flex-col gap-1">
+                        <img src="assets/emoji/emoji_{{ reaction.emojiPath }}.png" alt="" class="cursor-pointer w-6 h-6 object-cover rounded-full transition-all duration-[125ms] hover:bg-transparent! hover:scale-[1.2]">
+                        <div class="flex flex-col items-center gap-[5px]">
                         <b>{{ reaction.creator[reaction.creator.length - 1] }}</b>
                         <p>hat reagiert</p>
                         </div>
@@ -104,28 +115,28 @@
                 </span>
                  }
                 @if (reactionDialogIndicatorbarOpen) {
-                    <div class="reaction-dialog-indicatorbar"
+                    <div class="absolute bottom-12 left-12 w-[272px] flex items-center justify-center flex-wrap gap-3 p-[15px_12px] bg-white z-10 rounded-[30px_30px_30px_0px] shadow-[0px_2px_10px_0px_#00000014]"
                         [class.reaction-dialog-indicatorbar-reverse]="privateMessage.user.id == boardServ.currentUser.id"
                         (mouseleave)="reactionDialogIndicatorbarOpen = false">
                         @for (emoji of reactionEmojis; track emoji; let i = $index) {
-                        <img src="assets/emoji/emoji_{{ emoji }}.png" alt="{{ emoji }}" class="emoji-icon"
+                        <img src="assets/emoji/emoji_{{ emoji }}.png" alt="{{ emoji }}" class="cursor-pointer w-6 h-6 object-cover rounded-full transition-all duration-[125ms] hover:bg-transparent! hover:scale-[1.2]"
                             (click)="updateCompleteChannel(i, reactionEmojis)">
                         }
                     </div>
                 }
             </div>
-            <div class="answer-btn" (click)="setCurrentPrivateChatMessage()">Antworten</div>
+            <div class="cursor-pointer text-[#535AF1] text-lg font-normal hover:font-bold" (click)="setCurrentPrivateChatMessage()">Antworten</div>
         </div>
     </div>
 </div>
 
 <!-- Image popup -->
 @if (showFile) {
-    <div class="file-popup">
-        <div class="img-container">
-            <img src="{{ privateMessage.fileUpload }}" alt="" class="img-in-popup">
-            <a href="{{ privateMessage.fileUpload }}" download="download.image.png" target="_blank" (click)="boardServ.stopPropagation($event)" class="link"><img src="assets/icons/download_icon.png" alt="" class="download-icon"></a>
-            <img src="assets/icons/close.svg" alt="" class="close-icon" (click)="toggleFilePreview()">
+    <div class="fixed inset-0 bg-black/15 flex items-center justify-center z-[99]">
+        <div class="flex items-center justify-center bg-white p-6 rounded-[25px] border-4 border-[#e6e6e6] w-[40%] relative hover:[&_.link]:opacity-90 max-[690px]:w-[75%] max-[420px]:w-[95%]">
+            <img src="{{ privateMessage.fileUpload }}" alt="" class="w-full h-full object-contain">
+            <a href="{{ privateMessage.fileUpload }}" download="download.image.png" target="_blank" (click)="boardServ.stopPropagation($event)" class="link absolute z-[100] opacity-0 cursor-pointer rounded-full p-2 bg-[#e6e6e6] transition-all duration-[125ms]"><img src="assets/icons/download_icon.png" alt="" class="w-16 h-16"></a>
+            <img src="assets/icons/close.svg" alt="" class="close-icon cursor-pointer absolute top-6 right-6 p-1 rounded-full transition-all duration-[125ms] hover:bg-[#ECEEFE] hover:scale-[1.2]" (click)="toggleFilePreview()">
         </div>
     </div>
 }

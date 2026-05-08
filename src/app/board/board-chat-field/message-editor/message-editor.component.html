@@ -1,8 +1,9 @@
-<div class="textarea-container" (click)="closeEmojiDialog()">
+<div class="relative w-full min-h-[145px] h-[180px] bottom-[-8px] left-[30px] right-[30px] bg-white border border-[rgba(173,176,217,1)] rounded-[20px] p-5 flex flex-col max-[560px]:left-1/2 max-[560px]:-translate-x-1/2 max-[560px]:right-auto" (click)="closeEmojiDialog()">
     <label for="messageEditor{{ chatMessageIndex }}"></label>
-    <textarea name="messageEditor" id="messageEditor{{ chatMessageIndex }}" [(ngModel)]="editedMessage"></textarea>
-    <div class="tool-panel-textarea">
-        <svg (click)="toggleEmojiPicker($event)" class="textarea-icon" width="40" height="40" viewBox="0 0 40 40"
+    <textarea name="messageEditor" id="messageEditor{{ chatMessageIndex }}" [(ngModel)]="editedMessage"
+        class="flex flex-1 w-full border-none outline-none resize-none font-['Nunito'] text-lg font-normal placeholder:text-lg placeholder:font-normal placeholder:text-[rgba(104,104,104,1)] max-[560px]:mb-1"></textarea>
+    <div class="w-full flex items-center justify-between max-[560px]:justify-end max-[470px]:items-end">
+        <svg (click)="toggleEmojiPicker($event)" class="textarea-icon cursor-pointer max-[560px]:hidden" width="40" height="40" viewBox="0 0 40 40"
             fill="none" xmlns="http://www.w3.org/2000/svg">
             <mask id="mask0_51470_671" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="24"
                 height="24">
@@ -14,14 +15,14 @@
                     fill="#686868" />
             </g>
         </svg>
-        <div class="action-btns">
-            <button class="btn-no-style cancel-btn" (click)="closeEditor()">Abbrechen</button>
-            <button class="btn-no-style save-btn" (click)="editMessage(chatMessageIndex)">Speichern</button>
+        <div class="flex items-center gap-8 max-[1100px]:flex-col max-[1100px]:gap-2 max-[1100px]:items-end max-[560px]:flex-row max-[560px]:gap-2 max-[470px]:flex-col max-[470px]:items-end">
+            <button class="btn-no-style cancel-btn border border-[#797EF3] text-[#444DF2] font-bold text-lg hover:bg-[#5359F1] hover:text-white max-[1100px]:py-2 max-[1100px]:px-[15px] max-[560px]:py-1 max-[560px]:px-3 max-[470px]:text-base" (click)="closeEditor()">Abbrechen</button>
+            <button class="btn-no-style save-btn border border-transparent font-bold text-lg text-white bg-[#444DF2] hover:bg-[#787EF2] max-[1100px]:w-full max-[1100px]:py-2 max-[1100px]:px-[15px] max-[560px]:w-auto max-[560px]:py-1 max-[560px]:px-3 max-[470px]:text-base" (click)="editMessage(chatMessageIndex)">Speichern</button>
         </div>
 
     </div>
     @if (showEmojiPicker) {
-    <div class="emoji-container">
+    <div class="absolute bottom-14 left-9 z-[99] max-[560px]:left-1/2 max-[560px]:-translate-x-1/2 max-[420px]:left-[25%] max-[420px]:-translate-x-[25%]">
         <emoji-mart [showPreview]="false" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)"
             [style]="{'width': boardServ.emojiPickerSmall() ? '160px' : '270px'}"></emoji-mart>
     </div>

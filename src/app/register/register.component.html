@@ -1,12 +1,12 @@
-<div id="register" [class.flex-center]="smallScreen">
-    <header>
-        <div class="logo-box">
-            <img src="assets/img/logo.png" alt="">
-            <h1>DABubble</h1>
+<div id="register" [class]="'flex flex-col ' + (smallScreen ? 'h-screen' : '')">
+    <header class="flex justify-start px-[75px] pt-8 max-md:justify-center max-md:px-0">
+        <div class="flex gap-4 items-center">
+            <img src="assets/img/logo.png" alt="" class="max-md:w-14 max-md:h-14 max-h-[770px]:w-10 max-h-[770px]:h-10">
+            <h1 class="text-[32px] max-md:text-[24px] max-h-[770px]:text-[24px]">DABubble</h1>
         </div>
     </header>
-    <div class="content">
-        <div class="login-container">
+    <div class="flex flex-col gap-1 overflow-hidden max-md:gap-3 max-md:h-auto max-md:w-full max-[590px]:w-[95%] max-h-[860px]:gap-4">
+        <div class="flex flex-col gap-8 bg-white shadow-[0px_2px_10px_0px_rgba(0,0,0,0.078)] rounded-[30px] px-16 py-8 mt-4 max-md:px-5 max-md:py-8 max-[590px]:px-5 max-h-[860px]:gap-4 max-h-[770px]:px-5 max-h-[770px]:py-5">
             @if (!next) {
             <app-signup (showNextPage)="goToAvatarPicker($event)" (passUserDetail)="getUserDetail($event)"></app-signup>
             } @else {
@@ -14,14 +14,14 @@
                 [userData]="user"></app-avatar-picker>
             }
         </div>
-        
-        @if (signupService.errorCode() == 'auth/email-already-in-use') {
-        <div class="error-message slide-in">
+
+        @if (signupService.errorCode() === 'auth/email-already-in-use') {
+        <div class="flex gap-7 px-[50px] py-[50px] rounded-[30px_30px_0_30px] bg-[#ea204f] shadow-[0px_6px_10px_0px_rgba(0,0,0,0.2)] text-white text-[36px] font-bold self-end mr-4 transform translate-x-0 transition-transform duration-125 max-md:px-[25px] max-md:py-[25px] max-md:text-[24px] max-[410px]:text-[20px] max-[410px]:px-[15px] max-[410px]:py-[15px]">
             E-Mail-Adresse wir bereits verwendet.
         </div>
 
         } @else {
-        <div [class.slide-in]="signupService.signUpSuccessful()" class="confirmation-message">
+        <div [class]="'flex gap-7 px-[50px] py-[50px] rounded-[30px_30px_0_30px] bg-[#444DF2] shadow-[0px_6px_10px_0px_rgba(0,0,0,0.2)] text-white text-[36px] font-bold self-end mr-4 transform transition-transform duration-125 ' + (signupService.signUpSuccessful() ? 'translate-x-0' : 'translate-x-[600px]') + ' max-md:px-[25px] max-md:py-[25px] max-md:text-[24px] max-[410px]:text-[20px] max-[410px]:px-[15px] max-[410px]:py-[15px]'">
             Konto erfolgreich erstellt!
         </div>
         }
