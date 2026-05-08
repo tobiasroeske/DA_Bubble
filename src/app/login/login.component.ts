@@ -35,9 +35,14 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.localStorageService.loadIntroPlayed();
-    setTimeout(() => this.localStorageService.saveIntroPlayed(true), 3000);
     if (window.innerWidth <= 760) {
       this.smallScreen = true;
+    }
+  }
+
+  onIntroEnd(event: AnimationEvent): void {
+    if (event.animationName === 'background-vanish') {
+      this.localStorageService.saveIntroPlayed(true);
     }
   }
 

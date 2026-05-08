@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
 
 @Injectable({
@@ -6,7 +6,7 @@ import { CurrentUser } from '../../interfaces/currentUser.interface';
 })
 export class LocalStorageService {
   currentUser!: CurrentUser;
-  introPlayed = false;
+  introPlayed = signal(false);
   constructor() {}
 
   saveCurrentUser(user: any) {
@@ -29,6 +29,7 @@ export class LocalStorageService {
   }
 
   saveIntroPlayed(state: boolean) {
+    this.introPlayed.set(state);
     localStorage.setItem('introPlayed', JSON.stringify(state));
   }
 
@@ -59,10 +60,9 @@ export class LocalStorageService {
   }
 
   loadIntroPlayed() {
-    const introPlayed = localStorage.getItem('introPlayed');
-    if (introPlayed != null) {
-      const introPlayedAsJson = JSON.parse(localStorage.getItem('introPlayed')!);
-      this.introPlayed = introPlayedAsJson;
+    const stored = localStorage.getItem('introPlayed');
+    if (stored !== null) {
+      this.introPlayed.set(JSON.parse(stored));
     }
   }
 
