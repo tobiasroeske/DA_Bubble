@@ -1,7 +1,7 @@
 @if (memberServ.addMemberDialogIsOpen) {
   <div (click)="closeAddMemberDialog($event)" class="fixed inset-0 bg-black/20 z-12"></div>
   <div
-    [ngStyle]="{ gap: memberServ.addSpecificPerson ? '0' : '20px' }"
+    [ngClass]="memberServ.addSpecificPerson ? 'gap-0' : 'gap-5'"
     (click)="memberServ.stopPropagation($event)"
     class="absolute top-[55px] right-0 z-48 bg-white rounded-[30px] p-10 w-[710px] flex flex-col justify-between items-start max-md:w-[455px] max-md:p-6 max-md:right-[-5px] max-sm:w-[300px] max-sm:p-4"
   >

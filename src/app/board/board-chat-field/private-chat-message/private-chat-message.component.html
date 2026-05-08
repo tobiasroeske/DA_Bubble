@@ -1,4 +1,4 @@
-<div #messageElements class="relative" [ngStyle]="{ 'margin-bottom': lastIndex() ? '150px' : '0' }">
+<div #messageElements class="relative" [ngClass]="lastIndex() ? 'mb-[150px]' : 'mb-0'">
   <div class="relative w-full h-[35px] flex items-center justify-start">
     <span class="block bg-[rgba(173,176,217,1)] h-px w-full"></span>
     <div class="absolute inset-0 flex items-center justify-center">
@@ -141,7 +141,7 @@
   <div
     (mouseover)="onHover('message-box')"
     (mouseleave)="onLeave('message-box')"
-    [ngStyle]="{ 'background-color': mouseIsOverMessage ? 'rgb(236, 238, 254)' : '#fff' }"
+    [ngClass]="mouseIsOverMessage ? 'bg-[#ECEEFE]' : 'bg-white'"
     class="flex flex-row items-start justify-start gap-[30px] py-[10px] pr-[25px] pl-[70px] mt-6 transition-all duration-500 max-[1100px]:pl-[40px] max-[960px]:px-4"
     [class.flex-row-reverse!]="privateMessage.user.id == boardServ.currentUser.id"
     [class.pr-[70px]!]="privateMessage.user.id == boardServ.currentUser.id"
@@ -162,18 +162,11 @@
           privateMessage.date | date: 'shortTime'
         }}</span>
       </div>
-      @if (privateMessage.fileUpload.length > 0) {
-        <div
-          class="cursor-pointer flex items-center justify-center p-2 border-4 border-[#e6e6e6] rounded-xl ml-2 relative w-[200px] h-[200px] overflow-hidden bg-white transition-all duration-[125ms] [&:hover_.uploaded-img]:scale-[1.02] [&:hover_.close-icon]:opacity-100"
-        >
-          <img
-            src="{{ privateMessage.fileUpload }}"
-            alt=""
-            class="uploaded-img absolute w-[200px] h-[200px] object-contain transition-all duration-[125ms]"
-            (click)="toggleFilePreview()"
-          />
-        </div>
-      }
+      <app-chat-message-attachment
+        [fileUrl]="privateMessage.fileUpload"
+        [showPreview]="showFile"
+        (previewToggled)="toggleFilePreview()"
+      />
       @if (privateMessage.answers.length > 0) {
         <div
           class="flex items-center justify-start gap-2 py-2 px-3 rounded-[30px] transition-all duration-[125ms] hover:bg-white"
@@ -258,27 +251,3 @@
   </div>
 </div>
 
-<!-- Image popup -->
-@if (showFile) {
-  <div class="fixed inset-0 bg-black/15 flex items-center justify-center z-[99]">
-    <div
-      class="flex items-center justify-center bg-white p-6 rounded-[25px] border-4 border-[#e6e6e6] w-[40%] relative hover:[&_.link]:opacity-90 max-[690px]:w-[75%] max-[420px]:w-[95%]"
-    >
-      <img src="{{ privateMessage.fileUpload }}" alt="" class="w-full h-full object-contain" />
-      <a
-        href="{{ privateMessage.fileUpload }}"
-        download="download.image.png"
-        target="_blank"
-        (click)="boardServ.stopPropagation($event)"
-        class="link absolute z-[100] opacity-0 cursor-pointer rounded-full p-2 bg-[#e6e6e6] transition-all duration-[125ms]"
-        ><img src="assets/icons/download_icon.png" alt="" class="w-16 h-16"
-      /></a>
-      <img
-        src="assets/icons/close.svg"
-        alt=""
-        class="close-icon cursor-pointer absolute top-6 right-6 p-1 rounded-full transition-all duration-[125ms] hover:bg-[#ECEEFE] hover:scale-[1.2]"
-        (click)="toggleFilePreview()"
-      />
-    </div>
-  </div>
-}

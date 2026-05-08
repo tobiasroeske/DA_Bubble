@@ -17,11 +17,12 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
 import { PrivateMessageEditorComponent } from './private-message-editor/private-message-editor.component';
 import { LocalStorageService } from '../../../shared/services/local-storage-service/local-storage.service';
+import { ChatMessageAttachmentComponent } from '../chat-message/chat-message-attachment/chat-message-attachment.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-private-chat-message',
-  imports: [CommonModule, PrivateMessageEditorComponent],
+  imports: [CommonModule, PrivateMessageEditorComponent, ChatMessageAttachmentComponent],
   templateUrl: './private-chat-message.component.html',
   styleUrls: [
     './private-chat-message.component.scss',

@@ -1,7 +1,7 @@
 <div
   class="message"
   [class.reverse]="answer.user.id == boardServ.currentUser.id"
-  [ngStyle]="{ 'margin-bottom.px': lastIndex() ? '135' : '0' }"
+  [ngClass]="lastIndex() ? 'mb-[135px]' : 'mb-0'"
   (mouseover)="toggleReactionPopup($event)"
   (mouseleave)="toggleReactionPopup($event)"
 >
@@ -75,9 +75,7 @@
     <img class="avatar-thread-img" src="{{ answer.user.avatarPath }}" alt="" />
     <div
       class="thread-message"
-      [ngStyle]="{
-        'align-items': answer.user.id == boardServ.currentUser.id ? 'flex-end' : 'flex-start',
-      }"
+      [ngClass]="answer.user.id == boardServ.currentUser.id ? 'items-end' : 'items-start'"
     >
       <div class="time-and-name-container">
         <span class="name">{{ answer.user.name }}</span>
@@ -99,9 +97,7 @@
 
       <span
         class="reaction-indicator-container"
-        [ngStyle]="{
-          'justify-content': answer.user.id == boardServ.currentUser.id ? 'flex-end' : 'flex-start',
-        }"
+        [ngClass]="answer.user.id == boardServ.currentUser.id ? 'justify-end' : 'justify-start'"
       >
         @for (reaction of answer.reactions; track reaction; let i = $index) {
           <div class="reaction-indicator">

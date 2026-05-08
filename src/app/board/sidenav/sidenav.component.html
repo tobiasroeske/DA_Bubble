@@ -1,10 +1,10 @@
 <div
   class="h-full bg-white rounded-3xl font-nunito flex flex-col justify-start gap-6 px-0 py-8 pl-[52px]"
-  [ngStyle]="{ display: boardServ.sidenavTranslate() ? 'flex' : 'none' }"
+  [class.hidden]="!boardServ.sidenavTranslate()"
 >
   <div
     class="w-full flex justify-between pr-[30px]"
-    [ngStyle]="{ display: boardServ.textHidden() ? 'none' : '' }"
+    [class.hidden]="boardServ.textHidden()"
   >
     <span class="flex justify-between gap-4">
       <img class="h-[60px] w-[60px] object-cover" src="assets/img/workspaceLogo.png" alt="" />
@@ -69,10 +69,8 @@
   <div class="flex flex-col justify-start gap-6 overflow-auto pr-[30px] w-full">
     <div
       class="flex flex-col justify-start items-start gap-[25px] w-full"
-      [ngStyle]="{
-        display: boardServ.textHidden() ? 'none' : '',
-        gap: firestore.allChannels().length == 0 ? '12px' : '25px',
-      }"
+      [class.hidden]="boardServ.textHidden()"
+      [ngClass]="firestore.allChannels().length == 0 ? 'gap-3' : 'gap-[25px]'"
     >
       <div class="w-full flex justify-between bg-white z-10">
         <div
@@ -80,7 +78,7 @@
           class="flex justify-between gap-4 cursor-pointer hover:[&_svg_path]:fill-[#535AF1] hover:[&_span]:text-[#535AF1]"
         >
           <svg
-            [ngStyle]="{ transform: channelHeaderIsClicked ? 'rotate(0deg)' : 'rotate(-90deg)' }"
+            [ngClass]="channelHeaderIsClicked ? 'rotate-0' : '-rotate-90'"
             class="w-4 h-[7px] object-contain transition-transform duration-200"
             width="10"
             height="7"
@@ -131,10 +129,8 @@
       </div>
       <div
         class="flex flex-col items-start gap-[25px] overflow-hidden w-full ml-4 transition-all duration-200"
-        [ngStyle]="{
-          display: channelHeaderIsClicked ? '' : 'none',
-          transform: canTranslateYChannel ? 'translateY(0%)' : 'translateY(-200%)',
-        }"
+        [class.hidden]="!channelHeaderIsClicked"
+        [class.-translate-y-full]="!canTranslateYChannel"
       >
         @for (channel of firestore.allChannels(); track channel; let index = $index) {
           <a
@@ -185,13 +181,13 @@
     <div
       (click)="onDirectMessageClick()"
       class="w-full"
-      [ngStyle]="{ display: boardServ.textHidden() ? 'none' : '' }"
+      [class.hidden]="boardServ.textHidden()"
     >
       <div
         class="flex justify-start gap-4 cursor-pointer hover:[&_svg_path]:fill-[#535AF1] hover:[&_h3]:text-[#535AF1]"
       >
         <svg
-          [ngStyle]="{ transform: directMessHeaderisClicked ? 'rotate(0deg)' : 'rotate(-90deg)' }"
+          [class.-rotate-90]="!directMessHeaderisClicked"
           class="w-4 h-[7px] object-contain transition-transform duration-200"
           width="10"
           height="7"
@@ -223,10 +219,8 @@
       </div>
 
       <div
-        [ngStyle]="{
-          display: directMessHeaderisClicked ? '' : 'none',
-          transform: canTranslateYUserList ? 'translateY(0%)' : 'translateY(-200%)',
-        }"
+        [class.hidden]="!directMessHeaderisClicked"
+        [class.-translate-y-full]="!canTranslateYUserList"
         class="flex flex-col items-start justify-between gap-4 transition-all duration-250 mt-[25px]"
       >
         @for (

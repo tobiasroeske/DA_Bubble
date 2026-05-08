@@ -1,4 +1,4 @@
-<div [ngStyle]="{'transform': memberServ.addSpecificPerson ? 'translateY(0)' : 'translateY(100%)'}"
+<div [ngClass]="memberServ.addSpecificPerson ? 'translate-y-0' : 'translate-y-full'"
     class="add-specific-person-container">
     <div class="mobile-title-add-persons">
         <span>Leute hinzufügen</span>
@@ -49,8 +49,8 @@
             }
             <input (focus)="hidePlaceholder()" (blur)="showPlaceholder()" placeholder="{{placeholder}}"
                 [(ngModel)]="searchValue"
-                [ngStyle]="{'width': selectedList.length == 0 && currentWindowWidth > 768 ? '100%' : '20%'}"
-                [ngStyle]="{'width': selectedList.length == 0 && currentWindowWidth <= 768 ? '100%' : '100%'}"
+                [ngClass]="selectedList.length == 0 && currentWindowWidth > 768 ? 'w-full' : 'w-1/5'"
+                class="w-full"
                 (input)="filterMembers(filter.value)" #filter class="search" name="text" type="text">
         </div>
     </div>

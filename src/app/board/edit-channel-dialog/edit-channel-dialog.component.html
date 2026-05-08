@@ -60,7 +60,7 @@
           <div (click)="onEditButtonClick($event)" class="mobile-desc-btn md:hidden">
             <svg
               class="icon-edit-name-or-desc-mobile"
-              [ngStyle]="{ display: editName === 'Speichern' ? 'none' : '' }"
+              [class.hidden]="editName === 'Speichern'"
               width="30"
               height="30"
               viewBox="0 0 30 30"
@@ -88,7 +88,7 @@
             </svg>
             <svg
               class="icon-edit-name-or-desc-mobile"
-              [ngStyle]="{ display: editName === 'Bearbeiten' ? 'none' : '' }"
+              [class.hidden]="editName === 'Bearbeiten'"
               width="30"
               height="30"
               viewBox="0 0 30 30"
@@ -153,7 +153,7 @@
           <div (click)="onDescriptionButtonClick($event)" class="mobile-desc-btn md:hidden">
             <svg
               class="icon-edit-name-or-desc-mobile"
-              [ngStyle]="{ display: editDesc === 'Speichern' ? 'none' : '' }"
+              [class.hidden]="editDesc === 'Speichern'"
               width="30"
               height="30"
               viewBox="0 0 30 30"
@@ -181,7 +181,7 @@
             </svg>
             <svg
               class="icon-edit-name-or-desc-mobile"
-              [ngStyle]="{ display: editDesc === 'Bearbeiten' ? 'none' : '' }"
+              [class.hidden]="editDesc === 'Bearbeiten'"
               width="30"
               height="30"
               viewBox="0 0 30 30"

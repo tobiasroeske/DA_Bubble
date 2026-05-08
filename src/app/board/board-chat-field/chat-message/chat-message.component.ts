@@ -20,11 +20,12 @@ import { FormsModule } from '@angular/forms';
 import { MessageEditorComponent } from '../message-editor/message-editor.component';
 import { FirebaseStorageService } from '../../../shared/services/firebase-storage-service/firebase-storage.service';
 import { Channel } from '../../../shared/models/channel.class';
+import { ChatMessageAttachmentComponent } from './chat-message-attachment/chat-message-attachment.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-chat-message',
-  imports: [CommonModule, FormsModule, MessageEditorComponent],
+  imports: [CommonModule, FormsModule, MessageEditorComponent, ChatMessageAttachmentComponent],
   templateUrl: './chat-message.component.html',
   styleUrls: [
     './chat-message.component.scss',
@@ -51,8 +52,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   memberDialogIsOpen: boolean = false;
   reactionDialogOpen = false;
   reactionDialogIndicatorbarOpen = false;
-  membersList: any[] = [];
-  currentUserName!: any;
+  currentUserName!: string;
   lastReactions: string[] = ['thumbs_up', 'laughing'];
   currentChatMessage!: ChatMessage;
   editorOpen = false;
