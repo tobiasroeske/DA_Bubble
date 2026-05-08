@@ -67,9 +67,9 @@
             }
           }
         </span>
-        @if (firestore.allChannels()[boardServ.idx]?.members.length > 4) {
+        @if ((firestore.allChannels()[boardServ.idx]?.members?.length ?? 0) > 4) {
           <span class="text-xl font-semibold"
-            >+{{ firestore.allChannels()[boardServ.idx]?.members.length - 4 }}</span
+            >+{{ (firestore.allChannels()[boardServ.idx]?.members?.length ?? 4) - 4 }}</span
           >
         }
         @if (memberServ.membersDialogIsOpen) {
@@ -96,7 +96,7 @@
         @if (memberServ.addMemberDialogIsOpen) {
           <app-add-member-dialog
             [currentChannel]="firestore.allChannels()[boardServ.idx]"
-            [currentChannelId]="firestore.allChannels()[boardServ.idx]?.id"
+            [currentChannelId]="firestore.allChannels()[boardServ.idx]?.id ?? ''"
           ></app-add-member-dialog>
         }
       </div>
@@ -156,7 +156,7 @@
         [lastIndex]="lastIndex"
         [chatMessageIndex]="i"
         [chat]="chat"
-        [channelId]="firestore.allChannels()[boardServ.idx]?.id"
+        [channelId]="firestore.allChannels()[boardServ.idx]?.id ?? ''"
         [currentChannel]="firestore.allChannels()[boardServ.idx]"
       ></app-chat-message>
     }
@@ -230,8 +230,8 @@
 @if (!boardServ.privateChatIsStarted()) {
   <app-create-message-area
     [index]="boardServ.idx"
-    [channelId]="firestore.allChannels()[boardServ.idx]?.id"
-    [channelTitle]="firestore.allChannels()[boardServ.idx]?.title"
+    [channelId]="firestore.allChannels()[boardServ.idx]?.id ?? ''"
+    [channelTitle]="firestore.allChannels()[boardServ.idx]?.title ?? ''"
     [channels]="firestore.allChannels()"
     [hidden]="firestore.allChannels().length == 0"
   ></app-create-message-area>

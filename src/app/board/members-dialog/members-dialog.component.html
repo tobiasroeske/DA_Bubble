@@ -38,7 +38,7 @@
   <div
     class="flex flex-col items-start gap-[13px] overflow-y-auto max-h-[300px] w-full scrollbar-thin scrollbar-thumb-[#ADB0D9]"
   >
-    @if (firestore.allChannels()[boardServ.idx]?.members.length > 0) {
+    @if ((firestore.allChannels()[boardServ.idx]?.members?.length ?? 0) > 0) {
       @for (user of firestore.allChannels()[boardServ.idx].members; track user.id; let i = $index) {
         @if (user.selected) {
           <div

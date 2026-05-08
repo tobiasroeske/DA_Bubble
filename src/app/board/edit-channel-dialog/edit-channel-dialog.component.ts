@@ -47,7 +47,7 @@ export class EditChannelDialogComponent {
   constructor() {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.title = this.firestore.allChannels()[this.boardServ.idx].title;
-    this.description = this.firestore.allChannels()[this.boardServ.idx].description;
+    this.description = this.firestore.allChannels()[this.boardServ.idx].description ?? '';
     this.creatorName = this.firestore.allChannels()[this.boardServ.idx].creatorName;
   }
 

@@ -1,24 +1,22 @@
-import { Injectable, inject } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
 import { BoardService } from '../board-service/board.service';
 import { FirestoreService } from '../firestore-service/firestore.service';
 
 export enum IdleUserTimes {
   IdleTime = 10000,
-  CountdownTime = 5000
+  CountdownTime = 5000,
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class IdleService {
   boardServ = inject(BoardService);
-  firestore = inject(FirestoreService)
-  private timeoutId: any;
-  private countdownId: any;
+  firestore = inject(FirestoreService);
+
+  private timeoutId: ReturnType<typeof setTimeout> | undefined;
+  private countdownId: ReturnType<typeof setInterval> | undefined;
   private countdownValue!: number;
 
-  userInactive: Subject<boolean> = new Subject();
+  readonly userInactive = signal<boolean>(false);
 
   constructor() {
     this.reset();
@@ -26,18 +24,20 @@ export class IdleService {
   }
 
   initListener() {
-    window.addEventListener('mousemove', () => this.reset());
-    window.addEventListener('click', () => this.reset());
-    window.addEventListener('keypress', () => this.reset());
-    window.addEventListener('DOMMouseScroll', () => this.reset());
-    window.addEventListener('mousewheel', () => this.reset());
-    window.addEventListener('touchmove', () => this.reset());
-    window.addEventListener('MSPointerMove', () => this.reset());
+    const resetFn = () => this.reset();
+    window.addEventListener('mousemove', resetFn);
+    window.addEventListener('click', resetFn);
+    window.addEventListener('keypress', resetFn);
+    window.addEventListener('DOMMouseScroll', resetFn);
+    window.addEventListener('mousewheel', resetFn);
+    window.addEventListener('touchmove', resetFn);
+    window.addEventListener('MSPointerMove', resetFn);
   }
 
-  async reset() {
+  reset() {
     clearTimeout(this.timeoutId);
-    clearTimeout(this.countdownId);
+    clearInterval(this.countdownId);
+    this.userInactive.set(false);
     this.startIdleTimer();
   }
 
@@ -53,7 +53,7 @@ export class IdleService {
       this.countdownValue--;
       if (this.countdownValue <= 0) {
         clearInterval(this.countdownId);
-        this.userInactive.next(true);
+        this.userInactive.set(true);
       }
     }, 1000);
   }

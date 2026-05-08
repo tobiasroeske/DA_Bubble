@@ -1,337 +1,137 @@
-import { Injectable, inject, signal, OnDestroy } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { UserRepository } from '../../repositories/user.repository';
+import { ChannelRepository } from '../../repositories/channel.repository';
+import { DirectMessageRepository } from '../../repositories/direct-message.repository';
 import { CurrentUser } from '../../interfaces/currentUser.interface';
-import {
-  Firestore,
-  addDoc,
-  arrayUnion,
-  collection,
-  doc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-  query,
-  where,
-  orderBy,
-  deleteDoc,
-} from '@angular/fire/firestore';
 import { Channel } from '../../models/channel.class';
 import { PrivateChat } from '../../models/privateChat.class';
 import { ChatMessage } from '../../interfaces/chatMessage.interface';
-import { Auth, Unsubscribe } from '@angular/fire/auth';
-import { User } from '../../models/user.class';
-import { Subscribable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class FirestoreService implements OnDestroy {
-  private firestore: Firestore = inject(Firestore);
-  private auth: Auth = inject(Auth);
+/**
+ * Facade that delegates to focused repositories.
+ * All existing consumers continue to work without changes.
+ */
+@Injectable({ providedIn: 'root' })
+export class FirestoreService {
+  private readonly userRepo = inject(UserRepository);
+  private readonly channelRepo = inject(ChannelRepository);
+  private readonly dmRepo = inject(DirectMessageRepository);
 
-  readonly userList = signal<CurrentUser[]>([]);
-  readonly allChannels = signal<any[]>([]);
-  readonly allExistingChannels = signal<Channel[]>([]);
-  readonly directMessages = signal<PrivateChat[]>([]);
-  readonly allDirectMessages = signal<PrivateChat[]>([]);
+  // ── Signals (re-exported from repositories) ────────────────────────────
+  readonly userList = this.userRepo.userList;
+  readonly allChannels = this.channelRepo.allChannels;
+  readonly allExistingChannels = this.channelRepo.allExistingChannels;
+  readonly directMessages = this.dmRepo.directMessages;
+  readonly allDirectMessages = this.dmRepo.allDirectMessages;
 
-  private unsubscribeUsers: Unsubscribe | undefined;
-  private unsubChannel: Unsubscribe | undefined;
-  private unsubAllChannels: Unsubscribe | undefined;
-  private unsubDirectMess: Unsubscribe | undefined;
-  private unsubAllDirectMessages: Unsubscribe | undefined;
-
-  newChannelId?: string;
-  chatRoomId?: string;
-  currentUserId?: string;
-
-  constructor() {
-    this.initSubscriptions();
+  // ── Mutable state forwarded from repositories ───────────────────────────
+  get newChannelId(): string | undefined {
+    return this.channelRepo.newChannelId;
+  }
+  set newChannelId(v: string | undefined) {
+    this.channelRepo.newChannelId = v;
   }
 
-  private initSubscriptions(): void {
-    this.unsubscribeUsers = this.subUsersList();
-    this.auth.onAuthStateChanged(user => {
-      if (user) {
-        this.currentUserId = user.uid;
-        this.unsubChannel = this.subChannelList();
-        this.unsubDirectMess = this.subDirectMessages();
-        this.unsubAllChannels = this.subAllExistingChannelList();
-        this.unsubAllDirectMessages = this.subAllExistingChatRooms();
-      }
-    });
+  get chatRoomId(): string | undefined {
+    return this.dmRepo.chatRoomId;
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribeAll();
+  get currentUserId(): string | undefined {
+    return this.channelRepo.currentUserId;
   }
 
-  private unsubscribeAll(): void {
-    this.unsubscribeUsers?.();
-    this.unsubChannel?.();
-    this.unsubDirectMess?.();
-    this.unsubAllChannels?.();
-    this.unsubAllDirectMessages?.();
-  }
-
+  // ── User operations ─────────────────────────────────────────────────────
   getUsersRef() {
-    return collection(this.firestore, 'users');
+    return this.userRepo.getUsersRef();
   }
 
   getUserDocRef(userId: string) {
-    return doc(this.getUsersRef(), userId);
+    return this.userRepo.getUserDocRef(userId);
   }
 
   async addUser(userId: string, user: CurrentUser): Promise<void> {
-    try {
-      await setDoc(this.getUserDocRef(userId), user);
-    } catch (error) {
-      console.error('Error adding user:', error);
-    }
+    return this.userRepo.addUser(userId, user);
   }
 
   async updateUser(userId: string, newUser: CurrentUser): Promise<void> {
-    try {
-      const userRef = this.getUserDocRef(userId);
-      const userUpdate = this.setUserObject(newUser, userId);
-      await updateDoc(userRef, userUpdate);
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
+    return this.userRepo.updateUser(userId, newUser);
   }
 
-  async updateUserNotification(userId: string, notification: any): Promise<void> {
-    try {
-      const userRef = this.getUserDocRef(userId);
-      await updateDoc(userRef, { notification: arrayUnion(notification) });
-    } catch (error) {
-      console.error('Error updating user notification:', error);
-    }
+  async updateUserNotification(userId: string, notification: unknown): Promise<void> {
+    return this.userRepo.updateUserNotification(userId, notification);
   }
 
-  subUsersList(): Unsubscribe {
-    return onSnapshot(this.getUsersRef(), list => {
-      const items: CurrentUser[] = [];
-      list.forEach(user => {
-        const singleUser: CurrentUser = this.setUserObject(user.data(), user.id);
-        items.push(singleUser);
-      });
-      this.userList.set(items);
-    });
+  setUserObject(obj: Record<string, unknown>, id: string): CurrentUser {
+    return this.userRepo.setUserObject(obj, id);
   }
 
-  getCleanUserJson(obj: any) {
-    return {
-      id: obj.id ? obj.id : '',
-      name: obj.name,
-      email: obj.email,
-      avatarPath: obj.avatarPath,
-      selected: obj.selected ? obj.selected : false,
-      directMessages: obj.directMessages ? obj.directMessages : [],
-    };
+  getCleanUserJson(obj: Record<string, unknown>) {
+    return this.userRepo.getCleanUserJson(obj);
   }
 
-  setUserObject(obj: any, id: string) {
-    return {
-      id: id || '',
-      name: obj.name || '',
-      email: obj.email || '',
-      avatarPath: obj.avatarPath || '',
-      selected: obj.selected || false,
-      directMessages: obj.directMessages || [],
-      loginState: obj.loginState || 'loggedOut',
-      type: obj.type || 'CurrentUser',
-      notification: obj.notification || [],
-    };
-  }
-
-  subChannelList(): Unsubscribe {
-    const q = query(
-      this.getChannelsRef(),
-      where('partecipantsIds', 'array-contains', this.currentUserId)
-    );
-    return onSnapshot(q, list => {
-      const items: any[] = [];
-      list.forEach(el => {
-        const channel = new Channel(el.data());
-        channel.id = el.id;
-        items.push(channel.toJSON());
-      });
-      this.allChannels.set(items);
-    });
-  }
-
-  subAllExistingChannelList(): Unsubscribe {
-    return onSnapshot(this.getChannelsRef(), list => {
-      const items: Channel[] = [];
-      list.forEach(c => {
-        const channel = new Channel(c.data());
-        channel.id = c.id;
-        this.checkIfChannelHasMembers(channel, channel.id);
-        items.push(channel);
-      });
-      this.allExistingChannels.set(items);
-    });
-  }
-
-  private async checkIfChannelHasMembers(channel: Channel, channelId: string): Promise<void> {
-    if (channel.members.length <= 0) {
-      try {
-        await deleteDoc(this.getSingleChannelRef('channels', channelId));
-      } catch (error) {
-        console.error('Error deleting empty channel:', error);
-      }
-    }
-  }
-
-  async addChannel(obj: {}): Promise<void> {
-    try {
-      const docRef = await addDoc(this.getChannelsRef(), obj);
-      if (docRef?.id) {
-        this.newChannelId = docRef.id;
-        await updateDoc(this.getSingleChannelRef('channels', this.newChannelId), {
-          id: this.newChannelId,
-        });
-      }
-    } catch (error) {
-      console.error('Error adding channel:', error);
-    }
-  }
-
-  async updateChannel(item: {}, docId: string): Promise<void> {
-    try {
-      const docRef = this.getSingleChannelRef('channels', docId);
-      await updateDoc(docRef, item);
-    } catch (error) {
-      console.error('Error updating channel:', error);
-    }
-  }
-
-  async updateAllChats(docId: string, newChats: ChatMessage[]): Promise<void> {
-    try {
-      const chatRef = this.getSingleChannelRef('channels', docId);
-      await updateDoc(chatRef, { chat: newChats });
-    } catch (error) {
-      console.error('Error updating all chats:', error);
-    }
-  }
-
-  async updateChannelUsers(updatedUser: any, docId: string): Promise<void> {
-    try {
-      const channelRef = this.getSingleChannelRef('channels', docId);
-      await updateDoc(channelRef, { allUsers: updatedUser });
-    } catch (error) {
-      console.error('Error updating channel users:', error);
-    }
-  }
-
-  async updateMembers(updateMembers: string | CurrentUser, docId: string): Promise<void> {
-    try {
-      const channelRef = this.getSingleChannelRef('channels', docId);
-      await updateDoc(channelRef, { members: arrayUnion(updateMembers) });
-    } catch (error) {
-      console.error('Error updating members:', error);
-    }
-  }
-
-  async updatePartecipantsIds(id: string, docId: string): Promise<void> {
-    try {
-      const channelRef = this.getSingleChannelRef('channels', docId);
-      await updateDoc(channelRef, { partecipantsIds: arrayUnion(id) });
-    } catch (error) {
-      console.error('Error updating participants IDs:', error);
-    }
-  }
-
-  async updateChats(docId: string, messageObject: ChatMessage): Promise<void> {
-    try {
-      const chatRef = this.getSingleChannelRef('channels', docId);
-      await updateDoc(chatRef, { chat: arrayUnion(messageObject) });
-    } catch (error) {
-      console.error('Error updating chats:', error);
-    }
-  }
-
-  subDirectMessages(): Unsubscribe {
-    const q = query(
-      this.getDirectMessRef(),
-      where('partecipantsIds', 'array-contains', this.currentUserId),
-      orderBy('lastUpdateAt', 'desc')
-    );
-    return onSnapshot(q, list => {
-      const items: PrivateChat[] = [];
-      list.forEach(el => {
-        const privateChat = new PrivateChat(el.data());
-        items.push(privateChat);
-      });
-      this.directMessages.set(items);
-    });
-  }
-
-  subAllExistingChatRooms(): Unsubscribe {
-    return onSnapshot(this.getDirectMessRef(), list => {
-      const items: PrivateChat[] = [];
-      list.forEach(el => {
-        const privateChat = new PrivateChat(el.data());
-        items.push(privateChat);
-      });
-      this.allDirectMessages.set(items);
-    });
-  }
-
-  async addChatRoom(obj: {}): Promise<void> {
-    try {
-      const docRef = await addDoc(this.getDirectMessRef(), obj);
-      if (docRef?.id) {
-        this.chatRoomId = docRef.id;
-        await updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId });
-      }
-    } catch (error) {
-      console.error('Error adding chat room:', error);
-    }
-  }
-
-  async updatePrivateChat(docId: string, messageObject: ChatMessage) {
-    const chatRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(chatRef, { chat: arrayUnion(messageObject) }).then(() => {
-      updateDoc(chatRef, { lastUpdateAt: new Date().getTime() }).then(() => {});
-    });
-  }
-
-  async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat) {
-    try {
-      const pmRef = this.getDirectMessSingleDoc(docId);
-      await updateDoc(pmRef, privateMessage.toJSON()).catch(err => console.error(err));
-    } catch (error) {
-      console.error('Error updating complete private messages', error);
-    }
-  }
-
-  async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]) {
-    try {
-      const chatRef = this.getDirectMessSingleDoc(docId);
-      await updateDoc(chatRef, { chat: messageObject });
-    } catch (error) {
-      console.error('Error updating complete private chats', error);
-    }
-  }
-
-  getChatsRef(channelId: string) {
-    return collection(this.firestore, 'channels', channelId, 'chatMessages');
-  }
-
+  // ── Channel operations ──────────────────────────────────────────────────
   getChannelsRef() {
-    return collection(this.firestore, 'channels');
+    return this.channelRepo.getChannelsRef();
   }
 
   getSingleChannelRef(colId: string, docId: string) {
-    return doc(collection(this.firestore, colId), docId);
+    return this.channelRepo.getSingleChannelRef(colId, docId);
   }
 
+  getChatsRef(channelId: string) {
+    return this.channelRepo.getSingleChannelRef('channels', channelId);
+  }
+
+  async addChannel(obj: object): Promise<void> {
+    return this.channelRepo.addChannel(obj);
+  }
+
+  async updateChannel(item: object, docId: string): Promise<void> {
+    return this.channelRepo.updateChannel(item, docId);
+  }
+
+  async updateAllChats(docId: string, newChats: ChatMessage[]): Promise<void> {
+    return this.channelRepo.updateAllChats(docId, newChats);
+  }
+
+  async updateChannelUsers(updatedUser: unknown, docId: string): Promise<void> {
+    return this.channelRepo.updateChannelUsers(updatedUser, docId);
+  }
+
+  async updateMembers(updateMembers: string | CurrentUser, docId: string): Promise<void> {
+    return this.channelRepo.updateMembers(updateMembers, docId);
+  }
+
+  async updatePartecipantsIds(id: string, docId: string): Promise<void> {
+    return this.channelRepo.updatePartecipantsIds(id, docId);
+  }
+
+  async updateChats(docId: string, messageObject: ChatMessage): Promise<void> {
+    return this.channelRepo.updateChats(docId, messageObject);
+  }
+
+  // ── Direct Message operations ────────────────────────────────────────────
   getDirectMessRef() {
-    return collection(this.firestore, 'direct-messages');
+    return this.dmRepo.getDirectMessRef();
   }
 
-  getDirectMessSingleDoc(colId: string) {
-    return doc(this.getDirectMessRef(), colId);
+  getDirectMessSingleDoc(docId: string) {
+    return this.dmRepo.getDirectMessSingleDoc(docId);
+  }
+
+  async addChatRoom(obj: object): Promise<void> {
+    return this.dmRepo.addChatRoom(obj);
+  }
+
+  async updatePrivateChat(docId: string, messageObject: ChatMessage): Promise<void> {
+    return this.dmRepo.updatePrivateChat(docId, messageObject);
+  }
+
+  async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat): Promise<void> {
+    return this.dmRepo.updateCompletePrivateMessage(docId, privateMessage);
+  }
+
+  async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]): Promise<void> {
+    return this.dmRepo.updateCompletlyPrivateChat(docId, messageObject);
   }
 }

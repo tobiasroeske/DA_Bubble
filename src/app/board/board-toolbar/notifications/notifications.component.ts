@@ -48,11 +48,11 @@ export class NotificationsComponent {
       .allChannels()
       .findIndex((chan: Channel) => chan.title === notificChannel);
     const currentChannel = this.firestoreService.allChannels()[indexOfCurrentChannel];
-    const idxOfCurrentNotificMessage = currentChannel.chat.findIndex(
+    const idxOfCurrentNotificMessage = currentChannel.chat?.findIndex(
       (chat: ChatMessage) => chat.message.trim() == notificMessage.trim()
     );
     this.boardServ.showChannelInChatField(indexOfCurrentChannel, event);
-    this.boardServ.scrollToChannelMessageAfterClickOnNotific(idxOfCurrentNotificMessage);
+    this.boardServ.scrollToChannelMessageAfterClickOnNotific(idxOfCurrentNotificMessage ?? -1);
   }
 
   async markAsRed(index: number) {

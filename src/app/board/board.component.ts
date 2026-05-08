@@ -1,12 +1,11 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  DestroyRef,
   HostListener,
   OnInit,
+  effect,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { BoardToolbarComponent } from './board-toolbar/board-toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -50,10 +49,17 @@ export class BoardComponent implements OnInit {
   idleUserService = inject(IdleService);
   localStorageService = inject(LocalStorageService);
 
-  private readonly destroyRef = inject(DestroyRef);
-
   isUserIdle = false;
   profileOptionContainerOpen = false;
+
+  constructor() {
+    effect(() => {
+      if (this.idleUserService.userInactive()) {
+        this.boardServ.currentUser.loginState = 'idle';
+        this.firestore.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
+      }
+    });
+  }
 
   @HostListener('window:resize', ['$event'])
   handleResize(event: Event) {
@@ -81,14 +87,6 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this.boardServ.checkScreenSize();
     this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
-    this.idleUserService.userInactive
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(isIdle => {
-        if (isIdle) {
-          this.boardServ.currentUser.loginState = 'idle';
-          this.firestore.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
-        }
-      });
   }
 
   getUserNotifications() {
