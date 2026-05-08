@@ -28,7 +28,8 @@ import { Component, ChangeDetectionStrategy, input, output } from '@angular/core
             download="download.image.png"
             target="_blank"
             class="link absolute z-[100] opacity-0 cursor-pointer rounded-full p-2 bg-[#e6e6e6] transition-all duration-[125ms]"
-          ><img src="assets/icons/download_icon.png" alt="" class="w-16 h-16" /></a>
+            ><img src="assets/icons/download_icon.png" alt="" class="w-16 h-16"
+          /></a>
           <img
             src="assets/icons/close.svg"
             alt=""

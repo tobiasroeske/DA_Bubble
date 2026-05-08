@@ -19,7 +19,7 @@
       [ngClass]="{
         'w-full': boardServ.mobileView() && boardServ.sidenavTranslate(),
         'w-[366px]': !boardServ.mobileView() && boardServ.sidenavTranslate(),
-        'w-0': !boardServ.sidenavTranslate()
+        'w-0': !boardServ.sidenavTranslate(),
       }"
     ></app-sidenav>
 
@@ -36,7 +36,7 @@
       [ngClass]="{
         'w-full': boardServ.threadTranslate() && boardServ.mobileView(),
         'w-[485px]': boardServ.threadTranslate() && !boardServ.mobileView(),
-        'w-0': !boardServ.threadTranslate()
+        'w-0': !boardServ.threadTranslate(),
       }"
       style="transition: all 0.15s cubic-bezier(0.215, 0.61, 0.355, 1)"
     ></app-thread>

@@ -1,8 +1,4 @@
-<div
-  #channelMessages
-  class="relative"
-  [ngClass]="lastIndex() ? 'mb-[135px]' : 'mb-0'"
->
+<div #channelMessages class="relative" [ngClass]="lastIndex() ? 'mb-[135px]' : 'mb-0'">
   <div class="relative w-full h-[35px] flex items-center justify-start">
     <span class="block bg-[rgba(173,176,217,1)] h-px w-full"></span>
     <div class="absolute inset-0 flex items-center justify-center">
@@ -136,7 +132,7 @@
     [ngClass]="{
       'bg-[#BDBFE1]!': boardServ.highlightArrayForTheChannelElementSearched[chatMessageIndex()],
       'bg-[#ECEEFE]': mouseIsOverMessage,
-      'bg-white': !mouseIsOverMessage
+      'bg-white': !mouseIsOverMessage,
     }"
     (mouseover)="onHover('message-box')"
     (mouseleave)="onLeave('message-box')"
@@ -234,7 +230,7 @@
         [ngClass]="{
           'justify-between': chat.answers.length > 1,
           'justify-end': chat.answers.length <= 1 && chat.user.id == boardServ.currentUser.id,
-          'justify-start': chat.answers.length <= 1 && chat.user.id !== boardServ.currentUser.id
+          'justify-start': chat.answers.length <= 1 && chat.user.id !== boardServ.currentUser.id,
         }"
       >
         <div
@@ -258,4 +254,3 @@
     </div>
   </div>
 </div>
-
