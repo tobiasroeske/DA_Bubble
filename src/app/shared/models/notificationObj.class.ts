@@ -14,17 +14,17 @@ export class NotificationObj {
 
 
     constructor(obj?: any) {
-        this.date = obj ? obj.date : 0,
-            this.channelName = obj ? obj.channelName : '',
-            this.channelId = obj ? obj.channelId : '',
-            this.senderName = obj ? obj.senderName : '',
-            this.senderImage = obj ? obj.senderImage : '',
-            this.senderId = obj ? obj.senderId : '',
-            this.receiverImage = obj ? obj.receiverImage : '',
-            this.receiverName = obj ? obj.receiverName : '',
-            this.receiverId = obj ? obj.receiverId : '',
-            this.message = obj ? obj.message : ''
-            this.notificationRed = obj ? obj.notificationRed : false
+        this.date = obj ? obj.date : 0;
+        this.channelName = obj ? obj.channelName : '';
+        this.channelId = obj ? obj.channelId : '';
+        this.senderName = obj ? obj.senderName : '';
+        this.senderImage = obj ? obj.senderImage : '';
+        this.senderId = obj ? obj.senderId : '';
+        this.receiverImage = obj ? obj.receiverImage : '';
+        this.receiverName = obj ? obj.receiverName : '';
+        this.receiverId = obj ? obj.receiverId : '';
+        this.message = obj ? obj.message : '';
+        this.notificationRed = obj ? obj.notificationRed : false;
     }
 
     public toJSON(): {} {

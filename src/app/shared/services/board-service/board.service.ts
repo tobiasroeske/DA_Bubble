@@ -78,10 +78,6 @@ export class BoardService {
 
   searchText: string = "";
 
-  ngOnInit(){
-   this.loadCurrentUser();
-  }
-
   loadCurrentUser(){
     this.checkScreenSize();
     this.currentUser = this.storageService.loadCurrentUser()!;
@@ -120,8 +116,8 @@ export class BoardService {
   }
 
   getUserLoginState(participant: CurrentUser): string {
-    let allUsers: CurrentUser[] = this.firestore.userList();
-    let user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
+    const allUsers: CurrentUser[] = this.firestore.userList();
+    const user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
     return user.loginState
   }
 
@@ -295,7 +291,7 @@ export class BoardService {
 
   scrollToSearchedMessage(index: number) {
     setTimeout(() => {
-      let element = this.privateMessagesElementsToArray[index];
+      const element = this.privateMessagesElementsToArray[index];
       if (element) {
         element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         this.highlightArrayForTheChildElementSearched[index] = true;
@@ -314,7 +310,7 @@ export class BoardService {
 
   scrollToChannelMessageAfterClickOnNotific(index: number) {
     setTimeout(() => {
-      let element = this.channelMessageElementsToArray[index];
+      const element = this.channelMessageElementsToArray[index];
       if (element) {
         element.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         this.highlightArrayForTheChannelElementSearched[index] = true;

@@ -46,3 +46,13 @@ Thumbs.db
 *-debug.log
 .runtimeconfig.json
 .claude/
+
+# Local environment files with secrets (never commit these)
+src/environments/environment.local.ts
+.env
+.env.local
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

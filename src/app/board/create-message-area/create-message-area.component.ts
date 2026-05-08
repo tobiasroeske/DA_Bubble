@@ -30,8 +30,8 @@ export class CreateMessageAreaComponent {
   boardService = inject(BoardService);
   signUpServ = inject(SignupService);
   firestoreService = inject(FirestoreService);
-  fbStorageService = inject(FirebaseStorageService)
-  localStorageServ = inject(LocalStorageService)
+  fbStorageService = inject(FirebaseStorageService);
+  localStorageServ = inject(LocalStorageService);
 
   textMessage: string = '';
   memberToTag: string = '';
@@ -47,7 +47,7 @@ export class CreateMessageAreaComponent {
   filteredChannels: Channel[] = [];
   uploadedFile: string = '';
   filePath: string = '';
-  preview = 'false';
+  preview = false;
   member: CurrentUser | null = null;
 
   notificationObject = new NotificationObj();
@@ -136,7 +136,7 @@ export class CreateMessageAreaComponent {
 
   async onFileChange(event: any): Promise<void> {
     this.fileSizeToGreat = false;
-    let file = event.target.files[0];
+    const file = event.target.files[0];
     if (file && file.size <= 500000) {
       this.filePath = `fileUploads/${file.name}`;
       try {
@@ -178,7 +178,7 @@ export class CreateMessageAreaComponent {
 
   toggleTagMemberDialog() {
     this.filteredMembers = this.firestoreService.allChannels()[this.boardService.idx].members;
-    this.tagMembers = !this.tagMembers
+    this.tagMembers = !this.tagMembers;
   }
 
   tagMember(i: number) {
@@ -195,29 +195,27 @@ export class CreateMessageAreaComponent {
     if (this.channelToTag.length > 0) {
       this.removeStringToTagFromTextMessage(this.channelToTag);
     }
-    let channel = this.filteredChannels[i];
-    let channelIndex = this.findIndexOfChannel(channel);
+    const channel = this.filteredChannels[i];
+    const channelIndex = this.findIndexOfChannel(channel);
     this.boardService.showChannelInChatField(channelIndex, event)
     this.tagChannels = false;
     this.channelToTag = '';
   }
 
   findIndexOfChannel(channel: Channel) {
-    let allChannels = this.firestoreService.allChannels();
-    return allChannels.findIndex(c => c.id == channel.id);
+    const allChannels = this.firestoreService.allChannels();
+    return allChannels.findIndex(c => c.id === channel.id);
   }
 
   removeStringToTagFromTextMessage(string: string) {
-    let regex = new RegExp(`${string}`, 'gi');
+    const regex = new RegExp(`${string}`, 'gi');
     this.textMessage = this.textMessage.replace(regex, '').trim();
-    string = '';
   }
 
   async sendMessage() {
-    debugger
     if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       try {
-        let date = new Date().getTime();
+        const date = new Date().getTime();
         await this.firestoreService.updateChats(this.channelId, this.setMessageObject(date));
         if (this.member != null) {
           this.notificationObject = new NotificationObj();
@@ -262,14 +260,14 @@ export class CreateMessageAreaComponent {
   }
 
   filterMember() {
-    let members: CurrentUser[] = this.firestoreService.allChannels()[this.boardService.idx].members
-    let lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
+    const members: CurrentUser[] = this.firestoreService.allChannels()[this.boardService.idx].members
+    const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
     this.filteredMembers = members.filter(member => member.name.toLowerCase().includes(lowerCaseTag))
   }
 
   filterChannels() {
-    let channels: Channel[] = this.firestoreService.allChannels();
-    let lowerCaseTag = this.channelToTag.slice(1).toLowerCase();
+    const channels: Channel[] = this.firestoreService.allChannels();
+    const lowerCaseTag = this.channelToTag.slice(1).toLowerCase();
     this.filteredChannels = channels.filter(channel => channel.title.toLowerCase().includes(lowerCaseTag));
   }
 
