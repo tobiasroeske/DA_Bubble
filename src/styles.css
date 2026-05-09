@@ -11,57 +11,59 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  html {
+    scroll-behavior: smooth;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-body {
-  background: rgba(236, 238, 254, 1);
-  width: 100%;
-  max-width: 1920px;
-  user-select: none;
-}
+  body {
+    background: rgba(236, 238, 254, 1);
+    width: 100%;
+    max-width: 1920px;
+    user-select: none;
+  }
 
-body::-webkit-scrollbar {
-  width: 6px;
-}
+  body::-webkit-scrollbar {
+    width: 6px;
+  }
 
-body::-webkit-scrollbar-thumb {
-  background: rgba(173, 176, 217, 1);
-  border-radius: 100px;
-}
+  body::-webkit-scrollbar-thumb {
+    background: rgba(173, 176, 217, 1);
+    border-radius: 100px;
+  }
 
-a {
-  text-decoration: none;
-  color: #797ef3;
-  font-size: 18px;
-  font-family: 'Figtree', sans-serif;
-  transition: border-color 0.125s ease-in-out;
-  padding: 10px 15px;
-  border: 1px solid transparent;
-  border-radius: 25px;
-}
+  a {
+    text-decoration: none;
+    color: #797ef3;
+    font-size: 18px;
+    font-family: 'Figtree', sans-serif;
+    transition: border-color 0.125s ease-in-out;
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    border-radius: 25px;
+  }
 
-a:hover {
-  border-color: #bdbfe1;
-}
+  a:hover {
+    border-color: #bdbfe1;
+  }
 
-button {
-  cursor: pointer;
-  background-color: transparent;
-  outline: none;
-  border: none;
+  button {
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: none;
+  }
 }
 
 .btn-no-style {
@@ -69,7 +71,6 @@ button {
   padding: 12px 25px;
   border: 1px solid #797ef3;
   border-radius: 25px;
-  background-color: transparent;
   font-family: 'Nunito', sans-serif;
   font-size: 18px;
   font-weight: 700;
