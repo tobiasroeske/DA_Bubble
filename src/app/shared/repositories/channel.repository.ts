@@ -76,15 +76,7 @@ export class ChannelRepository {
   }
 
   getReplyRef(channelId: string, messageId: string, replyId: string) {
-    return doc(
-      this.firestore,
-      'channels',
-      channelId,
-      'messages',
-      messageId,
-      'replies',
-      replyId
-    );
+    return doc(this.firestore, 'channels', channelId, 'messages', messageId, 'replies', replyId);
   }
 
   subChannelList(): Unsubscribe {
@@ -93,9 +85,7 @@ export class ChannelRepository {
       where('memberIds', 'array-contains', this.currentUserId)
     );
     return onSnapshot(q, snapshot => {
-      this.allChannels.set(
-        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Channel)
-      );
+      this.allChannels.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Channel));
     });
   }
 
@@ -115,9 +105,7 @@ export class ChannelRepository {
     this.unsubMessages?.();
     const q = query(this.getMessagesRef(channelId), orderBy('timestamp', 'asc'));
     this.unsubMessages = onSnapshot(q, snapshot => {
-      this.currentMessages.set(
-        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message)
-      );
+      this.currentMessages.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message));
     });
   }
 
@@ -125,9 +113,7 @@ export class ChannelRepository {
     this.unsubReplies?.();
     const q = query(this.getRepliesRef(channelId, messageId), orderBy('timestamp', 'asc'));
     this.unsubReplies = onSnapshot(q, snapshot => {
-      this.currentReplies.set(
-        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message)
-      );
+      this.currentReplies.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message));
     });
   }
 

@@ -240,8 +240,10 @@ export class BoardService {
     const dm = this.firestore.directMessages()[index];
     this.chatPartnerIdx = index;
     this.privateChatId = dm.id || this.firestore.chatRoomId;
-    const otherUserId = dm.participantIds.find(id => id !== this.currentUser.id) ?? dm.participantIds[0];
-    this.currentChatPartner = this.firestore.userList().find(u => u.id === otherUserId) ?? this.currentUser;
+    const otherUserId =
+      dm.participantIds.find(id => id !== this.currentUser.id) ?? dm.participantIds[0];
+    this.currentChatPartner =
+      this.firestore.userList().find(u => u.id === otherUserId) ?? this.currentUser;
     this.selectedChatRoom = dm;
     if (dm.id) {
       this.firestore.subscribeToDirectMessages(dm.id);

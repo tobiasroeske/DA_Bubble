@@ -73,9 +73,7 @@ export class UserRepository {
 
   subUsersList(): Unsubscribe {
     return onSnapshot(this.getUsersRef(), snapshot => {
-      this.userList.set(
-        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as UserProfile)
-      );
+      this.userList.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as UserProfile));
     });
   }
 }

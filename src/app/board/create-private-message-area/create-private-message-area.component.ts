@@ -81,8 +81,7 @@ export class CreatePrivateMessageAreaComponent
       idx = this.firestoreService
         .directMessages()
         .findIndex(
-          dm =>
-            dm.participantIds.includes(currentUserId) && dm.participantIds.includes(partnerId)
+          dm => dm.participantIds.includes(currentUserId) && dm.participantIds.includes(partnerId)
         );
     }
     this.boardServ.startPrivateChat(idx, undefined, event as Event | undefined);

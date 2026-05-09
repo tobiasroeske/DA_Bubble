@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  input,
-  viewChild,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, ElementRef, input, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Message } from '../../../shared/interfaces/message.interface';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/interfaces/channel.interface';

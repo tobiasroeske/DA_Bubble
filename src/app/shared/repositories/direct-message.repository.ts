@@ -72,9 +72,7 @@ export class DirectMessageRepository {
       orderBy('lastMessageAt', 'desc')
     );
     return onSnapshot(q, snapshot => {
-      this.directMessages.set(
-        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as DirectMessage)
-      );
+      this.directMessages.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as DirectMessage));
     });
   }
 
@@ -90,9 +88,7 @@ export class DirectMessageRepository {
     this.unsubMessages?.();
     const q = query(this.getMessagesRef(dmId), orderBy('timestamp', 'asc'));
     this.unsubMessages = onSnapshot(q, snapshot => {
-      this.currentMessages.set(
-        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message)
-      );
+      this.currentMessages.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message));
     });
   }
 

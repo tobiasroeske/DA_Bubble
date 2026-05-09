@@ -4,7 +4,9 @@
     <div class="absolute inset-0 flex items-center justify-center">
       <span
         class="bg-white rounded-[30px] py-[5px] px-[15px] border border-[rgba(173,176,217,1)] font-['Nunito']"
-        >{{ checkIfDateIsToday(chat.timestamp) ? 'Heute' : (chat.timestamp | date: 'EEEE, MMMM d') }}</span
+        >{{
+          checkIfDateIsToday(chat.timestamp) ? 'Heute' : (chat.timestamp | date: 'EEEE, MMMM d')
+        }}</span
       >
     </div>
   </div>
@@ -227,7 +229,8 @@
         [ngClass]="{
           'justify-between': (chat.replyCount ?? 0) > 1,
           'justify-end': (chat.replyCount ?? 0) <= 1 && chat.author.id == boardServ.currentUser.id,
-          'justify-start': (chat.replyCount ?? 0) <= 1 && chat.author.id !== boardServ.currentUser.id,
+          'justify-start':
+            (chat.replyCount ?? 0) <= 1 && chat.author.id !== boardServ.currentUser.id,
         }"
       >
         <div

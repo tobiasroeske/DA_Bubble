@@ -152,8 +152,7 @@ export class FirestoreService {
   // ── Utility: find existing DM between two users ──────────────────────────
   findExistingDm(userId1: string, userId2: string): DirectMessage | undefined {
     return this.allDirectMessages().find(
-      dm =>
-        dm.participantIds.includes(userId1) && dm.participantIds.includes(userId2)
+      dm => dm.participantIds.includes(userId1) && dm.participantIds.includes(userId2)
     );
   }
 }

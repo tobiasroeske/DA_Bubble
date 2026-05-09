@@ -93,7 +93,10 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   }
 
   getUserAvatar(userId: string): string {
-    return this.firestore.userList().find(u => u.id === userId)?.avatarPath ?? 'assets/img/profile_big.png';
+    return (
+      this.firestore.userList().find(u => u.id === userId)?.avatarPath ??
+      'assets/img/profile_big.png'
+    );
   }
 
   showMembersDialogToggle() {

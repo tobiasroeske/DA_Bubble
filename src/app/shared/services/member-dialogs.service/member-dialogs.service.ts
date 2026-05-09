@@ -6,7 +6,7 @@ import { FirestoreService } from '../firestore-service/firestore.service';
 import { BoardService } from '../board-service/board.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MemberDialogsService {
   firestore = inject(FirestoreService);
@@ -77,8 +77,8 @@ export class MemberDialogsService {
 
   goToChat(index: number) {
     const dm = this.firestore.directMessages()[index];
-    const otherUserId = dm.participantIds.find(id => id !== this.boardServ.currentUser.id)
-      ?? dm.participantIds[0];
+    const otherUserId =
+      dm.participantIds.find(id => id !== this.boardServ.currentUser.id) ?? dm.participantIds[0];
     const partner = this.firestore.userList().find(u => u.id === otherUserId);
     if (partner) {
       this.name = partner.name;
@@ -98,9 +98,10 @@ export class MemberDialogsService {
     this.guestId = this.currentMember?.id;
     this.creatorId = this.boardServ.currentUser.id;
 
-    const existingDm = this.guestId && this.creatorId
-      ? this.firestore.findExistingDm(this.creatorId, this.guestId)
-      : undefined;
+    const existingDm =
+      this.guestId && this.creatorId
+        ? this.firestore.findExistingDm(this.creatorId, this.guestId)
+        : undefined;
 
     if (existingDm) {
       this.handleExistingGuest(event, existingDm);
@@ -132,9 +133,12 @@ export class MemberDialogsService {
   }
 
   startPrivateChat(event: Event) {
-    const idx = this.firestore.directMessages().findIndex(dm =>
-      dm.participantIds.includes(this.guestId!) && dm.participantIds.includes(this.creatorId!)
-    );
+    const idx = this.firestore
+      .directMessages()
+      .findIndex(
+        dm =>
+          dm.participantIds.includes(this.guestId!) && dm.participantIds.includes(this.creatorId!)
+      );
     this.boardServ.startPrivateChat(idx, undefined, event);
   }
 
