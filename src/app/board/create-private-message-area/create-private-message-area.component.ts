@@ -13,10 +13,9 @@ import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
-import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
+import { UserProfile } from '../../shared/interfaces/user.interface';
+import { Message } from '../../shared/interfaces/message.interface';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { PrivateChat } from '../../shared/models/privateChat.class';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,24 +28,19 @@ export class CreatePrivateMessageAreaComponent
   extends CreateMessageAreaComponent
   implements OnInit
 {
-  readonly allUsers = input.required<CurrentUser[]>();
+  readonly allUsers = input.required<UserProfile[]>();
   @Output() setToTrue: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   firestore = inject(FirestoreService);
   boardServ = inject(BoardService);
   memberServ = inject(MemberDialogsService);
 
-  currentChatPartner!: CurrentUser;
-  privateChat!: ChatMessage[];
-  chatId?: string;
-  override message!: ChatMessage;
-
   constructor() {
     super();
   }
 
   ngOnInit(): void {
-    this.privateChat = this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat;
+    // DM messages are now loaded via firestore.dmMessages() signal
   }
 
   override toggleTagMemberDialog() {
@@ -55,7 +49,7 @@ export class CreatePrivateMessageAreaComponent
   }
 
   override filterMember() {
-    const members: CurrentUser[] = this.allUsers();
+    const members: UserProfile[] = this.allUsers();
     const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
     this.filteredMembers = members.filter(member =>
       member.name.toLowerCase().includes(lowerCaseTag)
@@ -64,12 +58,10 @@ export class CreatePrivateMessageAreaComponent
 
   override async sendMessage(event?: Event) {
     if (this.boardServ.privateChatId) {
-      const date = new Date().getTime();
-      this.message = this.setMessageObject(date);
-      this.setAnswerMessage();
-      if (this.message.message.trim() !== '' || this.uploadedFile.length > 0) {
+      const msg = this.buildMessage();
+      if (msg.text.trim() !== '' || this.uploadedFile.length > 0) {
         try {
-          await this.firestore.updatePrivateChat(this.boardServ.privateChatId, this.message);
+          await this.firestore.addDmMessage(this.boardServ.privateChatId, msg);
           this.resetTextArea();
           setTimeout(() => {
             this.showMessageInChat();
@@ -81,22 +73,19 @@ export class CreatePrivateMessageAreaComponent
     }
   }
 
-  setAnswerMessage() {
-    if (this.boardServ.privateAnswerMessage != null) {
-      this.message.answers.push(this.boardServ.privateAnswerMessage);
-    }
-  }
-
   showMessageInChat() {
-    let idx = this.firestoreService
-      .directMessages()
-      .findIndex((dm: PrivateChat) => dm.guest.id == this.boardServ.currentChatPartner.id);
-    if (idx == -1) {
+    const currentUserId = this.boardServ.currentUser.id;
+    const partnerId = this.boardServ.currentChatPartner?.id;
+    let idx = -1;
+    if (currentUserId && partnerId) {
       idx = this.firestoreService
         .directMessages()
-        .findIndex((dm: PrivateChat) => dm.creator.id == this.boardServ.currentChatPartner.id);
+        .findIndex(
+          dm =>
+            dm.participantIds.includes(currentUserId) && dm.participantIds.includes(partnerId)
+        );
     }
-    this.boardServ.startPrivateChat(idx, 'creator', event);
+    this.boardServ.startPrivateChat(idx, undefined, event as Event | undefined);
   }
 
   override resetTextArea() {
@@ -105,11 +94,11 @@ export class CreatePrivateMessageAreaComponent
     this.filePath = '';
     this.boardServ.scrollToBottom(this.boardServ.chatFieldRef);
     this.checkIfPrivatChatIsEmpty();
-    this.boardServ.privateAnswerMessage = null;
+    this.boardServ.privateAnswerMessage = undefined;
   }
 
   checkIfPrivatChatIsEmpty() {
-    if (this.privateChat.length > 0) {
+    if (this.firestore.dmMessages().length > 0) {
       this.boardServ.firstPrivateMessageWasSent.set(true);
       setTimeout(() => {
         this.boardServ.hidePopUpChatPartner.set(true);
@@ -120,17 +109,5 @@ export class CreatePrivateMessageAreaComponent
         this.boardServ.firstPrivateMessageWasSent.set(false);
       }, 100);
     }
-  }
-
-  override setMessageObject(date: number): ChatMessage {
-    return {
-      date: date,
-      user: this.boardService.currentUser,
-      message: this.textMessage.replace('/\n/g', '<br>'),
-      answers: [],
-      reactions: [],
-      fileUpload: this.uploadedFile,
-      type: 'ChatMessage',
-    };
   }
 }

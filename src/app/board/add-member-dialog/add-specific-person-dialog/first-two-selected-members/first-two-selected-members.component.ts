@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, input, ChangeDetectionStrategy } from '@angular/core';
 
-import { CurrentUser } from '../../../../shared/interfaces/currentUser.interface';
+import { UserProfile } from '../../../../shared/interfaces/user.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -10,7 +10,7 @@ import { CurrentUser } from '../../../../shared/interfaces/currentUser.interface
   styleUrl: './first-two-selected-members.component.scss',
 })
 export class FirstTwoSelectedMembersComponent {
-  readonly selectedList = input<CurrentUser[]>();
+  readonly selectedList = input<UserProfile[]>();
   @Output() sendIndexToParent: EventEmitter<number> = new EventEmitter<number>();
 
   removeThisMember(index: number) {

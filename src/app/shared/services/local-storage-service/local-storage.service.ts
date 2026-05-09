@@ -1,11 +1,11 @@
 import { Injectable, signal } from '@angular/core';
-import { CurrentUser } from '../../interfaces/currentUser.interface';
+import { UserProfile } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
-  currentUser!: CurrentUser;
+  currentUser!: UserProfile;
   introPlayed = signal(false);
   constructor() {}
 
@@ -13,7 +13,7 @@ export class LocalStorageService {
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
-  loadCurrentUser() {
+  loadCurrentUser(): UserProfile {
     const userExists = localStorage.getItem('currentUser');
     if (userExists != null) {
       const userAsText = JSON.parse(localStorage.getItem('currentUser')!);
@@ -24,7 +24,14 @@ export class LocalStorageService {
         return userAsText;
       }
     } else {
-      return;
+      return {
+        id: '',
+        name: '',
+        email: '',
+        avatarPath: '',
+        loginState: 'loggedOut',
+        notifications: [],
+      } as UserProfile;
     }
   }
 
@@ -66,16 +73,14 @@ export class LocalStorageService {
     }
   }
 
-  setCurrentUserObject(obj: any) {
+  setCurrentUserObject(obj: any): UserProfile {
     return {
-      id: obj.uid || '',
-      name: obj.displayName || '',
+      id: obj.uid || obj.id || '',
+      name: obj.displayName || obj.name || '',
       email: obj.email || '',
-      avatarPath: obj.photoURL || '',
-      seleted: obj.selected || false,
+      avatarPath: obj.photoURL || obj.avatarPath || '',
       loginState: obj.loginState || 'loggedOut',
-      type: obj.type || 'CurrentUser',
-      notification: obj.notification || [],
+      notifications: obj.notifications || [],
     };
   }
 }

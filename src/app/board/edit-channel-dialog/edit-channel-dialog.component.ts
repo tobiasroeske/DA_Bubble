@@ -4,8 +4,7 @@ import { BoardService } from '../../shared/services/board-service/board.service'
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
 import { SignupService } from '../../shared/services/signup/signup.service';
-import { Channel } from '../../shared/models/channel.class';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { Channel } from '../../shared/interfaces/channel.interface';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { AddSpecificPersonDialogComponent } from '../add-member-dialog/add-specific-person-dialog/add-specific-person-dialog.component';
@@ -35,10 +34,9 @@ export class EditChannelDialogComponent {
   textareaDisabled: boolean = true;
   editNameBtnClicked: boolean = false;
   editDescriptionBtnClicked: boolean = false;
-  currentChannel: any;
+  currentChannel: Channel;
   title: string;
   description: string;
-  creatorName: string;
   channelAlreadyExist?: boolean;
   leaveFromChannel: boolean = false;
   allChannelLength!: number;
@@ -46,9 +44,13 @@ export class EditChannelDialogComponent {
 
   constructor() {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    this.title = this.firestore.allChannels()[this.boardServ.idx].title;
-    this.description = this.firestore.allChannels()[this.boardServ.idx].description ?? '';
-    this.creatorName = this.firestore.allChannels()[this.boardServ.idx].creatorName;
+    this.title = this.currentChannel.title;
+    this.description = this.currentChannel.description ?? '';
+  }
+
+  get creatorName(): string {
+    const creator = this.firestore.userList().find(u => u.id === this.currentChannel.creatorId);
+    return creator?.name ?? '';
   }
 
   async onEditButtonClick(event: Event) {
@@ -98,8 +100,9 @@ export class EditChannelDialogComponent {
   }
 
   async updateChannelOnLeave(event: Event) {
-    const channel: Channel = new Channel(this.currentChannel);
-    await this.firestore.updateChannel(channel.toJSON(), this.currentChannel.id);
+    await this.firestore.updateChannel(this.currentChannel.id!, {
+      memberIds: this.currentChannel.memberIds,
+    });
     this.leaveFromChannel = false;
     this.randomIndex = Math.floor(Math.random() * this.firestore.allChannels().length);
     this.boardServ.showChannelInChatField(this.randomIndex, event);
@@ -119,10 +122,10 @@ export class EditChannelDialogComponent {
   }
 
   async updateChannelWithNewTitleAndDescription() {
-    this.currentChannel.title = this.title;
-    this.currentChannel.description = this.description;
-    const channel: Channel = new Channel(this.currentChannel);
-    await this.firestore.updateChannel(channel.toJSON(), this.currentChannel.id);
+    await this.firestore.updateChannel(this.currentChannel.id!, {
+      title: this.title,
+      description: this.description,
+    });
     if (this.channelAlreadyExist) {
       this.channelAlreadyExist = false;
     }
@@ -130,18 +133,9 @@ export class EditChannelDialogComponent {
 
   async leaveThisChannel(event: Event) {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    const idxOfCurrentPartecipant = this.currentChannel.partecipantsIds.indexOf(
-      this.boardServ.currentUser.id
-    );
-    this.currentChannel.partecipantsIds.splice(idxOfCurrentPartecipant, 1);
-    const indexOfCurrentMember = this.currentChannel.members.findIndex(
-      (m: CurrentUser) => m.id == this.boardServ.currentUser.id
-    );
-    this.currentChannel.members.splice(indexOfCurrentMember, 1);
-    const indexInAllUsers = this.currentChannel.allUsers.findIndex(
-      (u: CurrentUser) => u.id == this.boardServ.currentUser.id
-    );
-    this.currentChannel.allUsers[indexInAllUsers].selected = false;
+    const currentUserId = this.boardServ.currentUser.id;
+    const updatedMemberIds = this.currentChannel.memberIds.filter(id => id !== currentUserId);
+    this.currentChannel = { ...this.currentChannel, memberIds: updatedMemberIds };
     this.leaveFromChannel = true;
     await this.onChannelUpdate(event);
   }
@@ -151,5 +145,11 @@ export class EditChannelDialogComponent {
       .allChannels()
       .findIndex((chan: Channel) => chan.title === this.title);
     return idx;
+  }
+
+  getMemberUsers() {
+    return this.currentChannel.memberIds
+      .map(id => this.firestore.userList().find(u => u.id === id))
+      .filter(u => u != null);
   }
 }

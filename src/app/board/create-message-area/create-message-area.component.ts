@@ -1,24 +1,20 @@
 import {
   Component,
   ElementRef,
-  EventEmitter,
-  Host,
   HostListener,
-  Output,
   inject,
   input,
   viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
+import { Message } from '../../shared/interfaces/message.interface';
+import { AppNotification, UserProfile } from '../../shared/interfaces/user.interface';
+import { Channel } from '../../shared/interfaces/channel.interface';
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { Channel } from '../../shared/models/channel.class';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
 import { FirebaseStorageService } from '../../shared/services/firebase-storage-service/firebase-storage.service';
-import { NotificationObj } from '../../shared/models/notificationObj.class';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
@@ -46,21 +42,17 @@ export class CreateMessageAreaComponent {
   textMessage: string = '';
   memberToTag: string = '';
   channelToTag: string = '';
-  message!: ChatMessage;
-  // currentUser: any;
   shiftPressed = false;
   enterPressed = false;
   tagMembers = false;
   tagChannels = false;
   fileSizeToGreat = false;
-  filteredMembers: CurrentUser[] = [];
+  filteredMembers: UserProfile[] = [];
   filteredChannels: Channel[] = [];
   uploadedFile: string = '';
   filePath: string = '';
   preview = false;
-  member: CurrentUser | null = null;
-
-  notificationObject = new NotificationObj();
+  member: UserProfile | null = null;
 
   @HostListener('keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
@@ -102,7 +94,6 @@ export class CreateMessageAreaComponent {
   }
 
   constructor() {
-    // this.currentUser = this.boardService.currentUser;
     this.filteredChannels = this.channels();
   }
 
@@ -167,7 +158,6 @@ export class CreateMessageAreaComponent {
       this.uploadedFile = url;
     } catch (err) {
       console.error('Error uploading and fetching download URL:', err);
-      // Handle error as needed
     }
   }
 
@@ -186,7 +176,11 @@ export class CreateMessageAreaComponent {
   }
 
   toggleTagMemberDialog() {
-    this.filteredMembers = this.firestoreService.allChannels()[this.boardService.idx].members;
+    const channel = this.firestoreService.allChannels()[this.boardService.idx];
+    const allUsers = this.firestoreService.userList();
+    this.filteredMembers = (channel?.memberIds ?? [])
+      .map(id => allUsers.find(u => u.id === id))
+      .filter((u): u is UserProfile => !!u);
     this.tagMembers = !this.tagMembers;
   }
 
@@ -224,22 +218,11 @@ export class CreateMessageAreaComponent {
   async sendMessage() {
     if (this.textMessage.length > 0 || this.uploadedFile.length > 0) {
       try {
-        const date = new Date().getTime();
-        await this.firestoreService.updateChats(this.channelId(), this.setMessageObject(date));
-        if (this.member != null) {
-          this.notificationObject = new NotificationObj();
-          this.setNotificationObject();
-          this.member.notification.push(this.notificationObject);
-          if (this.member.id) {
-            if (this.member.id == this.boardService.currentUser.id) {
-              this.boardService.currentUser.notification.push(this.notificationObject.toJSON());
-              this.localStorageServ.saveCurrentUser(this.boardService.currentUser);
-            }
-            await this.firestoreService.updateUserNotification(
-              this.member.id,
-              this.notificationObject.toJSON()
-            );
-          }
+        const channelId = this.channelId();
+        await this.firestoreService.addChannelMessage(channelId, this.buildMessage());
+        if (this.member?.id) {
+          const notification = this.buildNotification(this.member);
+          await this.firestoreService.addNotification(this.member.id, notification);
         }
         this.resetTextArea();
         this.boardService.scrollToBottom(this.boardService.chatFieldRef);
@@ -249,17 +232,35 @@ export class CreateMessageAreaComponent {
     }
   }
 
-  setNotificationObject() {
-    this.notificationObject.channelName = this.channelTitle();
-    this.notificationObject.channelId = this.channelId();
-    this.notificationObject.receiverImage = this.member!.avatarPath;
-    this.notificationObject.receiverName = this.member!.name;
-    this.notificationObject.receiverId = this.member!.id;
-    this.notificationObject.date = new Date().getTime();
-    this.notificationObject.senderImage = this.boardService.currentUser.avatarPath;
-    this.notificationObject.senderName = this.boardService.currentUser.name;
-    this.notificationObject.senderId = this.boardService.currentUser.id ?? '';
-    this.notificationObject.message = this.textMessage;
+  buildMessage(): Omit<Message, 'id'> {
+    const currentUser = this.boardService.currentUser;
+    return {
+      text: this.textMessage,
+      author: {
+        id: currentUser.id!,
+        name: currentUser.name,
+        avatarPath: currentUser.avatarPath,
+      },
+      timestamp: Date.now(),
+      reactions: [],
+      replyCount: 0,
+      fileUpload: this.uploadedFile || '',
+    };
+  }
+
+  buildNotification(member: UserProfile): AppNotification {
+    const currentUser = this.boardService.currentUser;
+    return {
+      id: crypto.randomUUID(),
+      date: Date.now(),
+      channelId: this.channelId(),
+      channelName: this.channelTitle(),
+      senderId: currentUser.id ?? '',
+      senderName: currentUser.name,
+      senderAvatarPath: currentUser.avatarPath,
+      message: this.textMessage,
+      isRead: false,
+    };
   }
 
   resetTextArea() {
@@ -271,12 +272,13 @@ export class CreateMessageAreaComponent {
   }
 
   filterMember() {
-    const members: CurrentUser[] =
-      this.firestoreService.allChannels()[this.boardService.idx].members;
+    const channel = this.firestoreService.allChannels()[this.boardService.idx];
+    const allUsers = this.firestoreService.userList();
+    const members = (channel?.memberIds ?? [])
+      .map(id => allUsers.find(u => u.id === id))
+      .filter((u): u is UserProfile => !!u);
     const lowerCaseTag = this.memberToTag.slice(1).toLowerCase();
-    this.filteredMembers = members.filter(member =>
-      member.name.toLowerCase().includes(lowerCaseTag)
-    );
+    this.filteredMembers = members.filter(m => m.name.toLowerCase().includes(lowerCaseTag));
   }
 
   filterChannels() {
@@ -295,15 +297,19 @@ export class CreateMessageAreaComponent {
     }
   }
 
-  setMessageObject(date: number): ChatMessage {
+  setMessageObject(date: number): Omit<Message, 'id'> {
+    const currentUser = this.boardService.currentUser;
     return {
-      date: date,
-      user: this.boardService.currentUser,
-      message: this.textMessage,
-      answers: [],
+      text: this.textMessage,
+      author: {
+        id: currentUser.id!,
+        name: currentUser.name,
+        avatarPath: currentUser.avatarPath,
+      },
+      timestamp: date,
       reactions: [],
+      replyCount: 0,
       fileUpload: this.uploadedFile,
-      type: 'ChatMessage',
     };
   }
 }

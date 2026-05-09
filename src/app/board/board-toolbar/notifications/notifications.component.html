@@ -11,27 +11,27 @@
   <div
     class="notifications-container flex flex-col items-start justify-start gap-2 max-h-[300px] overflow-auto pr-10"
   >
-    @if (boardServ.currentUser.notification.length == 0) {
+    @if (boardServ.currentUser.notifications.length == 0) {
       <div
         class="flex justify-start gap-2 px-3 py-1 rounded-[30px] transition-all duration-200 cursor-pointer hover:bg-[#eceefd]"
       >
         Keine neuen Benachrichtigungen
       </div>
     }
-    @for (notification of boardServ.currentUser.notification; track notification; let i = $index) {
-      @if (notification.receiverId == boardServ.currentUser.id) {
+    @for (notification of boardServ.currentUser.notifications; track notification; let i = $index) {
+      @if (!notification.isRead || notification.senderId !== boardServ.currentUser.id) {
         <div
           (click)="checkPositionOfThisNotific(i, $event)"
           class="flex justify-start gap-2 px-3 py-1 rounded-[30px] transition-all duration-200 cursor-pointer"
           [ngClass]="{
-            'bg-[#eceefd] hover:bg-[#797ef3]': !notification.notificationRed,
-            'hover:bg-[#eceefd]': notification.notificationRed,
+            'bg-[#eceefd] hover:bg-[#797ef3]': !notification.isRead,
+            'hover:bg-[#eceefd]': notification.isRead,
           }"
           (click)="markAsRed(i)"
         >
           <div class="flex justify-start gap-2">
             <img
-              src="{{ notification.senderImage }}"
+              src="{{ notification.senderAvatarPath }}"
               alt=""
               class="w-8 h-8 object-cover rounded-full"
             />

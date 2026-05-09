@@ -3,10 +3,8 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { ShowMemberPopUpComponent } from './show-member-pop-up/show-member-pop-up.component';
-import { Channel } from '../../shared/models/channel.class';
-import { PrivateChat } from '../../shared/models/privateChat.class';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
-import { SignupService } from '../../shared/services/signup/signup.service';
+import { Channel } from '../../shared/interfaces/channel.interface';
+import { UserProfile } from '../../shared/interfaces/user.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,27 +21,16 @@ export class MembersDialogComponent implements OnInit {
   memberServ = inject(MemberDialogsService);
 
   currentChannel!: Channel;
-  userList!: CurrentUser[];
+  memberUsers: UserProfile[] = [];
 
   async ngOnInit(): Promise<void> {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    this.userList = this.firestore.userList();
-    const updatedUsers = this.updateLoginState();
-    try {
-      await this.firestore.updateChannelUsers(updatedUsers, this.currentChannel.id!);
-    } catch (error) {
-      console.error('Error updating channels', error);
-    }
+    this.memberUsers = this.getMemberUsers();
   }
 
-  updateLoginState(): CurrentUser[] {
-    const allUsers = this.currentChannel.allUsers;
-    this.userList.forEach(user => {
-      const index = allUsers.findIndex(u => u.id == user.id);
-      if (index != -1 && allUsers[index].loginState != user.loginState) {
-        allUsers[index].loginState = user.loginState;
-      }
-    });
-    return allUsers;
+  getMemberUsers(): UserProfile[] {
+    return this.currentChannel.memberIds
+      .map(id => this.firestore.userList().find(u => u.id === id))
+      .filter((u): u is UserProfile => u != null);
   }
 }

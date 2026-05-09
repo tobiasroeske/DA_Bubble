@@ -2,19 +2,19 @@ import { Injectable, inject, signal } from '@angular/core';
 import {
   Firestore,
   addDoc,
-  arrayUnion,
   collection,
   deleteDoc,
   doc,
+  increment,
   onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { Auth, Unsubscribe } from '@angular/fire/auth';
-import { Channel } from '../models/channel.class';
-import { ChatMessage } from '../interfaces/chatMessage.interface';
-import { CurrentUser } from '../interfaces/currentUser.interface';
+import { Channel } from '../interfaces/channel.interface';
+import { Message } from '../interfaces/message.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ChannelRepository {
@@ -23,12 +23,16 @@ export class ChannelRepository {
 
   readonly allChannels = signal<Channel[]>([]);
   readonly allExistingChannels = signal<Channel[]>([]);
+  readonly currentMessages = signal<Message[]>([]);
+  readonly currentReplies = signal<Message[]>([]);
 
   newChannelId?: string;
   currentUserId?: string;
 
-  private unsubChannel: Unsubscribe | undefined;
-  private unsubAllChannels: Unsubscribe | undefined;
+  private unsubChannel?: Unsubscribe;
+  private unsubAllChannels?: Unsubscribe;
+  private unsubMessages?: Unsubscribe;
+  private unsubReplies?: Unsubscribe;
 
   constructor() {
     this.auth.onAuthStateChanged(user => {
@@ -41,8 +45,12 @@ export class ChannelRepository {
       } else {
         this.unsubChannel?.();
         this.unsubAllChannels?.();
+        this.unsubMessages?.();
+        this.unsubReplies?.();
         this.allChannels.set([]);
         this.allExistingChannels.set([]);
+        this.currentMessages.set([]);
+        this.currentReplies.set([]);
       }
     });
   }
@@ -51,114 +59,176 @@ export class ChannelRepository {
     return collection(this.firestore, 'channels');
   }
 
-  getSingleChannelRef(colId: string, docId: string) {
-    return doc(collection(this.firestore, colId), docId);
+  getChannelRef(channelId: string) {
+    return doc(this.firestore, 'channels', channelId);
+  }
+
+  getMessagesRef(channelId: string) {
+    return collection(this.firestore, 'channels', channelId, 'messages');
+  }
+
+  getMessageRef(channelId: string, messageId: string) {
+    return doc(this.firestore, 'channels', channelId, 'messages', messageId);
+  }
+
+  getRepliesRef(channelId: string, messageId: string) {
+    return collection(this.firestore, 'channels', channelId, 'messages', messageId, 'replies');
+  }
+
+  getReplyRef(channelId: string, messageId: string, replyId: string) {
+    return doc(
+      this.firestore,
+      'channels',
+      channelId,
+      'messages',
+      messageId,
+      'replies',
+      replyId
+    );
   }
 
   subChannelList(): Unsubscribe {
     const q = query(
       this.getChannelsRef(),
-      where('partecipantsIds', 'array-contains', this.currentUserId)
+      where('memberIds', 'array-contains', this.currentUserId)
     );
-    return onSnapshot(q, list => {
-      const items: Channel[] = [];
-      list.forEach(el => {
-        const channel = new Channel(el.data());
-        channel.id = el.id;
-        items.push(channel.toJSON() as Channel);
-      });
-      this.allChannels.set(items);
+    return onSnapshot(q, snapshot => {
+      this.allChannels.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Channel)
+      );
     });
   }
 
   subAllExistingChannelList(): Unsubscribe {
-    return onSnapshot(this.getChannelsRef(), list => {
-      const items: Channel[] = [];
-      list.forEach(c => {
-        const channel = new Channel(c.data());
-        channel.id = c.id;
-        this.checkIfChannelHasMembers(channel, channel.id);
-        items.push(channel);
+    return onSnapshot(this.getChannelsRef(), snapshot => {
+      const channels = snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Channel);
+      channels.forEach(c => {
+        if (c.memberIds.length === 0) {
+          this.deleteChannel(c.id!).catch(console.error);
+        }
       });
-      this.allExistingChannels.set(items);
+      this.allExistingChannels.set(channels);
     });
   }
 
-  private async checkIfChannelHasMembers(channel: Channel, channelId: string): Promise<void> {
-    if (channel.members.length <= 0) {
-      try {
-        await deleteDoc(this.getSingleChannelRef('channels', channelId));
-      } catch (error) {
-        console.error('Error deleting empty channel:', error);
-      }
-    }
+  subscribeToMessages(channelId: string): void {
+    this.unsubMessages?.();
+    const q = query(this.getMessagesRef(channelId), orderBy('timestamp', 'asc'));
+    this.unsubMessages = onSnapshot(q, snapshot => {
+      this.currentMessages.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message)
+      );
+    });
   }
 
-  async addChannel(obj: object): Promise<void> {
+  subscribeToReplies(channelId: string, messageId: string): void {
+    this.unsubReplies?.();
+    const q = query(this.getRepliesRef(channelId, messageId), orderBy('timestamp', 'asc'));
+    this.unsubReplies = onSnapshot(q, snapshot => {
+      this.currentReplies.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message)
+      );
+    });
+  }
+
+  stopListeningToReplies(): void {
+    this.unsubReplies?.();
+    this.currentReplies.set([]);
+  }
+
+  private async deleteChannel(channelId: string): Promise<void> {
+    await deleteDoc(this.getChannelRef(channelId));
+  }
+
+  async addChannel(channel: Omit<Channel, 'id'>): Promise<string | undefined> {
     try {
-      const docRef = await addDoc(this.getChannelsRef(), obj);
-      if (docRef?.id) {
-        this.newChannelId = docRef.id;
-        await updateDoc(this.getSingleChannelRef('channels', this.newChannelId), {
-          id: this.newChannelId,
-        });
-      }
+      const docRef = await addDoc(this.getChannelsRef(), channel);
+      this.newChannelId = docRef.id;
+      return docRef.id;
     } catch (error) {
       console.error('Error adding channel:', error);
+      return undefined;
     }
   }
 
-  async updateChannel(item: object, docId: string): Promise<void> {
+  async updateChannel(channelId: string, updates: Partial<Channel>): Promise<void> {
     try {
-      await updateDoc(this.getSingleChannelRef('channels', docId), item);
+      await updateDoc(this.getChannelRef(channelId), updates as Record<string, unknown>);
     } catch (error) {
       console.error('Error updating channel:', error);
     }
   }
 
-  async updateAllChats(docId: string, newChats: ChatMessage[]): Promise<void> {
+  async addMessage(channelId: string, message: Omit<Message, 'id'>): Promise<void> {
     try {
-      await updateDoc(this.getSingleChannelRef('channels', docId), { chat: newChats });
+      await addDoc(this.getMessagesRef(channelId), message);
     } catch (error) {
-      console.error('Error updating all chats:', error);
+      console.error('Error adding message:', error);
     }
   }
 
-  async updateChannelUsers(updatedUser: unknown, docId: string): Promise<void> {
+  async updateMessage(
+    channelId: string,
+    messageId: string,
+    updates: Partial<Message>
+  ): Promise<void> {
     try {
-      await updateDoc(this.getSingleChannelRef('channels', docId), { allUsers: updatedUser });
+      await updateDoc(this.getMessageRef(channelId, messageId), updates as Record<string, unknown>);
     } catch (error) {
-      console.error('Error updating channel users:', error);
+      console.error('Error updating message:', error);
     }
   }
 
-  async updateMembers(updateMembers: string | CurrentUser, docId: string): Promise<void> {
+  async addReply(
+    channelId: string,
+    messageId: string,
+    reply: Omit<Message, 'id' | 'replyCount'>
+  ): Promise<void> {
     try {
-      await updateDoc(this.getSingleChannelRef('channels', docId), {
-        members: arrayUnion(updateMembers),
+      await addDoc(this.getRepliesRef(channelId, messageId), reply);
+      await updateDoc(this.getMessageRef(channelId, messageId), {
+        replyCount: increment(1),
       });
     } catch (error) {
-      console.error('Error updating members:', error);
+      console.error('Error adding reply:', error);
     }
   }
 
-  async updatePartecipantsIds(id: string, docId: string): Promise<void> {
+  async updateReply(
+    channelId: string,
+    messageId: string,
+    replyId: string,
+    updates: Partial<Message>
+  ): Promise<void> {
     try {
-      await updateDoc(this.getSingleChannelRef('channels', docId), {
-        partecipantsIds: arrayUnion(id),
-      });
+      await updateDoc(
+        this.getReplyRef(channelId, messageId, replyId),
+        updates as Record<string, unknown>
+      );
     } catch (error) {
-      console.error('Error updating participants IDs:', error);
+      console.error('Error updating reply:', error);
     }
   }
 
-  async updateChats(docId: string, messageObject: ChatMessage): Promise<void> {
+  async addMember(channelId: string, userId: string): Promise<void> {
+    const channel = this.allChannels().find(c => c.id === channelId);
+    if (!channel) return;
+    const memberIds = [...new Set([...channel.memberIds, userId])];
     try {
-      await updateDoc(this.getSingleChannelRef('channels', docId), {
-        chat: arrayUnion(messageObject),
-      });
+      await updateDoc(this.getChannelRef(channelId), { memberIds });
     } catch (error) {
-      console.error('Error updating chats:', error);
+      console.error('Error adding member:', error);
+    }
+  }
+
+  async removeMember(channelId: string, userId: string): Promise<void> {
+    const channel = this.allChannels().find(c => c.id === channelId);
+    if (!channel) return;
+    const memberIds = channel.memberIds.filter(id => id !== userId);
+    try {
+      await updateDoc(this.getChannelRef(channelId), { memberIds });
+    } catch (error) {
+      console.error('Error removing member:', error);
     }
   }
 }

@@ -6,9 +6,6 @@ import { SignupService } from '../shared/services/signup/signup.service';
 import { LocalStorageService } from '../shared/services/local-storage-service/local-storage.service';
 import { FirestoreService } from '../shared/services/firestore-service/firestore.service';
 import { FirebaseStorageService } from '../shared/services/firebase-storage-service/firebase-storage.service';
-import { CurrentUser } from '../shared/interfaces/currentUser.interface';
-import { Channel } from '../shared/models/channel.class';
-import { PrivateChat } from '../shared/models/privateChat.class';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,10 +34,6 @@ export class EditProfileDialogComponent {
   ];
   changeAvatar = false;
   changesSuccessful = false;
-  allChannels: Channel[] = [];
-  allDirectMessages: PrivateChat[] = [];
-
-  allMembers: CurrentUser[] = [];
 
   constructor() {
     this.fullname = this.boardServ.currentUser.name;
@@ -53,7 +46,7 @@ export class EditProfileDialogComponent {
       try {
         await this.updateUserProfile();
         await this.updateEmailAndUser();
-        await this.updateEntities();
+        await this.updateUserDocument();
         this.changesSuccessful = true;
       } catch (error) {
         console.error('Error updating profile:', error);
@@ -73,40 +66,6 @@ export class EditProfileDialogComponent {
     }
   }
 
-  async updateDirectMessages(): Promise<void> {
-    try {
-      this.allDirectMessages = this.firestoreService.allDirectMessages();
-      for (const dm of this.allDirectMessages) {
-        await this.updateDirectMessage(dm);
-      }
-    } catch (error) {
-      console.error('Error updating direct messages:', error);
-    }
-  }
-
-  private async updateDirectMessage(dm: PrivateChat): Promise<void> {
-    if (dm.guest.id === this.boardServ.currentUser.id) {
-      dm.guest.name = this.boardServ.currentUser.name;
-      dm.guest.avatarPath = this.boardServ.currentUser.avatarPath;
-    } else if (dm.creator.id === this.boardServ.currentUser.id) {
-      dm.creator.name = this.boardServ.currentUser.name;
-      dm.creator.avatarPath = this.boardServ.currentUser.avatarPath;
-    }
-    for (const chat of dm.chat) {
-      this.updateChatUser(chat);
-    }
-    if (dm.id) {
-      await this.firestoreService.updateCompletePrivateMessage(dm.id, dm);
-    }
-  }
-
-  private updateChatUser(chat: any): void {
-    if (chat.user.id === this.boardServ.currentUser.id) {
-      chat.user.name = this.boardServ.currentUser.name;
-      chat.user.avatarPath = this.boardServ.currentUser.avatarPath;
-    }
-  }
-
   private async updateUserProfile(): Promise<void> {
     await this.authService.updateUserProfile({
       displayName: this.fullname,
@@ -118,57 +77,22 @@ export class EditProfileDialogComponent {
     const emailChanged = this.mail !== this.authService.auth.currentUser?.email;
     if (emailChanged) {
       await this.authService.updateEmail(this.mail);
-      await this.firestoreService.updateUser(
-        this.boardServ.currentUser.id!,
-        this.boardServ.currentUser
-      );
     }
   }
 
-  private async updateEntities(): Promise<void> {
-    await Promise.all([
-      this.updateUsers(),
-      this.updateMember(),
-      this.updateChatMessage(),
-      this.updateDirectMessages(),
-    ]);
-  }
-
-  private async updateUsers(): Promise<void> {
-    this.boardServ.currentUser = this.storageService.loadCurrentUser();
-    this.boardServ.loadCurrentUser();
-  }
-
-  async updateMember(): Promise<void> {
-    this.allChannels = this.firestoreService.allExistingChannels();
-    for (const chan of this.allChannels) {
-      await this.updateChannelMembers(chan);
+  private async updateUserDocument(): Promise<void> {
+    const userId = this.boardServ.currentUser.id;
+    if (userId) {
+      await this.firestoreService.updateUser(userId, {
+        name: this.fullname,
+        email: this.mail,
+        avatarPath: this.avatarPath,
+      });
     }
-  }
-
-  private async updateChannelMembers(chan: Channel): Promise<void> {
-    for (const member of chan.members) {
-      if (member.id === this.boardServ.currentUser.id) {
-        member.name = this.boardServ.currentUser.name;
-        member.avatarPath = this.boardServ.currentUser.avatarPath;
-      }
-    }
-    if (chan.id) {
-      await this.firestoreService.updateChannel(chan.toJSON(), chan.id);
-    }
-  }
-
-  async updateChatMessage(): Promise<void> {
-    this.allChannels.forEach(chan => {
-      if (chan.chat) {
-        chan.chat.forEach(chat => {
-          this.updateChatUser(chat);
-        });
-        if (chan.id) {
-          this.firestoreService.updateChannel(chan.toJSON(), chan.id);
-        }
-      }
-    });
+    this.boardServ.currentUser.name = this.fullname;
+    this.boardServ.currentUser.email = this.mail;
+    this.boardServ.currentUser.avatarPath = this.avatarPath;
+    this.storageService.saveCurrentUser(this.boardServ.currentUser);
   }
 
   pickAvatar(i: number): void {

@@ -83,8 +83,8 @@
     @if (boardServ.privateAnswerMessage) {
     <div class="answer-container">
         <img src="assets/icons/answer_arrow.svg" alt="">Antworten auf <div class="user-box"><img
-                src="{{ boardServ.privateAnswerMessage.user.avatarPath }}" alt=""> {{
-            boardServ.privateAnswerMessage.user.name }}:</div> {{ boardServ.privateAnswerMessage.message }}
+                src="{{ boardServ.privateAnswerMessage!.author.avatarPath }}" alt=""> {{
+            boardServ.privateAnswerMessage!.author.name }}:</div> {{ boardServ.privateAnswerMessage!.text }}
     </div>
     }
 

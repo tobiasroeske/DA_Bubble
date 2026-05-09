@@ -9,13 +9,13 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { Unsubscribe } from '@angular/fire/auth';
-import { CurrentUser } from '../interfaces/currentUser.interface';
+import { UserProfile, AppNotification } from '../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class UserRepository {
   private readonly firestore = inject(Firestore);
 
-  readonly userList = signal<CurrentUser[]>([]);
+  readonly userList = signal<UserProfile[]>([]);
 
   private unsub: Unsubscribe;
 
@@ -31,7 +31,7 @@ export class UserRepository {
     return doc(this.getUsersRef(), userId);
   }
 
-  async addUser(userId: string, user: CurrentUser): Promise<void> {
+  async addUser(userId: string, user: Omit<UserProfile, 'id'>): Promise<void> {
     try {
       await setDoc(this.getUserDocRef(userId), user);
     } catch (error) {
@@ -39,57 +39,43 @@ export class UserRepository {
     }
   }
 
-  async updateUser(userId: string, newUser: CurrentUser): Promise<void> {
+  async updateUser(userId: string, updates: Partial<UserProfile>): Promise<void> {
     try {
-      const userRef = this.getUserDocRef(userId);
-      const userUpdate = this.setUserObject(newUser as unknown as Record<string, unknown>, userId);
-      await updateDoc(userRef, userUpdate as unknown as Record<string, unknown>);
+      await updateDoc(this.getUserDocRef(userId), updates as Record<string, unknown>);
     } catch (error) {
       console.error('Error updating user:', error);
     }
   }
 
-  async updateUserNotification(userId: string, notification: unknown): Promise<void> {
+  async updatePresence(userId: string, status: UserProfile['loginState']): Promise<void> {
     try {
-      const userRef = this.getUserDocRef(userId);
-      await updateDoc(userRef, { notification: arrayUnion(notification) });
+      await updateDoc(this.getUserDocRef(userId), { loginState: status });
     } catch (error) {
-      console.error('Error updating user notification:', error);
+      console.error('Error updating presence:', error);
+    }
+  }
+
+  async addNotification(userId: string, notification: AppNotification): Promise<void> {
+    try {
+      await updateDoc(this.getUserDocRef(userId), { notifications: arrayUnion(notification) });
+    } catch (error) {
+      console.error('Error adding notification:', error);
+    }
+  }
+
+  async updateNotifications(userId: string, notifications: AppNotification[]): Promise<void> {
+    try {
+      await updateDoc(this.getUserDocRef(userId), { notifications });
+    } catch (error) {
+      console.error('Error updating notifications:', error);
     }
   }
 
   subUsersList(): Unsubscribe {
-    return onSnapshot(this.getUsersRef(), list => {
-      const items: CurrentUser[] = [];
-      list.forEach(snapshot => {
-        items.push(this.setUserObject(snapshot.data(), snapshot.id));
-      });
-      this.userList.set(items);
+    return onSnapshot(this.getUsersRef(), snapshot => {
+      this.userList.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as UserProfile)
+      );
     });
-  }
-
-  setUserObject(obj: Record<string, unknown>, id: string): CurrentUser {
-    return {
-      id: id || '',
-      name: (obj['name'] as string) || '',
-      email: (obj['email'] as string) || '',
-      avatarPath: (obj['avatarPath'] as string) || '',
-      selected: (obj['selected'] as boolean) || false,
-      directMessages: (obj['directMessages'] as string[]) || [],
-      loginState: ((obj['loginState'] as string) || 'loggedOut') as CurrentUser['loginState'],
-      type: 'CurrentUser',
-      notification: (obj['notification'] as unknown[]) || [],
-    } as CurrentUser;
-  }
-
-  getCleanUserJson(obj: Record<string, unknown>) {
-    return {
-      id: obj['id'] ?? '',
-      name: obj['name'] ?? '',
-      email: obj['email'] ?? '',
-      avatarPath: obj['avatarPath'] ?? '',
-      selected: obj['selected'] ?? false,
-      directMessages: obj['directMessages'] ?? [],
-    };
   }
 }

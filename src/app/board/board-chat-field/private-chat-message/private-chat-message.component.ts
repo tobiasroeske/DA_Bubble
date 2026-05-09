@@ -4,7 +4,6 @@ import {
   Input,
   ElementRef,
   HostListener,
-  AfterViewInit,
   OnDestroy,
   inject,
   AfterViewChecked,
@@ -13,8 +12,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
-import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
-import { Reaction } from '../../../shared/interfaces/reaction.interface';
+import { Message } from '../../../shared/interfaces/message.interface';
 import { PrivateMessageEditorComponent } from './private-message-editor/private-message-editor.component';
 import { LocalStorageService } from '../../../shared/services/local-storage-service/local-storage.service';
 import { ChatMessageAttachmentComponent } from '../chat-message/chat-message-attachment/chat-message-attachment.component';
@@ -35,7 +33,7 @@ export class PrivateChatMessageComponent
 {
   readonly messageElements = viewChildren<ElementRef>('messageElements');
   readonly privateChatId = input<string>();
-  @Input() privateMessage!: ChatMessage;
+  @Input() privateMessage!: Message;
   readonly privateChatIndex = input<number>(0);
   readonly lasIndex = input<boolean>(false);
   readonly message = input<string>('');
@@ -43,7 +41,6 @@ export class PrivateChatMessageComponent
 
   localStorageServ = inject(LocalStorageService);
 
-  currentPrivatChat!: ChatMessage[];
   override elementsInitialized: boolean = false;
   lastReactionEmojis: string[] = ['thumbs_up', 'laughing'];
   openTheIndicatorBarTools: boolean = false;
@@ -54,7 +51,6 @@ export class PrivateChatMessageComponent
   }
 
   override ngOnInit(): void {
-    this.currentPrivatChat = this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat;
     this.currentWindowWidth = window.innerWidth;
   }
 
@@ -65,8 +61,8 @@ export class PrivateChatMessageComponent
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.currentWindowWidth = event.target.innerWidth;
+  onResize(event: Event) {
+    this.currentWindowWidth = (event.target as Window).innerWidth;
   }
 
   openTheTools() {
@@ -76,6 +72,7 @@ export class PrivateChatMessageComponent
   closeTheTools() {
     this.openTheIndicatorBarTools = false;
   }
+
   setCurrentPrivateChatMessage() {
     this.boardServ.privateAnswerMessage = this.privateMessage;
     this.boardServ.privateAnswerIndex = this.privateChatIndex();
@@ -99,50 +96,21 @@ export class PrivateChatMessageComponent
   }
 
   override async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
-    const privateChatId = this.privateChatId();
-    if (privateChatId) {
-      const newPrivateMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
-      this.currentPrivatChat.splice(this.privateChatIndex(), 1, newPrivateMessage);
-      try {
-        await this.firestore.updateCompletlyPrivateChat(privateChatId, this.currentPrivatChat);
-        this.getLastTwoReactions(emojiIdx, emojiArray);
-      } catch (error) {
-        console.error('Error updating complete private chats', error);
-      }
-    }
-  }
-
-  override checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    const privateChatMessage = this.getCurrentPrivateChatMessage();
+    const dmId = this.privateChatId();
+    const msgId = this.privateMessage?.id;
+    if (!dmId || !msgId) return;
     const emojiPath = emojiArray[emojiIdx];
-    const existingReaction = this.findExistingReaction(privateChatMessage, emojiPath);
-    if (existingReaction) {
-      this.updateExistingReaction(existingReaction);
+    const reactions = this.privateMessage.reactions.map(r => ({ ...r, userIds: [...r.userIds] }));
+    const existingIdx = reactions.findIndex(r => r.emojiPath === emojiPath);
+    if (existingIdx >= 0) {
+      if (!reactions[existingIdx].userIds.includes(this.boardServ.currentUser.id!)) {
+        reactions[existingIdx].userIds.push(this.boardServ.currentUser.id!);
+      }
     } else {
-      this.addNewReaction(privateChatMessage, emojiIdx, emojiArray);
+      reactions.push({ emojiPath, userIds: [this.boardServ.currentUser.id!] });
     }
-    return privateChatMessage;
-  }
-
-  getCurrentPrivateChatMessage(): ChatMessage {
-    return this.firestore.directMessages()[this.boardServ.chatPartnerIdx].chat[
-      this.privateChatIndex()
-    ];
-  }
-
-  override findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
-    return chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
-  }
-
-  override updateExistingReaction(reaction: Reaction): void {
-    reaction.count++;
-    if (!reaction.creator.includes(this.currentUserName)) {
-      reaction.creator.push(this.currentUserName);
-    }
-  }
-
-  override addNewReaction(chatMessage: ChatMessage, emojiIdx: number, emojiArray: string[]): void {
-    chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
+    await this.firestore.updateDmMessage(dmId, msgId, { reactions });
+    this.getLastTwoReactions(emojiIdx, emojiArray);
   }
 
   override getLastTwoReactions(index: number, emojiArray: string[]) {
@@ -154,13 +122,5 @@ export class PrivateChatMessageComponent
       this.lastReactionEmojis.push(newReaction);
       this.localStorageServ.saveLastReactions(this.lastReactionEmojis);
     }
-  }
-
-  override setReactionObject(i: number, emojiArray: string[]): Reaction {
-    return {
-      emojiPath: emojiArray[i],
-      creator: [this.boardServ.currentUser.name],
-      count: 1,
-    };
   }
 }

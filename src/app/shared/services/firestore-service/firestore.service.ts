@@ -2,34 +2,30 @@ import { Injectable, inject } from '@angular/core';
 import { UserRepository } from '../../repositories/user.repository';
 import { ChannelRepository } from '../../repositories/channel.repository';
 import { DirectMessageRepository } from '../../repositories/direct-message.repository';
-import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { Channel } from '../../models/channel.class';
-import { PrivateChat } from '../../models/privateChat.class';
-import { ChatMessage } from '../../interfaces/chatMessage.interface';
+import { UserProfile, AppNotification } from '../../interfaces/user.interface';
+import { Channel } from '../../interfaces/channel.interface';
+import { DirectMessage } from '../../interfaces/direct-message.interface';
+import { Message } from '../../interfaces/message.interface';
 
-/**
- * Facade that delegates to focused repositories.
- * All existing consumers continue to work without changes.
- */
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
   private readonly userRepo = inject(UserRepository);
   private readonly channelRepo = inject(ChannelRepository);
   private readonly dmRepo = inject(DirectMessageRepository);
 
-  // ── Signals (re-exported from repositories) ────────────────────────────
+  // ── Signals ─────────────────────────────────────────────────────────────
   readonly userList = this.userRepo.userList;
   readonly allChannels = this.channelRepo.allChannels;
   readonly allExistingChannels = this.channelRepo.allExistingChannels;
+  readonly channelMessages = this.channelRepo.currentMessages;
+  readonly channelReplies = this.channelRepo.currentReplies;
   readonly directMessages = this.dmRepo.directMessages;
   readonly allDirectMessages = this.dmRepo.allDirectMessages;
+  readonly dmMessages = this.dmRepo.currentMessages;
 
   // ── Mutable state forwarded from repositories ───────────────────────────
   get newChannelId(): string | undefined {
     return this.channelRepo.newChannelId;
-  }
-  set newChannelId(v: string | undefined) {
-    this.channelRepo.newChannelId = v;
   }
 
   get chatRoomId(): string | undefined {
@@ -49,24 +45,24 @@ export class FirestoreService {
     return this.userRepo.getUserDocRef(userId);
   }
 
-  async addUser(userId: string, user: CurrentUser): Promise<void> {
+  async addUser(userId: string, user: Omit<UserProfile, 'id'>): Promise<void> {
     return this.userRepo.addUser(userId, user);
   }
 
-  async updateUser(userId: string, newUser: CurrentUser): Promise<void> {
-    return this.userRepo.updateUser(userId, newUser);
+  async updateUser(userId: string, updates: Partial<UserProfile>): Promise<void> {
+    return this.userRepo.updateUser(userId, updates);
   }
 
-  async updateUserNotification(userId: string, notification: unknown): Promise<void> {
-    return this.userRepo.updateUserNotification(userId, notification);
+  async updatePresence(userId: string, status: UserProfile['loginState']): Promise<void> {
+    return this.userRepo.updatePresence(userId, status);
   }
 
-  setUserObject(obj: Record<string, unknown>, id: string): CurrentUser {
-    return this.userRepo.setUserObject(obj, id);
+  async addNotification(userId: string, notification: AppNotification): Promise<void> {
+    return this.userRepo.addNotification(userId, notification);
   }
 
-  getCleanUserJson(obj: Record<string, unknown>) {
-    return this.userRepo.getCleanUserJson(obj);
+  async updateNotifications(userId: string, notifications: AppNotification[]): Promise<void> {
+    return this.userRepo.updateNotifications(userId, notifications);
   }
 
   // ── Channel operations ──────────────────────────────────────────────────
@@ -74,64 +70,90 @@ export class FirestoreService {
     return this.channelRepo.getChannelsRef();
   }
 
-  getSingleChannelRef(colId: string, docId: string) {
-    return this.channelRepo.getSingleChannelRef(colId, docId);
+  async addChannel(channel: Omit<Channel, 'id'>): Promise<string | undefined> {
+    return this.channelRepo.addChannel(channel);
   }
 
-  getChatsRef(channelId: string) {
-    return this.channelRepo.getSingleChannelRef('channels', channelId);
+  async updateChannel(channelId: string, updates: Partial<Channel>): Promise<void> {
+    return this.channelRepo.updateChannel(channelId, updates);
   }
 
-  async addChannel(obj: object): Promise<void> {
-    return this.channelRepo.addChannel(obj);
+  async addMember(channelId: string, userId: string): Promise<void> {
+    return this.channelRepo.addMember(channelId, userId);
   }
 
-  async updateChannel(item: object, docId: string): Promise<void> {
-    return this.channelRepo.updateChannel(item, docId);
+  async removeMember(channelId: string, userId: string): Promise<void> {
+    return this.channelRepo.removeMember(channelId, userId);
   }
 
-  async updateAllChats(docId: string, newChats: ChatMessage[]): Promise<void> {
-    return this.channelRepo.updateAllChats(docId, newChats);
+  subscribeToChannelMessages(channelId: string): void {
+    this.channelRepo.subscribeToMessages(channelId);
   }
 
-  async updateChannelUsers(updatedUser: unknown, docId: string): Promise<void> {
-    return this.channelRepo.updateChannelUsers(updatedUser, docId);
+  subscribeToReplies(channelId: string, messageId: string): void {
+    this.channelRepo.subscribeToReplies(channelId, messageId);
   }
 
-  async updateMembers(updateMembers: string | CurrentUser, docId: string): Promise<void> {
-    return this.channelRepo.updateMembers(updateMembers, docId);
+  stopListeningToReplies(): void {
+    this.channelRepo.stopListeningToReplies();
   }
 
-  async updatePartecipantsIds(id: string, docId: string): Promise<void> {
-    return this.channelRepo.updatePartecipantsIds(id, docId);
+  // ── Channel message operations ───────────────────────────────────────────
+  async addChannelMessage(channelId: string, message: Omit<Message, 'id'>): Promise<void> {
+    return this.channelRepo.addMessage(channelId, message);
   }
 
-  async updateChats(docId: string, messageObject: ChatMessage): Promise<void> {
-    return this.channelRepo.updateChats(docId, messageObject);
+  async updateChannelMessage(
+    channelId: string,
+    messageId: string,
+    updates: Partial<Message>
+  ): Promise<void> {
+    return this.channelRepo.updateMessage(channelId, messageId, updates);
+  }
+
+  async addReply(
+    channelId: string,
+    messageId: string,
+    reply: Omit<Message, 'id' | 'replyCount'>
+  ): Promise<void> {
+    return this.channelRepo.addReply(channelId, messageId, reply);
+  }
+
+  async updateReply(
+    channelId: string,
+    messageId: string,
+    replyId: string,
+    updates: Partial<Message>
+  ): Promise<void> {
+    return this.channelRepo.updateReply(channelId, messageId, replyId, updates);
   }
 
   // ── Direct Message operations ────────────────────────────────────────────
-  getDirectMessRef() {
-    return this.dmRepo.getDirectMessRef();
+  getDmRef() {
+    return this.dmRepo.getDmRef();
   }
 
-  getDirectMessSingleDoc(docId: string) {
-    return this.dmRepo.getDirectMessSingleDoc(docId);
+  async addChatRoom(participantIds: string[]): Promise<string | undefined> {
+    return this.dmRepo.addChatRoom(participantIds);
   }
 
-  async addChatRoom(obj: object): Promise<void> {
-    return this.dmRepo.addChatRoom(obj);
+  subscribeToDirectMessages(dmId: string): void {
+    this.dmRepo.subscribeToMessages(dmId);
   }
 
-  async updatePrivateChat(docId: string, messageObject: ChatMessage): Promise<void> {
-    return this.dmRepo.updatePrivateChat(docId, messageObject);
+  async addDmMessage(dmId: string, message: Omit<Message, 'id'>): Promise<void> {
+    return this.dmRepo.addMessage(dmId, message);
   }
 
-  async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat): Promise<void> {
-    return this.dmRepo.updateCompletePrivateMessage(docId, privateMessage);
+  async updateDmMessage(dmId: string, messageId: string, updates: Partial<Message>): Promise<void> {
+    return this.dmRepo.updateMessage(dmId, messageId, updates);
   }
 
-  async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]): Promise<void> {
-    return this.dmRepo.updateCompletlyPrivateChat(docId, messageObject);
+  // ── Utility: find existing DM between two users ──────────────────────────
+  findExistingDm(userId1: string, userId2: string): DirectMessage | undefined {
+    return this.allDirectMessages().find(
+      dm =>
+        dm.participantIds.includes(userId1) && dm.participantIds.includes(userId2)
+    );
   }
 }

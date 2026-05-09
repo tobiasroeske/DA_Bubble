@@ -2,11 +2,11 @@ import { ElementRef, Injectable, computed, inject, signal } from '@angular/core'
 
 import { SignupService } from '../signup/signup.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
-import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { ChatMessage } from '../../interfaces/chatMessage.interface';
+import { UserProfile } from '../../interfaces/user.interface';
+import { Message } from '../../interfaces/message.interface';
+import { Channel } from '../../interfaces/channel.interface';
+import { DirectMessage } from '../../interfaces/direct-message.interface';
 import { FirestoreService } from '../firestore-service/firestore.service';
-import { PrivateChat } from '../../models/privateChat.class';
-import { Channel } from '../../models/channel.class';
 import { BREAKPOINTS } from '../../constants/breakpoints';
 import { TIMINGS } from '../../constants/timings';
 
@@ -18,13 +18,12 @@ export class BoardService {
   storageService = inject(LocalStorageService);
   firestore = inject(FirestoreService);
 
-  currentUser!: CurrentUser;
-  currentChatMessage!: ChatMessage;
-  currentChatPartner!: CurrentUser;
-  privateChat!: ChatMessage[];
+  currentUser!: UserProfile;
+  currentChatMessage: Message | undefined = undefined;
+  currentChatPartner!: UserProfile;
   currentChannelTitle: string = '';
-  allData: (Channel | PrivateChat | CurrentUser | ChatMessage)[] = [];
-  selectedChatRoom!: PrivateChat;
+  allData: (Channel | DirectMessage | UserProfile)[] = [];
+  selectedChatRoom!: DirectMessage;
   public privateMessagesElementsToArray: ElementRef[] = [];
   highlightArrayForTheChildElementSearched: boolean[] = [];
 
@@ -66,14 +65,14 @@ export class BoardService {
   idx!: number;
   chatPartnerIdx!: number;
   chatMessageIndex!: number;
-  privateAnswerMessage!: ChatMessage | null;
+  privateAnswerMessage: Message | undefined = undefined;
   privateAnswerIndex!: number;
 
   blueColorsForTheChatPartersFocus: boolean[] = [];
 
   privateChatId?: string;
 
-  userObjectPopUp!: CurrentUser;
+  userObjectPopUp!: UserProfile;
   userNamePopUp!: string;
   userEmailPopUp!: string;
   userAvatarPopUp!: string;
@@ -83,9 +82,8 @@ export class BoardService {
   loadCurrentUser() {
     this.checkScreenSize();
     this.currentUser = this.storageService.loadCurrentUser()!;
-    if (this.currentUser.id != '') {
-      this.currentUser.loginState = 'loggedIn';
-      this.firestore.updateUser(this.currentUser.id!, this.currentUser);
+    if (this.currentUser.id) {
+      this.firestore.updatePresence(this.currentUser.id, 'loggedIn');
     } else {
       window.open('login', '_self');
     }
@@ -117,10 +115,8 @@ export class BoardService {
     this.emojiPickerSmall.set(false);
   }
 
-  getUserLoginState(participant: CurrentUser): string {
-    const allUsers: CurrentUser[] = this.firestore.userList();
-    const user: CurrentUser = allUsers.find(user => user.id == participant.id)!;
-    return user.loginState;
+  getUserLoginState(userId: string): string {
+    return this.firestore.userList().find(u => u.id === userId)?.loginState ?? 'loggedOut';
   }
 
   scrollToBottom(elementRef: ElementRef) {
@@ -232,23 +228,24 @@ export class BoardService {
     event.preventDefault();
   }
 
-  startPrivateChat(index: number, participant: string, event?: Event) {
-    const role = participant === 'creator' ? 'creator' : 'guest';
-    this.startChat(index, role);
+  startPrivateChat(index: number, _participant?: string, event?: Event) {
+    this.startChat(index);
     if (event) {
       event.stopPropagation();
     }
     this.markCurrentChat(index);
   }
 
-  startChat(index: number, role: 'creator' | 'guest') {
+  startChat(index: number) {
+    const dm = this.firestore.directMessages()[index];
     this.chatPartnerIdx = index;
-    this.privateChatId = this.firestore.directMessages()[index].id || this.firestore.chatRoomId;
-    this.currentChatPartner =
-      role === 'creator'
-        ? this.firestore.directMessages()[index].guest
-        : this.firestore.directMessages()[index].creator;
-    this.privateChat = this.firestore.directMessages()[index].chat;
+    this.privateChatId = dm.id || this.firestore.chatRoomId;
+    const otherUserId = dm.participantIds.find(id => id !== this.currentUser.id) ?? dm.participantIds[0];
+    this.currentChatPartner = this.firestore.userList().find(u => u.id === otherUserId) ?? this.currentUser;
+    this.selectedChatRoom = dm;
+    if (dm.id) {
+      this.firestore.subscribeToDirectMessages(dm.id);
+    }
     this.checkIfPrivateChatIsEmpty();
     this.privateChatIsStarted.set(true);
   }
@@ -272,7 +269,7 @@ export class BoardService {
   }
 
   checkIfPrivateChatIsEmpty() {
-    if (this.privateChat.length == 0) {
+    if (this.firestore.dmMessages().length === 0) {
       this.hidePopUpChatPartner.set(false);
       setTimeout(() => {
         this.firstPrivateMessageWasSent.set(false);
@@ -288,10 +285,10 @@ export class BoardService {
     this.firestore.allChannels().forEach((channel: Channel) => {
       this.allData.push(channel);
     });
-    this.firestore.userList().forEach((user: CurrentUser) => {
+    this.firestore.userList().forEach((user: UserProfile) => {
       this.allData.push(user);
     });
-    this.firestore.directMessages().forEach((dm: PrivateChat) => {
+    this.firestore.directMessages().forEach((dm: DirectMessage) => {
       this.allData.push(dm);
     });
   }

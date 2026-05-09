@@ -8,11 +8,10 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
+import { Message } from '../../../shared/interfaces/message.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +22,7 @@ import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 })
 export class MessageEditorComponent implements OnInit {
   readonly chatMessageIndex = input<number>(0);
-  readonly chat = input<ChatMessage | undefined>(undefined);
+  readonly chat = input<Message | undefined>(undefined);
   @Output() editorOpen = new EventEmitter<boolean>();
   @Output() emojiPickerOpen = new EventEmitter<boolean>();
 
@@ -31,20 +30,18 @@ export class MessageEditorComponent implements OnInit {
   boardServ = inject(BoardService);
 
   editedMessage?: string;
-  currentChannel!: any;
   showEmojiPicker = false;
 
   ngOnInit(): void {
-    this.editedMessage = this.chat()?.message;
+    this.editedMessage = this.chat()?.text;
   }
 
-  async editMessage(index: number) {
+  async editMessage(_index: number) {
     const chatMsg = this.chat();
-    if (!chatMsg) return;
-    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    chatMsg.message = this.editedMessage!;
-    this.currentChannel.chat.splice(index, 1, chatMsg);
-    await this.firestore.updateChannel(this.currentChannel, this.currentChannel.id);
+    if (!chatMsg?.id) return;
+    const channelId = this.firestore.allChannels()[this.boardServ.idx]?.id;
+    if (!channelId) return;
+    await this.firestore.updateChannelMessage(channelId, chatMsg.id, { text: this.editedMessage! });
     this.closeEditor();
   }
 

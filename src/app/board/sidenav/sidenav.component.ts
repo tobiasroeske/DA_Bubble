@@ -5,6 +5,8 @@ import { FirestoreService } from '../../shared/services/firestore-service/firest
 import { SearchDialogComponent } from '../board-toolbar/search-dialog/search-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { TIMINGS } from '../../shared/constants/timings';
+import { DirectMessage } from '../../shared/interfaces/direct-message.interface';
+import { UserProfile } from '../../shared/interfaces/user.interface';
 
 @Component({
   selector: 'app-sidenav',
@@ -49,6 +51,11 @@ export class SidenavComponent {
         this.directMessHeaderisClicked = false;
       }, TIMINGS.SECTION_COLLAPSE_DELAY);
     }
+  }
+
+  getChatPartner(dm: DirectMessage): UserProfile | undefined {
+    const otherId = dm.participantIds.find(id => id !== this.boardServ.currentUser?.id);
+    return this.firestore.userList().find(u => u.id === otherId);
   }
 
   toggleNewMessageInput(event: Event) {

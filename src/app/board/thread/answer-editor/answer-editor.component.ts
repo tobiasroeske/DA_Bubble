@@ -1,8 +1,7 @@
 import { Component, OnInit, input, ChangeDetectionStrategy } from '@angular/core';
 import { MessageEditorComponent } from '../../board-chat-field/message-editor/message-editor.component';
-
 import { FormsModule } from '@angular/forms';
-import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
+import { Message } from '../../../shared/interfaces/message.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,7 +11,7 @@ import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
   styleUrl: './answer-editor.component.scss',
 })
 export class AnswerEditorComponent extends MessageEditorComponent implements OnInit {
-  readonly answer = input.required<ChatMessage>();
+  readonly answer = input.required<Message>();
   readonly answerIndex = input.required<number>();
 
   editedAnswer?: string;
@@ -22,17 +21,23 @@ export class AnswerEditorComponent extends MessageEditorComponent implements OnI
   }
 
   override ngOnInit(): void {
-    this.editedAnswer = this.answer().message;
+    this.editedAnswer = this.answer().text;
   }
 
-  override async editMessage(index: number): Promise<void> {
-    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
-    this.answer().message = this.editedAnswer!;
+  override async editMessage(_index: number): Promise<void> {
+    const reply = this.answer();
+    if (!reply.id) return;
+    const channel = this.firestore.allChannels()[this.boardServ.idx];
+    const channelId = channel?.id;
+    const parentMsgId = this.boardServ.currentChatMessage?.id;
+    if (!channelId || !parentMsgId) return;
     try {
-      await this.firestore.updateChannel(this.currentChannel, this.currentChannel.id);
+      await this.firestore.updateReply(channelId, parentMsgId, reply.id, {
+        text: this.editedAnswer!,
+      });
       this.closeEditor();
     } catch (error) {
-      console.error('Error updating channel', error);
+      console.error('Error updating reply', error);
     }
   }
 }

@@ -1,12 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-primary: rgb(83, 90, 241);
   --color-bg: rgba(236, 238, 254, 1);
   --color-link: #797ef3;
   --color-scrollbar: rgba(173, 176, 217, 1);
-  --font-family-sans: "Figtree", sans-serif;
-  --font-family-nunito: "Nunito", sans-serif;
+  --font-family-sans: 'Figtree', sans-serif;
+  --font-family-nunito: 'Nunito', sans-serif;
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -46,7 +46,7 @@ a {
   text-decoration: none;
   color: #797ef3;
   font-size: 18px;
-  font-family: "Figtree", sans-serif;
+  font-family: 'Figtree', sans-serif;
   transition: border-color 0.125s ease-in-out;
   padding: 10px 15px;
   border: 1px solid transparent;
@@ -70,7 +70,7 @@ button {
   border: 1px solid #797ef3;
   border-radius: 25px;
   background-color: transparent;
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 18px;
   font-weight: 700;
 }
@@ -117,271 +117,271 @@ button {
 /* nunito-200 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 200;
-  src: url("./assets/fonts/nunito-v26-latin-200.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-200.woff2') format('woff2');
 }
 
 /* nunito-200italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 200;
-  src: url("./assets/fonts/nunito-v26-latin-200italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-200italic.woff2') format('woff2');
 }
 
 /* nunito-300 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 300;
-  src: url("./assets/fonts/nunito-v26-latin-300.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-300.woff2') format('woff2');
 }
 
 /* nunito-300italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 300;
-  src: url("./assets/fonts/nunito-v26-latin-300italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-300italic.woff2') format('woff2');
 }
 
 /* nunito-regular - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 400;
-  src: url("./assets/fonts/nunito-v26-latin-regular.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-regular.woff2') format('woff2');
 }
 
 /* nunito-italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 400;
-  src: url("./assets/fonts/nunito-v26-latin-italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-italic.woff2') format('woff2');
 }
 
 /* nunito-500 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 500;
-  src: url("./assets/fonts/nunito-v26-latin-500.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-500.woff2') format('woff2');
 }
 
 /* nunito-500italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 500;
-  src: url("./assets/fonts/nunito-v26-latin-500italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-500italic.woff2') format('woff2');
 }
 
 /* nunito-600 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 600;
-  src: url("./assets/fonts/nunito-v26-latin-600.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-600.woff2') format('woff2');
 }
 
 /* nunito-600italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 600;
-  src: url("./assets/fonts/nunito-v26-latin-600italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-600italic.woff2') format('woff2');
 }
 
 /* nunito-700 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 700;
-  src: url("./assets/fonts/nunito-v26-latin-700.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-700.woff2') format('woff2');
 }
 
 /* nunito-700italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 700;
-  src: url("./assets/fonts/nunito-v26-latin-700italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-700italic.woff2') format('woff2');
 }
 
 /* nunito-800 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 800;
-  src: url("./assets/fonts/nunito-v26-latin-800.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-800.woff2') format('woff2');
 }
 
 /* nunito-800italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 800;
-  src: url("./assets/fonts/nunito-v26-latin-800italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-800italic.woff2') format('woff2');
 }
 
 /* nunito-900 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: normal;
   font-weight: 900;
-  src: url("./assets/fonts/nunito-v26-latin-900.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-900.woff2') format('woff2');
 }
 
 /* nunito-900italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-style: italic;
   font-weight: 900;
-  src: url("./assets/fonts/nunito-v26-latin-900italic.woff2") format("woff2");
+  src: url('./assets/fonts/nunito-v26-latin-900italic.woff2') format('woff2');
 }
 
 /* figtree-300 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 300;
-  src: url("./assets/fonts/figtree-v5-latin-300.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-300.woff2') format('woff2');
 }
 
 /* figtree-300italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 300;
-  src: url("./assets/fonts/figtree-v5-latin-300italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-300italic.woff2') format('woff2');
 }
 
 /* figtree-regular - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 400;
-  src: url("./assets/fonts/figtree-v5-latin-regular.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-regular.woff2') format('woff2');
 }
 
 /* figtree-italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 400;
-  src: url("./assets/fonts/figtree-v5-latin-italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-italic.woff2') format('woff2');
 }
 
 /* figtree-500 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 500;
-  src: url("./assets/fonts/figtree-v5-latin-500.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-500.woff2') format('woff2');
 }
 
 /* figtree-500italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 500;
-  src: url("./assets/fonts/figtree-v5-latin-500italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-500italic.woff2') format('woff2');
 }
 
 /* figtree-600 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 600;
-  src: url("./assets/fonts/figtree-v5-latin-600.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-600.woff2') format('woff2');
 }
 
 /* figtree-600italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 600;
-  src: url("./assets/fonts/figtree-v5-latin-600italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-600italic.woff2') format('woff2');
 }
 
 /* figtree-700 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 700;
-  src: url("./assets/fonts/figtree-v5-latin-700.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-700.woff2') format('woff2');
 }
 
 /* figtree-700italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 700;
-  src: url("./assets/fonts/figtree-v5-latin-700italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-700italic.woff2') format('woff2');
 }
 
 /* figtree-800 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 800;
-  src: url("./assets/fonts/figtree-v5-latin-800.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-800.woff2') format('woff2');
 }
 
 /* figtree-800italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 800;
-  src: url("./assets/fonts/figtree-v5-latin-800italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-800italic.woff2') format('woff2');
 }
 
 /* figtree-900 - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: normal;
   font-weight: 900;
-  src: url("./assets/fonts/figtree-v5-latin-900.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-900.woff2') format('woff2');
 }
 
 /* figtree-900italic - latin */
 @font-face {
   font-display: swap;
-  font-family: "Figtree";
+  font-family: 'Figtree';
   font-style: italic;
   font-weight: 900;
-  src: url("./assets/fonts/figtree-v5-latin-900italic.woff2") format("woff2");
+  src: url('./assets/fonts/figtree-v5-latin-900italic.woff2') format('woff2');
 }
 
 /* ===== sidenav ===== */
@@ -798,7 +798,7 @@ textarea {
   border: unset;
   outline: none;
   resize: none;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 18px;
   font-weight: 400;
 }
@@ -827,15 +827,15 @@ textarea {
 }
 
 .textarea-container .action-btns .cancel-btn {
-  border: 1px solid #797EF3;
-  color: #444DF2;
+  border: 1px solid #797ef3;
+  color: #444df2;
   font-weight: 700;
   font-size: 16px;
   padding: 5px 12px;
 }
 
 .textarea-container .action-btns .cancel-btn:hover {
-  background-color: #5359F1;
+  background-color: #5359f1;
   color: white;
 }
 
@@ -845,11 +845,11 @@ textarea {
   font-size: 16px;
   padding: 5px 12px;
   color: white;
-  background-color: #444DF2;
+  background-color: #444df2;
 }
 
 .textarea-container .action-btns .save-btn:hover {
-  background-color: #787EF2;
+  background-color: #787ef2;
 }
 
 @media (max-width: 1100px) {
@@ -1084,7 +1084,7 @@ textarea {
   border: unset;
   outline: none;
   resize: none;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 18px;
   font-weight: 400;
 }
@@ -1113,14 +1113,14 @@ textarea {
 }
 
 .textarea-container .action-btns .cancel-btn {
-  border: 1px solid #797EF3;
-  color: #444DF2;
+  border: 1px solid #797ef3;
+  color: #444df2;
   font-weight: 700;
   font-size: 18px;
 }
 
 .textarea-container .action-btns .cancel-btn:hover {
-  background-color: #5359F1;
+  background-color: #5359f1;
   color: white;
 }
 
@@ -1129,11 +1129,11 @@ textarea {
   font-weight: 700;
   font-size: 18px;
   color: white;
-  background-color: #444DF2;
+  background-color: #444df2;
 }
 
 .textarea-container .action-btns .save-btn:hover {
-  background-color: #787EF2;
+  background-color: #787ef2;
 }
 
 .textarea-icon {
@@ -1239,7 +1239,7 @@ textarea {
   border: unset;
   outline: none;
   resize: none;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 18px;
   font-weight: 400;
 }
@@ -1319,14 +1319,14 @@ textarea {
   gap: 16px;
   font-size: 16px;
   font-weight: 700;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
   padding: 6px 12px;
   border-radius: 30px;
 }
 
 .tag-member-dialog .member:hover {
   transform: scale(1.05);
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .tag-member-dialog .member > img {
@@ -1336,7 +1336,7 @@ textarea {
   border-radius: 100%;
 }
 
-input[type="file"] {
+input[type='file'] {
   display: none;
 }
 
@@ -1384,7 +1384,7 @@ input[type="file"] {
   width: 200px;
   height: 80px;
   object-fit: contain;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file .close-icon {
@@ -1396,11 +1396,11 @@ input[type="file"] {
   padding: 4px;
   border-radius: 100%;
   opacity: 0;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .red {
@@ -1409,10 +1409,10 @@ input[type="file"] {
   left: 40px;
   font-size: 18px;
   font-weight: 600;
-  color: #ED1E79;
+  color: #ed1e79;
   width: auto;
   height: auto;
-  border: 2px solid #ED1E79;
+  border: 2px solid #ed1e79;
 }
 
 .textarea-icon {
@@ -1438,7 +1438,7 @@ app-first-two-selected-members {
 }
 
 .add-specific-person-container {
-  font-family: "Nunito";
+  font-family: 'Nunito';
   width: 100%;
   position: relative;
   display: flex;
@@ -1669,7 +1669,7 @@ app-first-two-selected-members {
 }
 
 .add-specific-person-container {
-  font-family: "Nunito";
+  font-family: 'Nunito';
   width: 100%;
   position: relative;
   display: flex;
@@ -1816,7 +1816,7 @@ app-first-two-selected-members {
     border-radius: 30px 30px 0 0;
     box-shadow: 0px -3px 10px rgba(0, 0, 0, 0.2);
     padding: 30px 16px 100px 16px;
-    transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+    transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 
   .mobile-title-add-persons {
@@ -1926,7 +1926,7 @@ app-first-two-selected-members {
   border: unset;
   outline: none;
   resize: none;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 18px;
   font-weight: 400;
 }
@@ -2004,14 +2004,14 @@ app-first-two-selected-members {
   gap: 16px;
   font-size: 16px;
   font-weight: 700;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
   padding: 6px 12px;
   border-radius: 30px;
 }
 
 .tag-member-dialog .member:hover {
   transform: scale(1.05);
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .tag-member-dialog .member > img {
@@ -2021,7 +2021,7 @@ app-first-two-selected-members {
   border-radius: 100%;
 }
 
-input[type="file"] {
+input[type='file'] {
   display: none;
 }
 
@@ -2063,7 +2063,7 @@ input[type="file"] {
   width: 200px;
   height: 80px;
   object-fit: contain;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file .close-icon {
@@ -2075,20 +2075,20 @@ input[type="file"] {
   padding: 4px;
   border-radius: 100%;
   opacity: 0;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .red {
   font-size: 18px;
   font-weight: 600;
-  color: #ED1E79;
+  color: #ed1e79;
   width: auto;
   height: auto;
-  border: 2px solid #ED1E79;
+  border: 2px solid #ed1e79;
 }
 
 .textarea-icon {
@@ -2168,7 +2168,7 @@ input[type="file"] {
   border: unset;
   outline: none;
   resize: none;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 18px;
   font-weight: 400;
 }
@@ -2255,14 +2255,14 @@ input[type="file"] {
   gap: 16px;
   font-size: 16px;
   font-weight: 700;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
   padding: 6px 12px;
   border-radius: 30px;
 }
 
 .tag-member-dialog .member:hover {
   transform: scale(1.05);
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .tag-member-dialog .member > img {
@@ -2272,7 +2272,7 @@ input[type="file"] {
   border-radius: 100%;
 }
 
-input[type="file"] {
+input[type='file'] {
   display: none;
 }
 
@@ -2314,7 +2314,7 @@ input[type="file"] {
   width: 200px;
   height: 80px;
   object-fit: contain;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file .close-icon {
@@ -2326,11 +2326,11 @@ input[type="file"] {
   padding: 4px;
   border-radius: 100%;
   opacity: 0;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .uploaded-file-container {
@@ -2349,7 +2349,7 @@ input[type="file"] {
   height: 200px;
   overflow: hidden;
   background-color: white;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container:hover .uploaded-img {
@@ -2365,7 +2365,7 @@ input[type="file"] {
   width: 200px;
   height: 200px;
   object-fit: contain;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container .close-icon {
@@ -2377,11 +2377,11 @@ input[type="file"] {
   padding: 4px;
   border-radius: 100%;
   opacity: 0;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .file-popup {
@@ -2414,7 +2414,7 @@ input[type="file"] {
 }
 
 .file-popup .img-container:hover .link {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .file-popup .img-container .img-in-popup {
@@ -2431,7 +2431,7 @@ input[type="file"] {
   border-radius: 100%;
   padding: 8px;
   background-color: #e6e6e6;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .file-popup .close-icon {
@@ -2441,21 +2441,21 @@ input[type="file"] {
   right: 24px;
   padding: 4px;
   border-radius: 100%;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .file-popup .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
   transform: scale(1.2);
 }
 
 .red {
   font-size: 18px;
   font-weight: 600;
-  color: #ED1E79;
+  color: #ed1e79;
   width: auto;
   height: auto;
-  border: 2px solid #ED1E79;
+  border: 2px solid #ed1e79;
 }
 
 .textarea-icon {
@@ -2965,7 +2965,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .message:hover {
-  background: #ECEEFD;
+  background: #eceefd;
 }
 
 .message:hover .answer-message {
@@ -2986,7 +2986,7 @@ textarea::-webkit-scrollbar-thumb {
   z-index: 5;
   opacity: 0;
   transform: translateX(-16px);
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .reaction-popoup-reverse {
@@ -3178,7 +3178,7 @@ textarea::-webkit-scrollbar-thumb {
   padding: 15px 10px;
   color: #fff;
   display: none;
-  transition: all 0.3s cubic-bezier(.215, .61, .355, 1);
+  transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
   z-index: 10;
 }
 
@@ -3222,11 +3222,11 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .reverse:hover {
-  background-color: #ECEEFD !important;
+  background-color: #eceefd !important;
 }
 
 .reverse:hover .answer-message {
-  background-color: #787EF2;
+  background-color: #787ef2;
   color: white;
 }
 
@@ -3246,7 +3246,7 @@ textarea::-webkit-scrollbar-thumb {
   height: 200px;
   overflow: hidden;
   background-color: white;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container:hover .uploaded-img {
@@ -3262,7 +3262,7 @@ textarea::-webkit-scrollbar-thumb {
   width: 200px;
   height: 200px;
   object-fit: contain;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container .close-icon {
@@ -3274,11 +3274,11 @@ textarea::-webkit-scrollbar-thumb {
   padding: 4px;
   border-radius: 100%;
   opacity: 0;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .file-popup {
@@ -3311,7 +3311,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .file-popup .img-container:hover .link {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .file-popup .img-container .img-in-popup {
@@ -3328,7 +3328,7 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 100%;
   padding: 8px;
   background-color: #e6e6e6;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .file-popup .close-icon {
@@ -3338,11 +3338,11 @@ textarea::-webkit-scrollbar-thumb {
   right: 24px;
   padding: 4px;
   border-radius: 100%;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .file-popup .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
   transform: scale(1.2);
 }
 
@@ -3404,14 +3404,14 @@ textarea::-webkit-scrollbar-thumb {
   width: 100%;
   background: #fff;
   border-radius: 30px;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: unset;
   gap: 24px;
-  transition: all 0.25s cubic-bezier(.215, .61, .355, 1);
+  transition: all 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 .thread > .thread-header {
@@ -3480,7 +3480,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .message:hover {
-  background-color: #ECEEFD;
+  background-color: #eceefd;
 }
 
 .message:hover .thread-answer-message {
@@ -3501,7 +3501,7 @@ textarea::-webkit-scrollbar-thumb {
   z-index: 5;
   opacity: 0;
   transform: translateX(-16px);
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .reaction-popoup-reverse {
@@ -3722,7 +3722,7 @@ textarea::-webkit-scrollbar-thumb {
   height: 200px;
   overflow: hidden;
   background-color: white;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container:hover .uploaded-img {
@@ -3738,7 +3738,7 @@ textarea::-webkit-scrollbar-thumb {
   width: 200px;
   height: 200px;
   object-fit: contain;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container .close-icon {
@@ -3750,11 +3750,11 @@ textarea::-webkit-scrollbar-thumb {
   padding: 4px;
   border-radius: 100%;
   opacity: 0;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .uploaded-file-container .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
 }
 
 .file-popup {
@@ -3787,7 +3787,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .file-popup .img-container:hover .link {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .file-popup .img-container .img-in-popup {
@@ -3804,7 +3804,7 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 100%;
   padding: 8px;
   background-color: #e6e6e6;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .file-popup .close-icon {
@@ -3814,11 +3814,11 @@ textarea::-webkit-scrollbar-thumb {
   right: 24px;
   padding: 4px;
   border-radius: 100%;
-  transition: all .125s ease-in-out;
+  transition: all 0.125s ease-in-out;
 }
 
 .file-popup .close-icon:hover {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
   transform: scale(1.2);
 }
 

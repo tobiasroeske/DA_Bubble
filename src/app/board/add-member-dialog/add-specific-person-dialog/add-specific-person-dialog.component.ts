@@ -3,9 +3,8 @@ import { Component, inject, OnInit, HostListener, ChangeDetectionStrategy } from
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { FormsModule } from '@angular/forms';
-import { Channel } from '../../../shared/models/channel.class';
-import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
-import { User } from '../../../shared/models/user.class';
+import { Channel } from '../../../shared/interfaces/channel.interface';
+import { UserProfile } from '../../../shared/interfaces/user.interface';
 import { SelectedMembersFullListComponent } from './selected-members-full-list/selected-members-full-list.component';
 import { SuggestedListComponent } from './suggested-list/suggested-list.component';
 import { FirstTwoSelectedMembersComponent } from './first-two-selected-members/first-two-selected-members.component';
@@ -37,10 +36,9 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   searchValue!: string;
   showAllSelectedMembers: boolean = false;
   placeholder: string = 'Name eingeben';
-  userList: CurrentUser[] = [];
-  filteredUsersList: any[] = [];
-  selectedList: any = [];
-  channel: Channel = new Channel();
+  userList: UserProfile[] = [];
+  filteredUsersList: UserProfile[] = [];
+  selectedList: UserProfile[] = [];
   currentWindowWidth!: number;
 
   @HostListener('window:resize', ['$event'])
@@ -49,33 +47,18 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   constructor() {
-    this.title = this.firestore.allChannels()[this.boardServ.idx].title;
-    this.currentChannel = new Channel(this.firestore.allChannels()[this.boardServ.idx]);
+    this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.channelId = this.currentChannel.id!;
+    this.title = this.currentChannel.title;
   }
 
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  async loadUsers() {
-    await this.findNewAddedUsers();
-    this.currentChannel.allUsers.forEach(user => {
-      if (user.selected == false) {
-        this.userList.push(user);
-      }
-    });
-  }
-
-  async findNewAddedUsers() {
-    const currentChannelUids = this.currentChannel.allUsers.map(user => user.id);
-    const userList = this.firestore.userList();
-    userList.forEach(user => {
-      if (!currentChannelUids.includes(user.id)) {
-        this.currentChannel.allUsers.push(user);
-      }
-    });
-    await this.firestore.updateChannelUsers(this.currentChannel.allUsers, this.channelId);
+  loadUsers() {
+    const memberIdSet = new Set(this.currentChannel.memberIds);
+    this.userList = this.firestore.userList().filter(u => !memberIdSet.has(u.id!));
   }
 
   getFirstTwoMembers() {
@@ -83,19 +66,12 @@ export class AddSpecificPersonDialogComponent implements OnInit {
   }
 
   async addNewMembersToChannel() {
-    this.currentChannel.partecipantsIds = [];
-    this.selectedList.forEach(async (member: CurrentUser) => {
-      await this.firestore.updateMembers(member, this.channelId);
+    for (const member of this.selectedList) {
       if (member.id) {
-        this.currentChannel.partecipantsIds.push(member.id);
+        await this.firestore.addMember(this.channelId, member.id);
       }
-      this.currentChannel.allUsers.forEach(user => {
-        if (user.name == member.name) {
-          user.selected = true;
-        }
-      });
-    });
-    await this.updateParticipants();
+    }
+    this.selectedList = [];
     this.closeTheAddMembersDialogs();
   }
 
@@ -106,26 +82,13 @@ export class AddSpecificPersonDialogComponent implements OnInit {
     });
   }
 
-  async updateParticipants() {
-    const updatedUsers = this.currentChannel.allUsers;
-    await this.firestore.updateChannelUsers(updatedUsers, this.channelId);
-    this.selectedList = [];
-    await this.addPartecipantsIds();
-    this.memberServ.addSpecificPerson = false;
-  }
-
-  async addPartecipantsIds() {
-    this.currentChannel.partecipantsIds.forEach(async id => {
-      await this.firestore.updatePartecipantsIds(id, this.channelId);
-    });
-  }
-
   filterMembers(text: string) {
     if (!text) {
       this.showSuggestedList = false;
     } else {
+      const memberIdSet = new Set(this.currentChannel.memberIds);
       this.filteredUsersList = this.userList.filter(
-        ul => ul.name.toLowerCase().includes(text.toLowerCase()) && ul.selected == false
+        ul => ul.name.toLowerCase().includes(text.toLowerCase()) && !memberIdSet.has(ul.id!)
       );
       if (this.filteredUsersList.length > 0) {
         this.showSuggestedList = true;
@@ -137,13 +100,11 @@ export class AddSpecificPersonDialogComponent implements OnInit {
 
   addMemberToSelectedList(index: number) {
     this.selectedMember = this.filteredUsersList[index];
-    this.selectedMember.selected = true;
     this.selectedList.push(this.selectedMember);
     this.searchValue = '';
   }
 
   removeMemberFromSelectedList(index: number) {
-    this.selectedList[index].selected = false;
     this.selectedList.splice(index, 1);
   }
 

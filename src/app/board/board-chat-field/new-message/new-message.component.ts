@@ -8,8 +8,8 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
-import { Channel } from '../../../shared/models/channel.class';
+import { UserProfile } from '../../../shared/interfaces/user.interface';
+import { Channel } from '../../../shared/interfaces/channel.interface';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
@@ -22,7 +22,7 @@ import { FirestoreService } from '../../../shared/services/firestore-service/fir
   styleUrl: './new-message.component.scss',
 })
 export class NewMessageComponent implements AfterViewInit {
-  readonly users = input.required<CurrentUser[]>();
+  readonly users = input.required<UserProfile[]>();
   readonly channels = input.required<Channel[]>();
 
   memberServ = inject(MemberDialogsService);
@@ -32,7 +32,7 @@ export class NewMessageComponent implements AfterViewInit {
   tagMember = false;
   tagChannel = false;
   searchInput: string = '';
-  filteredUsers: CurrentUser[] = [];
+  filteredUsers: UserProfile[] = [];
   filteredChannels: Channel[] = [];
 
   @HostListener('keydown', ['$event'])
@@ -64,7 +64,7 @@ export class NewMessageComponent implements AfterViewInit {
     this.filteredChannels = this.channels();
   }
 
-  filterResults(target: CurrentUser[] | Channel[]) {
+  filterResults(target: UserProfile[] | Channel[]) {
     const lowerCaseTag = this.searchInput.slice(1).toLowerCase();
     if (target == this.users()) {
       this.filteredUsers = target.filter(res => res.name.toLowerCase().includes(lowerCaseTag));

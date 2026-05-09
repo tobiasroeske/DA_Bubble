@@ -5,8 +5,8 @@ import { BoardService } from '../../shared/services/board-service/board.service'
 import { AddSpecificPersonDialogComponent } from './add-specific-person-dialog/add-specific-person-dialog.component';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { Channel } from '../../shared/models/channel.class';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { Channel } from '../../shared/interfaces/channel.interface';
+import { UserProfile } from '../../shared/interfaces/user.interface';
 import { AddSpecificPersonDialogMobileComponent } from './add-specific-person-dialog-mobile/add-specific-person-dialog-mobile.component';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,7 +30,6 @@ export class AddMemberDialogComponent {
 
   specificMember: boolean = false;
   allMembers: boolean = false;
-  allUsers: CurrentUser[] = [];
 
   onCheck(condition: string) {
     if (condition == 'allMembers') {
@@ -43,41 +42,10 @@ export class AddMemberDialogComponent {
   }
 
   async setAllUsersOnSelectedTrue(event: Event) {
-    this.allUsers = this.firestore.userList();
-    this.allUsers.forEach(u => {
-      u.selected = true;
-    });
-    await this.firestore.updateChannelUsers(this.allUsers, this.currentChannelId());
-    this.addUserToMemberArray();
+    const allUsers: UserProfile[] = this.firestore.userList();
+    const memberIds = allUsers.map(u => u.id!).filter(id => id != null);
+    await this.firestore.updateChannel(this.currentChannelId(), { memberIds });
     this.closeAddMemberDialog(event);
-  }
-
-  async addUserToMemberArray() {
-    const currentChannel = this.currentChannel();
-    currentChannel.members = [];
-    currentChannel.partecipantsIds = [];
-    this.allUsers.forEach(user => {
-      this.currentChannel().members.push(user);
-      if (user.id) {
-        this.currentChannel().partecipantsIds.push(user.id);
-      }
-    });
-    await this.firestore.updateChannel(currentChannel, this.currentChannelId());
-    // this.currentChannel.members.forEach(async (members) => {
-    //   await this.firestore.updateMembers(members, this.currentChannelId);
-    //   if (members.id) {
-    //     this.currentChannel.partecipantsIds.push(members.id)
-    //   }
-    // });
-    // this.addIdsToPartecipantsIds();
-  }
-
-  addIdsToPartecipantsIds() {
-    this.currentChannel().partecipantsIds.forEach(id => {
-      if (this.currentChannel().id) {
-        this.firestore.updatePartecipantsIds(id, this.currentChannelId());
-      }
-    });
   }
 
   closeAddMemberDialog(event: Event) {

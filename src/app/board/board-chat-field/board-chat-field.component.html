@@ -53,23 +53,23 @@
       >
         <span class="flex items-center">
           @for (
-            member of firestore.allChannels()[boardServ.idx]?.members;
-            track member;
+            memberId of firestore.allChannels()[boardServ.idx]?.memberIds;
+            track memberId;
             let i = $index
           ) {
             @if (i <= 3) {
               <img
                 id="{{ i }}"
-                src="{{ member.avatarPath }}"
+                src="{{ getUserAvatar(memberId) }}"
                 alt=""
                 class="h-10 w-10 rounded-full object-cover -ml-[7px] border-2 border-white"
               />
             }
           }
         </span>
-        @if ((firestore.allChannels()[boardServ.idx]?.members?.length ?? 0) > 4) {
+        @if ((firestore.allChannels()[boardServ.idx]?.memberIds?.length ?? 0) > 4) {
           <span class="text-xl font-semibold"
-            >+{{ (firestore.allChannels()[boardServ.idx]?.members?.length ?? 4) - 4 }}</span
+            >+{{ (firestore.allChannels()[boardServ.idx]?.memberIds?.length ?? 4) - 4 }}</span
           >
         }
         @if (memberServ.membersDialogIsOpen) {
@@ -111,13 +111,13 @@
         src="{{ boardServ.currentChatPartner.avatarPath }}"
         alt=""
       />
-      @if (boardServ.getUserLoginState(boardServ.currentChatPartner) === 'loggedIn') {
+      @if (boardServ.getUserLoginState(boardServ.currentChatPartner?.id ?? '') === 'loggedIn') {
         <img
           src="assets/icons/user_online.png"
           alt=""
           class="absolute left-[45px] bottom-1 z-[15] w-4 h-4"
         />
-      } @else if (boardServ.getUserLoginState(boardServ.currentChatPartner) === 'idle') {
+      } @else if (boardServ.getUserLoginState(boardServ.currentChatPartner?.id ?? '') === 'idle') {
         <img
           src="assets/icons/user_idle.png"
           alt=""
@@ -147,8 +147,8 @@
 >
   @if (!boardServ.privateChatIsStarted()) {
     @for (
-      chat of firestore.allChannels()[boardServ.idx]?.chat;
-      track chat.user.id;
+      chat of firestore.channelMessages();
+      track chat.id;
       let i = $index;
       let lastIndex = $last
     ) {
@@ -162,15 +162,15 @@
     }
   } @else {
     @for (
-      privateMessage of firestore.directMessages()[boardServ.chatPartnerIdx].chat;
-      track privateMessage;
+      privateMessage of firestore.dmMessages();
+      track privateMessage.id;
       let index = $index;
       let lastIndex = $last
     ) {
       <app-private-chat-message
         [lastIndex]="lastIndex"
-        [message]="privateMessage.message"
-        [privateChatId]="firestore.directMessages()[boardServ.chatPartnerIdx].id"
+        [message]="privateMessage.text"
+        [privateChatId]="boardServ.privateChatId"
         [privateMessage]="privateMessage"
         [privateChatIndex]="index"
       ></app-private-chat-message>
@@ -178,10 +178,7 @@
   }
 </div>
 
-@if (
-  boardServ.privateChatIsStarted() &&
-  this.firestore.directMessages()[boardServ.chatPartnerIdx].chat.length == 0
-) {
+@if (boardServ.privateChatIsStarted() && firestore.dmMessages().length == 0) {
   <div
     [ngClass]="{
       'translate-x-[-200%]': boardServ.firstPrivateMessageWasSent(),
@@ -219,7 +216,7 @@
           (click)="memberServ.openShowMemberPopUp(boardServ.chatPartnerIdx)"
           class="text-[#535AF1] hover:font-bold hover:cursor-pointer"
         >
-          &#64;{{ firestore.directMessages()[boardServ.chatPartnerIdx].guest.name }}
+          &#64;{{ boardServ.currentChatPartner.name }}
         </span>
         un dir statt
       </p>

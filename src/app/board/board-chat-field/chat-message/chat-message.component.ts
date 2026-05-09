@@ -14,12 +14,12 @@ import {
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { CommonModule } from '@angular/common';
-import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
+import { Message } from '../../../shared/interfaces/message.interface';
 import { Reaction } from '../../../shared/interfaces/reaction.interface';
+import { Channel } from '../../../shared/interfaces/channel.interface';
 import { FormsModule } from '@angular/forms';
 import { MessageEditorComponent } from '../message-editor/message-editor.component';
 import { FirebaseStorageService } from '../../../shared/services/firebase-storage-service/firebase-storage.service';
-import { Channel } from '../../../shared/models/channel.class';
 import { ChatMessageAttachmentComponent } from './chat-message-attachment/chat-message-attachment.component';
 
 @Component({
@@ -35,7 +35,7 @@ import { ChatMessageAttachmentComponent } from './chat-message-attachment/chat-m
 })
 export class ChatMessageComponent implements OnInit, AfterViewChecked {
   readonly channelMessages = viewChildren<ElementRef>('channelMessages');
-  @Input() chat!: ChatMessage;
+  @Input() chat!: Message;
   readonly lastIndex = input.required<boolean>();
   readonly channelId = input<string>('');
   readonly chatMessageIndex = input<number>(0);
@@ -54,7 +54,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   reactionDialogIndicatorbarOpen = false;
   currentUserName!: string;
   lastReactions: string[] = ['thumbs_up', 'laughing'];
-  currentChatMessage!: ChatMessage;
+  currentChatMessage!: Message;
   editorOpen = false;
   reactionEmojis: string[] = [
     'angry',
@@ -73,7 +73,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     this.currentUserName = this.boardServ.currentUser.name;
     this.currentChatMessage = this.chat;
-    this.editedMessage = this.chat.message;
+    this.editedMessage = this.chat.text;
   }
 
   ngAfterViewChecked() {
@@ -92,15 +92,10 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
     this.cdr.detectChanges();
   }
 
-  checkIfDateIsToday(date: number) {
+  checkIfDateIsToday(timestamp: number) {
     const todayAsString = new Date().toDateString();
-    const dateToCheckAsString = new Date(date).toDateString();
-    const sameDate = todayAsString == dateToCheckAsString;
-    if (sameDate) {
-      return true;
-    } else {
-      return false;
-    }
+    const dateToCheckAsString = new Date(timestamp).toDateString();
+    return todayAsString === dateToCheckAsString;
   }
 
   toggleReactionDialog(htmlElement: string) {
@@ -120,10 +115,11 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
     this.showFile = !this.showFile;
   }
 
-  async editMessage(index: number) {
-    this.chat.message = this.editedMessage!;
-    this.currentChannel.chat!.splice(index, 1, this.chat);
-    await this.firestore.updateChannel(this.currentChannel, this.channelId());
+  async editMessage(_index: number) {
+    if (!this.chat.id) return;
+    await this.firestore.updateChannelMessage(this.channelId(), this.chat.id, {
+      text: this.editedMessage!,
+    });
     this.editorOpen = false;
   }
 
@@ -134,41 +130,19 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   }
 
   async updateCompleteChannel(emojiIdx: number, emojiArray: string[]): Promise<void> {
-    const newChatMessage = this.checkIfReactionExists(emojiIdx, emojiArray);
-    this.currentChannel.chat!.splice(this.chatMessageIndex(), 1, newChatMessage);
-    await this.firestore.updateAllChats(this.channelId(), this.currentChannel.chat!);
-    this.getLastTwoReactions(emojiIdx, emojiArray);
-  }
-
-  checkIfReactionExists(emojiIdx: number, emojiArray: string[]): ChatMessage {
-    const chatMessage = this.getCurrentChatMessage();
+    if (!this.chat.id) return;
     const emojiPath = emojiArray[emojiIdx];
-    const existingReaction = this.findExistingReaction(chatMessage, emojiPath);
-    if (existingReaction) {
-      this.updateExistingReaction(existingReaction);
+    const reactions = this.chat.reactions.map(r => ({ ...r, userIds: [...r.userIds] }));
+    const existingIdx = reactions.findIndex(r => r.emojiPath === emojiPath);
+    if (existingIdx >= 0) {
+      if (!reactions[existingIdx].userIds.includes(this.boardServ.currentUser.id!)) {
+        reactions[existingIdx].userIds.push(this.boardServ.currentUser.id!);
+      }
     } else {
-      this.addNewReaction(chatMessage, emojiIdx, emojiArray);
+      reactions.push({ emojiPath, userIds: [this.boardServ.currentUser.id!] });
     }
-    return chatMessage;
-  }
-
-  getCurrentChatMessage(): ChatMessage {
-    return this.currentChannel.chat![this.chatMessageIndex()];
-  }
-
-  findExistingReaction(chatMessage: ChatMessage, emojiPath: string): Reaction | undefined {
-    return chatMessage.reactions.find(reaction => reaction.emojiPath === emojiPath);
-  }
-
-  updateExistingReaction(existingReaction: Reaction): void {
-    existingReaction.count += 1;
-    if (!existingReaction.creator.includes(this.currentUserName)) {
-      existingReaction.creator.push(this.currentUserName);
-    }
-  }
-
-  addNewReaction(chatMessage: ChatMessage, emojiIdx: number, emojiArray: string[]): void {
-    chatMessage.reactions.push(this.setReactionObject(emojiIdx, emojiArray));
+    await this.firestore.updateChannelMessage(this.channelId(), this.chat.id, { reactions });
+    this.getLastTwoReactions(emojiIdx, emojiArray);
   }
 
   getLastTwoReactions(index: number, emojiArray: string[]) {
@@ -184,8 +158,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
   setReactionObject(i: number, emojiArray: string[]): Reaction {
     return {
       emojiPath: emojiArray[i],
-      creator: [this.boardServ.currentUser.name],
-      count: 1,
+      userIds: [this.boardServ.currentUser.id!],
     };
   }
 
@@ -195,7 +168,7 @@ export class ChatMessageComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  stopHover(event: boolean) {
+  stopHover(_event: boolean) {
     this.mouseIsOverMessage = false;
   }
 

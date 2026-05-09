@@ -218,77 +218,44 @@
       >
         @for (
           privateChat of this.firestore.directMessages();
-          track privateChat;
+          track privateChat.id;
           let index = $index
         ) {
-          @if (firestore.currentUserId == privateChat.creator.id) {
-            <div
-              [ngClass]="{
-                'text-[#535AF1] bg-[#ECEEFE]': boardServ.blueColorsForTheChatPartersFocus[index],
-              }"
-              id="{{ index }}"
-              class="flex items-center justify-between gap-4 px-5 py-1 rounded-[35px] relative hover:bg-[#ECEEFE] hover:cursor-pointer hover:[&_h3]:text-[#535AF1]"
-              (click)="boardServ.startPrivateChat(index, 'creator', $event)"
-            >
+          @let partner = getChatPartner(privateChat);
+          <div
+            [ngClass]="{
+              'text-[#535AF1] bg-[#ECEEFE]': boardServ.blueColorsForTheChatPartersFocus[index],
+            }"
+            id="{{ index }}"
+            class="flex items-center justify-between gap-4 px-5 py-1 rounded-[35px] relative hover:bg-[#ECEEFE] hover:cursor-pointer hover:[&_h3]:text-[#535AF1]"
+            (click)="boardServ.startPrivateChat(index, 'creator', $event)"
+          >
+            <img
+              class="w-[50px] h-[50px] object-cover rounded-full z-10"
+              src="{{ partner?.avatarPath ?? 'assets/img/profile_big.png' }}"
+              alt=""
+            />
+            @if (boardServ.getUserLoginState(partner?.id ?? '') === 'idle') {
               <img
-                class="w-[50px] h-[50px] object-cover rounded-full z-10"
-                src="{{ privateChat.guest.avatarPath }}"
+                src="assets/icons/user_idle.png"
                 alt=""
+                class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
               />
-              @if (boardServ.getUserLoginState(privateChat.guest) === 'idle') {
-                <img
-                  src="assets/icons/user_idle.png"
-                  alt=""
-                  class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
-                />
-              } @else if (boardServ.getUserLoginState(privateChat.guest) === 'loggedOut') {
-                <img
-                  src="assets/icons/user_offline.png"
-                  alt=""
-                  class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
-                />
-              } @else {
-                <img
-                  src="assets/icons/user_online.png"
-                  alt=""
-                  class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
-                />
-              }
-              <h3 class="font-normal text-lg">{{ privateChat.guest.name }}</h3>
-            </div>
-          } @else {
-            <div
-              id="{{ index }}"
-              class="flex items-center justify-between gap-4 px-5 py-1 rounded-[35px] relative hover:bg-[#ECEEFE] hover:cursor-pointer hover:[&_h3]:text-[#535AF1]"
-              (click)="boardServ.startPrivateChat(index, 'guest', $event)"
-            >
+            } @else if (boardServ.getUserLoginState(partner?.id ?? '') === 'loggedOut') {
               <img
-                class="w-[50px] h-[50px] object-cover rounded-full z-10"
-                src="{{ privateChat.creator.avatarPath }}"
+                src="assets/icons/user_offline.png"
                 alt=""
+                class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
               />
-              @if (boardServ.getUserLoginState(privateChat.creator) === 'idle') {
-                <img
-                  src="assets/icons/user_idle.png"
-                  alt=""
-                  class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
-                />
-              } @else if (boardServ.getUserLoginState(privateChat.creator) === 'loggedOut') {
-                <img
-                  src="assets/icons/user_offline.png"
-                  alt=""
-                  class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
-                />
-              } @else {
-                <img
-                  src="assets/icons/user_online.png"
-                  alt=""
-                  class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
-                />
-              }
-              <h3 class="font-normal text-lg">{{ privateChat.creator.name }}</h3>
-            </div>
-          }
+            } @else {
+              <img
+                src="assets/icons/user_online.png"
+                alt=""
+                class="w-4 h-4 absolute left-[55px] bottom-[5px] z-20"
+              />
+            }
+            <h3 class="font-normal text-lg">{{ partner?.name ?? '' }}</h3>
+          </div>
         }
       </div>
     </div>

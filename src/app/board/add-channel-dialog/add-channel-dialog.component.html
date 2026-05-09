@@ -68,7 +68,7 @@
             type="text"
             name="title"
             minlength="3"
-            [(ngModel)]="channel.title"
+            [(ngModel)]="channelTitle"
             #title="ngModel"
             required
             class="flex-1 border-none outline-none text-lg font-normal"
@@ -90,7 +90,7 @@
         <div class="rounded-full border border-[#ADB0D9] p-[18px_20px] flex justify-between gap-4">
           <textarea
             placeholder="Dein text hier"
-            [(ngModel)]="channel.description"
+            [(ngModel)]="channelDescription"
             type="text"
             name="textarea"
             class="flex-1 border-none outline-none resize-none text-lg font-normal whitespace-pre-wrap word-break break-word font-['Nunito'] overflow-hidden"

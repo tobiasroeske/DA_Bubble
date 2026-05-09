@@ -1,8 +1,7 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { MessageEditorComponent } from '../../message-editor/message-editor.component';
 import { FormsModule } from '@angular/forms';
-
-import { PrivateChat } from '../../../../shared/models/privateChat.class';
+import { BoardService } from '../../../../shared/services/board-service/board.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,17 +11,19 @@ import { PrivateChat } from '../../../../shared/models/privateChat.class';
   styleUrl: './private-message-editor.component.scss',
 })
 export class PrivateMessageEditorComponent extends MessageEditorComponent {
-  readonly privateChat = input.required<PrivateChat>();
+  readonly dmId = input<string>('');
+  private boardServ2 = inject(BoardService);
 
   constructor() {
     super();
   }
 
-  override async editMessage(index: number) {
+  override async editMessage(_index: number) {
     const chatMsg = this.chat();
-    if (!chatMsg) return;
-    chatMsg.message = this.editedMessage!;
-    this.privateChat().chat.splice(index, 1, chatMsg);
-    await this.firestore.updateCompletePrivateMessage(this.privateChat().id!, this.privateChat());
+    if (!chatMsg?.id) return;
+    const dmId = this.dmId() || this.boardServ2.privateChatId;
+    if (!dmId) return;
+    await this.firestore.updateDmMessage(dmId, chatMsg.id, { text: this.editedMessage! });
+    this.closeEditor();
   }
 }

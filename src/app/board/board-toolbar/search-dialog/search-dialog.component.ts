@@ -11,13 +11,11 @@ import {
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { MemberDialogsService } from '../../../shared/services/member-dialogs.service/member-dialogs.service';
-import { PrivateChat } from '../../../shared/models/privateChat.class';
-import { Channel } from '../../../shared/models/channel.class';
-import { User } from '../../../shared/models/user.class';
-import { CurrentUser } from '../../../shared/interfaces/currentUser.interface';
-import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
+import { UserProfile } from '../../../shared/interfaces/user.interface';
+import { Channel } from '../../../shared/interfaces/channel.interface';
+import { DirectMessage } from '../../../shared/interfaces/direct-message.interface';
 
-type SearchItem = CurrentUser | PrivateChat | Channel | ChatMessage;
+type SearchItem = UserProfile | Channel | DirectMessage;
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,67 +33,35 @@ export class SearchDialogComponent implements OnChanges {
   memberServ = inject(MemberDialogsService);
 
   mainSearchList: any[] = [];
-  chatArray: ChatMessage[] = [];
-  idxToFindPositionOfGuestInDirectMessArray!: number;
-  idxToFindPositionOfClickedMessageInTheChoisedPrivChat!: number;
 
   showSearchElementClicked(index: number, event: Event) {
     const clickedElement = this.mainSearchList[index];
-    if (clickedElement.type == 'Channel') {
+    if (this.isChannel(clickedElement)) {
       this.showTheClickedElementOfTypeChannel(clickedElement, event);
-    } else if (clickedElement.type == 'CurrentUser') {
-      this.showTheClickedElementOfTypeCurrentUser(clickedElement);
-    } else if (clickedElement.type == 'PrivateChat') {
-      this.showTheClickedElementOfTypePrivatChat(clickedElement, event);
+    } else if (this.isUser(clickedElement)) {
+      this.showTheClickedElementOfTypeUser(clickedElement);
+    } else if (this.isDirectMessage(clickedElement)) {
+      this.showTheClickedElementOfTypeDirectMessage(clickedElement, event);
     }
     this.boardServ.showSearchDialog.set(false);
   }
 
   showTheClickedElementOfTypeChannel(clickedElement: Channel, event: Event) {
-    const idx = this.firestore.allChannels().findIndex(chann => chann.id == clickedElement.id);
+    const idx = this.firestore.allChannels().findIndex(chann => chann.id === clickedElement.id);
     this.boardServ.showChannelInChatField(idx, event);
   }
 
-  showTheClickedElementOfTypeCurrentUser(clickedElement: CurrentUser) {
-    const idx = this.firestore.userList().findIndex(user => user.id == clickedElement.id);
+  showTheClickedElementOfTypeUser(clickedElement: UserProfile) {
+    const idx = this.firestore.userList().findIndex(user => user.id === clickedElement.id);
     this.boardServ.openShowUserPopUp(idx);
     this.boardServ.showUserPopUp.set(true);
   }
 
-  async showTheClickedElementOfTypePrivatChat(clickedElement: PrivateChat, event: Event) {
-    this.idxToFindPositionOfGuestInDirectMessArray =
-      this.findGuestIndexInDirectMessages(clickedElement);
-    this.selectChatRoomAndMember();
-    await this.setChatRoomAndScrollToMessage(event);
-  }
-
-  findGuestIndexInDirectMessages(clickedElement: PrivateChat): number {
-    return this.firestore
-      .directMessages()
-      .findIndex(privChat => privChat.guest.id == clickedElement.guest.id);
-  }
-
-  selectChatRoomAndMember(): void {
-    this.boardServ.selectedChatRoom =
-      this.firestore.directMessages()[this.idxToFindPositionOfGuestInDirectMessArray];
-    this.memberServ.currentMember = this.boardServ.selectedChatRoom.guest;
-  }
-
-  async setChatRoomAndScrollToMessage(event: Event): Promise<void> {
-    await this.memberServ.setChatRoom(event);
-    this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat =
-      this.findMessageIndexInSelectedChatRoom();
-    if (this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat !== -1) {
-      this.boardServ.scrollToSearchedMessage(
-        this.idxToFindPositionOfClickedMessageInTheChoisedPrivChat
-      );
+  async showTheClickedElementOfTypeDirectMessage(clickedElement: DirectMessage, event: Event) {
+    const idx = this.firestore.directMessages().findIndex(dm => dm.id === clickedElement.id);
+    if (idx !== -1) {
+      this.boardServ.startPrivateChat(idx, undefined, event);
     }
-  }
-
-  findMessageIndexInSelectedChatRoom(): number {
-    return this.boardServ.selectedChatRoom.chat.findIndex(
-      chat => chat.message && chat.message.includes(this.searchValue())
-    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -118,38 +84,50 @@ export class SearchDialogComponent implements OnChanges {
   }
 
   filterSearchItems(): SearchItem[] {
-    return this.boardServ.allData.filter((ad: SearchItem) => {
-      if (this.isCurrentUser(ad)) {
-        return ad.name.toLowerCase().includes(this.searchValue().toLowerCase());
-      } else if (this.isChannel(ad)) {
-        return ad.title.toLowerCase().includes(this.searchValue().toLowerCase());
-      } else if (this.isPrivateChat(ad)) {
-        return ad.chat.some(chat =>
-          chat.message.toLowerCase().includes(this.searchValue().toLowerCase())
-        );
-      } else {
-        return false;
+    const query = this.searchValue().toLowerCase();
+    const results: SearchItem[] = [];
+
+    this.firestore.allChannels().forEach(channel => {
+      if (channel.title.toLowerCase().includes(query)) {
+        results.push(channel);
       }
     });
+
+    this.firestore.userList().forEach(user => {
+      if (user.name.toLowerCase().includes(query)) {
+        results.push(user);
+      }
+    });
+
+    this.firestore.directMessages().forEach(dm => {
+      const messages = this.firestore.dmMessages();
+      const hasMatch = messages.some(msg => msg.text.toLowerCase().includes(query));
+      if (hasMatch) {
+        results.push(dm);
+      }
+    });
+
+    return results;
   }
 
   hideSearchDialog(): void {
     this.boardServ.showSearchDialog.set(false);
   }
 
-  isCurrentUser(item: SearchItem): item is CurrentUser {
-    return item.type == 'CurrentUser';
-  }
-
   isChannel(item: SearchItem): item is Channel {
-    return item.type == 'Channel';
+    return 'title' in item && 'memberIds' in item;
   }
 
-  isPrivateChat(item: SearchItem): item is PrivateChat {
-    return item.type == 'PrivateChat';
+  isUser(item: SearchItem): item is UserProfile {
+    return 'name' in item && 'avatarPath' in item && 'loginState' in item;
   }
 
-  isChatMessage(item: SearchItem): item is ChatMessage {
-    return item.type == 'ChatMessage';
+  isDirectMessage(item: SearchItem): item is DirectMessage {
+    return 'participantIds' in item;
+  }
+
+  getPartnerForDm(dm: DirectMessage): UserProfile | undefined {
+    const partnerId = dm.participantIds.find(id => id !== this.boardServ.currentUser.id);
+    return this.firestore.userList().find(u => u.id === partnerId);
   }
 }

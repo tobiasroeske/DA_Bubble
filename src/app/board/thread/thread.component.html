@@ -57,13 +57,13 @@
         (mouseover)="toggleReactionPopup($event)"
         (mouseleave)="toggleReactionPopup($event)"
       >
-        <img class="avatar-thread-img" src="{{ currentChatMessage?.user!.avatarPath }}" alt="" />
+        <img class="avatar-thread-img" src="{{ currentChatMessage?.author?.avatarPath }}" alt="" />
         <div class="thread-message">
           <div class="time-and-name-container">
-            <span class="name">{{ currentChatMessage?.user?.name }}</span>
-            <span class="time">{{ currentChatMessage?.date | date: 'shortTime' }}</span>
+            <span class="name">{{ currentChatMessage?.author?.name }}</span>
+            <span class="time">{{ currentChatMessage?.timestamp | date: 'shortTime' }}</span>
           </div>
-          @if (currentChatMessage?.fileUpload!.length > 0) {
+          @if (currentChatMessage?.fileUpload && currentChatMessage?.fileUpload!.length > 0) {
             <div class="uploaded-file-container">
               <img
                 src="{{ currentChatMessage?.fileUpload }}"
@@ -72,8 +72,8 @@
                 (click)="toggleFilePreview()"
               />
             </div>
-          } @else if (currentChatMessage?.message!.length > 0) {
-            <p class="thread-answer-message">{{ currentChatMessage?.message }}</p>
+          } @else if (currentChatMessage?.text && currentChatMessage?.text!.length > 0) {
+            <p class="thread-answer-message">{{ currentChatMessage?.text }}</p>
           }
           <span class="reaction-indicator-container">
             @for (reaction of currentChatMessage?.reactions; track reaction; let i = $index) {
@@ -83,7 +83,7 @@
                   src="assets/emoji/emoji_{{ reaction.emojiPath }}.png"
                   alt="{{ reaction.emojiPath }}"
                 />
-                <span class="emoji-count">{{ reaction.count }}</span>
+                <span class="emoji-count">{{ reaction.userIds.length }}</span>
               </div>
             }
           </span>
@@ -92,7 +92,7 @@
 
       <div class="answer-advice-container">
         <div class="answer-advice">
-          <span class="count-of-answers">{{ currentChatMessage?.answers?.length }}</span>
+          <span class="count-of-answers">{{ currentChatMessage?.replyCount ?? 0 }}</span>
           <p>Answers</p>
         </div>
         <span class="line"></span>
@@ -101,7 +101,7 @@
 
     <div class="answers-container-thread">
       @for (
-        answer of currentChatMessage?.answers;
+        answer of firestore.channelReplies();
         track answer;
         let i = $index;
         let lastIdx = $last

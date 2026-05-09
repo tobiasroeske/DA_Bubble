@@ -23,7 +23,7 @@ import { CreatePrivateMessageAreaComponent } from '../create-private-message-are
 import { PrivateChatMessageComponent } from './private-chat-message/private-chat-message.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
-import { PrivateChat } from '../../shared/models/privateChat.class';
+import { DirectMessage } from '../../shared/interfaces/direct-message.interface';
 import { NewMessageComponent } from './new-message/new-message.component';
 
 @Component({
@@ -57,7 +57,7 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
   membersList: any[] = [];
   chatPartnerName!: string;
   chatPartnerAvatar!: string;
-  directMessages: PrivateChat[] = [];
+  directMessages: DirectMessage[] = [];
 
   mouseIsOverMessage: boolean = false;
   popUpReaction: boolean = false;
@@ -90,6 +90,10 @@ export class BoardChatFieldComponent implements OnInit, AfterViewInit {
     } else {
       this.popUpReaction = false;
     }
+  }
+
+  getUserAvatar(userId: string): string {
+    return this.firestore.userList().find(u => u.id === userId)?.avatarPath ?? 'assets/img/profile_big.png';
   }
 
   showMembersDialogToggle() {

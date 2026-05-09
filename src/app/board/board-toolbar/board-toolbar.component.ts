@@ -7,9 +7,8 @@ import { EditProfileDialogComponent } from '../../edit-profile-dialog/edit-profi
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { CurrentUser } from '../../shared/interfaces/currentUser.interface';
+import { AppNotification } from '../../shared/interfaces/user.interface';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { NotificationObj } from '../../shared/models/notificationObj.class';
 import { LocalStorageService } from '../../shared/services/local-storage-service/local-storage.service';
 
 @Component({
@@ -31,14 +30,13 @@ export class BoardToolbarComponent {
   firestoreService = inject(FirestoreService);
   localStorageService = inject(LocalStorageService);
 
-  userList: CurrentUser[] = [];
   searchText: string = '';
   showProfileOptions = false;
   showProfile = false;
   showOverlay = false;
   editorOpen = false;
   notificationsOpen = false;
-  unredNotifications: NotificationObj[] = [];
+  unreadNotifications: AppNotification[] = [];
 
   showValue(text: string) {
     this.searchText = text;
@@ -55,21 +53,17 @@ export class BoardToolbarComponent {
   }
 
   allNotificationsRed() {
-    this.unredNotifications = [];
-    const notifications = this.boardServ.currentUser.notification;
-    notifications.forEach((n: NotificationObj) => {
-      if (n.notificationRed === false) {
-        this.unredNotifications.push(n);
+    this.unreadNotifications = [];
+    const notifications = this.boardServ.currentUser?.notifications ?? [];
+    notifications.forEach((n: AppNotification) => {
+      if (!n.isRead) {
+        this.unreadNotifications.push(n);
       }
     });
-    if (this.unredNotifications.length >= 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 
-  toggleProfileOptions(event: Event) {
+  toggleProfileOptions(_event: Event) {
     this.showOverlay = !this.showOverlay;
     this.showProfileOptions = !this.showProfileOptions;
   }
@@ -86,7 +80,7 @@ export class BoardToolbarComponent {
     this.showProfileOptions = false;
   }
 
-  closeProfileDialog(event: boolean) {
+  closeProfileDialog(_event: boolean) {
     this.showProfile = false;
     this.showProfileOptions = false;
     this.showOverlay = false;
@@ -108,12 +102,8 @@ export class BoardToolbarComponent {
 
   async logout() {
     this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
-    this.boardServ.currentUser.loginState = 'loggedOut';
+    await this.firestoreService.updatePresence(this.boardServ.currentUser.id!, 'loggedOut');
     this.localStorageService.saveCurrentUser(this.boardServ.currentUser);
-    await this.firestoreService.updateUser(
-      this.boardServ.currentUser.id!,
-      this.boardServ.currentUser
-    );
     await this.authService.logout();
   }
 }

@@ -2,7 +2,6 @@ import { Injectable, inject, signal } from '@angular/core';
 import {
   Firestore,
   addDoc,
-  arrayUnion,
   collection,
   doc,
   onSnapshot,
@@ -12,22 +11,24 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Auth, Unsubscribe } from '@angular/fire/auth';
-import { PrivateChat } from '../models/privateChat.class';
-import { ChatMessage } from '../interfaces/chatMessage.interface';
+import { DirectMessage } from '../interfaces/direct-message.interface';
+import { Message } from '../interfaces/message.interface';
 
 @Injectable({ providedIn: 'root' })
 export class DirectMessageRepository {
   private readonly firestore = inject(Firestore);
   private readonly auth = inject(Auth);
 
-  readonly directMessages = signal<PrivateChat[]>([]);
-  readonly allDirectMessages = signal<PrivateChat[]>([]);
+  readonly directMessages = signal<DirectMessage[]>([]);
+  readonly allDirectMessages = signal<DirectMessage[]>([]);
+  readonly currentMessages = signal<Message[]>([]);
 
   chatRoomId?: string;
   private currentUserId?: string;
 
-  private unsubDirectMess: Unsubscribe | undefined;
-  private unsubAllDirectMessages: Unsubscribe | undefined;
+  private unsubDirectMess?: Unsubscribe;
+  private unsubAllDirectMessages?: Unsubscribe;
+  private unsubMessages?: Unsubscribe;
 
   constructor() {
     this.auth.onAuthStateChanged(user => {
@@ -40,77 +41,92 @@ export class DirectMessageRepository {
       } else {
         this.unsubDirectMess?.();
         this.unsubAllDirectMessages?.();
+        this.unsubMessages?.();
         this.directMessages.set([]);
         this.allDirectMessages.set([]);
+        this.currentMessages.set([]);
       }
     });
   }
 
-  getDirectMessRef() {
+  getDmRef() {
     return collection(this.firestore, 'direct-messages');
   }
 
-  getDirectMessSingleDoc(docId: string) {
-    return doc(this.getDirectMessRef(), docId);
+  getDmDocRef(dmId: string) {
+    return doc(this.firestore, 'direct-messages', dmId);
+  }
+
+  getMessagesRef(dmId: string) {
+    return collection(this.firestore, 'direct-messages', dmId, 'messages');
+  }
+
+  getMessageRef(dmId: string, messageId: string) {
+    return doc(this.firestore, 'direct-messages', dmId, 'messages', messageId);
   }
 
   subDirectMessages(): Unsubscribe {
     const q = query(
-      this.getDirectMessRef(),
-      where('partecipantsIds', 'array-contains', this.currentUserId),
-      orderBy('lastUpdateAt', 'desc')
+      this.getDmRef(),
+      where('participantIds', 'array-contains', this.currentUserId),
+      orderBy('lastMessageAt', 'desc')
     );
-    return onSnapshot(q, list => {
-      const items: PrivateChat[] = [];
-      list.forEach(el => {
-        items.push(new PrivateChat(el.data()));
-      });
-      this.directMessages.set(items);
+    return onSnapshot(q, snapshot => {
+      this.directMessages.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as DirectMessage)
+      );
     });
   }
 
   subAllExistingChatRooms(): Unsubscribe {
-    return onSnapshot(this.getDirectMessRef(), list => {
-      const items: PrivateChat[] = [];
-      list.forEach(el => {
-        items.push(new PrivateChat(el.data()));
-      });
-      this.allDirectMessages.set(items);
+    return onSnapshot(this.getDmRef(), snapshot => {
+      this.allDirectMessages.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as DirectMessage)
+      );
     });
   }
 
-  async addChatRoom(obj: object): Promise<void> {
+  subscribeToMessages(dmId: string): void {
+    this.unsubMessages?.();
+    const q = query(this.getMessagesRef(dmId), orderBy('timestamp', 'asc'));
+    this.unsubMessages = onSnapshot(q, snapshot => {
+      this.currentMessages.set(
+        snapshot.docs.map(d => ({ id: d.id, ...d.data() }) as Message)
+      );
+    });
+  }
+
+  async addChatRoom(participantIds: string[]): Promise<string | undefined> {
+    const now = Date.now();
+    const dm: Omit<DirectMessage, 'id'> = {
+      participantIds,
+      createdAt: now,
+      lastMessageAt: now,
+    };
     try {
-      const docRef = await addDoc(this.getDirectMessRef(), obj);
-      if (docRef?.id) {
-        this.chatRoomId = docRef.id;
-        await updateDoc(this.getDirectMessSingleDoc(this.chatRoomId), { id: this.chatRoomId });
-      }
+      const docRef = await addDoc(this.getDmRef(), dm);
+      this.chatRoomId = docRef.id;
+      return docRef.id;
     } catch (error) {
       console.error('Error adding chat room:', error);
+      return undefined;
     }
   }
 
-  async updatePrivateChat(docId: string, messageObject: ChatMessage): Promise<void> {
-    const chatRef = this.getDirectMessSingleDoc(docId);
-    await updateDoc(chatRef, { chat: arrayUnion(messageObject) });
-    await updateDoc(chatRef, { lastUpdateAt: new Date().getTime() });
-  }
-
-  async updateCompletePrivateMessage(docId: string, privateMessage: PrivateChat): Promise<void> {
+  async addMessage(dmId: string, message: Omit<Message, 'id'>): Promise<void> {
     try {
-      const pmRef = this.getDirectMessSingleDoc(docId);
-      await updateDoc(pmRef, privateMessage.toJSON());
+      await addDoc(this.getMessagesRef(dmId), message);
+      await updateDoc(this.getDmDocRef(dmId), { lastMessageAt: message.timestamp });
     } catch (error) {
-      console.error('Error updating complete private messages', error);
+      console.error('Error adding DM message:', error);
     }
   }
 
-  async updateCompletlyPrivateChat(docId: string, messageObject: ChatMessage[]): Promise<void> {
+  async updateMessage(dmId: string, messageId: string, updates: Partial<Message>): Promise<void> {
     try {
-      await updateDoc(this.getDirectMessSingleDoc(docId), { chat: messageObject });
+      await updateDoc(this.getMessageRef(dmId, messageId), updates as Record<string, unknown>);
     } catch (error) {
-      console.error('Error updating complete private chats', error);
+      console.error('Error updating DM message:', error);
     }
   }
 }

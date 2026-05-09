@@ -1,7 +1,7 @@
-import { Injectable, OnInit, inject, HostListener } from '@angular/core';
-import { CurrentUser } from '../../interfaces/currentUser.interface';
-import { PrivateChat } from '../../models/privateChat.class';
-import { Channel } from '../../models/channel.class';
+import { Injectable, inject } from '@angular/core';
+import { UserProfile } from '../../interfaces/user.interface';
+import { Channel } from '../../interfaces/channel.interface';
+import { DirectMessage } from '../../interfaces/direct-message.interface';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { BoardService } from '../board-service/board.service';
 
@@ -10,25 +10,21 @@ import { BoardService } from '../board-service/board.service';
 })
 export class MemberDialogsService {
   firestore = inject(FirestoreService);
-  boardServ = inject(BoardService)
+  boardServ = inject(BoardService);
 
   membersDialogIsOpen: boolean = false;
   addMemberDialogIsOpen: boolean = false;
   addSpecificPerson: boolean = false;
   showMemberPopUpisOpen: boolean = false;
 
-  privateChat = new PrivateChat();
   currentChannel: Channel | undefined;
   name = '';
   avatarPath = '';
   email = '';
-  currentMember: CurrentUser | undefined;
+  currentMember: UserProfile | undefined;
   guestId: string | undefined;
   creatorId: string | undefined;
   searchedUserPopUpId: string | undefined;
-
-
- 
 
   toggleMembersDialog(event: Event) {
     this.membersDialogIsOpen = !this.membersDialogIsOpen;
@@ -68,42 +64,54 @@ export class MemberDialogsService {
   startNewChat(index: number) {
     this.currentChannel = this.firestore.allChannels()[this.boardServ.idx];
     if (this.currentChannel) {
-      this.currentMember = this.currentChannel.members[index];
-      this.name = this.currentChannel.members[index].name;
-      this.avatarPath = this.currentChannel.members[index].avatarPath;
-      this.email = this.currentChannel.members[index].email;
+      const memberId = this.currentChannel.memberIds[index];
+      const member = this.firestore.userList().find(u => u.id === memberId);
+      if (member) {
+        this.currentMember = member;
+        this.name = member.name;
+        this.avatarPath = member.avatarPath;
+        this.email = member.email;
+      }
     }
   }
 
   goToChat(index: number) {
-    this.name = this.firestore.directMessages()[index].guest.name;
-    this.avatarPath = this.firestore.directMessages()[index].guest.avatarPath;
-    this.email = this.firestore.directMessages()[index].guest.email;
-    this.currentMember = this.firestore.directMessages()[index].guest;
+    const dm = this.firestore.directMessages()[index];
+    const otherUserId = dm.participantIds.find(id => id !== this.boardServ.currentUser.id)
+      ?? dm.participantIds[0];
+    const partner = this.firestore.userList().find(u => u.id === otherUserId);
+    if (partner) {
+      this.name = partner.name;
+      this.avatarPath = partner.avatarPath;
+      this.email = partner.email;
+      this.currentMember = partner;
+    }
   }
 
-  checkMemberLoginState(member: CurrentUser): string | null {
+  checkMemberLoginState(member: UserProfile): string | null {
     const user = this.firestore.userList().find(user => user.id === member.id);
     return user ? user.loginState : null;
   }
 
   async setChatRoom(event: Event) {
     event.preventDefault();
-    this.setThePrivateChatObject();
+    this.guestId = this.currentMember?.id;
+    this.creatorId = this.boardServ.currentUser.id;
 
-    if (this.isGuestExist()) {
-      this.handleExistingGuest(event);
+    const existingDm = this.guestId && this.creatorId
+      ? this.firestore.findExistingDm(this.creatorId, this.guestId)
+      : undefined;
+
+    if (existingDm) {
+      this.handleExistingGuest(event, existingDm);
     } else {
       await this.addNewChatRoom(event);
     }
   }
 
-  isGuestExist(): boolean {
-    return this.firestore.directMessages().findIndex((dm: PrivateChat) => dm.guest.id == this.guestId) !== -1;
-  }
-
   async addNewChatRoom(event: Event) {
-    await this.firestore.addChatRoom(this.privateChat.toJSON()).then(() => {
+    const participantIds = [this.creatorId!, this.guestId!].filter(Boolean);
+    await this.firestore.addChatRoom(participantIds).then(() => {
       this.boardServ.privateChatId = this.firestore.chatRoomId;
       this.toggleMembersDialog(event);
       this.closeShowMemberPopUp(event);
@@ -111,26 +119,23 @@ export class MemberDialogsService {
     });
   }
 
-  handleExistingGuest(event: Event) {
-    this.startPrivateChat(event);
+  handleExistingGuest(event: Event, dm?: DirectMessage) {
+    if (dm) {
+      const idx = this.firestore.directMessages().findIndex(d => d.id === dm.id);
+      if (idx !== -1) {
+        this.boardServ.startPrivateChat(idx, undefined, event);
+      }
+    } else {
+      this.startPrivateChat(event);
+    }
     this.closeShowMemberPopUp(event);
   }
 
   startPrivateChat(event: Event) {
-    const idx = this.firestore.directMessages().findIndex((dm: PrivateChat) => dm.guest.id == this.guestId);
-    this.boardServ.startPrivateChat(idx, 'creator', event);
-  }
-
-  setThePrivateChatObject() {
-    if (this.currentMember && this.boardServ.currentUser) {
-      this.privateChat.guest = this.currentMember;
-      this.privateChat.creator = this.boardServ.currentUser;
-      this.guestId = this.privateChat.guest.id;
-      this.creatorId = this.privateChat.creator.id;
-      if (this.guestId && this.creatorId) {
-        this.privateChat.partecipantsIds = [this.guestId, this.creatorId];
-      }
-    }
+    const idx = this.firestore.directMessages().findIndex(dm =>
+      dm.participantIds.includes(this.guestId!) && dm.participantIds.includes(this.creatorId!)
+    );
+    this.boardServ.startPrivateChat(idx, undefined, event);
   }
 
   closeShowMemberPopUp(event: Event) {

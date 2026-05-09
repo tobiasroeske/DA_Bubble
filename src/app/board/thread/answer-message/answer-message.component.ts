@@ -7,12 +7,10 @@ import {
   input,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ChatMessage } from '../../../shared/interfaces/chatMessage.interface';
-import { Channel } from '../../../shared/models/channel.class';
+import { Message } from '../../../shared/interfaces/message.interface';
+import { Channel } from '../../../shared/interfaces/channel.interface';
 import { BoardService } from '../../../shared/services/board-service/board.service';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../shared/models/user.class';
-import { Reaction } from '../../../shared/interfaces/reaction.interface';
 import { FirestoreService } from '../../../shared/services/firestore-service/firestore.service';
 import { AnswerEditorComponent } from '../answer-editor/answer-editor.component';
 
@@ -28,13 +26,12 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   boardServ = inject(BoardService);
 
   readonly currentChannel = input.required<Channel>();
-  readonly currentChatMessage = input<ChatMessage>();
-  @Input() answer!: ChatMessage;
+  readonly currentChatMessage = input<Message>();
+  @Input() answer!: Message;
   readonly lastIndex = input.required<boolean>();
   readonly chatMessagaeIndex = input<number>();
   readonly answerIndex = input<number>();
 
-  currentUserName!: string;
   showReactionPopup = false;
   showEmojiBar = false;
   reactionDialogIndicatorbarOpen = false;
@@ -51,7 +48,6 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   ];
 
   ngOnInit(): void {
-    this.currentUserName = this.boardServ.currentUser.name;
     this.boardServ.scrollToBottom(this.boardServ.threadRef);
   }
 
@@ -64,50 +60,25 @@ export class AnswerMessageComponent implements OnInit, AfterViewInit {
   }
 
   async updateAllChannels(emojiIdx: number) {
-    const newAnswer = this.checkIfReactionExists(emojiIdx);
-    this.currentChannel()?.chat?.splice(this.chatMessagaeIndex()!, 1, this.currentChatMessage());
-    await this.firestoreService.updateAllChats(
-      this.currentChannel().id!,
-      this.currentChannel().chat!
-    );
+    const channelId = this.currentChannel().id;
+    const parentMsgId = this.currentChatMessage()?.id;
+    const replyId = this.answer.id;
+    if (!channelId || !parentMsgId || !replyId) return;
+    const emojiPath = this.reactionEmojis[emojiIdx];
+    const reactions = this.answer.reactions.map(r => ({ ...r, userIds: [...r.userIds] }));
+    const existingIdx = reactions.findIndex(r => r.emojiPath === emojiPath);
+    if (existingIdx >= 0) {
+      if (!reactions[existingIdx].userIds.includes(this.boardServ.currentUser.id!)) {
+        reactions[existingIdx].userIds.push(this.boardServ.currentUser.id!);
+      }
+    } else {
+      reactions.push({ emojiPath, userIds: [this.boardServ.currentUser.id!] });
+    }
+    await this.firestoreService.updateReply(channelId, parentMsgId, replyId, { reactions });
   }
 
   toggleMessageEditor() {
     this.editorOpen = !this.editorOpen;
-  }
-
-  checkIfReactionExists(emojiIdx: number) {
-    const emojiPath = this.reactionEmojis[emojiIdx];
-    const existingReaction = this.findExistingReaction(emojiPath);
-    if (existingReaction) {
-      this.updateExistingReaction(existingReaction);
-    } else {
-      this.addNewReaction(emojiIdx);
-    }
-    return this.answer;
-  }
-
-  findExistingReaction(emojiPath: string) {
-    return this.answer.reactions.find(reaction => reaction.emojiPath === emojiPath);
-  }
-
-  updateExistingReaction(reaction: any) {
-    reaction.count++;
-    if (!reaction.creator.includes(this.currentUserName)) {
-      reaction.creator.push(this.currentUserName);
-    }
-  }
-
-  addNewReaction(emojiIdx: number) {
-    this.answer.reactions.push(this.setReactionObject(emojiIdx));
-  }
-
-  setReactionObject(i: number): Reaction {
-    return {
-      emojiPath: this.reactionEmojis[i],
-      creator: [this.boardServ.currentUser.name],
-      count: 1,
-    };
   }
 
   toggleReactionPopup(event: Event) {

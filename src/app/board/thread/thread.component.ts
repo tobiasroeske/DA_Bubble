@@ -8,12 +8,16 @@ import {
   input,
   viewChild,
   ChangeDetectionStrategy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CreateMessageAreaThreadComponent } from './create-message-area-thread/create-message-area-thread.component';
 import { BoardService } from '../../shared/services/board-service/board.service';
-import { Channel } from '../../shared/models/channel.class';
-import { ChatMessage } from '../../shared/interfaces/chatMessage.interface';
+import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
+import { Channel } from '../../shared/interfaces/channel.interface';
+import { Message } from '../../shared/interfaces/message.interface';
 import { AnswerMessageComponent } from './answer-message/answer-message.component';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-thread',
@@ -21,12 +25,13 @@ import { AnswerMessageComponent } from './answer-message/answer-message.componen
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss',
 })
-export class ThreadComponent implements AfterViewInit {
+export class ThreadComponent implements AfterViewInit, OnChanges {
   readonly currentChannel = input<Channel>();
-  @Input() currentChatMessage?: ChatMessage;
+  @Input() currentChatMessage?: Message;
   readonly chatMessageIndex = input<number>();
   readonly threadChatField = viewChild.required<ElementRef>('threadChat');
   boardServ = inject(BoardService);
+  firestore = inject(FirestoreService);
 
   specialBlue: string = 'rgba(83, 90, 241, 1)';
   reactionEmojis: string[] = [
@@ -42,6 +47,15 @@ export class ThreadComponent implements AfterViewInit {
   showEmojiBar = false;
   reactionDialogIndicatorbarOpen = false;
   showFile = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentChatMessage'] && this.currentChatMessage?.id) {
+      const channelId = this.currentChannel()?.id;
+      if (channelId) {
+        this.firestore.subscribeToReplies(channelId, this.currentChatMessage.id);
+      }
+    }
+  }
 
   toggleReactionPopup(event: Event) {
     if (event.type == 'mouseover') {

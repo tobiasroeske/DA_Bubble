@@ -55,8 +55,9 @@ export class BoardComponent implements OnInit {
   constructor() {
     effect(() => {
       if (this.idleUserService.userInactive()) {
-        this.boardServ.currentUser.loginState = 'idle';
-        this.firestore.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
+        if (this.boardServ.currentUser?.id) {
+          this.firestore.updatePresence(this.boardServ.currentUser.id, 'idle');
+        }
       }
     });
   }
@@ -68,10 +69,11 @@ export class BoardComponent implements OnInit {
 
   @HostListener('window:click')
   async handleClick() {
-    if (this.boardServ.currentUser.loginState != 'loggedOut') {
+    if (this.boardServ.currentUser?.loginState !== 'loggedOut') {
       this.boardServ.currentUser = this.localStorageService.loadCurrentUser();
-      this.boardServ.currentUser.loginState = 'loggedIn';
-      await this.firestore.updateUser(this.boardServ.currentUser.id!, this.boardServ.currentUser);
+      if (this.boardServ.currentUser?.id) {
+        await this.firestore.updatePresence(this.boardServ.currentUser.id, 'loggedIn');
+      }
     }
   }
 
@@ -80,8 +82,9 @@ export class BoardComponent implements OnInit {
     event.preventDefault();
     this.localStorageService.saveIntroPlayed(false);
     const currentUser = this.localStorageService.loadCurrentUser();
-    currentUser.loginState = 'loggedOut';
-    await this.firestore.updateUser(currentUser.id!, currentUser);
+    if (currentUser?.id) {
+      await this.firestore.updatePresence(currentUser.id, 'loggedOut');
+    }
   }
 
   ngOnInit() {
@@ -91,8 +94,8 @@ export class BoardComponent implements OnInit {
 
   getUserNotifications() {
     const allUsers = this.firestore.userList();
-    const currentUser = allUsers.find(u => u.id == this.boardServ.currentUser.id);
-    return currentUser;
+    const currentUser = allUsers.find(u => u.id == this.boardServ.currentUser?.id);
+    return currentUser?.notifications ?? [];
   }
 
   openProfileOptions($event: boolean) {

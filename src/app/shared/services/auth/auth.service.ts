@@ -21,7 +21,7 @@ import {
 import { Router } from '@angular/router';
 import { FirestoreService } from '../firestore-service/firestore.service';
 import { LocalStorageService } from '../local-storage-service/local-storage.service';
-import { CurrentUser } from '../../interfaces/currentUser.interface';
+import { UserProfile } from '../../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -34,7 +34,7 @@ export class AuthService {
   readonly errorCode = signal<string>('');
   readonly signupSuccessful = signal<boolean>(false);
 
-  currentUser!: CurrentUser;
+  currentUser!: UserProfile;
 
   readonly actionCodeSettings: ActionCodeSettings = {
     url: 'https://dabubble.tobias-roeske.ch/resetpassword',
@@ -198,7 +198,7 @@ export class AuthService {
     }
   }
 
-  async updateStorages(uc: UserCredential, newUserObject: CurrentUser): Promise<void> {
+  async updateStorages(uc: UserCredential, newUserObject: Omit<UserProfile, 'id'>): Promise<void> {
     try {
       this.storageService.saveCurrentUser(uc.user);
       await this.firestoreService.addUser(uc.user.uid, newUserObject);
@@ -211,12 +211,10 @@ export class AuthService {
   updateLoggedInUser(user: { uid: string }): void {
     try {
       const currentUser = this.findCurrentUser(user);
-      currentUser['loginState'] = 'loggedIn';
       this.storageService.saveCurrentUser(currentUser);
-      this.firestoreService.updateUser(
-        currentUser['uid'] as string,
-        this.storageService.setCurrentUserObject(currentUser)
-      );
+      if (currentUser['id']) {
+        this.firestoreService.updatePresence(currentUser['id'] as string, 'loggedIn');
+      }
     } catch (err: unknown) {
       console.error(err);
       throw err;
@@ -226,7 +224,7 @@ export class AuthService {
   getLoggedInUser(): void {
     onAuthStateChanged(this.auth, user => {
       if (user) {
-        this.currentUser = user as unknown as CurrentUser;
+        this.currentUser = this.storageService.setCurrentUserObject(user);
         this.storageService.saveCurrentUser(user);
       } else {
         this.storageService.saveCurrentUser(user);
@@ -243,14 +241,15 @@ export class AuthService {
   setCurrentUserObject(obj: unknown): Record<string, unknown> {
     const u = obj as Record<string, unknown>;
     return {
+      id: u['id'],
       uid: u['id'],
       displayName: u['name'],
+      name: u['name'],
       email: u['email'],
+      avatarPath: u['avatarPath'],
       photoURL: u['avatarPath'],
-      selected: u['selected'] ?? false,
       loginState: u['loginState'],
-      type: u['type'],
-      notification: u['notification'],
+      notifications: u['notifications'] ?? [],
     };
   }
 }

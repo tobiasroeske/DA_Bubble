@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { BoardService } from '../../shared/services/board-service/board.service';
 import { FirestoreService } from '../../shared/services/firestore-service/firestore.service';
-import { Channel } from '../../shared/models/channel.class';
+import { Channel } from '../../shared/interfaces/channel.interface';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SignupService } from '../../shared/services/signup/signup.service';
 import { MemberDialogsService } from '../../shared/services/member-dialogs.service/member-dialogs.service';
@@ -24,10 +24,10 @@ export class AddChannelDialogComponent {
 
   channelAlreadyExist: boolean = false;
   existingChannelIndex?: number;
-  channel: Channel = new Channel();
+  channelTitle: string = '';
+  channelDescription: string = '';
 
   async onSubmit(ngForm: NgForm, event: Event) {
-    await this.shapeChannel();
     if (ngForm.valid && ngForm.submitted) {
       this.checkIfChannelTitleAleadyExist();
       if (this.existingChannelIndex == -1) {
@@ -41,7 +41,15 @@ export class AddChannelDialogComponent {
 
   async sendFormDataToDatabase(ngForm: NgForm) {
     try {
-      await this.firestore.addChannel(this.channel.toJSON());
+      const currentUser = this.localStorageService.loadCurrentUser();
+      const channelData: Omit<Channel, 'id'> = {
+        title: this.channelTitle,
+        description: this.channelDescription,
+        creatorId: currentUser.id!,
+        memberIds: [currentUser.id!],
+        createdAt: new Date().getTime(),
+      };
+      await this.firestore.addChannel(channelData);
       this.boardServ.idx = this.getNewChannelIndex();
       this.localStorageService.saveCurrentChannelIndex(this.getNewChannelIndex());
       ngForm.resetForm();
@@ -61,42 +69,13 @@ export class AddChannelDialogComponent {
   checkIfChannelTitleAleadyExist() {
     const idx = this.firestore
       .allExistingChannels()
-      .findIndex(chan => chan.title === this.channel.title);
+      .findIndex(chan => chan.title === this.channelTitle);
     this.existingChannelIndex = idx;
   }
 
   getNewChannelIndex() {
     const allChannels = this.firestore.allChannels();
-    const isChannel = (channel: Channel) => channel.id == this.firestore.newChannelId;
-    const index = allChannels.findIndex(isChannel);
+    const index = allChannels.findIndex(channel => channel.id === this.firestore.newChannelId);
     return index;
-  }
-
-  async shapeChannel() {
-    this.setCreatorInfo();
-    this.initializeChannel();
-    await this.populateAllUsers();
-  }
-
-  setCreatorInfo(): void {
-    const currentUser = this.localStorageService.loadCurrentUser();
-    this.channel.creatorId = currentUser.id;
-    this.channel.creatorName = currentUser.name;
-  }
-
-  initializeChannel(): void {
-    this.channel.allUsers = [];
-    this.channel.partecipantsIds = [this.channel.creatorId];
-    this.channel.members = [];
-  }
-
-  async populateAllUsers(): Promise<void> {
-    for (const user of this.firestore.userList()) {
-      if (user.id === this.channel.creatorId) {
-        user.selected = true;
-        this.channel.members.push(user);
-      }
-      this.channel.allUsers.push(user);
-    }
   }
 }

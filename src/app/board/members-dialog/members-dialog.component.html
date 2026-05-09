@@ -38,42 +38,38 @@
   <div
     class="flex flex-col items-start gap-[13px] overflow-y-auto max-h-[300px] w-full scrollbar-thin scrollbar-thumb-[#ADB0D9]"
   >
-    @if ((firestore.allChannels()[boardServ.idx]?.members?.length ?? 0) > 0) {
-      @for (user of firestore.allChannels()[boardServ.idx].members; track user.id; let i = $index) {
-        @if (user.selected) {
-          <div
-            id="{{ i }}"
-            class="w-full rounded-[30px] p-[4px_20px] flex gap-[13px] cursor-pointer hover:bg-[#ECEEFE] transition-colors max-sm:p-[4px_8px]"
-            (click)="memberServ.openShowMemberPopUp(i); memberServ.toggleMembersDialog($event)"
-          >
-            <img
-              class="h-[50px] w-[50px] rounded-full object-cover flex-shrink-0 max-sm:h-[25px] max-sm:w-[25px]"
-              src="{{ user.avatarPath }}"
-              alt=""
-            />
-            <span class="text-lg font-normal max-sm:text-base">{{ user.name }}</span>
-            @if (memberServ.checkMemberLoginState(user) === 'loggedIn') {
-              <img
-                src="assets/icons/user_online.png"
-                alt=""
-                class="absolute bottom-1 left-16 w-4 h-4 max-sm:left-8"
-              />
-            } @else if (memberServ.checkMemberLoginState(user) === 'loggedOut') {
-              <img
-                src="assets/icons/user_offline.png"
-                alt=""
-                class="absolute bottom-1 left-16 w-4 h-4 max-sm:left-8"
-              />
-            } @else if (memberServ.checkMemberLoginState(user) === 'idle') {
-              <img
-                src="assets/icons/user_idle.png"
-                alt=""
-                class="absolute bottom-1 left-16 w-4 h-4 max-sm:left-8"
-              />
-            }
-          </div>
+    @for (user of memberUsers; track user.id; let i = $index) {
+      <div
+        id="{{ i }}"
+        class="w-full rounded-[30px] p-[4px_20px] flex gap-[13px] cursor-pointer hover:bg-[#ECEEFE] transition-colors max-sm:p-[4px_8px]"
+        (click)="memberServ.openShowMemberPopUp(i); memberServ.toggleMembersDialog($event)"
+      >
+        <img
+          class="h-[50px] w-[50px] rounded-full object-cover flex-shrink-0 max-sm:h-[25px] max-sm:w-[25px]"
+          src="{{ user.avatarPath }}"
+          alt=""
+        />
+        <span class="text-lg font-normal max-sm:text-base">{{ user.name }}</span>
+        @if (memberServ.checkMemberLoginState(user) === 'loggedIn') {
+          <img
+            src="assets/icons/user_online.png"
+            alt=""
+            class="absolute bottom-1 left-16 w-4 h-4 max-sm:left-8"
+          />
+        } @else if (memberServ.checkMemberLoginState(user) === 'loggedOut') {
+          <img
+            src="assets/icons/user_offline.png"
+            alt=""
+            class="absolute bottom-1 left-16 w-4 h-4 max-sm:left-8"
+          />
+        } @else if (memberServ.checkMemberLoginState(user) === 'idle') {
+          <img
+            src="assets/icons/user_idle.png"
+            alt=""
+            class="absolute bottom-1 left-16 w-4 h-4 max-sm:left-8"
+          />
         }
-      }
+      </div>
     }
   </div>
   <div

@@ -7,7 +7,7 @@
     >
       @if (mainSearchList.length > 0) {
         @for (result of mainSearchList; track result; let index = $index) {
-          @if (result.title) {
+          @if (isChannel(result)) {
             <div
               (click)="showSearchElementClicked(index, $event)"
               id="{{ index }}"
@@ -19,7 +19,7 @@
                 class="hidden max-[480px]:block h-0.5 w-full rounded-full bg-[#ADB0D9] max-[480px]:mt-2"
               ></span>
             </div>
-          } @else if (result.name && result.avatarPath) {
+          } @else if (isUser(result)) {
             <div
               (click)="showSearchElementClicked(index, $event)"
               id="{{ index }}"
@@ -38,21 +38,23 @@
                 class="hidden max-[480px]:block h-0.5 w-full rounded-full bg-[#ADB0D9] max-[480px]:mt-2"
               ></span>
             </div>
-          } @else if (result.guest) {
+          } @else if (isDirectMessage(result)) {
             <div
               (click)="showSearchElementClicked(index, $event)"
               id="{{ index }}"
               class="flex gap-2 px-3 py-1 rounded-[100px] hover:text-[#535AF1] hover:bg-[#ECEEFE] hover:cursor-pointer max-[480px]:flex-col max-[480px]:items-start max-[480px]:rounded-[20px] max-[480px]:px-6 max-[480px]:py-3"
             >
               <span class="text-base font-normal">Direktnachricht :</span>
-              <div class="flex gap-4">
-                <img
-                  src="{{ result.guest.avatarPath }}"
-                  alt=""
-                  class="w-8 h-8 object-cover rounded-full"
-                />
-                <span class="text-lg font-bold"> {{ result.guest.name }}</span>
-              </div>
+              @if (getPartnerForDm(result); as partner) {
+                <div class="flex gap-4">
+                  <img
+                    src="{{ partner.avatarPath }}"
+                    alt=""
+                    class="w-8 h-8 object-cover rounded-full"
+                  />
+                  <span class="text-lg font-bold"> {{ partner.name }}</span>
+                </div>
+              }
               <span
                 class="hidden max-[480px]:block h-0.5 w-full rounded-full bg-[#ADB0D9] max-[480px]:mt-2"
               ></span>

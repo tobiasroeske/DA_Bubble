@@ -51,7 +51,7 @@
       src="{{ boardServ.currentUser.avatarPath }}"
       alt="account-photo"
     />
-    @if (boardServ.currentUser.notification.length > 0) {
+    @if (boardServ.currentUser.notifications.length > 0) {
       <div
         class="absolute top-[26px] right-[106px] w-4 h-4 bg-[#c50707] rounded-full m-0 p-0 max-lg:w-[14px] max-lg:h-[14px] max-lg:top-[11px] max-lg:right-[88px]"
       ></div>
@@ -102,7 +102,7 @@
               (click)="showNotificationDialog($event)"
             >
               <img src="assets/icons/notification_icon.svg" alt="" />
-              @if (boardServ.currentUser.notification.length > 0) {
+              @if (boardServ.currentUser.notifications.length > 0) {
                 <div
                   class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-[#c50707] rounded-full p-0"
                 ></div>
@@ -162,7 +162,7 @@
           class="relative w-fit bg-transparent text-black border-0 transition-colors duration-200 py-[10px] px-[45px] text-2xl font-semibold hover:bg-[#eceefe] hover:text-[#5359f1]"
           (click)="showNotificationDialog($event)"
         >
-          @if (boardServ.currentUser.notification.length > 0) {
+          @if (boardServ.currentUser.notifications.length > 0) {
             <div
               class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-[#c50707] rounded-full p-0"
             ></div>

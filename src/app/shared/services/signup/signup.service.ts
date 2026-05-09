@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../../models/user.class';
-import { CurrentUser } from '../../interfaces/currentUser.interface';
+import { UserProfile } from '../../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SignupService {
@@ -113,7 +113,7 @@ export class SignupService {
     this.user.avatarPath = uc.user.photoURL!;
   }
 
-  getCurrentUser(): CurrentUser {
+  getCurrentUser(): UserProfile {
     return this.currentUser;
   }
 
@@ -157,15 +157,13 @@ export class SignupService {
     }
   }
 
-  setNewUserObject(userId: string): CurrentUser {
+  setNewUserObject(userId: string): Omit<UserProfile, 'id'> {
     return {
-      id: userId,
       name: this.user.name || '',
       email: this.user.email || '',
       avatarPath: this.user.avatarPath || '',
       loginState: 'loggedOut',
-      type: 'CurrentUser',
-      notification: [],
+      notifications: [],
     };
   }
 }
