@@ -89,25 +89,21 @@
   </div>
   @if (!localStorageService.introPlayed()) {
     <div
-      class="fixed z-100 inset-0 flex items-center justify-center gap-6 bg-gradient-to-b from-[#797ef3] to-[#313ae5] animate-[background-vanish_0.225s_ease-in-out_forwards_2.7s]"
+      class="fixed z-100 inset-0 flex items-center justify-center bg-gradient-to-b from-[#797ef3] to-[#313ae5] animate-[background-vanish_0.4s_ease-in-out_forwards_2.5s]"
       (animationend)="onIntroEnd($event)"
     >
-      <div class="flex items-center justify-center relative w-full h-screen max-w-[1920px]">
-        <div
-          class="flex gap-6 max-md:gap-4 absolute animate-[mobile-animation_0.5s_ease-in_forwards_2.2s] md:animate-[intro-animation_0.5s_ease-in_forwards_2.2s]"
-        >
-          <img
-            src="assets/img/logo_big.png"
-            alt=""
-            class="object-cover translate-x-[154px] w-[186px] h-[184px] max-md:w-[70px] max-md:h-[70px] animate-[logo-animation_0.7s_ease-in-out_forwards_0.5s,_mobile-intro-logo_0.5s_ease-in-out_forwards_2.2s] md:animate-[logo-animation_0.7s_ease-in-out_forwards_0.5s,_intro-logo-animation_0.5s_ease-in-out_forwards_2.2s]"
-          />
-          <div class="relative overflow-hidden">
-            <h1
-              class="font-nunito text-[64px] max-md:text-[32px] font-bold text-white -translate-x-80 animate-[headline-animation_0.5s_ease-in-out_forwards_1s,_mobile-intro-headline_0.5s_ease-in-out_forwards_2.2s] md:animate-[headline-animation_0.5s_ease-in-out_forwards_1s,_intro-headline-animation_0.5s_ease-in-out_forwards_2.2s]"
-            >
-              DABubble
-            </h1>
-          </div>
+      <div class="flex items-center gap-6 max-md:gap-4">
+        <img
+          src="assets/img/logo_big.png"
+          alt=""
+          class="w-[186px] h-[184px] max-md:w-[70px] max-md:h-[70px] translate-x-[154px] animate-[logo-animation_0.7s_ease-in-out_forwards_0.5s]"
+        />
+        <div class="overflow-hidden">
+          <h1
+            class="font-nunito text-[64px] max-md:text-[32px] font-bold text-white -translate-x-80 animate-[headline-animation_0.5s_ease-in-out_forwards_1s]"
+          >
+            DABubble
+          </h1>
         </div>
       </div>
     </div>
