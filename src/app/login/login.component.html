@@ -89,21 +89,21 @@
   </div>
   @if (!localStorageService.introPlayed()) {
     <div
-      class="fixed z-100 inset-0 flex items-center justify-center gap-6 bg-gradient-to-b from-[#797ef3] to-[#313ae5] animation-[background-vanish_0.225s_ease-in-out_forwards_2.7s]"
+      class="fixed z-100 inset-0 flex items-center justify-center gap-6 bg-gradient-to-b from-[#797ef3] to-[#313ae5] animate-[background-vanish_0.225s_ease-in-out_forwards_2.7s]"
       (animationend)="onIntroEnd($event)"
     >
       <div class="flex items-center justify-center relative w-full h-screen max-w-[1920px]">
         <div
-          class="flex gap-6 absolute animation-[mobile-animation_0.5s_ease-in_forwards_2.2s] md:animation-[intro-animation_0.5s_ease-in_forwards_2.2s]"
+          class="flex gap-6 absolute animate-[mobile-animation_0.5s_ease-in_forwards_2.2s] md:animate-[intro-animation_0.5s_ease-in_forwards_2.2s]"
         >
           <img
             src="assets/img/logo_big.png"
             alt=""
-            class="object-cover transform translate-x-[154px] animation-[logo-animation_0.7s_ease-in-out_forwards_0.5s,_mobile-intro-logo_0.5s_ease-in-out_forwards_2.2s] md:animation-[logo-animation_0.7s_ease-in-out_forwards_0.5s,_intro-logo-animation_0.5s_ease-in-out_forwards_2.2s]"
+            class="object-cover transform translate-x-[154px] animate-[logo-animation_0.7s_ease-in-out_forwards_0.5s,_mobile-intro-logo_0.5s_ease-in-out_forwards_2.2s] md:animate-[logo-animation_0.7s_ease-in-out_forwards_0.5s,_intro-logo-animation_0.5s_ease-in-out_forwards_2.2s]"
           />
           <div class="relative overflow-hidden">
             <h1
-              class="text-[64px] font-bold text-white transform -translate-x-80 animation-[headline-animation_0.5s_ease-in-out_forwards_1s,_mobile-intro-headline_0.5s_ease-in-out_forwards_2.2s] md:animation-[headline-animation_0.5s_ease-in-out_forwards_1s,_intro-headline-animation_0.5s_ease-in-out_forwards_2.2s]"
+              class="text-[64px] font-bold text-white transform -translate-x-80 animate-[headline-animation_0.5s_ease-in-out_forwards_1s,_mobile-intro-headline_0.5s_ease-in-out_forwards_2.2s] md:animate-[headline-animation_0.5s_ease-in-out_forwards_1s,_intro-headline-animation_0.5s_ease-in-out_forwards_2.2s]"
             >
               DABubble
             </h1>
