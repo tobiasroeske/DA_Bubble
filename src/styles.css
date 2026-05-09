@@ -929,19 +929,19 @@ textarea {
 /* ===== login ===== */
 @keyframes logo-animation {
   from {
-    transform: translateX(154px);
+    translate: 154px 0;
   }
   to {
-    transform: translateX(0);
+    translate: 0px 0;
   }
 }
 
 @keyframes headline-animation {
   from {
-    transform: translateX(-320px);
+    translate: -320px 0;
   }
   to {
-    transform: translateX(0);
+    translate: 0px 0;
   }
 }
 
